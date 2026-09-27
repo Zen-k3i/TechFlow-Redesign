@@ -16,7 +16,7 @@ import { AdScreen, PhoneFrame } from "./phone";
 export function GrowthCaseStudyPage({ study }: { study: GrowthCaseStudy }) {
   return (
     <div style={{ "--accent": study.accent } as React.CSSProperties}>
-      <Navbar base="/" />
+      <Navbar current="projects" />
       <main>
         <Hero study={study} />
         <Brief study={study} />
@@ -62,7 +62,7 @@ function Hero({ study }: { study: GrowthCaseStudy }) {
       <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }}>
-            <Link href="/#projets" className="eyebrow inline-flex items-center gap-2 text-white/50 hover:text-white">
+            <Link href="/projets" className="eyebrow inline-flex items-center gap-2 text-white/50 hover:text-white">
               ← Tous les projets
             </Link>
           </motion.div>
@@ -254,7 +254,7 @@ function Offer() {
                   <span className="flex size-10 items-center justify-center rounded-full bg-night text-white transition-transform group-hover:-rotate-45">→</span>
                 </a>
               </Magnetic>
-              <Link href="/#projets" className="flex h-14 items-center justify-center rounded-full border border-white/20 px-7 transition-colors hover:border-white">
+              <Link href="/projets" className="flex h-14 items-center justify-center rounded-full border border-white/20 px-7 transition-colors hover:border-white">
                 Voir d&apos;autres projets
               </Link>
             </div>

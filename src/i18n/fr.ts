@@ -1,4 +1,4 @@
-const SITE = "https://www.techflow-agency.com";
+import { href } from "./routes";
 
 export const fr = {
   meta: {
@@ -8,13 +8,15 @@ export const fr = {
   },
 
   nav: {
-    links: [
-      { id: "services", label: "Services" },
-      { id: "projets", label: "Projets" },
-      { id: "methode", label: "Méthode" },
-      { id: "avis", label: "Avis" },
-      { id: "faq", label: "FAQ" },
-    ],
+    pages: {
+      services: "Services",
+      projects: "Projets",
+      team: "Notre équipe",
+      insights: "Ressources",
+      contact: "Contact",
+    },
+    allServices: "Voir tous les services",
+    servicesIntro: "Un studio de design web et de développement, du premier wireframe au site en ligne.",
     book: "Réserver un appel",
     bookMobile: "Réserver un appel gratuit →",
     openMenu: "Ouvrir le menu",
@@ -120,7 +122,7 @@ export const fr = {
         pitch: "Branding, UX/UI, Social Ads, Motion Design : nous concevons votre marque pour positionner votre expertise.",
         deliverables: ["Identité visuelle", "Design system Figma", "UX/UI haute fidélité", "Motion design"],
         image: "little-green-spark",
-        href: `${SITE}/design`,
+        href: href("fr", "design"),
       },
       {
         id: "developpement",
@@ -129,7 +131,7 @@ export const fr = {
         pitch: "Des plateformes et des sites web conçus pour être performants et propres même trois ans après la livraison.",
         deliverables: ["Webflow", "Shopify & Bubble", "Sur mesure", "SEO & performance"],
         image: "opco-ep",
-        href: `${SITE}/developpement`,
+        href: href("fr", "development"),
       },
       {
         id: "agents-ia",
@@ -138,7 +140,7 @@ export const fr = {
         pitch: "Ce que votre équipe refait quinze fois par semaine, un agent le fait pendant la nuit.",
         deliverables: ["Automatisation n8n", "CRM HubSpot & Twenty", "Intégrations API", "IA souveraines"],
         image: "leapmotor",
-        href: `${SITE}/agents-ia`,
+        href: href("fr", "aiAgents"),
       },
       {
         id: "tunnel-de-vente",
@@ -148,7 +150,7 @@ export const fr = {
           "De la création de la publicité à la prise de rendez-vous : on crée, on mesure, on ajuste pour maximiser les résultats.",
         deliverables: ["Publicités sociales", "Landing pages", "Prise de rendez-vous", "Mesure & optimisation"],
         image: "place-des-aines",
-        href: `${SITE}/tunnel-de-vente`,
+        href: href("fr", "salesFunnel"),
       },
     ],
   },
@@ -313,6 +315,62 @@ export const fr = {
     legal: "Mentions légales",
     terms: "Conditions générales",
     top: "Haut de page ↑",
+  },
+
+  common: {
+    human: "Parler à un humain",
+    start: "Démarrer un projet",
+    reassurance: "Gratuit · Sans engagement · 30 minutes",
+    viewCase: "Voir le cas",
+    allProjects: "Tous les projets",
+    readMore: "Lire l'article",
+    deliverable: "Livrable",
+    step: "Étape",
+    breadcrumbHome: "Accueil",
+    comparison: {
+      eyebrow: "Comparatif",
+      heading: "Pourquoi nous sommes le *choix naturel.*",
+      techflow: "TechFlow",
+      agencies: "Autres agences",
+      freelancers: "Freelances",
+      yes: "Oui",
+      no: "Non",
+      partial: "En partie",
+      criterion: "Critère",
+      note: "35 % moins cher que les agences européennes, à exigence égale.",
+    },
+    nextSteps: {
+      eyebrow: "Et ensuite ?",
+      heading: "De la première conversation au *lancement.*",
+      intro:
+        "La démarche est simple. Voici exactement ce qui vous attend lorsque vous contactez TechFlow.",
+      steps: [
+        {
+          title: "Planifier un appel",
+          text: "Un appel découverte de 30 minutes avec l'équipe. Nous voulons comprendre votre projet, vos objectifs et la vision derrière : c'est ici que nous écoutons.",
+        },
+        {
+          title: "Mini design sprint",
+          text: "Un sprint ciblé pour explorer votre vision et commencer à donner forme à la solution : parcours, interfaces, architecture. Avant de chiffrer quoi que ce soit.",
+        },
+        {
+          title: "Co-construire la proposition",
+          text: "Périmètre, calendrier, livrables et stack retenue : la proposition se construit avec vous, autour de vos besoins réels.",
+        },
+        {
+          title: "Premier versement",
+          text: "Simple et transparent. Le premier versement confirme l'engagement et bloque la date de démarrage de votre projet.",
+        },
+        {
+          title: "Lancer le projet",
+          text: "La première semaine commence. Le cadre est posé, l'équipe est alignée : préparez-vous à vous réveiller avec des avancées.",
+        },
+      ],
+    },
+    cta: {
+      heading: "Un projet en *tête ?*",
+      text: "TechFlow transforme les idées en résultats. Nos clients lancent 40 % plus vite et constatent une croissance mesurable dès le premier trimestre.",
+    },
   },
 };
 

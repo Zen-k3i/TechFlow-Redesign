@@ -16,7 +16,7 @@ import { GrowthCover } from "./growth-cover";
 export function CaseStudyPage({ project, study }: { project: Project; study: CaseStudy }) {
   return (
     <>
-      <Navbar base="/" />
+      <Navbar current="projects" />
       <main>
         <Hero project={project} study={study} />
         {study.testimonial && <Quote testimonial={study.testimonial} />}
@@ -50,7 +50,7 @@ function Hero({ project, study }: { project: Project; study: CaseStudy }) {
       <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }}>
-            <Link href="/#projets" className="eyebrow inline-flex items-center gap-2 text-white/50 hover:text-white">
+            <Link href="/projets" className="eyebrow inline-flex items-center gap-2 text-white/50 hover:text-white">
               ← Tous les projets
             </Link>
           </motion.div>
@@ -298,7 +298,7 @@ function MoreProjects({ current }: { current: string }) {
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between gap-6">
           <RevealHeading text="Nos *réalisations.*" accentClassName="italic text-brand-deep" className="font-serif text-5xl leading-[0.95] md:text-7xl" />
-          <Link href="/#projets" className="hidden shrink-0 rounded-full border border-ink/15 px-5 py-2.5 text-sm hover:border-ink md:block">
+          <Link href="/projets" className="hidden shrink-0 rounded-full border border-ink/15 px-5 py-2.5 text-sm hover:border-ink md:block">
             Tous les projets
           </Link>
         </div>

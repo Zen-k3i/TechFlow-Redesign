@@ -37,6 +37,8 @@ const THEMES: Record<string, Theme> = {
 
 const FALLBACK: Theme = { accent: "#4791ff", glow: "rgba(71, 102, 255, 0.4)", motif: "foil" };
 
+export const projectTheme = (slug: string) => THEMES[slug] ?? FALLBACK;
+
 export function ProjectHighlight({
   slug,
   mx,

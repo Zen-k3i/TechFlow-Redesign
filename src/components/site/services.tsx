@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ease, projectImage } from "./content";
@@ -79,14 +80,12 @@ export function Services() {
                               </li>
                             ))}
                           </ul>
-                          <a
+                          <Link
                             href={s.href}
-                            target="_blank"
-                            rel="noreferrer"
                             className="mt-6 inline-flex items-center gap-2 text-sm text-brand-sky hover:text-white"
                           >
-                            {t.services.discover} {s.title} ↗
-                          </a>
+                            {t.services.discover} {s.title} →
+                          </Link>
                         </div>
                       </motion.div>
                     )}

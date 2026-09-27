@@ -1,17 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { href } from "@/i18n/routes";
 import { useLocale } from "./locale";
 import { Magnetic } from "./magnetic";
 import { RevealHeading } from "./reveal";
 
 export function Footer() {
-  const { t, links } = useLocale();
+  const { t, lang, links } = useLocale();
   const f = t.footer;
   const columns = [
     {
       title: f.columns.services,
-      items: t.services.items.map((s) => ({ label: s.title, href: s.href })),
+      items: [
+        ...t.services.items.map((s) => ({ label: s.title, href: s.href })),
+        { label: t.nav.allServices, href: href(lang, "services") },
+      ],
     },
     {
       title: f.columns.agency,
@@ -24,6 +29,7 @@ export function Footer() {
     },
     {
       title: f.columns.follow,
+      external: true,
       items: [
         { label: "Instagram", href: links.instagram },
         { label: "LinkedIn", href: links.linkedin },
@@ -80,14 +86,15 @@ export function Footer() {
               <ul className="mt-4 space-y-2.5">
                 {col.items.map((item) => (
                   <li key={item.label}>
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-white/75 transition-colors hover:text-white"
-                    >
-                      {item.label}
-                    </a>
+                    {col.external ? (
+                      <a href={item.href} target="_blank" rel="noreferrer" className="text-white/75 transition-colors hover:text-white">
+                        {item.label} ↗
+                      </a>
+                    ) : (
+                      <Link href={item.href} className="text-white/75 transition-colors hover:text-white">
+                        {item.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -105,12 +112,12 @@ export function Footer() {
         <div className="eyebrow flex flex-col justify-between gap-4 border-t border-white/15 py-6 text-white/50 md:flex-row">
           <span>© {new Date().getFullYear()} TechFlow Agency</span>
           <span className="flex gap-6">
-            <a href={links.legal} target="_blank" rel="noreferrer" className="hover:text-white">
+            <Link href={links.legal} className="hover:text-white">
               {f.legal}
-            </a>
-            <a href={links.terms} target="_blank" rel="noreferrer" className="hover:text-white">
+            </Link>
+            <Link href={links.terms} className="hover:text-white">
               {f.terms}
-            </a>
+            </Link>
             <a href="#top" className="hover:text-white">
               {f.top}
             </a>

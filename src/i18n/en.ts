@@ -1,6 +1,5 @@
 import type { Dictionary } from "./fr";
-
-const SITE = "https://www.techflow-agency.com/en";
+import { href } from "./routes";
 
 export const en: Dictionary = {
   meta: {
@@ -10,13 +9,15 @@ export const en: Dictionary = {
   },
 
   nav: {
-    links: [
-      { id: "services", label: "Services" },
-      { id: "projets", label: "Work" },
-      { id: "methode", label: "Process" },
-      { id: "avis", label: "Reviews" },
-      { id: "faq", label: "FAQ" },
-    ],
+    pages: {
+      services: "Services",
+      projects: "Work",
+      team: "Our team",
+      insights: "Insights",
+      contact: "Contact",
+    },
+    allServices: "See all services",
+    servicesIntro: "A web design and development studio, from the first wireframe to the live site.",
     book: "Book a call",
     bookMobile: "Book a free call →",
     openMenu: "Open menu",
@@ -121,7 +122,7 @@ export const en: Dictionary = {
         pitch: "Branding, UX/UI, social ads, motion design: we build a brand that puts your expertise up front.",
         deliverables: ["Visual identity", "Figma design system", "High-fidelity UX/UI", "Motion design"],
         image: "little-green-spark",
-        href: `${SITE}/design`,
+        href: href("en", "design"),
       },
       {
         id: "developpement",
@@ -130,7 +131,7 @@ export const en: Dictionary = {
         pitch: "Platforms and websites still fast and clean three years after launch.",
         deliverables: ["Webflow", "Shopify & Bubble", "Custom builds", "SEO & performance"],
         image: "opco-ep",
-        href: `${SITE}/development`,
+        href: href("en", "development"),
       },
       {
         id: "agents-ia",
@@ -139,7 +140,7 @@ export const en: Dictionary = {
         pitch: "What your team redoes fifteen times a week, an agent does overnight.",
         deliverables: ["n8n automation", "HubSpot & Twenty CRM", "API integrations", "Sovereign AI"],
         image: "leapmotor",
-        href: `${SITE}/ai-agents`,
+        href: href("en", "aiAgents"),
       },
       {
         id: "tunnel-de-vente",
@@ -148,7 +149,7 @@ export const en: Dictionary = {
         pitch: "From the ad to the booked meeting: we build it, we measure it, we tune it.",
         deliverables: ["Social ads", "Landing pages", "Meeting booking", "Tracking & optimization"],
         image: "place-des-aines",
-        href: `${SITE}/sales-funnel`,
+        href: href("en", "salesFunnel"),
       },
     ],
   },
@@ -169,12 +170,14 @@ export const en: Dictionary = {
       "Education & Formation": "Education & Training",
       "Immobilier & Archi": "Real Estate & Architecture",
       Musique: "Music",
+      eCommerce: "E-commerce",
     },
     disciplines: {
       "Image de marque": "Branding",
       "Design UI/UX": "UI/UX Design",
       "Développement Web": "Web Development",
       "Publicités vidéo": "Video ads",
+      Automatisation: "Automation",
     },
   },
 
@@ -326,5 +329,60 @@ export const en: Dictionary = {
     legal: "Legal notices",
     terms: "Terms of service",
     top: "Back to top ↑",
+  },
+
+  common: {
+    human: "Talk to a human",
+    start: "Start a project",
+    reassurance: "Free · No commitment · 30 minutes",
+    viewCase: "View case",
+    allProjects: "All projects",
+    readMore: "Read the article",
+    deliverable: "Deliverable",
+    step: "Step",
+    breadcrumbHome: "Home",
+    comparison: {
+      eyebrow: "Comparison",
+      heading: "Why we're the *natural choice.*",
+      techflow: "TechFlow",
+      agencies: "Other agencies",
+      freelancers: "Freelancers",
+      yes: "Yes",
+      no: "No",
+      partial: "Partly",
+      criterion: "Criterion",
+      note: "35% cheaper than European agencies, with the same standard.",
+    },
+    nextSteps: {
+      eyebrow: "What's next?",
+      heading: "From first conversation to *launch.*",
+      intro: "The process is simple. Here's exactly what happens once you reach out to TechFlow.",
+      steps: [
+        {
+          title: "Book a call",
+          text: "A 30-minute discovery call with the team. We want to understand your project, your goals and the vision behind them: this is where we listen.",
+        },
+        {
+          title: "Mini design sprint",
+          text: "A focused sprint to explore your vision and start shaping the solution: journeys, interfaces, architecture. Before we price anything.",
+        },
+        {
+          title: "Co-build the proposal",
+          text: "Scope, timeline, deliverables and the chosen stack: the proposal is built with you, around what you actually need.",
+        },
+        {
+          title: "First payment",
+          text: "Simple and transparent. The first payment confirms the engagement and locks in your start date.",
+        },
+        {
+          title: "Kick off",
+          text: "Week one begins. The framework is set, the team is aligned: get ready to wake up to progress.",
+        },
+      ],
+    },
+    cta: {
+      heading: "Got a project in *mind?*",
+      text: "TechFlow turns ideas into results. Our clients launch 40% faster and see measurable growth from the first quarter.",
+    },
   },
 };

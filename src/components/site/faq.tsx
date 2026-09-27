@@ -6,7 +6,9 @@ import { ease } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";
 
-export function Faq() {
+type FaqProps = { eyebrow?: string; heading?: string; intro?: string; items?: { q: string; a: string }[] };
+
+export function Faq({ eyebrow, heading, intro, items }: FaqProps = {}) {
   const { t } = useLocale();
   const [open, setOpen] = useState<number | null>(0);
 
@@ -14,14 +16,15 @@ export function Faq() {
     <section id="faq" className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="eyebrow text-brand-sky">{t.faq.eyebrow}</p>
+          <p className="eyebrow text-brand-sky">{eyebrow ?? t.faq.eyebrow}</p>
           <RevealHeading
-            text={t.faq.heading}
+            text={heading ?? t.faq.heading}
             className="mt-4 font-serif text-5xl leading-[0.95] md:text-6xl"
           />
+          {intro && <p className="mt-6 max-w-sm text-white/55">{intro}</p>}
         </div>
         <ul className="border-t border-white/10">
-          {t.faq.items.map((item, i) => {
+          {(items ?? t.faq.items).map((item, i) => {
             const isOpen = open === i;
             return (
               <li key={item.q} className="border-b border-white/10">

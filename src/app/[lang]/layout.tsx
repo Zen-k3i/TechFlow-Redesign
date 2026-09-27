@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, locales } from "@/i18n/config";
 import { en } from "@/i18n/en";
 import { fr } from "@/i18n/fr";
+import { siteUrl } from "@/i18n/routes";
 import "../globals.css";
 
 const satoshi = localFont({
@@ -37,7 +38,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   const { meta } = lang === "en" ? en : fr;
-  return { title: meta.title, description: meta.description };
+  return { metadataBase: new URL(siteUrl), title: meta.title, description: meta.description };
 }
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {

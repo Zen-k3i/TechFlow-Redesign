@@ -1,33 +1,21 @@
 import type { Locale } from "@/i18n/config";
+import { href } from "@/i18n/routes";
 
-const SITE = "https://www.techflow-agency.com";
+const siteLink = (lang: Locale) => ({
+  booking: "https://calendly.com/maximilien-grolier-1/30min",
+  email: "maximilien@techflow-agency.com",
+  contact: href(lang, "contact"),
+  projects: href(lang, "projects"),
+  team: href(lang, "team"),
+  insights: href(lang, "insights"),
+  legal: href(lang, "legal"),
+  terms: href(lang, "terms"),
+  instagram: "https://www.instagram.com/we.are.techflow/",
+  linkedin: "https://www.linkedin.com/company/techflow-agence/",
+  webflow: "https://webflow.com/@techflow-agencys-workspace",
+});
 
-const siteLinks = {
-  fr: {
-    booking: "https://calendly.com/maximilien-grolier-1/30min",
-    contact: `${SITE}/contact`,
-    projects: `${SITE}/projets`,
-    team: `${SITE}/notre-equipe`,
-    insights: `${SITE}/nos-insights`,
-    legal: `${SITE}/mentions-legales`,
-    terms: `${SITE}/conditions-generales`,
-    instagram: "https://www.instagram.com/we.are.techflow/",
-    linkedin: "https://www.linkedin.com/company/techflow-agence/",
-    webflow: "https://webflow.com/@techflow-agencys-workspace",
-  },
-  en: {
-    booking: "https://calendly.com/maximilien-grolier-1/30min",
-    contact: `${SITE}/en/contact`,
-    projects: `${SITE}/en/projects`,
-    team: `${SITE}/en/our-team`,
-    insights: `${SITE}/en/our-insights`,
-    legal: `${SITE}/en/legal-notices`,
-    terms: `${SITE}/en/terms-of-service`,
-    instagram: "https://www.instagram.com/we.are.techflow/",
-    linkedin: "https://www.linkedin.com/company/techflow-agence/",
-    webflow: "https://webflow.com/@techflow-agencys-workspace",
-  },
-} satisfies Record<Locale, Record<string, string>>;
+const siteLinks = { fr: siteLink("fr"), en: siteLink("en") } satisfies Record<Locale, Record<string, string>>;
 
 export const getLinks = (lang: Locale) => siteLinks[lang];
 export const links = siteLinks.fr;

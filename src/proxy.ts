@@ -1,15 +1,29 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { englishAliases } from "./i18n/routes";
+
+/** Case studies and articles only exist in French. */
+const frenchOnly = [/^\/en\/(projets|projects)\/(.+)$/, /^\/en\/(nos-insights|our-insights)\/(.+)$/];
+const frenchParent = { projets: "projets", projects: "projets", "nos-insights": "nos-insights", "our-insights": "nos-insights" };
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const url = request.nextUrl.clone();
 
-  if (pathname.startsWith("/en/projets/")) {
-    url.pathname = pathname.slice(3);
-    return NextResponse.redirect(url);
+  for (const pattern of frenchOnly) {
+    const match = pathname.match(pattern);
+    if (match) {
+      url.pathname = `/${frenchParent[match[1] as keyof typeof frenchParent]}/${match[2]}`;
+      return NextResponse.redirect(url);
+    }
   }
 
-  if (pathname === "/en" || pathname.startsWith("/en/")) return;
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    const [, , first, ...rest] = pathname.split("/");
+    const folder = first && englishAliases[first];
+    if (!folder) return;
+    url.pathname = ["", "en", folder, ...rest].join("/");
+    return NextResponse.rewrite(url);
+  }
 
   if (pathname === "/fr" || pathname.startsWith("/fr/")) {
     url.pathname = pathname.slice(3) || "/";

@@ -1,16 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { GrowthCover } from "../case-study/growth-cover";
-import { caseStudyUrl, projectImage, projects, type Project } from "./content";
+import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { projects } from "./content";
 import { useLocale } from "./locale";
-import { ProjectHighlight } from "./project-highlight";
+import { ProjectCard } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
-
-const MotionLink = motion.create(Link);
 
 export function Work() {
   const { t, links } = useLocale();
@@ -74,87 +70,22 @@ export function Work() {
         </LayoutGroup>
 
         <div className="mt-14 flex justify-center">
-          <a
+          <Link
             href={links.projects}
-            target="_blank"
-            rel="noreferrer"
             className="group flex h-14 items-center gap-3 rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand-deep"
           >
             {t.work.seeAll}
             <span className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform group-hover:-rotate-45">
               →
             </span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
-  const { t } = useLocale();
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-5, 5]), { stiffness: 200, damping: 20 });
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), { stiffness: 200, damping: 20 });
-
-  return (
-    <div className="[perspective:1200px]">
-      <MotionLink
-        href={caseStudyUrl(project.slug)}
-        data-cursor={t.hero.caseCursor}
-        style={{ rotateX, rotateY }}
-        onPointerMove={(e) => {
-          if (e.pointerType !== "mouse") return;
-          const r = e.currentTarget.getBoundingClientRect();
-          mx.set((e.clientX - r.left) / r.width - 0.5);
-          my.set((e.clientY - r.top) / r.height - 0.5);
-        }}
-        onPointerLeave={() => {
-          mx.set(0);
-          my.set(0);
-        }}
-        className="group block"
-      >
-        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-ink/5">
-          {project.kind === "growth" ? (
-            <GrowthCover videos={t.work.growthCover.videos} title={t.work.growthCover.title} />
-          ) : (
-            <Image
-              src={projectImage(project.slug)}
-              alt={`${t.hero.caseAlt} ${project.name}`}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover object-top transition-[transform,object-position] duration-[1.6s] ease-out group-hover:scale-105 group-hover:object-bottom"
-            />
-          )}
-          <ProjectHighlight slug={project.slug} mx={mx} my={my} />
-          <div className="absolute left-4 top-4 z-20 flex flex-wrap gap-1.5">
-            {project.disciplines.map((d) => (
-              <span
-                key={d}
-                className="translate-y-[-8px] rounded-full bg-white/90 px-2.5 py-1 text-xs text-ink opacity-0 backdrop-blur transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-              >
-                {t.work.disciplines[d] ?? d}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="mt-4 flex items-start justify-between gap-4 px-1">
-          <div>
-            <h3 className="text-xl font-medium">{project.name}</h3>
-            <p className="mt-0.5 text-sm text-ink/55">{t.work.sectors[project.sector] ?? project.sector}</p>
-          </div>
-          <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/15 transition-[transform,background-color,color] group-hover:-rotate-45 group-hover:bg-brand-deep group-hover:text-white">
-            →
-          </span>
-        </div>
-      </MotionLink>
-    </div>
-  );
-}
-
-function FilterChip({
+export function FilterChip({
   active,
   onClick,
   label,

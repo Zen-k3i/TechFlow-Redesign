@@ -1,0 +1,449 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "motion/react";
+import { href } from "@/i18n/routes";
+import { clients, ease } from "../site/content";
+import { useLocale } from "../site/locale";
+import { Magnetic } from "../site/magnetic";
+import { FadeIn, RevealHeading } from "../site/reveal";
+
+type Tone = "dark" | "light";
+
+export function ButtonLink({
+  href: to,
+  children,
+  variant = "light",
+  external = false,
+  className = "",
+}: {
+  href: string;
+  children: React.ReactNode;
+  variant?: "light" | "dark" | "outline" | "outline-dark";
+  external?: boolean;
+  className?: string;
+}) {
+  const styles = {
+    light: "bg-white text-night hover:bg-brand-sky hover:text-white",
+    dark: "bg-ink text-paper hover:bg-brand-deep",
+    outline: "border border-white/20 text-white hover:border-white",
+    "outline-dark": "border border-ink/15 text-ink hover:border-ink",
+  }[variant];
+  const arrow = {
+    light: "bg-night text-white",
+    dark: "bg-paper text-ink",
+    outline: "bg-white/10 text-white",
+    "outline-dark": "bg-ink text-paper",
+  }[variant];
+  const content = (
+    <>
+      {children}
+      <span className={`flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:-rotate-45 ${arrow}`}>
+        →
+      </span>
+    </>
+  );
+  const cls = `group inline-flex h-14 shrink-0 items-center gap-3 rounded-full pl-7 pr-2 font-medium transition-colors ${styles} ${className}`;
+
+  return external ? (
+    <a href={to} target="_blank" rel="noreferrer" className={cls}>
+      {content}
+    </a>
+  ) : (
+    <Link href={to} className={cls}>
+      {content}
+    </Link>
+  );
+}
+
+/** "Talk to a human" (booking) and "Start a project" (contact form). */
+export function HumanActions({ tone = "dark" }: { tone?: Tone }) {
+  const { t, lang, links } = useLocale();
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Magnetic>
+        <ButtonLink href={links.booking} external variant={tone === "dark" ? "light" : "dark"}>
+          {t.common.human}
+        </ButtonLink>
+      </Magnetic>
+      <ButtonLink href={href(lang, "contact")} variant={tone === "dark" ? "outline" : "outline-dark"}>
+        {t.common.start}
+      </ButtonLink>
+    </div>
+  );
+}
+
+export function PageHero({
+  eyebrow,
+  title,
+  intro,
+  badge,
+  actions,
+  aside,
+  crumbs,
+}: {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  badge?: string;
+  actions?: React.ReactNode;
+  aside?: React.ReactNode;
+  crumbs?: { label: string; href: string }[];
+}) {
+  const { t, lang } = useLocale();
+  const trail = crumbs ? [{ label: t.common.breadcrumbHome, href: href(lang, "home") }, ...crumbs] : null;
+
+  return (
+    <section id="top" className="grain relative overflow-hidden bg-night px-5 pb-20 pt-32 text-white md:px-10 md:pb-28 md:pt-44">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_55%_at_85%_20%,rgba(71,102,255,0.3),transparent_70%),radial-gradient(40%_40%_at_0%_100%,rgba(21,37,112,0.5),transparent_70%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(70%_60%_at_50%_30%,black,transparent)]" />
+
+      <div className={`relative mx-auto grid max-w-7xl gap-14 ${aside ? "lg:grid-cols-[1.05fr_0.95fr] lg:items-center" : ""}`}>
+        <div>
+          {trail && (
+            <motion.nav
+              aria-label="Breadcrumb"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease }}
+              className="eyebrow mb-8 flex flex-wrap items-center gap-2 text-white/40"
+            >
+              {trail.map((c, i) => (
+                <span key={c.href} className="flex items-center gap-2">
+                  {i > 0 && <span aria-hidden>/</span>}
+                  {i < trail.length - 1 ? (
+                    <Link href={c.href} className="hover:text-white">
+                      {c.label}
+                    </Link>
+                  ) : (
+                    <span aria-current="page" className="text-white/70">
+                      {c.label}
+                    </span>
+                  )}
+                </span>
+              ))}
+            </motion.nav>
+          )}
+          {(badge || eyebrow) && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05, ease }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm text-white/75"
+            >
+              <span className="size-1.5 rounded-full bg-brand-sky shadow-[0_0_10px_2px_rgba(71,145,255,0.6)]" />
+              {badge ?? eyebrow}
+            </motion.p>
+          )}
+          <RevealHeading
+            as="h1"
+            text={title}
+            className={`mt-6 font-serif leading-[0.92] tracking-[-0.02em] ${aside ? "text-[clamp(3.2rem,7vw,6.5rem)]" : "max-w-5xl text-[clamp(3.5rem,9vw,8.5rem)]"}`}
+          />
+          {intro && (
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease }}
+              className="mt-7 max-w-xl text-lg text-white/65 md:text-xl"
+            >
+              {intro}
+            </motion.p>
+          )}
+          {actions && (
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45, ease }}
+              className="mt-10"
+            >
+              {actions}
+            </motion.div>
+          )}
+        </div>
+        {aside && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.1, delay: 0.2, ease }}
+          >
+            {aside}
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+export function SectionHeader({
+  eyebrow,
+  title,
+  intro,
+  tone = "dark",
+  className = "",
+}: {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  tone?: Tone;
+  className?: string;
+}) {
+  const light = tone === "light";
+  return (
+    <div className={`grid gap-6 md:grid-cols-[1fr_auto] md:items-end ${className}`}>
+      <div>
+        {eyebrow && <p className={`eyebrow ${light ? "text-brand-deep" : "text-brand-sky"}`}>{eyebrow}</p>}
+        <RevealHeading
+          text={title}
+          accentClassName={`italic ${light ? "text-brand-deep" : "text-brand-sky"}`}
+          className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl"
+        />
+      </div>
+      {intro && (
+        <FadeIn>
+          <p className={`max-w-sm ${light ? "text-ink/60" : "text-white/55"}`}>{intro}</p>
+        </FadeIn>
+      )}
+    </div>
+  );
+}
+
+/** Website screenshot inside browser chrome. Tall screenshots scroll on hover. */
+export function BrowserFrame({
+  src,
+  alt,
+  url,
+  sizes = "(min-width: 1024px) 45vw, 100vw",
+  preload = false,
+  className = "aspect-[4/3]",
+  tone = "dark",
+}: {
+  src: string;
+  alt: string;
+  url: string;
+  sizes?: string;
+  preload?: boolean;
+  className?: string;
+  tone?: Tone;
+}) {
+  const light = tone === "light";
+  return (
+    <div
+      className={`group overflow-hidden rounded-[1.4rem] border shadow-[0_40px_100px_-30px_rgba(7,8,13,0.85)] ${
+        light ? "border-ink/10 bg-white" : "border-white/10 bg-night-soft"
+      }`}
+    >
+      <div className={`flex items-center gap-3 border-b px-4 py-3 ${light ? "border-ink/10" : "border-white/10"}`}>
+        <span className="flex gap-1.5">
+          <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+          <span className="size-2.5 rounded-full bg-[#febc2e]" />
+          <span className="size-2.5 rounded-full bg-[#28c840]" />
+        </span>
+        <span
+          className={`mx-auto flex max-w-[70%] items-center gap-1.5 truncate rounded-full px-4 py-1 font-mono text-[11px] ${
+            light ? "bg-ink/5 text-ink/55" : "bg-white/5 text-white/50"
+          }`}
+        >
+          <span aria-hidden>🔒</span> {url}
+        </span>
+        <span className="w-10" />
+      </div>
+      <div className={`relative overflow-hidden ${className}`}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          preload={preload}
+          className="object-cover object-top transition-[object-position] duration-[4s] ease-in-out group-hover:object-bottom"
+        />
+      </div>
+    </div>
+  );
+}
+
+export type Mark = "yes" | "no" | "partial";
+
+export function ComparisonTable({
+  rows,
+  columns,
+  tone = "light",
+}: {
+  rows: { label: string; values: [Mark, Mark, Mark] }[];
+  columns?: [string, string, string];
+  tone?: Tone;
+}) {
+  const { t } = useLocale();
+  const c = t.common.comparison;
+  const heads = columns ?? [c.techflow, c.agencies, c.freelancers];
+  const light = tone === "light";
+  const label = { yes: c.yes, no: c.no, partial: c.partial };
+
+  return (
+    <div className={`relative overflow-x-auto rounded-[2rem] border ${light ? "border-ink/10 bg-white" : "border-white/10 bg-night-soft"}`}>
+      <table className="w-full min-w-[640px] border-collapse text-left">
+        <thead>
+          <tr className={light ? "text-ink/50" : "text-white/50"}>
+            <th scope="col" className="eyebrow p-5 font-normal md:p-6">
+              {c.criterion}
+            </th>
+            {heads.map((h, i) => (
+              <th
+                key={h}
+                scope="col"
+                className={`p-5 text-center text-sm font-medium md:p-6 ${
+                  i === 0 ? "rounded-t-3xl bg-brand-deep text-white" : ""
+                }`}
+              >
+                {i === 0 ? (
+                  <Image src="/images/techflow-logo.svg" alt={h} width={179} height={36} className="mx-auto h-5 w-auto" />
+                ) : (
+                  h
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, r) => (
+            <tr key={row.label} className={`border-t ${light ? "border-ink/10" : "border-white/10"}`}>
+              <th scope="row" className="p-5 font-medium md:p-6">
+                {row.label}
+              </th>
+              {row.values.map((v, i) => (
+                <td
+                  key={i}
+                  className={`p-5 text-center md:p-6 ${i === 0 ? "bg-brand-deep text-white" : ""} ${
+                    i === 0 && r === rows.length - 1 ? "rounded-b-3xl" : ""
+                  }`}
+                >
+                  <MarkIcon mark={v} highlight={i === 0} light={light} />
+                  <span className="sr-only">{label[v]}</span>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function MarkIcon({ mark, highlight, light }: { mark: Mark; highlight: boolean; light: boolean }) {
+  if (mark === "yes")
+    return (
+      <span
+        aria-hidden
+        className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${
+          highlight ? "bg-white text-brand-deep" : light ? "bg-emerald-500/15 text-emerald-700" : "bg-emerald-400/15 text-emerald-300"
+        }`}
+      >
+        ✓
+      </span>
+    );
+  if (mark === "partial")
+    return (
+      <span aria-hidden className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-amber-500/15 text-amber-700" : "bg-amber-400/15 text-amber-300"}`}>
+        ~
+      </span>
+    );
+  return (
+    <span aria-hidden className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/35" : "bg-white/5 text-white/30"}`}>
+      ✕
+    </span>
+  );
+}
+
+export function ClientMarquee({ label, tone = "dark" }: { label?: string; tone?: Tone }) {
+  const light = tone === "light";
+  return (
+    <div>
+      {label && <p className={`eyebrow text-center ${light ? "text-ink/40" : "text-white/40"}`}>{label}</p>}
+      <div className="mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
+        <ul className="flex w-max animate-marquee items-center gap-16">
+          {[...clients, ...clients].map((client, i) => (
+            <li key={i} aria-hidden={i >= clients.length} className="shrink-0">
+              <Image
+                src={client.src}
+                alt={i < clients.length ? client.name : ""}
+                width={client.width}
+                height={client.height}
+                className={`h-7 w-auto max-w-[140px] object-contain opacity-50 brightness-0 transition-opacity hover:opacity-100 ${light ? "" : "invert"}`}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export function QuoteCard({ quote, name, role, photo }: { quote: string; name: string; role: string; photo?: string }) {
+  return (
+    <section className="bg-night px-5 py-10 md:px-10">
+      <FadeIn className="mx-auto max-w-7xl rounded-[2.5rem] bg-paper px-6 py-16 text-ink md:rounded-[3.5rem] md:px-20 md:py-24">
+        <figure className="mx-auto max-w-4xl">
+          <span aria-hidden className="block font-serif text-8xl leading-[0.5] text-brand-deep">
+            &ldquo;
+          </span>
+          <blockquote className="mt-6 font-serif text-3xl leading-[1.15] md:text-5xl">{quote}</blockquote>
+          <figcaption className="mt-10 flex items-center gap-4">
+            {photo ? (
+              <Image src={photo} alt="" width={48} height={48} className="size-12 rounded-full object-cover" />
+            ) : (
+              <span className="flex size-12 items-center justify-center rounded-full bg-brand-deep font-serif text-xl text-white">{name[0]}</span>
+            )}
+            <span>
+              <span className="block font-medium">{name}</span>
+              <span className="block text-sm text-ink/55">{role}</span>
+            </span>
+          </figcaption>
+        </figure>
+      </FadeIn>
+    </section>
+  );
+}
+
+export function NextSteps({ second }: { second?: { title: string; text: string } }) {
+  const { t } = useLocale();
+  const n = t.common.nextSteps;
+  const steps = n.steps.map((s, i) => (i === 1 && second ? second : s));
+
+  return (
+    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeader eyebrow={n.eyebrow} title={n.heading} intro={n.intro} />
+        <ol className="relative mt-16 grid gap-4 md:grid-cols-5">
+          <div aria-hidden className="absolute left-0 right-0 top-6 hidden h-px bg-linear-to-r from-brand-sky via-white/15 to-transparent md:block" />
+          {steps.map((s, i) => (
+            <FadeIn key={s.title} delay={i * 0.08}>
+              <li className="relative h-full">
+                <span className={`relative flex size-12 items-center justify-center rounded-full border font-serif text-xl ${i === 0 ? "border-brand bg-brand text-white" : "border-white/15 bg-night text-white/70"}`}>
+                  {i + 1}
+                </span>
+                <p className="eyebrow mt-6 text-white/40">
+                  {t.common.step} {i + 1}
+                </p>
+                <h3 className="mt-2 font-serif text-2xl leading-tight">{s.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/55">{s.text}</p>
+              </li>
+            </FadeIn>
+          ))}
+        </ol>
+        <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:flex-row md:items-center md:p-8">
+          <p className="text-white/60">{t.common.reassurance}</p>
+          <HumanActions />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function Chip({ children, tone = "dark" }: { children: React.ReactNode; tone?: Tone }) {
+  return (
+    <span className={`inline-block rounded-full border px-3 py-1 text-sm ${tone === "light" ? "border-ink/15 text-ink/75" : "border-white/15 text-white/80"}`}>
+      {children}
+    </span>
+  );
+}
