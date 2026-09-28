@@ -60,10 +60,7 @@ export function EditorialHero({
         transition={{ duration: 1.2, ease }}
         className="mt-10 flex origin-left items-center justify-between border-b border-white/15 pb-5"
       >
-        <span className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-white/55">
-          <span className="size-1.5 rounded-full bg-brand-sky shadow-[0_0_10px_2px_rgba(71,145,255,0.6)]" />
-          {kicker}
-        </span>
+        <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/55">{kicker}</span>
         {counter && <span className="font-mono text-xs tracking-[0.2em] text-white/35">{counter}</span>}
       </motion.div>
 

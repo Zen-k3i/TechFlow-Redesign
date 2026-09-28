@@ -8,6 +8,8 @@ import { clients, ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
 import { FadeIn, RevealHeading } from "../site/reveal";
+import { useRef, useState } from "react";
+import MuxPlayer, { type MuxPlayerRefAttributes } from "@mux/mux-player-react";
 
 type Tone = "dark" | "light";
 
@@ -39,7 +41,9 @@ export function ButtonLink({
   const content = (
     <>
       {children}
-      <span className={`flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:-rotate-45 ${arrow}`}>
+      <span
+        className={`flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:-rotate-45 ${arrow}`}
+      >
         →
       </span>
     </>
@@ -63,11 +67,18 @@ export function HumanActions({ tone = "dark" }: { tone?: Tone }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Magnetic>
-        <ButtonLink href={links.booking} external variant={tone === "dark" ? "light" : "dark"}>
+        <ButtonLink
+          href={links.booking}
+          external
+          variant={tone === "dark" ? "light" : "dark"}
+        >
           {t.common.human}
         </ButtonLink>
       </Magnetic>
-      <ButtonLink href={href(lang, "contact")} variant={tone === "dark" ? "outline" : "outline-dark"}>
+      <ButtonLink
+        href={href(lang, "contact")}
+        variant={tone === "dark" ? "outline" : "outline-dark"}
+      >
         {t.common.start}
       </ButtonLink>
     </div>
@@ -92,14 +103,27 @@ export function PageHero({
   crumbs?: { label: string; href: string }[];
 }) {
   const { t, lang } = useLocale();
-  const trail = crumbs ? [{ label: t.common.breadcrumbHome, href: href(lang, "home") }, ...crumbs] : null;
+  const trail = crumbs
+    ? [{ label: t.common.breadcrumbHome, href: href(lang, "home") }, ...crumbs]
+    : null;
 
   return (
-    <section id="top" className="grain relative overflow-hidden bg-night px-5 pb-20 pt-32 text-white md:px-10 md:pb-28 md:pt-44">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_55%_at_85%_20%,rgba(71,102,255,0.3),transparent_70%),radial-gradient(40%_40%_at_0%_100%,rgba(21,37,112,0.5),transparent_70%)]" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(70%_60%_at_50%_30%,black,transparent)]" />
+    <section
+      id="top"
+      className="grain relative overflow-hidden bg-night px-5 pb-20 pt-32 text-white md:px-10 md:pb-28 md:pt-44"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_55%_at_85%_20%,rgba(71,102,255,0.3),transparent_70%),radial-gradient(40%_40%_at_0%_100%,rgba(21,37,112,0.5),transparent_70%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(70%_60%_at_50%_30%,black,transparent)]"
+      />
 
-      <div className={`relative mx-auto grid max-w-7xl gap-14 ${aside ? "lg:grid-cols-[1.05fr_0.95fr] lg:items-center" : ""}`}>
+      <div
+        className={`relative mx-auto grid max-w-7xl gap-14 ${aside ? "lg:grid-cols-[1.05fr_0.95fr] lg:items-center" : ""}`}
+      >
         <div>
           {trail && (
             <motion.nav
@@ -130,9 +154,8 @@ export function PageHero({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05, ease }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm text-white/75"
+              className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm text-white/75"
             >
-              <span className="size-1.5 rounded-full bg-brand-sky shadow-[0_0_10px_2px_rgba(71,145,255,0.6)]" />
               {badge ?? eyebrow}
             </motion.p>
           )}
@@ -191,9 +214,17 @@ export function SectionHeader({
 }) {
   const light = tone === "light";
   return (
-    <div className={`grid gap-6 md:grid-cols-[1fr_auto] md:items-end ${className}`}>
+    <div
+      className={`grid gap-6 md:grid-cols-[1fr_auto] md:items-end ${className}`}
+    >
       <div>
-        {eyebrow && <p className={`eyebrow ${light ? "text-brand-deep" : "text-brand-sky"}`}>{eyebrow}</p>}
+        {eyebrow && (
+          <p
+            className={`eyebrow ${light ? "text-brand-deep" : "text-brand-sky"}`}
+          >
+            {eyebrow}
+          </p>
+        )}
         <RevealHeading
           text={title}
           accentClassName={`italic ${light ? "text-brand-deep" : "text-brand-sky"}`}
@@ -202,7 +233,9 @@ export function SectionHeader({
       </div>
       {intro && (
         <FadeIn>
-          <p className={`max-w-sm ${light ? "text-ink/60" : "text-white/55"}`}>{intro}</p>
+          <p className={`max-w-sm ${light ? "text-ink/60" : "text-white/55"}`}>
+            {intro}
+          </p>
         </FadeIn>
       )}
     </div>
@@ -234,7 +267,9 @@ export function BrowserFrame({
         light ? "border-ink/10 bg-white" : "border-white/10 bg-night-soft"
       }`}
     >
-      <div className={`flex items-center gap-3 border-b px-4 py-3 ${light ? "border-ink/10" : "border-white/10"}`}>
+      <div
+        className={`flex items-center gap-3 border-b px-4 py-3 ${light ? "border-ink/10" : "border-white/10"}`}
+      >
         <span className="flex gap-1.5">
           <span className="size-2.5 rounded-full bg-[#ff5f57]" />
           <span className="size-2.5 rounded-full bg-[#febc2e]" />
@@ -281,7 +316,9 @@ export function ComparisonTable({
   const label = { yes: c.yes, no: c.no, partial: c.partial };
 
   return (
-    <div className={`relative overflow-x-auto rounded-[2rem] border ${light ? "border-ink/10 bg-white" : "border-white/10 bg-night-soft"}`}>
+    <div
+      className={`relative overflow-x-auto rounded-[2rem] border ${light ? "border-ink/10 bg-white" : "border-white/10 bg-night-soft"}`}
+    >
       <table className="w-full min-w-[640px] border-collapse text-left">
         <thead>
           <tr className={light ? "text-ink/50" : "text-white/50"}>
@@ -297,7 +334,13 @@ export function ComparisonTable({
                 }`}
               >
                 {i === 0 ? (
-                  <Image src="/images/techflow-logo.svg" alt={h} width={179} height={36} className="mx-auto h-5 w-auto" />
+                  <Image
+                    src="/images/techflow-logo.svg"
+                    alt={h}
+                    width={179}
+                    height={36}
+                    className="mx-auto h-5 w-auto"
+                  />
                 ) : (
                   h
                 )}
@@ -307,7 +350,10 @@ export function ComparisonTable({
         </thead>
         <tbody>
           {rows.map((row, r) => (
-            <tr key={row.label} className={`border-t ${light ? "border-ink/10" : "border-white/10"}`}>
+            <tr
+              key={row.label}
+              className={`border-t ${light ? "border-ink/10" : "border-white/10"}`}
+            >
               <th scope="row" className="p-5 font-medium md:p-6">
                 {row.label}
               </th>
@@ -330,13 +376,25 @@ export function ComparisonTable({
   );
 }
 
-function MarkIcon({ mark, highlight, light }: { mark: Mark; highlight: boolean; light: boolean }) {
+function MarkIcon({
+  mark,
+  highlight,
+  light,
+}: {
+  mark: Mark;
+  highlight: boolean;
+  light: boolean;
+}) {
   if (mark === "yes")
     return (
       <span
         aria-hidden
         className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${
-          highlight ? "bg-white text-brand-deep" : light ? "bg-emerald-500/15 text-emerald-700" : "bg-emerald-400/15 text-emerald-300"
+          highlight
+            ? "bg-white text-brand-deep"
+            : light
+              ? "bg-emerald-500/15 text-emerald-700"
+              : "bg-emerald-400/15 text-emerald-300"
         }`}
       >
         ✓
@@ -344,22 +402,40 @@ function MarkIcon({ mark, highlight, light }: { mark: Mark; highlight: boolean; 
     );
   if (mark === "partial")
     return (
-      <span aria-hidden className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-amber-500/15 text-amber-700" : "bg-amber-400/15 text-amber-300"}`}>
+      <span
+        aria-hidden
+        className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-amber-500/15 text-amber-700" : "bg-amber-400/15 text-amber-300"}`}
+      >
         ~
       </span>
     );
   return (
-    <span aria-hidden className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/35" : "bg-white/5 text-white/30"}`}>
+    <span
+      aria-hidden
+      className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/35" : "bg-white/5 text-white/30"}`}
+    >
       ✕
     </span>
   );
 }
 
-export function ClientMarquee({ label, tone = "dark" }: { label?: string; tone?: Tone }) {
+export function ClientMarquee({
+  label,
+  tone = "dark",
+}: {
+  label?: string;
+  tone?: Tone;
+}) {
   const light = tone === "light";
   return (
     <div>
-      {label && <p className={`eyebrow text-center ${light ? "text-ink/40" : "text-white/40"}`}>{label}</p>}
+      {label && (
+        <p
+          className={`eyebrow text-center ${light ? "text-ink/40" : "text-white/40"}`}
+        >
+          {label}
+        </p>
+      )}
       <div className="mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
         <ul className="flex w-max animate-marquee items-center gap-16">
           {[...clients, ...clients].map((client, i) => (
@@ -379,20 +455,43 @@ export function ClientMarquee({ label, tone = "dark" }: { label?: string; tone?:
   );
 }
 
-export function QuoteCard({ quote, name, role, photo }: { quote: string; name: string; role: string; photo?: string }) {
+export function QuoteCard({
+  quote,
+  name,
+  role,
+  photo,
+}: {
+  quote: string;
+  name: string;
+  role: string;
+  photo?: string;
+}) {
   return (
     <section className="bg-night px-5 py-10 md:px-10">
       <FadeIn className="mx-auto max-w-7xl rounded-[2.5rem] bg-paper px-6 py-16 text-ink md:rounded-[3.5rem] md:px-20 md:py-24">
         <figure className="mx-auto max-w-4xl">
-          <span aria-hidden className="block font-serif text-8xl leading-[0.5] text-brand-deep">
+          <span
+            aria-hidden
+            className="block font-serif text-8xl leading-[0.5] text-brand-deep"
+          >
             &ldquo;
           </span>
-          <blockquote className="mt-6 font-serif text-3xl leading-[1.15] md:text-5xl">{quote}</blockquote>
+          <blockquote className="mt-6 font-serif text-3xl leading-[1.15] md:text-5xl">
+            {quote}
+          </blockquote>
           <figcaption className="mt-10 flex items-center gap-4">
             {photo ? (
-              <Image src={photo} alt="" width={48} height={48} className="size-12 rounded-full object-cover" />
+              <Image
+                src={photo}
+                alt=""
+                width={48}
+                height={48}
+                className="size-12 rounded-full object-cover"
+              />
             ) : (
-              <span className="flex size-12 items-center justify-center rounded-full bg-brand-deep font-serif text-xl text-white">{name[0]}</span>
+              <span className="flex size-12 items-center justify-center rounded-full bg-brand-deep font-serif text-xl text-white">
+                {name[0]}
+              </span>
             )}
             <span>
               <span className="block font-medium">{name}</span>
@@ -405,7 +504,11 @@ export function QuoteCard({ quote, name, role, photo }: { quote: string; name: s
   );
 }
 
-export function NextSteps({ second }: { second?: { title: string; text: string } }) {
+export function NextSteps({
+  second,
+}: {
+  second?: { title: string; text: string };
+}) {
   const { t } = useLocale();
   const n = t.common.nextSteps;
   const steps = n.steps.map((s, i) => (i === 1 && second ? second : s));
@@ -415,18 +518,27 @@ export function NextSteps({ second }: { second?: { title: string; text: string }
       <div className="mx-auto max-w-7xl">
         <SectionHeader eyebrow={n.eyebrow} title={n.heading} intro={n.intro} />
         <ol className="relative mt-16 grid gap-4 md:grid-cols-5">
-          <div aria-hidden className="absolute left-0 right-0 top-6 hidden h-px bg-linear-to-r from-brand-sky via-white/15 to-transparent md:block" />
+          <div
+            aria-hidden
+            className="absolute left-0 right-0 top-6 hidden h-px bg-linear-to-r from-brand-sky via-white/15 to-transparent md:block"
+          />
           {steps.map((s, i) => (
             <FadeIn key={s.title} delay={i * 0.08}>
               <li className="relative h-full">
-                <span className={`relative flex size-12 items-center justify-center rounded-full border font-serif text-xl ${i === 0 ? "border-brand bg-brand text-white" : "border-white/15 bg-night text-white/70"}`}>
+                <span
+                  className={`relative flex size-12 items-center justify-center rounded-full border font-serif text-xl ${i === 0 ? "border-brand bg-brand text-white" : "border-white/15 bg-night text-white/70"}`}
+                >
                   {i + 1}
                 </span>
                 <p className="eyebrow mt-6 text-white/40">
                   {t.common.step} {i + 1}
                 </p>
-                <h3 className="mt-2 font-serif text-2xl leading-tight">{s.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/55">{s.text}</p>
+                <h3 className="mt-2 font-serif text-2xl leading-tight">
+                  {s.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/55">
+                  {s.text}
+                </p>
               </li>
             </FadeIn>
           ))}
@@ -440,10 +552,105 @@ export function NextSteps({ second }: { second?: { title: string; text: string }
   );
 }
 
-export function Chip({ children, tone = "dark" }: { children: React.ReactNode; tone?: Tone }) {
+export function Chip({
+  children,
+  tone = "dark",
+}: {
+  children: React.ReactNode;
+  tone?: Tone;
+}) {
   return (
-    <span className={`inline-block rounded-full border px-3 py-1 text-sm ${tone === "light" ? "border-ink/15 text-ink/75" : "border-white/15 text-white/80"}`}>
+    <span
+      className={`inline-block rounded-full border px-3 py-1 text-sm ${tone === "light" ? "border-ink/15 text-ink/75" : "border-white/15 text-white/80"}`}
+    >
       {children}
     </span>
+  );
+}
+
+export type MuxVideoItem = {
+  kind: "video";
+  playbackId: string;
+  name?: string;
+  aspectRatio?: string;
+  role?: string;
+};
+
+export function MuxCard({
+  item,
+  className = "",
+}: {
+  item: MuxVideoItem;
+  className?: string;
+}) {
+  const [isPlayingWithSound, setIsPlayingWithSound] = useState(false);
+  const playerRef = useRef<MuxPlayerRefAttributes>(null);
+
+  const handlePlayWithSound = () => {
+    setIsPlayingWithSound(true);
+  };
+
+  return (
+    <div
+      className={`relative h-full w-auto shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-night-soft transition-colors hover:border-brand/50 ${className}`}
+      style={{
+        aspectRatio: item.aspectRatio || "9 / 16",
+        contain: "paint layout",
+      }}
+    >
+      {!isPlayingWithSound ? (
+        <>
+          {/* Native HTML5 video: 100% smooth in CSS marquee, no shadow DOM reflow glitches */}
+          <video
+            src={`https://stream.mux.com/${item.playbackId}/medium.mp4`}
+            poster={`https://image.mux.com/${item.playbackId}/thumbnail.webp?time=1`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover"
+          />
+
+          {/* Overlay gradient */}
+          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+
+          {/* Play Button */}
+          <button
+            type="button"
+            aria-label="Play video with sound"
+            onClick={handlePlayWithSound}
+            className="absolute left-1/2 top-1/2 z-10 flex size-14 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#4766ff] shadow-lg transition-transform hover:scale-110 active:scale-95 md:size-16"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="white"
+              className="ml-1"
+            >
+              <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
+            </svg>
+          </button>
+        </>
+      ) : (
+        /* Full interactive player mounts with sound from beginning on click */
+        <MuxPlayer
+          ref={playerRef}
+          playbackId={item.playbackId}
+          metadataVideoTitle={item.name || "Client Testimonial"}
+          autoPlay
+          playsInline
+          startTime={0}
+          className="h-full w-full object-cover"
+          style={{ width: "100%", height: "100%", display: "block" }}
+        />
+      )}
+      <div className="absolute bottom-0 left-0 right-0 p-4">
+        <h3 className="text-sm font-medium text-white">{item.name}</h3>
+        <p className="text-sm text-white/55">{item.role}</p>
+      </div>
+    </div>
   );
 }

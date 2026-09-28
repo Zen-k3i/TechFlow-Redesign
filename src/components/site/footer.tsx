@@ -43,17 +43,13 @@ export function Footer() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col items-start justify-between gap-12 md:flex-row md:items-end">
           <div>
-            <p className="eyebrow flex items-center gap-2 text-white/60">
-              <span className="size-2 rounded-full bg-emerald-400" /> {f.status}
-            </p>
+            <p className="eyebrow text-white/60">{f.status}</p>
             <RevealHeading
               text={f.heading}
               accentClassName="italic text-brand-sky"
               className="mt-5 font-serif text-[clamp(3.5rem,10vw,9rem)] leading-[0.9]"
             />
-            <p className="mt-6 max-w-md text-white/60">
-              {f.text}
-            </p>
+            <p className="mt-6 max-w-md text-white/60">{f.text}</p>
           </div>
           <Magnetic strength={0.4}>
             <a
@@ -75,10 +71,14 @@ export function Footer() {
 
         <div className="mt-28 grid gap-12 border-t border-white/15 pt-14 md:grid-cols-[1.2fr_repeat(3,1fr)]">
           <div>
-            <Image src="/images/techflow-logo.svg" alt="TechFlow" width={179} height={36} className="h-8 w-auto" />
-            <p className="mt-4 max-w-xs text-sm text-white/55">
-              {f.tagline}
-            </p>
+            <Image
+              src="/images/techflow-logo.svg"
+              alt="TechFlow"
+              width={179}
+              height={36}
+              className="h-8 w-auto"
+            />
+            <p className="mt-4 max-w-xs text-sm text-white/55">{f.tagline}</p>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
@@ -87,11 +87,19 @@ export function Footer() {
                 {col.items.map((item) => (
                   <li key={item.label}>
                     {col.external ? (
-                      <a href={item.href} target="_blank" rel="noreferrer" className="text-white/75 transition-colors hover:text-white">
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-white/75 transition-colors hover:text-white"
+                      >
                         {item.label} ↗
                       </a>
                     ) : (
-                      <Link href={item.href} className="text-white/75 transition-colors hover:text-white">
+                      <Link
+                        href={item.href}
+                        className="text-white/75 transition-colors hover:text-white"
+                      >
                         {item.label}
                       </Link>
                     )}

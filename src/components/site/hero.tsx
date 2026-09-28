@@ -79,10 +79,6 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
           transition={{ duration: 0.6, delay: 0.15, ease }}
           className="group flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.03] px-4 py-1.5 text-sm text-brand-sky backdrop-blur transition-colors hover:border-brand-sky/60"
         >
-          <span className="relative flex size-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-brand-sky/70" />
-            <span className="relative size-2 rounded-full bg-brand-sky" />
-          </span>
           {t.hero.badge}
           <span className="transition-transform group-hover:translate-x-0.5">
             →

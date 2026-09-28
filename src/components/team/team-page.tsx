@@ -158,10 +158,7 @@ export function TeamPage() {
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   {offices.map((o) => (
                     <div key={o.city} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="flex items-center gap-2 whitespace-nowrap font-serif text-2xl">
-                        <span className="size-2 rounded-full bg-brand-sky shadow-[0_0_10px_2px_rgba(71,145,255,0.6)]" />
-                        {o.city}
-                      </p>
+                      <p className="whitespace-nowrap font-serif text-2xl">{o.city}</p>
                       <p className="eyebrow mt-3 text-white/40">{c.cambodia.localTime}</p>
                       <LocalTime timeZone={o.timeZone} lang={lang} />
                     </div>

@@ -30,19 +30,33 @@ export function ContactPage() {
 
       <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl">
-          <SectionHeader eyebrow={c.offices.eyebrow} title={c.offices.heading} intro={c.offices.intro} />
+          <SectionHeader
+            eyebrow={c.offices.eyebrow}
+            title={c.offices.heading}
+            intro={c.offices.intro}
+          />
           <FadeIn className="relative mt-14 overflow-hidden rounded-[2.5rem] border border-white/10 bg-night-soft p-6 md:p-10">
-            <Image src="/images/studio/photo.png" alt="Paris · Phnom Penh" width={1545} height={768} className="w-full opacity-35 invert" />
+            <Image
+              src="/images/studio/photo.png"
+              alt="Paris · Phnom Penh"
+              width={1545}
+              height={768}
+              className="w-full opacity-35 invert"
+            />
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {offices.map((o) => (
-                <div key={o.city} className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+                <div
+                  key={o.city}
+                  className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
+                >
                   <div className="flex items-start justify-between gap-4">
-                    <p className="flex items-center gap-3 whitespace-nowrap font-serif text-3xl md:text-4xl">
-                      <span className="size-2.5 shrink-0 rounded-full bg-brand-sky shadow-[0_0_10px_2px_rgba(71,145,255,0.6)]" />
+                    <p className="whitespace-nowrap font-serif text-3xl md:text-4xl">
                       {o.city}
                     </p>
                     <div className="shrink-0 text-right">
-                      <p className="eyebrow whitespace-nowrap text-white/40">{c.offices.localTime}</p>
+                      <p className="eyebrow whitespace-nowrap text-white/40">
+                        {c.offices.localTime}
+                      </p>
                       <LocalTime timeZone={o.timeZone} lang={lang} />
                     </div>
                   </div>
@@ -61,7 +75,9 @@ export function ContactPage() {
                       <span className="text-white/45">{c.offices.call} · </span>
                       {o.phone}
                     </span>
-                    <span className="flex size-9 items-center justify-center rounded-full bg-white/10">↗</span>
+                    <span className="flex size-9 items-center justify-center rounded-full bg-white/10">
+                      ↗
+                    </span>
                   </a>
                 </div>
               ))}
@@ -79,12 +95,15 @@ function FounderCard() {
   return (
     <div className="relative mx-auto max-w-md overflow-hidden rounded-[2.5rem] border border-white/10 bg-night-soft/80 p-3 backdrop-blur">
       <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem]">
-        <Image src={founder.photo} alt={founder.name} fill sizes="(min-width: 1024px) 28rem, 100vw" preload className="object-cover object-[50%_25%]" />
-        <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-night/70 px-3 py-1.5 text-xs text-white backdrop-blur">
-          <span className="relative flex size-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-70" />
-            <span className="relative size-2 rounded-full bg-emerald-400" />
-          </span>
+        <Image
+          src={founder.photo}
+          alt={founder.name}
+          fill
+          sizes="(min-width: 1024px) 28rem, 100vw"
+          preload
+          className="object-cover object-[50%_25%]"
+        />
+        <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-night/70 px-3 py-1.5 text-xs text-white backdrop-blur">
           {c.person.availability}
         </span>
       </div>
@@ -93,14 +112,21 @@ function FounderCard() {
         <p className="text-sm text-white/50">{founder.role}</p>
         <div className="mt-6">
           <Magnetic>
-            <ButtonLink href={links.booking} external className="w-full justify-between">
+            <ButtonLink
+              href={links.booking}
+              external
+              className="w-full justify-between"
+            >
               {c.person.book}
             </ButtonLink>
           </Magnetic>
         </div>
         <p className="mt-4 text-center text-sm text-white/45">
           {c.person.or}{" "}
-          <a href={`mailto:${links.email}`} className="text-white underline-offset-4 hover:underline">
+          <a
+            href={`mailto:${links.email}`}
+            className="text-white underline-offset-4 hover:underline"
+          >
             {links.email}
           </a>
         </p>
@@ -133,7 +159,9 @@ function Chips({
               aria-pressed={on}
               onClick={() => onToggle(o)}
               className={`rounded-full border px-4 py-2 text-sm transition-colors ${
-                on ? "border-brand-deep bg-brand-deep text-white" : "border-ink/15 text-ink/70 hover:border-ink/40"
+                on
+                  ? "border-brand-deep bg-brand-deep text-white"
+                  : "border-ink/15 text-ink/70 hover:border-ink/40"
               }`}
             >
               {o}
@@ -157,7 +185,10 @@ function BriefForm() {
   const [timeline, setTimeline] = useState("");
   const [sent, setSent] = useState(false);
 
-  const toggle = (value: string) => setServices((s) => (s.includes(value) ? s.filter((v) => v !== value) : [...s, value]));
+  const toggle = (value: string) =>
+    setServices((s) =>
+      s.includes(value) ? s.filter((v) => v !== value) : [...s, value],
+    );
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -169,7 +200,6 @@ function BriefForm() {
       [f.company, get("company")],
       [f.website, get("website")],
       [f.services, services.join(", ")],
-      [f.budget, budget],
       [f.timeline, timeline],
     ]
       .filter(([, v]) => v)
@@ -185,12 +215,18 @@ function BriefForm() {
       <div className="mx-auto grid max-w-7xl gap-14 rounded-[2.5rem] bg-paper px-6 py-16 text-ink md:rounded-[3.5rem] md:px-16 md:py-24 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="eyebrow text-brand-deep">{f.eyebrow}</p>
-          <RevealHeading text={f.heading} accentClassName="italic text-brand-deep" className="mt-4 font-serif text-5xl leading-[0.95] md:text-6xl" />
+          <RevealHeading
+            text={f.heading}
+            accentClassName="italic text-brand-deep"
+            className="mt-4 font-serif text-5xl leading-[0.95] md:text-6xl"
+          />
           <ul className="mt-12 space-y-6">
             {f.promises.map((p, i) => (
               <FadeIn key={p.title} delay={i * 0.08}>
                 <li className="flex gap-4">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-deep/10 font-serif text-lg text-brand-deep">{i + 1}</span>
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-deep/10 font-serif text-lg text-brand-deep">
+                    {i + 1}
+                  </span>
                   <span>
                     <span className="block font-medium">{p.title}</span>
                     <span className="mt-1 block text-ink/60">{p.text}</span>
@@ -202,31 +238,71 @@ function BriefForm() {
         </div>
 
         <FadeIn>
-          <form onSubmit={onSubmit} className="space-y-7 rounded-[2rem] border border-ink/10 bg-white/60 p-6 md:p-10">
+          <form
+            onSubmit={onSubmit}
+            className="space-y-7 rounded-[2rem] border border-ink/10 bg-white/60 p-6 md:p-10"
+          >
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="block text-sm font-medium text-ink/70">
                 {f.name} *
-                <input name="name" required autoComplete="name" className={field} />
+                <input
+                  name="name"
+                  required
+                  autoComplete="name"
+                  className={field}
+                />
               </label>
               <label className="block text-sm font-medium text-ink/70">
                 {f.email} *
-                <input name="email" type="email" required autoComplete="email" className={field} />
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className={field}
+                />
               </label>
               <label className="block text-sm font-medium text-ink/70">
                 {f.company}
-                <input name="company" autoComplete="organization" className={field} />
+                <input
+                  name="company"
+                  autoComplete="organization"
+                  className={field}
+                />
               </label>
               <label className="block text-sm font-medium text-ink/70">
                 {f.website}
-                <input name="website" type="url" inputMode="url" placeholder="https://" className={field} />
+                <input
+                  name="website"
+                  type="url"
+                  inputMode="url"
+                  placeholder="https://"
+                  className={field}
+                />
               </label>
             </div>
-            <Chips legend={f.services} options={f.serviceOptions} selected={services} onToggle={toggle} />
-            <Chips legend={f.budget} options={f.budgetOptions} selected={[budget]} onToggle={(v) => setBudget(budget === v ? "" : v)} />
-            <Chips legend={f.timeline} options={f.timelineOptions} selected={[timeline]} onToggle={(v) => setTimeline(timeline === v ? "" : v)} />
+            <Chips
+              legend={f.services}
+              options={f.serviceOptions}
+              selected={services}
+              onToggle={toggle}
+            />
+
+            <Chips
+              legend={f.timeline}
+              options={f.timelineOptions}
+              selected={[timeline]}
+              onToggle={(v) => setTimeline(timeline === v ? "" : v)}
+            />
             <label className="block text-sm font-medium text-ink/70">
               {f.message} *
-              <textarea name="message" required rows={5} placeholder={f.messagePlaceholder} className={`${field} resize-y`} />
+              <textarea
+                name="message"
+                required
+                rows={5}
+                placeholder={f.messagePlaceholder}
+                className={`${field} resize-y`}
+              />
             </label>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <button
@@ -234,7 +310,9 @@ function BriefForm() {
                 className="group inline-flex h-14 items-center gap-3 self-start rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand-deep"
               >
                 {f.submit}
-                <span className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">→</span>
+                <span className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">
+                  →
+                </span>
               </button>
               <p className="text-sm text-ink/50" aria-live="polite">
                 {sent ? f.sent : f.note}
