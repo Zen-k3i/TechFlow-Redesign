@@ -5,7 +5,7 @@ import { PageShell } from "@/components/page/shell";
 import { hasLocale } from "@/i18n/config";
 import { client } from "@/sanity/client";
 import { getInsight, isSlug, redirectToTranslation } from "@/sanity/fetch";
-import { cmsAlternates } from "@/sanity/metadata";
+import { cmsAlternates, translationLinks } from "@/sanity/metadata";
 import { INSIGHT_SLUGS_QUERY } from "@/sanity/queries";
 
 export async function generateStaticParams({ params }: { params: { lang: string } }) {
@@ -37,7 +37,7 @@ export default async function Article({ params }: PageProps<"/[lang]/nos-insight
   }
 
   return (
-    <PageShell lang={lang} current="insights">
+    <PageShell lang={lang} current="insights" alternates={translationLinks("insights", lang, slug, article.translations)}>
       <ArticlePage article={article} />
     </PageShell>
   );

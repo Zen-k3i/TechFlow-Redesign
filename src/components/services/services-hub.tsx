@@ -8,14 +8,13 @@ import { useLocale } from "../site/locale";
 import { Process } from "../site/process";
 import { FadeIn, RevealHeading } from "../site/reveal";
 import { Faq } from "../site/faq";
-import { Testimonials } from "../site/testimonials";
 import { Chip, HumanActions, SectionHeader } from "../page/ui";
 import { projectImage } from "../site/content";
 import { projectPreviews } from "../site/previews";
 import { EditorialHero, HoverPreview, pad, WordMarquee } from "./editorial";
 import { servicesHub, tools } from "./hub-data";
 
-export function ServicesHub() {
+export function ServicesHub({ testimonials }: { testimonials: React.ReactNode }) {
   const { lang, t } = useLocale();
   const c = servicesHub[lang];
   const services = serviceKeys.map((key, i) => ({ key, url: c.urls[i], ...t.services.items[i] }));
@@ -141,7 +140,7 @@ export function ServicesHub() {
       </section>
 
       <Process />
-      <Testimonials />
+      {testimonials}
       <Faq />
     </>
   );

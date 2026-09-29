@@ -89,7 +89,7 @@ export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
                     exit={{ opacity: 0, scale: 0.94 }}
                     transition={{ duration: 0.4, ease }}
                   >
-                    {"cms" in entry ? <CmsProjectCard project={entry.cms} /> : <ProjectCard project={entry.local} />}
+                    {"cms" in entry ? <CmsProjectCard project={entry.cms} /> : <ProjectCard project={entry.local} cursor={false} glow={false} />}
                   </motion.li>
                 ))}
               </AnimatePresence>

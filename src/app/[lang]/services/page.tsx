@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PageShell } from "@/components/page/shell";
 import { servicesHub } from "@/components/services/hub-data";
 import { ServicesHub } from "@/components/services/services-hub";
+import { Testimonials } from "@/components/site/testimonials";
 import { hasLocale } from "@/i18n/config";
 import { pageMetadata } from "@/i18n/routes";
 
@@ -18,7 +19,7 @@ export default async function Services({ params }: PageProps<"/[lang]/services">
 
   return (
     <PageShell lang={lang} current="services">
-      <ServicesHub />
+      <ServicesHub testimonials={<Testimonials />} />
     </PageShell>
   );
 }

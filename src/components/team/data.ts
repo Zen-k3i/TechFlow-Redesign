@@ -1,6 +1,11 @@
 import type { Locale } from "@/i18n/config";
+import type { TEAM_QUERY_RESULT } from "@/sanity.types";
 import type { Mark } from "../page/ui";
 
+/** Team members live in Sanity (TechFlow CMS) for the team page. */
+export type TeamMember = TEAM_QUERY_RESULT[number];
+
+/** Local copy still used by the contact page and the services hero. */
 export const members = [
   { name: "Maximilien Grolier", role: "Founder & CEO", photo: "/images/team/maximilien-grolier.webp" },
   { name: "Wichheca Hin", role: "Senior Project Manager", photo: "/images/team/wichheca-hin.jpg" },

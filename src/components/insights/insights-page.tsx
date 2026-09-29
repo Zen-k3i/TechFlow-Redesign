@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useDeferredValue, useMemo, useState } from "react";
+import { LayoutGroup } from "motion/react";
 import { href } from "@/i18n/routes";
-import { sanityLoader, urlFor } from "@/sanity/image";
 import { SanityImage } from "../cms/sanity-image";
 import { ServiceCards } from "../page/service-cards";
-import { BrowserFrame, PageHero } from "../page/ui";
+import { PageHero } from "../page/ui";
 import { useLocale } from "../site/locale";
 import { FadeIn } from "../site/reveal";
+import { FilterChip } from "../site/work";
 import { insightsContent, type InsightCard } from "./data";
 
 export const formatDate = (iso: string, lang: string) =>
@@ -38,9 +40,9 @@ function Meta({ article, light = false }: { article: InsightCard; light?: boolea
 }
 
 export function ArticleCard({ article, light = true, wide = false }: { article: InsightCard; light?: boolean; wide?: boolean }) {
-  const { lang, t } = useLocale();
+  const { lang } = useLocale();
   return (
-    <Link href={href(lang, "insights", article.slug ?? "")} data-cursor={t.common.readMore} className={`group block ${wide ? "md:grid md:grid-cols-2 md:items-center md:gap-12" : ""}`}>
+    <Link href={href(lang, "insights", article.slug ?? "")} className={`group block ${wide ? "md:grid md:grid-cols-2 md:items-center md:gap-12" : ""}`}>
       <div className="relative aspect-[16/10] overflow-hidden rounded-[1.6rem] bg-night-soft">
         <SanityImage
           image={article.coverImage}
@@ -52,7 +54,7 @@ export function ArticleCard({ article, light = true, wide = false }: { article: 
       </div>
       <div className={wide ? "mt-6 md:mt-0" : "mt-6"}>
         <Meta article={article} light={light} />
-        <h3 className={`mt-4 font-serif text-3xl leading-[1.05] transition-colors md:text-4xl ${light ? "group-hover:text-brand-deep" : "group-hover:text-brand-sky"}`}>
+        <h3 className={`mt-4 font-serif text-3xl leading-[1.05] transition-colors ${wide ? "md:text-4xl" : ""} ${light ? "group-hover:text-brand" : "group-hover:text-brand-sky"}`}>
           {article.title}
         </h3>
         <p className={`mt-3 max-w-xl ${light ? "text-ink/60" : "text-white/55"}`}>{article.excerpt}</p>
@@ -61,66 +63,175 @@ export function ArticleCard({ article, light = true, wide = false }: { article: 
   );
 }
 
+/** The newest article, opening the articles section in the same visual language as the grid. */
+function FeaturedArticle({ article }: { article: InsightCard }) {
+  const { lang, t } = useLocale();
+  const c = insightsContent[lang];
+  const author = article.author;
+
+  return (
+    <FadeIn>
+      <p className="eyebrow text-brand-deep">{c.latest}</p>
+      <Link
+        href={href(lang, "insights", article.slug ?? "")}
+        className="group mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-14"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] bg-ink/5">
+          <SanityImage
+            image={article.coverImage}
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 1024px) 55vw, 100vw"
+            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+          />
+        </div>
+        <div>
+          <Meta article={article} light />
+          <h2 className="mt-5 font-serif text-4xl leading-[1.02] transition-colors group-hover:text-brand md:text-5xl xl:text-6xl">
+            {article.title}
+          </h2>
+          <p className="mt-5 text-lg text-ink/60">{article.excerpt}</p>
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-6">
+            <span className="flex items-center gap-3 text-sm text-ink/60">
+              {author?.photo?.asset && (
+                <span className="relative size-9 overflow-hidden rounded-full bg-ink/5">
+                  <SanityImage image={author.photo} alt="" fill width={96} sizes="36px" className="object-cover object-top" />
+                </span>
+              )}
+              <span>
+                {c.by} <span className="font-medium text-ink">{author?.name ?? "TechFlow Agency"}</span>
+              </span>
+            </span>
+            <span className="inline-flex h-14 items-center gap-3 rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors group-hover:bg-brand">
+              {t.common.readMore}
+              <span className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">
+                →
+              </span>
+            </span>
+          </div>
+        </div>
+      </Link>
+    </FadeIn>
+  );
+}
+
 export function InsightsPage({ articles }: { articles: InsightCard[] }) {
   const { lang, t } = useLocale();
   const c = insightsContent[lang];
   const [latest, ...rest] = articles;
 
+
   return (
     <>
       <PageHero badge={c.badge} title={c.title} intro={c.intro} crumbs={[{ label: t.nav.pages.insights, href: href(lang, "insights") }]} />
 
-      {latest && (
-        <section className="bg-night px-5 pb-28 text-white md:px-10">
-          <FadeIn className="mx-auto max-w-7xl">
-            <p className="eyebrow text-white/40">{c.latest}</p>
-            <Link
-              href={href(lang, "insights", latest.slug ?? "")}
-              data-cursor={t.common.readMore}
-              className="group mt-6 grid gap-10 rounded-[2.5rem] border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/25 md:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
-            >
-              {latest.coverImage?.asset && (
-                <BrowserFrame
-                  src={urlFor(latest.coverImage).width(1600).url()}
-                  alt={latest.coverImage.alt ?? ""}
-                  loader={sanityLoader}
-                  url={`techflow-agency.com${href(lang, "insights", latest.slug ?? "")}`}
-                  preload
-                  className="aspect-[16/10]"
-                />
-              )}
-              <div className="lg:pr-6">
-                <Meta article={latest} />
-                <h2 className="mt-5 font-serif text-4xl leading-[1.02] md:text-6xl">{latest.title}</h2>
-                <p className="mt-5 text-lg text-white/60">{latest.excerpt}</p>
-                <span className="mt-8 inline-flex items-center gap-3 font-medium">
-                  {t.common.readMore}
-                  <span className="flex size-10 items-center justify-center rounded-full bg-white text-night transition-transform duration-300 group-hover:-rotate-45">
-                    →
-                  </span>
-                </span>
-              </div>
-            </Link>
-          </FadeIn>
-        </section>
-      )}
-
-      {rest.length > 0 && (
-        <section className="bg-night px-5 md:px-10">
-          <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-paper px-6 py-20 text-ink md:rounded-[3.5rem] md:px-16 md:py-24">
-            <p className="eyebrow text-brand-deep">{c.all}</p>
-            <div className={`mt-12 grid gap-16 ${rest.length > 1 ? "md:grid-cols-2" : ""}`}>
-              {rest.map((a, i) => (
-                <FadeIn key={a._id} delay={(i % 2) * 0.08}>
-                  <ArticleCard article={a} wide={rest.length === 1} />
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {latest && <ArticleIndex articles={articles} latest={latest} showGrid={rest.length > 0} />}
 
       <ServiceCards eyebrow={c.services.eyebrow} heading={c.services.heading} />
     </>
+  );
+}
+
+const normalize = (text: string) =>
+  text
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase();
+
+/** Every article in a 3-column grid, filterable by category and searchable by text. */
+function ArticleIndex({ articles, latest, showGrid }: { articles: InsightCard[]; latest: InsightCard; showGrid: boolean }) {
+  const { lang } = useLocale();
+  const f = insightsContent[lang].filters;
+  const [category, setCategory] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const search = normalize(useDeferredValue(query).trim());
+
+  // [category, article count], most-used first.
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const a of articles) for (const cat of a.categories ?? []) counts.set(cat, (counts.get(cat) ?? 0) + 1);
+    return [...counts].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
+  }, [articles]);
+
+  const filtering = category !== null || search !== "";
+  const shown = articles.filter((a) => {
+    // The featured article sits above; it only joins the grid as a search or filter result.
+    if (!filtering) return a._id !== latest._id;
+    if (category && !a.categories?.includes(category)) return false;
+    return !search || normalize([a.title, a.excerpt, ...(a.categories ?? [])].join(" ")).includes(search);
+  });
+
+  return (
+    <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+      <div className="mx-auto max-w-7xl">
+        <FeaturedArticle article={latest} />
+
+        {showGrid && (
+          <>
+            <div className="mt-20 flex flex-wrap items-end justify-between gap-6 border-t border-ink/10 pt-16 md:mt-28 md:pt-20">
+              <div>
+                <p className="eyebrow text-brand-deep">{insightsContent[lang].all}</p>
+                <p aria-live="polite" className="mt-2 text-sm text-ink/50">
+                  {f.count(shown.length)}
+                </p>
+              </div>
+              <label className="relative w-full md:w-[28rem] lg:w-[36rem]">
+                <span className="sr-only">{f.search}</span>
+                <svg viewBox="0 0 24 24" aria-hidden className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 fill-none stroke-brand stroke-2">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" strokeLinecap="round" />
+                </svg>
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={f.search}
+                  className="w-full rounded-full border border-brand/40 bg-white py-2 pl-10 pr-4 text-sm outline-none transition-[border-color,box-shadow] placeholder:text-ink/40 hover:border-brand/70 focus:border-brand focus:shadow-[0_0_0_3px_rgba(71,102,255,0.15)]"
+                />
+              </label>
+            </div>
+
+            {categories.length > 1 && (
+              <LayoutGroup>
+                <div role="group" aria-label={f.label} className="mt-12 flex flex-wrap gap-2">
+                  <FilterChip active={category === null} onClick={() => setCategory(null)} label={f.all} count={articles.length} />
+                  {categories.map(([cat, count]) => (
+                    <FilterChip key={cat} active={category === cat} onClick={() => setCategory(category === cat ? null : cat)} label={cat} count={count} />
+                  ))}
+                </div>
+              </LayoutGroup>
+            )}
+
+            {shown.length > 0 ? (
+              <div className="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+                {shown.map((a, i) => (
+                  <FadeIn key={a._id} delay={(i % 3) * 0.06}>
+                    <ArticleCard article={a} />
+                  </FadeIn>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-12 rounded-3xl border border-dashed border-ink/15 px-6 py-16 text-center">
+                <p className="text-ink/60">{f.empty}</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategory(null);
+                    setQuery("");
+                  }}
+                  className="group mt-6 inline-flex h-14 items-center gap-3 rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand"
+                >
+                  {f.reset}
+                  <span aria-hidden className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">
+                    ↺
+                  </span>
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </section>
   );
 }

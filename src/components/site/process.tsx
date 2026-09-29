@@ -1,11 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useScroll, useTransform } from "motion/react";
 import type { Dictionary } from "@/i18n/fr";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";
+
+/** Real screens from each phase of a project, in step order. */
+const stepImage = (index: number) => `/images/process/step-${index + 1}.webp`;
 
 export function Process() {
   const { t } = useLocale();
@@ -16,13 +20,13 @@ export function Process() {
   const [current, setCurrent] = useState(0);
 
   return (
-    <section id="methode" className="relative overflow-hidden bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section id="methode" className="relative overflow-clip bg-night px-5 py-28 text-white md:px-10 md:py-36">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_0%_50%,rgba(54,71,245,0.18),transparent_70%)]"
       />
       <div className="relative mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="lg:sticky lg:top-32 lg:self-start">
+        <div className="lg:sticky lg:top-24 lg:self-start">
           <p className="eyebrow text-brand-sky">{t.process.eyebrow}</p>
           <RevealHeading
             text={t.process.heading}
@@ -31,24 +35,7 @@ export function Process() {
           <p className="mt-6 max-w-md text-white/55">
             {t.process.intro}
           </p>
-          <div className="mt-12 hidden items-end gap-4 lg:flex">
-            <span className="eyebrow pb-3 text-white/40">{t.process.week}</span>
-            <div className="relative h-36 w-28 overflow-hidden">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
-                  key={current}
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  exit={{ y: "-100%" }}
-                  transition={{ duration: 0.6, ease }}
-                  className="absolute inset-0 font-serif text-[9rem] leading-none text-brand-sky"
-                >
-                  {current + 1}
-                </motion.span>
-              </AnimatePresence>
-            </div>
-            <span className="pb-3 font-serif text-4xl text-white/30">/ 5</span>
-          </div>
+          <StepScreen steps={steps} current={current} />
         </div>
 
         <ol ref={listRef} className="relative space-y-4 pl-8 md:pl-12">
@@ -101,7 +88,93 @@ function Step({
         <p className="eyebrow text-brand-sky">{step.week}</p>
         <h3 className="mt-3 font-serif text-3xl md:text-4xl">{step.title}</h3>
         <p className="mt-3 max-w-lg text-white/60">{step.text}</p>
+        {/* Below lg the sticky screen is hidden, so each step carries its own image. */}
+        <div className="relative mt-6 aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-night-soft lg:hidden">
+          <Image src={stepImage(index)} alt={step.alt} fill sizes="(min-width: 768px) 80vw, 100vw" className="object-cover object-top" />
+        </div>
       </div>
     </li>
+  );
+}
+
+/**
+ * Sticky app window that shows the screen of the step being read. All five images stay
+ * mounted and crossfade, so switching steps never waits on a download.
+ */
+function StepScreen({ steps, current }: { steps: Dictionary["process"]["steps"]; current: number }) {
+  const { t } = useLocale();
+
+  return (
+    <div className="relative mt-10 hidden lg:block">
+      <div aria-hidden className="absolute -inset-6 rounded-[3rem] bg-brand/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[1.4rem] border border-white/10 bg-night-soft shadow-[0_40px_100px_-30px_rgba(7,8,13,0.85)]">
+        <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+          <span className="flex gap-1.5">
+            <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="size-2.5 rounded-full bg-[#febc2e]" />
+            <span className="size-2.5 rounded-full bg-[#28c840]" />
+          </span>
+          <span className="relative mx-auto h-6 w-40 overflow-hidden rounded-full bg-white/5 font-mono text-[11px] text-white/55">
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={current}
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "-100%", opacity: 0 }}
+                transition={{ duration: 0.5, ease }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                {steps[current].app}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+          <span className="eyebrow flex items-center gap-1 text-white/40">
+            {t.process.week}
+            <span className="relative inline-block h-[1.2em] w-[1ch] overflow-hidden text-brand-sky">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={current}
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-100%" }}
+                  transition={{ duration: 0.5, ease }}
+                  className="absolute inset-0"
+                >
+                  {current + 1}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+            /{steps.length}
+          </span>
+        </div>
+
+        <div className="relative aspect-[16/9]">
+          {steps.map((step, i) => (
+            <Image
+              key={step.week}
+              src={stepImage(i)}
+              alt={i === current ? step.alt : ""}
+              aria-hidden={i !== current}
+              fill
+              sizes="(min-width: 1280px) 560px, 45vw"
+              className={`object-cover object-top transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                i === current ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
+              }`}
+            />
+          ))}
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-night/70 to-transparent" />
+          <div aria-hidden className="absolute inset-x-5 bottom-4 flex gap-1.5">
+            {steps.map((step, i) => (
+              <span key={step.week} className="h-1 flex-1 overflow-hidden rounded-full bg-white/20">
+                <span
+                  className="block h-full origin-left rounded-full bg-brand-sky transition-transform duration-700"
+                  style={{ transform: `scaleX(${i <= current ? 1 : 0})` }}
+                />
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

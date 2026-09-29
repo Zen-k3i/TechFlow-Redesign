@@ -78,7 +78,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
             <ul className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {tool.benefits.map((b, i) => (
                 <FadeIn key={b._key} delay={(i % 3) * 0.06}>
-                  <li className="h-full rounded-3xl border border-ink/10 bg-white p-7 transition-colors hover:border-brand-deep/40">
+                  <li className="h-full rounded-3xl border border-ink/10 bg-white p-7 transition-colors hover:border-brand/40">
                     <span className="eyebrow text-brand-deep">{String(i + 1).padStart(2, "0")}</span>
                     <h3 className="mt-4 font-serif text-2xl leading-tight">{b.title}</h3>
                     {b.text && <p className="mt-3 leading-relaxed text-ink/65">{b.text}</p>}
@@ -105,7 +105,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
               {tool.projects.map((p, i) => (
                 <FadeIn key={p._id} delay={(i % 3) * 0.06}>
                   <li>
-                    <CmsProjectCard project={p} tone="dark" />
+                    <CmsProjectCard project={p} />
                   </li>
                 </FadeIn>
               ))}

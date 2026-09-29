@@ -10,30 +10,30 @@ export const imageWithAlt = defineType({
   title: 'Image',
   type: 'image',
   options: {hotspot: true},
-  fields: [defineField({name: 'alt', title: 'Texte alternatif', type: 'string'})],
+  fields: [defineField({name: 'alt', title: 'Alt text', type: 'string'})],
 })
 
 export const metric = defineType({
   name: 'metric',
-  title: 'Chiffre clé',
+  title: 'Key figure',
   type: 'object',
   icon: ChartUpwardIcon,
   fields: [
-    defineField({name: 'value', title: 'Valeur', type: 'string', validation: (r) => r.required()}),
-    defineField({name: 'label', title: 'Libellé', type: 'string', validation: (r) => r.required()}),
+    defineField({name: 'value', title: 'Value', type: 'string', validation: (r) => r.required()}),
+    defineField({name: 'label', title: 'Label', type: 'string', validation: (r) => r.required()}),
   ],
   preview: {select: {title: 'value', subtitle: 'label'}},
 })
 
 export const testimonial = defineType({
   name: 'testimonial',
-  title: 'Témoignage',
+  title: 'Testimonial',
   type: 'object',
   icon: CommentIcon,
   fields: [
-    defineField({name: 'quote', title: 'Citation', type: 'text', rows: 4}),
-    defineField({name: 'name', title: 'Nom', type: 'string'}),
-    defineField({name: 'role', title: 'Fonction', type: 'string'}),
+    defineField({name: 'quote', title: 'Quote', type: 'text', rows: 4}),
+    defineField({name: 'name', title: 'Name', type: 'string'}),
+    defineField({name: 'role', title: 'Role', type: 'string'}),
     defineField({name: 'photo', title: 'Photo', type: 'image', options: {hotspot: true}}),
   ],
   preview: {select: {title: 'name', subtitle: 'role', media: 'photo'}},
@@ -41,12 +41,12 @@ export const testimonial = defineType({
 
 export const benefit = defineType({
   name: 'benefit',
-  title: 'Avantage',
+  title: 'Benefit',
   type: 'object',
   icon: StarIcon,
   fields: [
-    defineField({name: 'title', title: 'Titre', type: 'string', validation: (r) => r.required()}),
-    defineField({name: 'text', title: 'Texte', type: 'text', rows: 3}),
+    defineField({name: 'title', title: 'Title', type: 'string', validation: (r) => r.required()}),
+    defineField({name: 'text', title: 'Text', type: 'text', rows: 3}),
   ],
   preview: {select: {title: 'title', subtitle: 'text'}},
 })
@@ -58,14 +58,14 @@ export const seo = defineType({
   icon: SearchIcon,
   options: {collapsible: true, collapsed: true},
   fields: [
-    defineField({name: 'title', title: 'Titre SEO', type: 'string'}),
+    defineField({name: 'title', title: 'SEO title', type: 'string'}),
     defineField({
       name: 'description',
-      title: 'Description SEO',
+      title: 'SEO description',
       type: 'text',
       rows: 3,
-      validation: (r) => r.max(170).warning('Restez sous 170 caractères.'),
+      validation: (r) => r.max(170).warning('Keep it under 170 characters.'),
     }),
-    defineField({name: 'image', title: 'Image de partage', type: 'image'}),
+    defineField({name: 'image', title: 'Social share image', type: 'image'}),
   ],
 })

@@ -10,6 +10,9 @@ const translations = /* groq */ `"translations": *[_type == "translation.metadat
 
 // ---------------------------------------------------------------- projects
 
+/** Header mosaic in reading order: four sides, the hero image in the middle, four sides. */
+const heroMosaic = /* groq */ `[heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8]`;
+
 const projectCard = /* groq */ `
   _id,
   title,
@@ -17,7 +20,9 @@ const projectCard = /* groq */ `
   sector,
   summary,
   services,
-  coverImage ${image}
+  websiteUrl,
+  coverImage ${image},
+  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} }
 `;
 
 export const PROJECTS_INDEX_QUERY = defineQuery(`
@@ -29,10 +34,10 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
   *[_type == "project" && language == $lang && slug.current == $slug][0]{
     ${projectCard},
     body[]{ ..., _type == "image" => ${image} },
+    "minutes": round(length(string::split(pt::text(body), " ")) / 220),
     metrics[]{ _key, value, label },
-    websiteUrl,
     logo ${image},
-    gallery[]{ _key, ...${image} },
+    "gallery": ${heroMosaic}[defined(asset)]{ "_key": asset._ref, ...${image} },
     showcase[]{ _key, ...${image} },
     testimonial { quote, name, role, photo ${image} },
     tools[]->{ _id, title, "slug": slug.current, logo ${image} },
@@ -82,6 +87,33 @@ export const TOOL_SLUGS_QUERY = defineQuery(`
   *[_type == "tool" && language == $lang && defined(slug.current)].slug.current
 `);
 
+// ---------------------------------------------------------------- team
+
+const member = /* groq */ `
+  _id,
+  name,
+  role,
+  linkedin,
+  photo ${image}
+`;
+
+export const TEAM_QUERY = defineQuery(`
+  *[_type == "teamMember" && defined(photo.asset)]
+    | order(coalesce(order, 999) asc, name asc) { ${member} }
+`);
+
+// ---------------------------------------------------------------- reviews
+
+export const REVIEWS_QUERY = defineQuery(`
+  *[_type == "review" && defined(quote)] | order(coalesce(order, 999) asc, name asc) {
+    _id,
+    quote,
+    name,
+    role,
+    photo ${image}
+  }
+`);
+
 // ---------------------------------------------------------------- insights
 
 const insightCard = /* groq */ `
@@ -91,7 +123,7 @@ const insightCard = /* groq */ `
   excerpt,
   categories,
   publishedAt,
-  author,
+  author->{ ${member} },
   coverImage ${image},
   "minutes": round(length(string::split(pt::text(body), " ")) / 220)
 `;

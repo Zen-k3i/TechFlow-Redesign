@@ -1,11 +1,11 @@
 /**
- * Imports projects, tools and insights from the live Webflow site (techflow-agency.com)
+ * Imports the team, client reviews, projects, tools and insights from the live Webflow site (techflow-agency.com)
  * into this dataset, in French and English, and links each pair as translations.
  *
  *   npx sanity exec scripts/import-live.ts --with-user-token            # write
  *   npx sanity exec scripts/import-live.ts --with-user-token -- --dry-run  # extract only
  *
- * Re-running is safe: documents are matched on `sourceUrl` and replaced in place.
+ * Re-running is safe: documents are matched on `sourceUrl` (team members and reviews on `name`) and updated in place.
  */
 import {randomUUID} from 'node:crypto'
 import {createSchema} from 'sanity'
@@ -17,6 +17,7 @@ import {schemaTypes} from '../schemaTypes'
 const SITE = 'https://www.techflow-agency.com'
 const DRY_RUN = process.argv.includes('--dry-run')
 const ONLY = process.argv.find((a) => a.startsWith('--only='))?.slice(7) // e.g. --only=project
+const TEAM_PATH = '/notre-equipe'
 
 type Lang = 'fr' | 'en'
 type DocType = 'project' | 'tool' | 'insight'
@@ -170,7 +171,8 @@ async function richText(elements: Element[]) {
 // ---------------------------------------------------------------- extractors
 
 type Draft = Record<string, unknown> & {_type: DocType; language: Lang; sourceUrl: string; slug: {current: string}}
-type ProjectRefs = {tools: string[]; team: {name: string; role: string; photo?: string}[]}
+type TeamMember = {name: string; role: string; photo?: string; linkedin?: string; order?: number}
+type ProjectRefs = {tools: string[]; team: TeamMember[]}
 
 function seoFrom(doc: Document) {
   const description = doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? ''
@@ -217,11 +219,7 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
     order: card?.order,
     coverImage: await image(card?.image, undefined, 'imageWithAlt'),
     logo: await image(imgSrc(info?.querySelector('img'))),
-    gallery: (
-      await Promise.all(galleryImgs.map(async (i) => image(imgSrc(i), i.getAttribute('alt') || undefined, 'imageWithAlt')))
-    )
-      .filter(Boolean)
-      .map((i) => ({...i, _key: key()})),
+    ...(await heroFields(galleryImgs)),
     showcase: (await Promise.all(showcaseImgs.map((src) => image(src, undefined, 'imageWithAlt'))))
       .filter(Boolean)
       .map((i) => ({...i, _key: key()})),
@@ -238,6 +236,47 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
     seo: seoFrom(doc),
   }
   return {draft, refs}
+}
+
+/** The header mosaic lists four sides, the hero image, then four more sides. */
+async function heroFields(imgs: Element[]) {
+  const fields = ['heroSide1', 'heroSide2', 'heroSide3', 'heroSide4', 'heroImage', 'heroSide5', 'heroSide6', 'heroSide7', 'heroSide8']
+  const images = await Promise.all(imgs.slice(0, 9).map((i) => image(imgSrc(i), i.getAttribute('alt') || undefined, 'imageWithAlt')))
+  return Object.fromEntries(images.map((img, i) => [fields[i], img]))
+}
+
+/** Unique review cards from the home page marquee, in page order. */
+async function extractReviews() {
+  const doc = await page('/')
+  const reviews = new Map<string, {name: string; role: string; quote: string; photo?: string; rating: number}>()
+  for (const card of doc.querySelectorAll('.testimonial_card')) {
+    const info = card.querySelector('.testimonial_client-info')
+    const name = text(info?.children[0])
+    const quote = text(card.querySelector('.testimonial')).replace(/^["“]|["”]$/g, '')
+    if (!name || !quote || reviews.has(name)) continue
+    reviews.set(name, {
+      name,
+      role: text(info?.children[1]),
+      quote,
+      photo: imgSrc(card.querySelector('.testimonial_customer-image')),
+      rating: card.querySelectorAll('.testimonial_rating-icon').length || 5,
+    })
+  }
+  return [...reviews.values()]
+}
+
+async function upsertReview(review: Awaited<ReturnType<typeof extractReviews>>[number], order: number) {
+  if (DRY_RUN) return
+  const existing = await client.fetch<{_id: string; photo: boolean} | null>(
+    `*[_type == "review" && name == $name && !(_id in path("drafts.**"))][0]{_id, "photo": defined(photo.asset)}`,
+    {name: review.name},
+  )
+  const fields = {quote: review.quote, role: review.role, rating: review.rating, order}
+  if (existing) {
+    await client.patch(existing._id).set(clean({...fields, photo: existing.photo ? undefined : await image(review.photo)})).commit()
+  } else {
+    await client.create(clean({_type: 'review', name: review.name, ...fields, photo: await image(review.photo)}))
+  }
 }
 
 async function extractTool(path: string, lang: Lang, order: number) {
@@ -276,6 +315,23 @@ function parseDate(raw: string) {
   const m = raw.toLowerCase().match(/(\d{1,2})\s+([a-zéû]+)\s+(\d{4})/)
   if (!m || !MONTHS[m[2]]) return undefined
   return `${m[3]}-${MONTHS[m[2]]}-${m[1].padStart(2, '0')}`
+}
+
+/** Team page cards, in page order. */
+async function extractTeam(): Promise<TeamMember[]> {
+  const doc = await page(TEAM_PATH)
+  return [...doc.querySelectorAll('.team_item')].map((item, i) => {
+    const href = item.querySelector<HTMLAnchorElement>('a[href*="linkedin.com/in/"]')?.getAttribute('href')
+    // Drop tracking parameters and normalize to https://www.linkedin.com/in/<handle>
+    const handle = href?.match(/linkedin\.com\/in\/([^/?#]+)/)?.[1]
+    return {
+      name: text(item.querySelector('.team-name_text')),
+      role: text(item.querySelector('.team_title-wrapper > :not(.team-name_text)')),
+      photo: imgSrc(item.querySelector('.team_image')),
+      linkedin: handle ? `https://www.linkedin.com/in/${handle}` : undefined,
+      order: i + 1,
+    }
+  })
 }
 
 async function extractInsight(path: string, lang: Lang) {
@@ -340,11 +396,30 @@ async function upsert(draft: Record<string, unknown> & {_type: string; sourceUrl
   return (await client.create(doc))._id
 }
 
-async function upsertTeamMember(member: ProjectRefs['team'][number]) {
+const teamIds = new Map<string, string>()
+
+/**
+ * Finds a team member by name, creating it if needed. With `update`, the team page's
+ * role, LinkedIn and order overwrite the stored ones; an existing photo is kept.
+ */
+async function upsertTeamMember(member: TeamMember, update = false) {
   if (DRY_RUN) return `dry-run.team.${member.name}`
-  const existing = await client.fetch<string | null>(`*[_type == "teamMember" && name == $name][0]._id`, {name: member.name})
-  if (existing) return existing
-  return (await client.create(clean({_type: 'teamMember', name: member.name, role: member.role, photo: await image(member.photo)})))._id
+  const cached = teamIds.get(member.name)
+  if (cached && !update) return cached
+  const existing = await client.fetch<{_id: string; photo: boolean} | null>(
+    `*[_type == "teamMember" && name == $name && !(_id in path("drafts.**"))][0]{_id, "photo": defined(photo.asset)}`,
+    {name: member.name},
+  )
+  const fields = {role: member.role, linkedin: member.linkedin, order: member.order}
+  let id = existing?._id
+  if (!id) {
+    id = (await client.create(clean({_type: 'teamMember', name: member.name, ...fields, photo: await image(member.photo)})))._id
+  } else if (update) {
+    const photo = existing?.photo ? undefined : await image(member.photo)
+    await client.patch(id).set(clean({...fields, photo})).commit()
+  }
+  teamIds.set(member.name, id)
+  return id
 }
 
 async function linkTranslations(type: DocType, ids: Partial<Record<Lang, string>>) {
@@ -374,6 +449,20 @@ async function run() {
 
   const summary: string[] = []
   const toolIds: Record<Lang, Map<string, string>> = {fr: new Map(), en: new Map()}
+
+  if (!ONLY || ONLY === 'review') {
+    const reviews = await extractReviews()
+    if (DRY_RUN) console.log(JSON.stringify(reviews, null, 1))
+    for (const [i, review] of reviews.entries()) await upsertReview(review, i + 1)
+    summary.push(`reviews: ${reviews.length}`)
+  }
+
+  if (!ONLY || ONLY === 'team') {
+    const members = await extractTeam()
+    if (DRY_RUN) console.log(JSON.stringify(members, null, 1))
+    for (const member of members) await upsertTeamMember(member, true)
+    summary.push(`team: ${members.length}`)
+  }
 
   if (!ONLY || ONLY === 'tool') {
     for (const lang of ['fr', 'en'] as Lang[]) {
@@ -437,6 +526,11 @@ async function run() {
       const slugs = [...new Set([...cards.keys(), ...slugsFor(PATHS.insight[lang])])]
       for (const slug of slugs) {
         const {draft, coverSrc} = await extractInsight(`${PATHS.insight[lang]}/${slug}`, lang)
+        // A named team member becomes a reference; the agency byline is the empty default.
+        const author = String(draft.author ?? '')
+        draft.author = author && !/^techflow agency$/i.test(author)
+          ? {_type: 'reference', _ref: await upsertTeamMember({name: author, role: ''})}
+          : undefined
         const id = await upsert(draft)
         // Weglot keeps the same cover image across languages, which pairs FR and EN articles.
         if (coverSrc) byCover[lang].set(coverSrc.split('/').pop()!, id)

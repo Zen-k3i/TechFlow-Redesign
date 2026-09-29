@@ -27,8 +27,8 @@ export function ButtonLink({
   className?: string;
 }) {
   const styles = {
-    light: "bg-white text-night hover:bg-brand-sky hover:text-white",
-    dark: "bg-ink text-paper hover:bg-brand-deep",
+    light: "bg-white text-night hover:bg-brand hover:text-white",
+    dark: "bg-ink text-paper hover:bg-brand",
     outline: "border border-white/20 text-white hover:border-white",
     "outline-dark": "border border-ink/15 text-ink hover:border-ink",
   }[variant];
@@ -423,6 +423,17 @@ function MarkIcon({
   );
 }
 
+/** Every logo gets the same visual area (in px² at desktop size), so wide wordmarks and compact marks weigh the same. */
+const LOGO_AREA = 4400;
+const LOGO_MAX_HEIGHT = 46;
+
+/** `optical` nudges logos whose stroke weight makes them read bigger or smaller than their area. */
+const logoSize = ({ width, height, optical = 1 }: { width: number; height: number; optical?: number }) => {
+  const ratio = width / height;
+  const h = Math.min(LOGO_MAX_HEIGHT, Math.sqrt(LOGO_AREA / ratio)) * optical;
+  return { height: h, width: h * ratio };
+};
+
 export function ClientMarquee({
   label,
   tone = "dark",
@@ -441,18 +452,26 @@ export function ClientMarquee({
         </p>
       )}
       <div className="mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
-        <ul className="flex w-max animate-marquee items-center gap-16">
-          {[...clients, ...clients].map((client, i) => (
-            <li key={i} aria-hidden={i >= clients.length} className="shrink-0">
-              <Image
-                src={client.src}
-                alt={i < clients.length ? client.name : ""}
-                width={client.width}
-                height={client.height}
-                className={`h-7 w-auto max-w-[140px] object-contain opacity-50 brightness-0 transition-opacity hover:opacity-100 ${light ? "" : "invert"}`}
-              />
-            </li>
-          ))}
+        {/* Logos scale down to 80% on phones. */}
+        <ul className="flex w-max animate-marquee items-center gap-12 [--logo-scale:0.8] md:gap-16 md:[--logo-scale:1]">
+          {[...clients, ...clients].map((client, i) => {
+            const size = logoSize(client);
+            return (
+              <li key={i} aria-hidden={i >= clients.length} className="shrink-0">
+                <Image
+                  src={client.src}
+                  alt={i < clients.length ? client.name : ""}
+                  width={client.width}
+                  height={client.height}
+                  style={{
+                    width: `calc(${size.width.toFixed(1)}px * var(--logo-scale))`,
+                    height: `calc(${size.height.toFixed(1)}px * var(--logo-scale))`,
+                  }}
+                  className={`object-contain opacity-50 brightness-0 transition-opacity hover:opacity-100 ${light ? "" : "invert"}`}
+                />
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

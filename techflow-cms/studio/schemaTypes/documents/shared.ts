@@ -14,16 +14,16 @@ export const slugField = defineField({
   options: {source: 'title', maxLength: 96},
   validation: (rule) =>
     rule.required().custom((slug) => {
-      if (!slug?.current) return 'Obligatoire'
-      return /^[a-z0-9-]+$/.test(slug.current) || 'Minuscules, chiffres et tirets uniquement'
+      if (!slug?.current) return 'Required'
+      return /^[a-z0-9-]+$/.test(slug.current) || 'Lowercase letters, numbers and hyphens only'
     }),
 })
 
 export const orderField = defineField({
   name: 'order',
-  title: 'Ordre',
+  title: 'Order',
   type: 'number',
-  description: "Position dans la liste (le plus petit s'affiche en premier).",
+  description: 'Position in lists (lowest first).',
 })
 
 export const seoField = defineField({name: 'seo', type: 'seo'})

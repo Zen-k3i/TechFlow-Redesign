@@ -46,17 +46,6 @@ export function Manifesto() {
             <FadeIn>
               <p className="max-w-lg text-ink/65 md:text-lg">{m.body}</p>
             </FadeIn>
-            <FadeIn delay={0.1}>
-              <p className="eyebrow text-ink/45">{m.chainLabel}</p>
-              <ol className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-ink/10 bg-ink/10 sm:grid-cols-4">
-                {m.chain.map((step, i) => (
-                  <li key={step} className="bg-white p-4 transition-colors hover:bg-brand-deep hover:text-white">
-                    <span className="eyebrow text-brand-sky">0{i + 1}</span>
-                    <span className="mt-6 block text-[15px] leading-snug">{step}</span>
-                  </li>
-                ))}
-              </ol>
-            </FadeIn>
           </div>
         </div>
       </div>

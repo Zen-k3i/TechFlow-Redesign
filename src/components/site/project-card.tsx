@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { type ImageLoader } from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
@@ -21,19 +21,67 @@ const STACK = [
   "translate3d(-8%,-70%,15px) rotateZ(-3deg) scale(0.8)",
 ];
 
-export function ProjectCard({
-  project,
-  sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
-  cursor = true,
-  glow = true,
-}: {
-  project: Project;
+type CardOptions = {
   sizes?: string;
   /** Show the "View case" cursor bubble on hover. */
   cursor?: boolean;
   /** Show the colored glow and pointer glare gradients on hover. */
   glow?: boolean;
-}) {
+};
+
+/** Card for a locally coded project (homepage, service pages, growth case studies). */
+export function ProjectCard({ project, ...options }: { project: Project } & CardOptions) {
+  const { t } = useLocale();
+  return (
+    <ProjectCardView
+      {...options}
+      href={caseStudyUrl(project.slug)}
+      slug={project.slug}
+      name={project.name}
+      sector={t.work.sectors[project.sector] ?? project.sector}
+      tags={project.disciplines.map((d) => t.work.disciplines[d] ?? d)}
+      cover={{ src: projectImage(project.slug) }}
+      previews={projectPreviews(project.slug)}
+      domain={projectDomain(project.slug)}
+      growth={project.kind === "growth"}
+    />
+  );
+}
+
+type CardImage = { src: string; blurDataURL?: string };
+
+/**
+ * Tilting case-study card: the cover image, plus a stack of browser screens that
+ * cycles on hover when `previews` are given.
+ */
+export function ProjectCardView({
+  href: to,
+  slug,
+  name,
+  sector,
+  tags,
+  cover,
+  previews,
+  domain,
+  loader,
+  growth = false,
+  sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
+  cursor = true,
+  glow = true,
+}: {
+  href: string;
+  /** Picks the accent color. */
+  slug: string;
+  name: string;
+  sector?: string;
+  tags: string[];
+  cover?: CardImage;
+  previews: string[];
+  domain?: string;
+  /** Image loader for every image of the card, e.g. the Sanity CDN loader. */
+  loader?: ImageLoader;
+  growth?: boolean;
+} & CardOptions) {
   const { t } = useLocale();
   const reduce = useReducedMotion();
   const mx = useMotionValue(0);
@@ -44,10 +92,7 @@ export function ProjectCard({
   const glareY = useTransform(my, [-0.5, 0.5], [0, 100]);
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.22), transparent 55%)`;
 
-  const growth = project.kind === "growth";
-  const theme = projectTheme(project.slug);
-  const previews = projectPreviews(project.slug);
-  const domain = projectDomain(project.slug);
+  const theme = projectTheme(slug);
   const stacked = !growth && previews.length > 0;
   const [hovered, setHovered] = useState(false);
   const [slide, setSlide] = useState(0);
@@ -61,7 +106,7 @@ export function ProjectCard({
   return (
     <div className="[perspective:1100px]">
       <MotionLink
-        href={caseStudyUrl(project.slug)}
+        href={to}
         data-cursor={cursor ? t.hero.caseCursor : undefined}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         onPointerEnter={(e) => {
@@ -87,15 +132,20 @@ export function ProjectCard({
               <GrowthCover videos={t.work.growthCover.videos} title={t.work.growthCover.title} />
             ) : (
               <>
-                <Image
-                  src={projectImage(project.slug)}
-                  alt={`${t.hero.caseAlt} ${project.name}`}
-                  fill
-                  sizes={sizes}
-                  className={`object-cover object-top transition-[transform,opacity,filter,object-position] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${
-                    stacked ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
-                  }`}
-                />
+                {cover && (
+                  <Image
+                    src={cover.src}
+                    loader={loader}
+                    placeholder={cover.blurDataURL ? "blur" : "empty"}
+                    blurDataURL={cover.blurDataURL}
+                    alt={`${t.hero.caseAlt} ${name}`}
+                    fill
+                    sizes={sizes}
+                    className={`object-cover object-top transition-[transform,opacity,filter,object-position] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${
+                      stacked ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
+                    }`}
+                  />
+                )}
                 {glow && (
                   <span
                     aria-hidden
@@ -141,7 +191,7 @@ export function ProjectCard({
                         <span className="ml-2 flex h-3.5 flex-1 items-center truncate rounded-full bg-black/5 px-2 font-mono text-[8px] text-black/45">{domain}</span>
                       </div>
                       <div className="relative aspect-[16/10]">
-                        <Image src={src} alt="" fill sizes="(min-width: 1024px) 28vw, 85vw" className="object-cover object-top" />
+                        <Image src={src} loader={loader} alt="" fill sizes="(min-width: 1024px) 28vw, 85vw" className="object-cover object-top" />
                       </div>
                     </div>
                   </div>
@@ -151,9 +201,9 @@ export function ProjectCard({
           )}
 
           <div className="absolute left-4 top-4 z-20 flex flex-wrap gap-1.5 transition-opacity duration-300 group-hover:opacity-0">
-            {project.disciplines.map((d) => (
-              <span key={d} className="rounded-full bg-white/90 px-2.5 py-1 text-xs text-ink backdrop-blur">
-                {t.work.disciplines[d] ?? d}
+            {tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-white/90 px-2.5 py-1 text-xs text-ink backdrop-blur">
+                {tag}
               </span>
             ))}
           </div>
@@ -188,10 +238,10 @@ export function ProjectCard({
 
         <div className="mt-4 flex items-start justify-between gap-4 px-1">
           <div>
-            <h3 className="text-xl font-medium">{project.name}</h3>
-            <p className="mt-0.5 text-sm opacity-55">{t.work.sectors[project.sector] ?? project.sector}</p>
+            <h3 className="text-xl font-medium">{name}</h3>
+            {sector && <p className="mt-0.5 text-sm opacity-55">{sector}</p>}
           </div>
-          <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-current/15 transition-[transform,background-color,color,border-color] group-hover:-rotate-45 group-hover:border-brand-deep group-hover:bg-brand-deep group-hover:text-white">
+          <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-current/15 transition-[transform,background-color,color,border-color] group-hover:-rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-white">
             →
           </span>
         </div>

@@ -26,13 +26,9 @@ export const headingsOf = (body: BodyValue | null | undefined) => {
   });
 };
 
-/**
- * Rich text from the CMS. `article` matches the insight article style;
- * `case` matches the case study body on techflow-agency.com.
- */
-export function PortableBody({ value, variant = "article" }: { value: BodyValue | null | undefined; variant?: "article" | "case" }) {
+/** Rich text from the CMS, styled for insight articles and case studies alike. */
+export function PortableBody({ value }: { value: BodyValue | null | undefined }) {
   if (!value?.length) return null;
-  const caseStudy = variant === "case";
   const headingIds = new Map(headingsOf(value).map((h) => [h.key, h.id]));
 
   const components: PortableTextComponents = {
@@ -40,23 +36,17 @@ export function PortableBody({ value, variant = "article" }: { value: BodyValue 
       h2: ({ children, value: block }) => (
         <h2
           id={block._key ? headingIds.get(block._key) : undefined}
-          className={
-            caseStudy
-              ? "mt-14 scroll-mt-28 font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.03em] text-black first:mt-0"
-              : "mt-16 scroll-mt-28 font-serif text-4xl leading-[1.05] first:mt-0 md:text-5xl"
-          }
+          className="mt-16 scroll-mt-28 font-serif text-4xl leading-[1.05] first:mt-0 md:text-5xl"
         >
           {children}
         </h2>
       ),
       h3: ({ children }) => (
-        <h3 className={caseStudy ? "mt-10 font-serif text-2xl font-light leading-tight tracking-[-0.03em] text-black" : "mt-10 text-xl font-semibold"}>
-          {children}
-        </h3>
+        <h3 className="mt-10 text-xl font-semibold">{children}</h3>
       ),
       h4: ({ children }) => <h4 className="mt-8 text-lg font-semibold">{children}</h4>,
       normal: ({ children }) => (
-        <p className={caseStudy ? "mt-5 text-lg leading-[1.33] tracking-[-0.01em] text-[#454750]" : "mt-5 text-lg leading-relaxed text-ink/75"}>{children}</p>
+        <p className="mt-5 text-lg leading-relaxed text-ink/75">{children}</p>
       ),
       blockquote: ({ children }) => (
         <blockquote className="mt-8 border-l-2 border-brand-deep pl-6 font-serif text-2xl leading-snug">{children}</blockquote>
@@ -64,12 +54,10 @@ export function PortableBody({ value, variant = "article" }: { value: BodyValue 
     },
     list: {
       bullet: ({ children }) => (
-        <ul className={caseStudy ? "mt-5 list-disc space-y-2 pl-6 text-lg leading-normal text-[#454750] marker:text-[#454750]" : "mt-6 list-disc space-y-3 pl-6 text-lg leading-relaxed text-ink/75 marker:text-brand-deep"}>
-          {children}
-        </ul>
+        <ul className="mt-6 list-disc space-y-3 pl-6 text-lg leading-relaxed text-ink/75 marker:text-brand-deep">{children}</ul>
       ),
       number: ({ children }) => (
-        <ol className={`mt-6 list-decimal space-y-3 pl-6 text-lg leading-relaxed ${caseStudy ? "text-[#454750]" : "text-ink/75"}`}>{children}</ol>
+        <ol className="mt-6 list-decimal space-y-3 pl-6 text-lg leading-relaxed text-ink/75">{children}</ol>
       ),
     },
     marks: {

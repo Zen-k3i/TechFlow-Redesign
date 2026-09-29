@@ -7,11 +7,12 @@ import { href } from "@/i18n/routes";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { FadeIn, RevealHeading } from "../site/reveal";
-import { Testimonials } from "../site/testimonials";
+import { SanityImage } from "../cms/sanity-image";
+import { OfficeMap } from "../page/office-map";
 import { Chip, ComparisonTable, HumanActions, PageHero, SectionHeader } from "../page/ui";
-import { members, offices, teamContent } from "./data";
+import { offices, teamContent, type TeamMember } from "./data";
 
-export function TeamPage() {
+export function TeamPage({ members, testimonials }: { members: TeamMember[]; testimonials: React.ReactNode }) {
   const { lang, t } = useLocale();
   const c = teamContent[lang];
 
@@ -23,7 +24,7 @@ export function TeamPage() {
         title={c.title}
         intro={c.intro}
         actions={<HumanActions />}
-        aside={<VisioCall />}
+        aside={<VisioCall members={members} />}
       />
 
       <section className="bg-night px-5 pb-24 text-white md:px-10">
@@ -40,7 +41,7 @@ export function TeamPage() {
         </dl>
       </section>
 
-      <PortraitStrip />
+      <PortraitStrip members={members} />
 
       <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl">
@@ -97,7 +98,7 @@ export function TeamPage() {
           <ul className="mt-16 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
             {members.map((m, i) => (
               <motion.li
-                key={m.name}
+                key={m._id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-5% 0px" }}
@@ -105,16 +106,22 @@ export function TeamPage() {
                 className="group"
               >
                 <div className="relative aspect-[3/4] overflow-hidden rounded-3xl bg-ink/5">
-                  <Image
-                    src={m.photo}
-                    alt={m.name}
+                  <SanityImage
+                    image={m.photo}
+                    alt={m.name ?? ""}
                     fill
+                    width={800}
                     sizes="(min-width: 1024px) 20vw, (min-width: 768px) 33vw, 50vw"
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <p className="mt-4 font-medium">{m.name}</p>
-                <p className="text-sm text-ink/55">{m.role}</p>
+                <div className="mt-4 flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-medium">{m.name}</p>
+                    <p className="text-sm text-ink/55">{m.role}</p>
+                  </div>
+                  {m.linkedin && <LinkedInLink href={m.linkedin} name={m.name ?? ""} />}
+                </div>
               </motion.li>
             ))}
           </ul>
@@ -148,13 +155,7 @@ export function TeamPage() {
             </div>
             <FadeIn>
               <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-night-soft p-6 md:p-10">
-                <Image
-                  src="/images/studio/photo.png"
-                  alt="Paris · Phnom Penh"
-                  width={1545}
-                  height={768}
-                  className="w-full opacity-40 invert"
-                />
+                <OfficeMap />
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   {offices.map((o) => (
                     <div key={o.city} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
@@ -170,7 +171,7 @@ export function TeamPage() {
         </div>
       </section>
 
-      <Testimonials />
+      {testimonials}
     </>
   );
 }
@@ -197,16 +198,33 @@ const subscribeSecond = (onChange: () => void) => {
   return () => clearInterval(id);
 };
 
-function VisioCall() {
+function LinkedInLink({ href, name }: { href: string; name: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${name} · LinkedIn`}
+      className="grid size-9 shrink-0 place-items-center rounded-full border border-ink/10 text-ink/55 transition-colors hover:border-[#0a66c2] hover:bg-[#0a66c2] hover:text-white"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden className="size-4 fill-current">
+        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+      </svg>
+    </a>
+  );
+}
+
+function VisioCall({ members }: { members: TeamMember[] }) {
   const { lang } = useLocale();
   const h = humanCopy[lang];
-  const picks = [0, 1, 3, 4, 2, 5].map((i) => members[i]);
+  const picks = [0, 1, 3, 4, 2, 5].map((i) => members[i]).filter(Boolean);
+  const chatter = members[2] ?? members[0];
   const seconds = useSyncExternalStore(
     subscribeSecond,
     () => Math.floor(Date.now() / 1000),
     () => 0,
   );
-  const speaking = Math.floor(seconds / 3) % picks.length;
+  const speaking = Math.floor(seconds / 3) % Math.max(1, picks.length);
   const elapsed = 14 * 60 + (seconds % 2700);
   const clock = seconds ? `${String(Math.floor(elapsed / 60)).padStart(2, "0")}:${String(elapsed % 60).padStart(2, "0")}` : "--:--";
 
@@ -229,12 +247,12 @@ function VisioCall() {
         <div className="grid grid-cols-3 gap-2">
           {picks.map((m, i) => (
             <figure
-              key={m.name}
+              key={m._id}
               className={`relative aspect-[4/5] overflow-hidden rounded-xl bg-night-soft ring-2 transition-shadow duration-500 ${i === speaking ? "ring-brand-sky shadow-[0_0_24px_rgba(71,145,255,0.55)]" : "ring-transparent"}`}
             >
-              <Image src={m.photo} alt={m.name} fill preload={i < 3} sizes="(min-width: 1024px) 12vw, 30vw" className="object-cover object-top" />
+              <SanityImage image={m.photo} alt={m.name ?? ""} fill width={400} priority={i < 3} sizes="(min-width: 1024px) 12vw, 30vw" className="object-cover object-top" />
               <figcaption className="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1.5 rounded-lg bg-black/55 px-2 py-1 backdrop-blur">
-                <span className="truncate text-[10px] font-medium">{m.name.split(" ")[0]}</span>
+                <span className="truncate text-[10px] font-medium">{m.name?.split(" ")[0]}</span>
                 {i === speaking ? (
                   <span aria-hidden className="ml-auto flex h-2.5 items-end gap-px">
                     {[0, 1, 2].map((b) => (
@@ -264,6 +282,7 @@ function VisioCall() {
         </div>
       </motion.div>
 
+      {chatter && (
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -271,13 +290,14 @@ function VisioCall() {
         className="absolute -bottom-16 left-2 flex max-w-[16rem] gap-2.5 rounded-2xl rounded-bl-sm bg-white p-3 text-ink shadow-2xl md:-bottom-8 md:-left-10"
       >
         <span className="relative size-8 shrink-0 overflow-hidden rounded-full">
-          <Image src={members[2].photo} alt={members[2].name} fill sizes="32px" className="object-cover object-top" />
+          <SanityImage image={chatter.photo} alt={chatter.name ?? ""} fill width={96} sizes="32px" className="object-cover object-top" />
         </span>
         <span>
-          <span className="block text-[11px] font-medium">{members[2].name}</span>
+          <span className="block text-[11px] font-medium">{chatter.name}</span>
           <span className="mt-0.5 block text-xs leading-snug text-ink/70">{h.chat}</span>
         </span>
       </motion.div>
+      )}
       <motion.span
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -289,7 +309,7 @@ function VisioCall() {
   );
 }
 
-function PortraitStrip() {
+function PortraitStrip({ members }: { members: TeamMember[] }) {
   const { lang } = useLocale();
   const h = humanCopy[lang];
   const list = [...members, ...members];
@@ -302,12 +322,12 @@ function PortraitStrip() {
       <div className="mt-16 flex w-max animate-marquee hover:[animation-play-state:paused]">
         {list.map((m, i) => (
           <figure
-            key={`${m.name}-${i}`}
+            key={`${m._id}-${i}`}
             aria-hidden={i >= members.length}
             className={`relative mr-5 w-56 shrink-0 overflow-hidden rounded-[1.75rem] bg-night-soft transition-transform duration-500 hover:rotate-0 hover:scale-[1.03] md:w-64 ${i % 2 ? "rotate-2" : "-rotate-2"}`}
           >
             <div className="relative aspect-[3/4]">
-              <Image src={m.photo} alt={m.name} fill sizes="16rem" className="object-cover object-top" />
+              <SanityImage image={m.photo} alt={m.name ?? ""} fill width={600} sizes="16rem" className="object-cover object-top" />
               <div className="absolute inset-0 bg-linear-to-t from-night/85 via-transparent to-transparent" />
             </div>
             <figcaption className="absolute inset-x-4 bottom-4">

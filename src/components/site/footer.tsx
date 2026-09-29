@@ -22,6 +22,7 @@ export function Footer() {
       title: f.columns.agency,
       items: [
         { label: f.agency.projects, href: links.projects },
+        { label: f.agency.tools, href: href(lang, "tools") },
         { label: f.agency.team, href: links.team },
         { label: f.agency.insights, href: links.insights },
         { label: f.agency.contact, href: links.contact },

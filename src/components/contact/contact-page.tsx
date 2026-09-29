@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { href } from "@/i18n/routes";
+import { OfficeMap } from "../page/office-map";
 import { ButtonLink, PageHero, SectionHeader } from "../page/ui";
 import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
@@ -36,13 +37,7 @@ export function ContactPage() {
             intro={c.offices.intro}
           />
           <FadeIn className="relative mt-14 overflow-hidden rounded-[2.5rem] border border-white/10 bg-night-soft p-6 md:p-10">
-            <Image
-              src="/images/studio/photo.png"
-              alt="Paris · Phnom Penh"
-              width={1545}
-              height={768}
-              className="w-full opacity-35 invert"
-            />
+            <OfficeMap />
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {offices.map((o) => (
                 <div
@@ -307,7 +302,7 @@ function BriefForm() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <button
                 type="submit"
-                className="group inline-flex h-14 items-center gap-3 self-start rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand-deep"
+                className="group inline-flex h-14 items-center gap-3 self-start rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand"
               >
                 {f.submit}
                 <span className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">

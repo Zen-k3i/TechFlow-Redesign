@@ -5,31 +5,31 @@ import {LinkIcon} from '@sanity/icons/Link'
 /** Rich text used for case study, tool and insight bodies. */
 export const blockContent = defineType({
   name: 'blockContent',
-  title: 'Contenu',
+  title: 'Content',
   type: 'array',
   of: [
     defineArrayMember({
       type: 'block',
       styles: [
-        {title: 'Paragraphe', value: 'normal'},
-        {title: 'Titre 2', value: 'h2'},
-        {title: 'Titre 3', value: 'h3'},
-        {title: 'Titre 4', value: 'h4'},
-        {title: 'Citation', value: 'blockquote'},
+        {title: 'Paragraph', value: 'normal'},
+        {title: 'Heading 2', value: 'h2'},
+        {title: 'Heading 3', value: 'h3'},
+        {title: 'Heading 4', value: 'h4'},
+        {title: 'Quote', value: 'blockquote'},
       ],
       lists: [
-        {title: 'Puces', value: 'bullet'},
-        {title: 'Numérotée', value: 'number'},
+        {title: 'Bullets', value: 'bullet'},
+        {title: 'Numbered', value: 'number'},
       ],
       marks: {
         decorators: [
-          {title: 'Gras', value: 'strong'},
-          {title: 'Italique', value: 'em'},
+          {title: 'Bold', value: 'strong'},
+          {title: 'Italic', value: 'em'},
         ],
         annotations: [
           defineArrayMember({
             name: 'link',
-            title: 'Lien',
+            title: 'Link',
             type: 'object',
             icon: LinkIcon,
             fields: [
@@ -39,7 +39,7 @@ export const blockContent = defineType({
                 validation: (rule) =>
                   rule.uri({allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel']}),
               }),
-              defineField({name: 'blank', title: 'Ouvrir dans un nouvel onglet', type: 'boolean'}),
+              defineField({name: 'blank', title: 'Open in a new tab', type: 'boolean'}),
             ],
           }),
         ],
@@ -50,8 +50,8 @@ export const blockContent = defineType({
       icon: ImageIcon,
       options: {hotspot: true},
       fields: [
-        defineField({name: 'alt', title: 'Texte alternatif', type: 'string'}),
-        defineField({name: 'caption', title: 'Légende', type: 'string'}),
+        defineField({name: 'alt', title: 'Alt text', type: 'string'}),
+        defineField({name: 'caption', title: 'Caption', type: 'string'}),
       ],
     }),
     defineArrayMember({type: 'table'}),

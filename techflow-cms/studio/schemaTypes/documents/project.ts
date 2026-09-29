@@ -2,35 +2,39 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CaseIcon} from '@sanity/icons/Case'
 import {languageField, orderField, seoField, slugField} from './shared'
 
+/** The case-study header is a 3×3 mosaic: four sides, the hero image in the middle, four sides. */
+const HERO_SIDES = [1, 2, 3, 4, 5, 6, 7, 8]
+
 export const project = defineType({
   name: 'project',
-  title: 'Projet',
+  title: 'Project',
   type: 'document',
   icon: CaseIcon,
   groups: [
-    {name: 'content', title: 'Contenu', default: true},
-    {name: 'details', title: 'Détails'},
-    {name: 'media', title: 'Médias'},
+    {name: 'content', title: 'Content', default: true},
+    {name: 'details', title: 'Details'},
+    {name: 'media', title: 'Media'},
     {name: 'seo', title: 'SEO'},
   ],
+  fieldsets: [{name: 'hero', title: 'Case study header', options: {columns: 3}}],
   fields: [
     languageField,
-    defineField({name: 'title', title: 'Nom du projet', type: 'string', group: 'content', validation: (r) => r.required()}),
+    defineField({name: 'title', title: 'Project name', type: 'string', group: 'content', validation: (r) => r.required()}),
     {...slugField, group: 'content'},
-    defineField({name: 'summary', title: 'Résumé', type: 'text', rows: 3, group: 'content'}),
-    defineField({name: 'body', title: 'Étude de cas', type: 'blockContent', group: 'content'}),
-    defineField({name: 'testimonial', title: 'Témoignage client', type: 'testimonial', group: 'content'}),
+    defineField({name: 'summary', title: 'Summary', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'body', title: 'Case study', type: 'blockContent', group: 'content'}),
+    defineField({name: 'testimonial', title: 'Client testimonial', type: 'testimonial', group: 'content'}),
 
-    defineField({name: 'sector', title: 'Secteur', type: 'string', group: 'details'}),
+    defineField({name: 'sector', title: 'Sector', type: 'string', group: 'details'}),
     defineField({
       name: 'metrics',
-      title: 'Chiffres clés',
+      title: 'Key figures',
       type: 'array',
       group: 'details',
       of: [defineArrayMember({type: 'metric'})],
       validation: (r) => r.max(4),
     }),
-    defineField({name: 'websiteUrl', title: 'Site du client', type: 'url', group: 'details'}),
+    defineField({name: 'websiteUrl', title: 'Client website', type: 'url', group: 'details'}),
     defineField({
       name: 'services',
       title: 'Services',
@@ -41,7 +45,7 @@ export const project = defineType({
     }),
     defineField({
       name: 'tools',
-      title: 'Outils',
+      title: 'Tools',
       type: 'array',
       group: 'details',
       of: [defineArrayMember({type: 'reference', to: [{type: 'tool'}]})],
@@ -49,7 +53,7 @@ export const project = defineType({
     }),
     defineField({
       name: 'team',
-      title: 'Équipe TechFlow',
+      title: 'TechFlow team',
       type: 'array',
       group: 'details',
       of: [defineArrayMember({type: 'reference', to: [{type: 'teamMember'}]})],
@@ -57,21 +61,37 @@ export const project = defineType({
     }),
     {...orderField, group: 'details'},
 
-    defineField({name: 'coverImage', title: 'Image de carte', type: 'imageWithAlt', group: 'media'}),
-    defineField({name: 'logo', title: 'Logo du client', type: 'image', group: 'media'}),
     defineField({
-      name: 'gallery',
-      title: "Galerie d'en-tête",
-      description: "Jusqu'à 9 images. La 5e est l'image centrale.",
-      type: 'array',
+      name: 'coverImage',
+      title: 'Card image',
+      description: 'Portrait visual for project cards (home page, Projects page).',
+      type: 'imageWithAlt',
       group: 'media',
-      of: [defineArrayMember({type: 'imageWithAlt'})],
-      options: {layout: 'grid'},
-      validation: (r) => r.max(9),
     }),
+    defineField({name: 'logo', title: 'Client logo', type: 'image', group: 'media'}),
+    defineField({
+      name: 'heroImage',
+      title: 'Hero image',
+      description: 'Centre screen of the header, also shown when hovering project cards.',
+      type: 'imageWithAlt',
+      group: 'media',
+      fieldset: 'hero',
+      validation: (r) => r.required(),
+    }),
+    ...HERO_SIDES.map((n) =>
+      defineField({
+        name: `heroSide${n}`,
+        title: `Hero side ${n}`,
+        description: n <= 2 ? 'Also shown when hovering project cards.' : undefined,
+        type: 'imageWithAlt',
+        group: 'media',
+        fieldset: 'hero',
+        validation: (r) => r.required(),
+      }),
+    ),
     defineField({
       name: 'showcase',
-      title: 'Visuels du projet',
+      title: 'Project visuals',
       type: 'array',
       group: 'media',
       of: [defineArrayMember({type: 'imageWithAlt'})],
@@ -81,14 +101,14 @@ export const project = defineType({
     {...seoField, group: 'seo'},
     defineField({
       name: 'sourceUrl',
-      title: 'URL source',
-      description: "Page d'origine sur l'ancien site, utilisée par l'import.",
+      title: 'Source URL',
+      description: 'Original page on the old site, used by the import.',
       type: 'url',
       group: 'seo',
       readOnly: true,
     }),
   ],
-  orderings: [{title: 'Ordre', name: 'order', by: [{field: 'order', direction: 'asc'}]}],
+  orderings: [{title: 'Order', name: 'order', by: [{field: 'order', direction: 'asc'}]}],
   preview: {
     select: {title: 'title', subtitle: 'sector', language: 'language', media: 'coverImage'},
     prepare: ({title, subtitle, language, media}) => ({

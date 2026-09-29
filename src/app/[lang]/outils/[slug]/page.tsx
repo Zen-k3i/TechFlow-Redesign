@@ -5,7 +5,7 @@ import { ToolPage } from "@/components/tools/tool-page";
 import { hasLocale } from "@/i18n/config";
 import { client } from "@/sanity/client";
 import { getTool, isSlug, redirectToTranslation } from "@/sanity/fetch";
-import { cmsAlternates } from "@/sanity/metadata";
+import { cmsAlternates, translationLinks } from "@/sanity/metadata";
 import { TOOL_SLUGS_QUERY } from "@/sanity/queries";
 
 export async function generateStaticParams({ params }: { params: { lang: string } }) {
@@ -35,7 +35,7 @@ export default async function Tool({ params }: PageProps<"/[lang]/outils/[slug]"
   }
 
   return (
-    <PageShell lang={lang} current="tools">
+    <PageShell lang={lang} current="tools" alternates={translationLinks("tools", lang, slug, tool.translations)}>
       <ToolPage tool={tool} />
     </PageShell>
   );

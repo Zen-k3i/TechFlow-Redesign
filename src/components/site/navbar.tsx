@@ -4,14 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
-import { locales } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import { href, isServiceKey, serviceKeys, type RouteKey } from "@/i18n/routes";
 import { ease, projectImage } from "./content";
 import { useLocale } from "./locale";
 
 const pageKeys = ["projects", "team", "insights", "contact"] as const;
 
-export function Navbar({ current }: { current?: RouteKey }) {
+/** Per-locale URLs of the current page, when they differ from the section index (e.g. a translated slug). */
+export type Alternates = Partial<Record<Locale, string>>;
+
+export function Navbar({ current, alternates }: { current?: RouteKey; alternates?: Alternates }) {
   const { t, lang, links } = useLocale();
   const { scrollY, scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
@@ -97,12 +100,12 @@ export function Navbar({ current }: { current?: RouteKey }) {
           </ul>
 
           <div className="flex items-center gap-2">
-            <LanguageSwitch current={current} className="hidden sm:flex" />
+            <LanguageSwitch current={current} alternates={alternates} className="hidden sm:flex" />
             <a
               href={links.booking}
               target="_blank"
               rel="noreferrer"
-              className="group hidden h-12 items-center gap-2.5 rounded-full bg-white pl-5 pr-1.5 text-[15px] font-medium text-night transition-colors hover:bg-brand-sky hover:text-white sm:flex"
+              className="group hidden h-12 items-center gap-2.5 rounded-full bg-white pl-5 pr-1.5 text-[15px] font-medium text-night transition-colors hover:bg-brand hover:text-white sm:flex"
             >
               {t.nav.book}
               <span className="flex size-9 items-center justify-center rounded-full bg-night text-white transition-transform duration-300 group-hover:-rotate-45">
@@ -240,7 +243,7 @@ export function Navbar({ current }: { current?: RouteKey }) {
               ))}
             </ul>
             <div className="mt-10 space-y-4">
-              <LanguageSwitch current={current} className="flex w-fit border-white/30" />
+              <LanguageSwitch current={current} alternates={alternates} className="flex w-fit border-white/30" />
               <a
                 href={links.booking}
                 target="_blank"
@@ -257,7 +260,15 @@ export function Navbar({ current }: { current?: RouteKey }) {
   );
 }
 
-function LanguageSwitch({ current = "home", className = "" }: { current?: RouteKey; className?: string }) {
+function LanguageSwitch({
+  current = "home",
+  alternates,
+  className = "",
+}: {
+  current?: RouteKey;
+  alternates?: Alternates;
+  className?: string;
+}) {
   const { lang, t } = useLocale();
 
   return (
@@ -269,7 +280,7 @@ function LanguageSwitch({ current = "home", className = "" }: { current?: RouteK
       {locales.map((l) => (
         <a
           key={l}
-          href={href(l, current)}
+          href={alternates?.[l] ?? href(l, current)}
           hrefLang={l}
           lang={l}
           aria-current={l === lang ? "true" : undefined}

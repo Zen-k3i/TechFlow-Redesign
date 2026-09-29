@@ -6,125 +6,145 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import type { Locale } from "@/i18n/config";
 import { href } from "@/i18n/routes";
 import type { PROJECT_DETAIL_QUERY_RESULT } from "@/sanity.types";
-import { PortableBody, safeHref } from "../cms/portable-body";
+import { headingsOf, PortableBody, safeHref } from "../cms/portable-body";
 import { SanityImage, type CmsImage } from "../cms/sanity-image";
+import { Toc } from "../page/blocks";
+import { HumanActions } from "../page/ui";
 import { CmsProjectCard } from "../projects/cms-project-card";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
-import { FadeIn } from "../site/reveal";
+import { FadeIn, RevealHeading } from "../site/reveal";
 
 export type CmsCaseStudy = NonNullable<PROJECT_DETAIL_QUERY_RESULT>;
 
 const copy: Record<Locale, Record<string, string>> = {
   fr: {
-    back: "Tous les projets",
-    prefix: "Case Study :",
-    sector: "Secteur :",
+    eyebrow: "Étude de cas",
+    minutes: "min de lecture",
     visit: "Voir le site",
+    results: "Résultats",
+    facts: "Fiche projet",
+    client: "Client",
+    sector: "Secteur",
     services: "Services",
-    tools: "Outil(s)",
-    team: "Équipe",
-    ctaTitle: "Envie des mêmes résultats pour votre site ?",
+    tools: "Outils",
+    team: "L'équipe TechFlow",
+    toc: "Sommaire",
+    visuals: "Le projet en images",
+    ctaTitle: "Envie des mêmes résultats *pour votre site ?*",
     ctaText: "Réservez un appel de 30 minutes pour voir ce que nous pouvons vous apporter.",
-    ctaLink: "Parler à un humain",
-    related: "Nos réalisations",
+    related: "D'autres projets",
+    back: "Tous les projets",
   },
   en: {
-    back: "All projects",
-    prefix: "Case Study:",
-    sector: "Sector:",
+    eyebrow: "Case study",
+    minutes: "min read",
     visit: "Visit the site",
+    results: "Results",
+    facts: "Project facts",
+    client: "Client",
+    sector: "Sector",
     services: "Services",
-    tools: "Tool(s)",
-    team: "Team",
-    ctaTitle: "Want the same results for your site?",
+    tools: "Tools",
+    team: "The TechFlow team",
+    toc: "Contents",
+    visuals: "The project in pictures",
+    ctaTitle: "Want the same results *for your site?*",
     ctaText: "Book a 30-minute call to see what we can do for you.",
-    ctaLink: "Talk to a human",
-    related: "Our work",
+    related: "More projects",
+    back: "All projects",
   },
 };
 
-/** Case study stored in the CMS, laid out like techflow-agency.com/projets/kretz-club. */
+/**
+ * Case study stored in the CMS, read like an insight article: a dark hero, the header
+ * mosaic, key results, then the story on paper with a sticky project sheet beside it.
+ */
 export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
   const { lang } = useLocale();
   const c = copy[lang];
+  const headings = headingsOf(study.body);
+  const showcase = study.showcase ?? [];
 
   return (
-    <div className="bg-white text-[#1b1b1b]">
-      {/* The navbar is transparent until scrolled; the live site sits it on a black band. */}
-      <div aria-hidden className="h-24 bg-night md:h-[6.2rem]" />
-
-      <header className="mx-auto max-w-6xl px-5 pt-6 md:px-12">
-        <Link href={href(lang, "projects")} className="inline-flex items-center gap-2 text-sm text-black/70 transition-colors hover:text-black">
-          <span aria-hidden>‹</span> {c.back}
-        </Link>
-        <div className="mt-8 grid gap-6 md:grid-cols-2 md:gap-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease }}
-            className="font-serif text-[clamp(2.6rem,5.5vw,3.5rem)] leading-[1.1] tracking-[-0.02em] text-black"
-          >
-            <span className="text-black/35">{c.prefix} </span>
-            {study.title}
-          </motion.h1>
-          {study.summary && (
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease }}
-              className="text-xl leading-7 text-[#060808]"
-            >
-              {study.summary}
-            </motion.p>
-          )}
-        </div>
-      </header>
-
+    <>
+      <Hero study={study} />
       <Gallery study={study} />
+      <Results study={study} />
 
-      <section className="bg-linear-to-b from-white to-[#fff4de] pb-24 md:pb-32">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 pt-4 md:grid-cols-[16rem_1fr] md:gap-12 md:px-12">
-          <Sidebar study={study} />
+      <section className="bg-night px-5 md:px-10">
+        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-paper px-6 py-16 text-ink md:rounded-[3.5rem] md:px-16 md:py-24">
+          <div className="grid gap-12 lg:grid-cols-[280px_1fr] xl:gap-20">
+            {/* The facts scroll away; the contents then stay pinned for the rest of the story. */}
+            <aside className="flex flex-col">
+              <ProjectFacts study={study} />
+              {headings.length > 0 && (
+                <div className="mt-10 hidden flex-1 lg:block">
+                  <Toc label={c.toc} items={headings} />
+                </div>
+              )}
+            </aside>
 
-          <article lang={lang} className="min-w-0 max-w-[42rem] pt-4">
-            <PortableBody value={study.body} variant="case" />
+            <article lang={lang} className="min-w-0 max-w-3xl">
+              <PortableBody value={study.body} />
 
-            {study.testimonial?.quote && (
-              <figure className="mt-14 rounded border border-[#d0d1d3] bg-white p-6 md:p-8">
-                <blockquote className="font-serif text-2xl leading-snug text-black">“{study.testimonial.quote}”</blockquote>
-                <figcaption className="mt-6 flex items-center gap-4">
-                  <Avatar image={study.testimonial.photo} name={study.testimonial.name ?? ""} />
-                  <span>
-                    <span className="block font-medium">{study.testimonial.name}</span>
-                    <span className="block text-sm text-[#454750]">{study.testimonial.role}</span>
-                  </span>
-                </figcaption>
-              </figure>
-            )}
+              {study.testimonial?.quote && (
+                <FadeIn>
+                  <figure className="relative mt-20 overflow-hidden rounded-[2rem] border border-ink/10 bg-white p-8 md:p-12">
+                    <span aria-hidden className="absolute -top-6 right-6 font-serif text-[10rem] leading-none text-brand/10 md:right-10">
+                      &rdquo;
+                    </span>
+                    <blockquote className="relative font-serif text-2xl leading-snug md:text-[2rem]">&ldquo;{study.testimonial.quote}&rdquo;</blockquote>
+                    <figcaption className="relative mt-8 flex items-center gap-4">
+                      <Avatar image={study.testimonial.photo} name={study.testimonial.name ?? ""} />
+                      <span>
+                        <span className="block font-medium">{study.testimonial.name}</span>
+                        <span className="block text-sm text-ink/55">{study.testimonial.role}</span>
+                      </span>
+                    </figcaption>
+                  </figure>
+                </FadeIn>
+              )}
 
-            {study.showcase && study.showcase.length > 0 && (
-              <div className="mt-14 grid gap-4">
-                {study.showcase.map((img) => (
-                  <SanityImage key={img._key} image={img} sizes="(min-width: 768px) 42rem, 100vw" className="h-auto w-full" />
-                ))}
-              </div>
-            )}
+              {showcase.length > 0 && (
+                <div className="mt-20">
+                  <p className="eyebrow text-brand-deep">{c.visuals}</p>
+                  <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                    {showcase.map((img, i) => (
+                      <FadeIn key={img._key} delay={(i % 2) * 0.06} className={i === 0 || showcase.length === 1 ? "sm:col-span-2" : ""}>
+                        <SanityImage
+                          image={img}
+                          sizes={i === 0 ? "(min-width: 768px) 768px, 100vw" : "(min-width: 768px) 380px, 100vw"}
+                          className="h-auto w-full rounded-2xl border border-ink/10 bg-white"
+                        />
+                      </FadeIn>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-            <div className="mt-14 rounded border-2 border-dashed border-[#2531ae] bg-[#ddeaff] p-5 md:p-6">
-              <h2 className="font-serif text-[2.25rem] font-light leading-tight tracking-[-0.03em] text-[#2a37d8]">{c.ctaTitle}</h2>
-              <p className="mt-4 text-[#454750]">{c.ctaText}</p>
-              <BookingLink label={c.ctaLink} className="mt-6" />
-            </div>
-          </article>
+              <FadeIn className="mt-20 overflow-hidden rounded-[2rem] bg-night p-8 text-white md:p-12">
+                <RevealHeading text={c.ctaTitle} accentClassName="italic text-brand-sky" className="font-serif text-4xl leading-[1.02] md:text-5xl" />
+                <p className="mt-4 max-w-lg text-white/60">{c.ctaText}</p>
+                <div className="mt-8">
+                  <HumanActions />
+                </div>
+              </FadeIn>
+            </article>
+          </div>
         </div>
       </section>
 
-      {study.related.length > 0 && (
-        <section className="bg-linear-to-b from-[#f5f0e6] to-white px-5 py-20 md:px-12 md:py-24">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-center font-serif text-5xl leading-none tracking-[-0.02em] text-black md:text-6xl">{c.related}</h2>
-            <ul className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-3">
+      <section className="bg-night px-5 py-28 text-white md:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>
+            <Link href={href(lang, "projects")} className="text-white/60 underline-offset-4 hover:text-white hover:underline">
+              ← {c.back}
+            </Link>
+          </div>
+          {study.related.length > 0 && (
+            <ul className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
               {study.related.map((p, i) => (
                 <FadeIn key={p._id} delay={i * 0.08}>
                   <li>
@@ -133,30 +153,108 @@ export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
                 </FadeIn>
               ))}
             </ul>
-          </div>
-        </section>
-      )}
-    </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function Hero({ study }: { study: CmsCaseStudy }) {
+  const { lang, t } = useLocale();
+  const c = copy[lang];
+  const website = safeHref(study.websiteUrl);
+  const reveal = (delay: number) => ({
+    initial: { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay, ease },
+  });
+
+  return (
+    <section className="grain relative overflow-hidden bg-night px-5 pb-16 pt-32 text-white md:px-10 md:pt-44">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_55%_at_85%_10%,rgba(71,102,255,0.28),transparent_70%)]" />
+      <div className="relative mx-auto max-w-5xl">
+        <motion.nav aria-label="Breadcrumb" {...reveal(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/40">
+          <Link href={href(lang, "home")} className="hover:text-white">
+            {t.common.breadcrumbHome}
+          </Link>
+          <span aria-hidden>/</span>
+          <Link href={href(lang, "projects")} className="hover:text-white">
+            {t.nav.pages.projects}
+          </Link>
+          <span aria-hidden>/</span>
+          <span aria-current="page" className="text-white/70">
+            {study.title}
+          </span>
+        </motion.nav>
+
+        <motion.div {...reveal(0.05)} className="mt-10 flex items-center gap-3">
+          {study.logo?.asset && (
+            <span className="flex size-11 items-center justify-center rounded-xl bg-white p-2">
+              <SanityImage image={study.logo} alt={study.title ?? ""} width={160} sizes="44px" className="size-full object-contain" />
+            </span>
+          )}
+          <span className="eyebrow text-brand-sky">
+            {c.eyebrow}
+            {study.sector && <span className="text-white/40"> · {study.sector}</span>}
+          </span>
+        </motion.div>
+
+        <RevealHeading as="h1" text={study.title ?? ""} className="mt-6 font-serif text-[clamp(2.8rem,7vw,6rem)] leading-[0.95] tracking-[-0.02em]" />
+
+        {study.summary && (
+          <motion.p {...reveal(0.2)} className="mt-6 max-w-3xl text-lg text-white/65 md:text-xl">
+            {study.summary}
+          </motion.p>
+        )}
+
+        <motion.div {...reveal(0.3)} className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-white/55">
+          {study.services?.map((s) => (
+            <span key={s} className="rounded-full bg-brand-sky/15 px-3 py-1 text-brand-sky">
+              {s}
+            </span>
+          ))}
+          {study.minutes > 0 && (
+            <span>
+              {Math.max(1, study.minutes)} {c.minutes}
+            </span>
+          )}
+          {website && (
+            <a
+              href={website}
+              target="_blank"
+              rel="noreferrer"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/15 py-1 pl-4 pr-1 text-white transition-colors hover:border-brand hover:bg-brand"
+            >
+              {c.visit}
+              <span aria-hidden className="flex size-7 items-center justify-center rounded-full bg-white/10 transition-transform duration-300 group-hover:-rotate-45">
+                →
+              </span>
+            </a>
+          )}
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
 /**
- * 3×3 image grid that starts zoomed on its centre image and pulls back as you scroll,
- * like the live case study header. Falls back to a single cover image.
+ * 3×3 mosaic of the project's screens that starts zoomed on its centre image and pulls back
+ * as you scroll. Falls back to a single cover image.
  */
 function Gallery({ study }: { study: CmsCaseStudy }) {
   const ref = useRef<HTMLDivElement>(null);
   const still = useReducedMotion() ?? false;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  // At 3.2× the centre cell (plus its gaps) spans the container, as on the live page.
+  // At 3.2× the centre cell (plus its gaps) spans the container.
   const scale = useTransform(scrollYProgress, [0, 0.8], still ? [1, 1] : [3.2, 1]);
-  const images = study.gallery ?? [];
+  const images = (study.gallery ?? []).filter((img) => img !== null);
 
   if (images.length < 9) {
     const cover = images[0] ?? study.coverImage;
     return (
-      <div className="mx-auto mt-10 max-w-6xl px-5 md:px-12">
-        <div className="relative aspect-[16/9] overflow-hidden bg-black">
+      <div className="bg-night px-5 pb-20 md:px-10">
+        <div className="relative mx-auto aspect-[16/9] max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-black">
           <SanityImage image={cover} alt={study.title ?? ""} fill priority sizes="(min-width: 1152px) 1152px, 100vw" className="object-cover" />
         </div>
       </div>
@@ -164,22 +262,22 @@ function Gallery({ study }: { study: CmsCaseStudy }) {
   }
 
   return (
-    <>
+    <div className="bg-night">
       {/* Phones and small tablets: the centre column, stacked. */}
-      <div className="mx-auto mt-10 grid max-w-6xl gap-4 px-5 md:hidden">
+      <div className="mx-auto grid max-w-6xl gap-4 px-5 pb-20 md:hidden">
         {[1, 4, 7].map((i) => (
-          <div key={images[i]._key} className="relative aspect-[1.42] overflow-hidden bg-black">
+          <div key={images[i]._key ?? i} className="relative aspect-[1.42] overflow-hidden rounded-2xl bg-black">
             <SanityImage image={images[i]} alt={images[i].alt ?? study.title ?? ""} fill priority={i === 4} sizes="100vw" className="object-cover" />
           </div>
         ))}
       </div>
 
-      <div ref={ref} className="relative mt-10 hidden h-[300vh] md:block">
+      <div ref={ref} className="relative hidden h-[300vh] md:block">
         <div className="sticky top-[5.5rem] flex h-[calc(100vh-5.5rem)] items-center overflow-hidden">
           <div className="mx-auto w-full max-w-6xl px-12">
             <motion.div style={{ scale }} className="grid origin-center grid-cols-3 gap-4 will-change-transform">
               {images.map((img, i) => (
-                <div key={img._key} className="relative aspect-[1.42] overflow-hidden bg-black">
+                <div key={img._key ?? i} className="relative aspect-[1.42] overflow-hidden rounded-xl bg-black">
                   <SanityImage
                     image={img}
                     alt={img.alt ?? study.title ?? ""}
@@ -194,132 +292,146 @@ function Gallery({ study }: { study: CmsCaseStudy }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-function Sidebar({ study }: { study: CmsCaseStudy }) {
+/** Columns per number of key figures, so no cell is ever left empty. */
+const GRID: Record<number, string> = {
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-1 sm:grid-cols-3",
+  4: "grid-cols-2 md:grid-cols-4",
+};
+
+/** Key figures, big and first, before the story explains them. */
+function Results({ study }: { study: CmsCaseStudy }) {
+  const { lang } = useLocale();
+  const metrics = study.metrics ?? [];
+  if (metrics.length === 0) return null;
+
+  return (
+    <section className="bg-night px-5 pb-24 text-white md:px-10">
+      <div className="mx-auto max-w-7xl">
+        <p className="eyebrow text-brand-sky">{copy[lang].results}</p>
+        <dl className={`mt-6 grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 ${GRID[Math.min(metrics.length, 4)]}`}>
+          {metrics.map((m, i) => (
+            <FadeIn key={m._key} delay={i * 0.06} className="flex flex-col-reverse bg-night p-6 md:p-8">
+              <dt className="mt-3 text-sm text-white/55">{m.label}</dt>
+              <dd className="font-serif text-4xl leading-none md:text-6xl">{m.value}</dd>
+            </FadeIn>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+/** Everything about the engagement at a glance: who, what, with which tools and people. */
+function ProjectFacts({ study }: { study: CmsCaseStudy }) {
   const { lang } = useLocale();
   const c = copy[lang];
-  const card = "rounded border border-[#d0d1d3] bg-white/60 p-5";
+  const website = safeHref(study.websiteUrl);
+  const row = "border-t border-ink/10 py-4 first:border-t-0 first:pt-0";
+  const label = "eyebrow text-ink/40";
 
   return (
-    <aside className="flex flex-col gap-2 md:sticky md:top-24 md:self-start md:pb-8">
-      <div className={card}>
-        {study.logo?.asset && (
-          <div className="mb-3 size-[50px]">
-            <SanityImage image={study.logo} alt={study.title ?? ""} width={200} sizes="50px" className="size-full object-contain" />
+    <div className="rounded-3xl border border-ink/10 bg-white p-6">
+      <p className="eyebrow text-brand-deep">{c.facts}</p>
+      <dl className="mt-5">
+        <div className={row}>
+          <dt className={label}>{c.client}</dt>
+          <dd className="mt-2 flex items-center gap-3 font-medium">
+            {study.logo?.asset && (
+              <span className="size-8 shrink-0">
+                <SanityImage image={study.logo} alt="" width={120} sizes="32px" className="size-full object-contain" />
+              </span>
+            )}
+            {study.title}
+          </dd>
+        </div>
+
+        {study.sector && (
+          <div className={row}>
+            <dt className={label}>{c.sector}</dt>
+            <dd className="mt-2">{study.sector}</dd>
           </div>
         )}
-        {study.sector && (
-          <p className="mb-3 text-[#1b1b1b]">
-            {c.sector} {study.sector}
-          </p>
-        )}
-        {study.metrics && study.metrics.length > 0 && (
-          <dl className="grid gap-2 py-1">
-            {study.metrics.map((m) => (
-              <div key={m._key} className="flex gap-2">
-                <dt className="shrink-0 text-xl leading-7 text-[#1b1b1b]">{m.value}</dt>
-                <dd className="text-[#454750]">{m.label}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
-        {safeHref(study.websiteUrl) && (
-          <a
-            href={safeHref(study.websiteUrl)}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex h-10 items-center gap-3 rounded-full border border-[#245dff] bg-[#151515] pl-6 pr-2 text-white transition-colors hover:bg-black"
-          >
-            {c.visit}
-            <span aria-hidden className="flex size-8 items-center justify-center">
-              ↗
-            </span>
-          </a>
-        )}
-      </div>
 
-      {((study.services?.length ?? 0) > 0 || (study.tools?.length ?? 0) > 0) && (
-        <div className={`${card} flex flex-col gap-4`}>
-          {study.services && study.services.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <p className="font-bold text-black">{c.services}</p>
-              <ul className="flex flex-col items-start gap-2">
-                {study.services.map((s) => (
-                  <li key={s} className="rounded-full border border-[#d9d9d9] bg-[#f2f2f2] px-4 py-2 text-sm font-medium text-[#454750]">
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {study.tools && study.tools.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <p className="font-bold text-black">{c.tools}</p>
-              <ul className="flex flex-col items-start gap-2">
-                {study.tools.map((tool) => (
-                  <li key={tool._id}>
-                    <Link
-                      href={href(lang, "tools", tool.slug ?? "")}
-                      className="flex items-center gap-1.5 rounded-full border border-[#d9d9d9] bg-[#f2f2f2] px-3.5 py-2 font-medium text-[#1b1b1b] transition-colors hover:border-[#245dff]"
-                    >
-                      <SanityImage image={tool.logo} alt="" width={120} sizes="18px" className="h-[18px] w-auto max-w-16 object-contain" />
-                      {tool.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-
-      {study.team && study.team.length > 0 && (
-        <div className={card}>
-          <p className="sr-only">{c.team}</p>
-          <ul className="flex flex-col gap-4">
-            {study.team.map((member) => (
-              <li key={member._id} className="flex items-center gap-3">
-                <Avatar image={member.photo} name={member.name ?? ""} />
-                <span>
-                  <span className="block font-medium leading-tight text-black">{member.name}</span>
-                  <span className="block text-sm text-[#454750]">{member.role}</span>
+        {study.services && study.services.length > 0 && (
+          <div className={row}>
+            <dt className={label}>{c.services}</dt>
+            <dd className="mt-3 flex flex-wrap gap-1.5">
+              {study.services.map((s) => (
+                <span key={s} className="rounded-full bg-brand-deep/10 px-3 py-1 text-sm text-brand-deep">
+                  {s}
                 </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+              ))}
+            </dd>
+          </div>
+        )}
+
+        {study.tools && study.tools.length > 0 && (
+          <div className={row}>
+            <dt className={label}>{c.tools}</dt>
+            <dd className="mt-3 flex flex-wrap gap-1.5">
+              {study.tools.map((tool) => (
+                <Link
+                  key={tool._id}
+                  href={href(lang, "tools", tool.slug ?? "")}
+                  className="flex items-center gap-1.5 rounded-full border border-ink/10 px-3 py-1.5 text-sm transition-colors hover:border-brand hover:text-brand"
+                >
+                  <SanityImage image={tool.logo} alt="" width={80} sizes="16px" className="h-4 w-auto max-w-12 object-contain" />
+                  {tool.title}
+                </Link>
+              ))}
+            </dd>
+          </div>
+        )}
+
+        {study.team && study.team.length > 0 && (
+          <div className={row}>
+            <dt className={label}>{c.team}</dt>
+            <dd className="mt-3 space-y-3">
+              {study.team.map((member) => (
+                <div key={member._id} className="flex items-center gap-3">
+                  <Avatar image={member.photo} name={member.name ?? ""} size="sm" />
+                  <span className="leading-tight">
+                    <span className="block text-sm font-medium">{member.name}</span>
+                    <span className="block text-xs text-ink/50">{member.role}</span>
+                  </span>
+                </div>
+              ))}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      {website && (
+        <a
+          href={website}
+          target="_blank"
+          rel="noreferrer"
+          className="group mt-2 flex h-12 items-center justify-between rounded-full bg-ink pl-5 pr-1.5 text-sm font-medium text-paper transition-colors hover:bg-brand"
+        >
+          {c.visit}
+          <span aria-hidden className="flex size-9 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">
+            →
+          </span>
+        </a>
       )}
-    </aside>
+    </div>
   );
 }
 
-function Avatar({ image, name }: { image: CmsImage | undefined; name: string }) {
+function Avatar({ image, name, size = "md" }: { image: CmsImage | undefined; name: string; size?: "sm" | "md" }) {
+  const box = size === "sm" ? "size-9" : "size-12";
   if (!image?.asset) {
-    return <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#2a37d8] font-serif text-lg text-white">{name[0]}</span>;
+    return <span className={`flex ${box} shrink-0 items-center justify-center rounded-full bg-brand-deep font-serif text-white`}>{name[0]}</span>;
   }
   return (
-    <span className="relative size-12 shrink-0 overflow-hidden rounded-full">
-      <SanityImage image={image} alt="" fill width={200} sizes="48px" className="object-cover" />
+    <span className={`relative ${box} shrink-0 overflow-hidden rounded-full bg-ink/5`}>
+      <SanityImage image={image} alt="" fill width={144} sizes="48px" className="object-cover object-top" />
     </span>
-  );
-}
-
-function BookingLink({ label, className = "" }: { label: string; className?: string }) {
-  const { links } = useLocale();
-  return (
-    <a
-      href={links.booking}
-      target="_blank"
-      rel="noreferrer"
-      className={`inline-flex h-11 items-center gap-3 rounded-full bg-[#2a37d8] pl-6 pr-2 text-white transition-colors hover:bg-[#2531ae] ${className}`}
-    >
-      {label}
-      <span aria-hidden className="flex size-8 items-center justify-center rounded-full bg-white/15">
-        ↗
-      </span>
-    </a>
   );
 }

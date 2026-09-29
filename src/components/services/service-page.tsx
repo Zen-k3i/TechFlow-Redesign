@@ -118,7 +118,7 @@ function Audience({ content }: { content: ServiceContent }) {
                 <span className="font-serif text-3xl italic text-brand-deep md:text-4xl">{a.cta}</span>
                 <span className="flex items-center gap-3 text-sm font-medium">
                   <span className="hidden sm:inline">{copy[lang].book}</span>
-                  <span className="flex size-12 items-center justify-center rounded-full bg-ink text-paper transition-[transform,background-color] duration-300 group-hover:-rotate-45 group-hover:bg-brand-deep">
+                  <span className="flex size-12 items-center justify-center rounded-full bg-ink text-paper transition-[transform,background-color] duration-300 group-hover:-rotate-45 group-hover:bg-brand">
                     →
                   </span>
                 </span>

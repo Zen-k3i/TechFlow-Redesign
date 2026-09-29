@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { href } from "@/i18n/routes";
 import { sanityLoader, urlFor } from "@/sanity/image";
 import { headingsOf, PortableBody } from "../cms/portable-body";
+import { SanityImage } from "../cms/sanity-image";
 import { BrowserFrame, HumanActions } from "../page/ui";
 import { Toc } from "../page/blocks";
 import { ease } from "../site/content";
@@ -12,6 +13,29 @@ import { useLocale } from "../site/locale";
 import { FadeIn, RevealHeading } from "../site/reveal";
 import { insightsContent, type InsightDetail } from "./data";
 import { ArticleCard, formatDate } from "./insights-page";
+
+function Byline({ author, label }: { author: InsightDetail["author"]; label: string }) {
+  const name = author?.name ?? "TechFlow Agency";
+  return (
+    <span className="flex items-center gap-2.5">
+      {author?.photo?.asset && (
+        <span className="relative size-7 shrink-0 overflow-hidden rounded-full bg-night-soft">
+          <SanityImage image={author.photo} alt="" fill width={96} sizes="28px" className="object-cover object-top" />
+        </span>
+      )}
+      <span>
+        {label}{" "}
+        {author?.linkedin ? (
+          <a href={author.linkedin} target="_blank" rel="noopener noreferrer" className="text-white underline-offset-4 hover:underline">
+            {name}
+          </a>
+        ) : (
+          name
+        )}
+      </span>
+    </span>
+  );
+}
 
 export function ArticlePage({ article }: { article: InsightDetail }) {
   const { lang, t } = useLocale();
@@ -75,9 +99,7 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
               {Math.max(1, article.minutes)} {c.minutes}
             </span>
             <span aria-hidden>·</span>
-            <span>
-              {c.by} {article.author ?? "TechFlow Agency"}
-            </span>
+            <Byline author={article.author} label={c.by} />
           </motion.div>
         </div>
         {article.coverImage?.asset && (

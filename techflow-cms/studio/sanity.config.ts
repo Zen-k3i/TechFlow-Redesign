@@ -4,13 +4,12 @@ import {visionTool} from '@sanity/vision'
 import {documentInternationalization} from '@sanity/document-internationalization'
 import {table} from '@sanity/table'
 import {schemaTypes} from './schemaTypes'
+import {BASE_LANGUAGE, LANGUAGES, LOCALIZED_TYPES} from './languages'
+import {structure} from './structure'
 
-const LANGUAGES = [
-  {id: 'fr', title: 'Français'},
-  {id: 'en', title: 'English'},
-]
-const BASE_LANGUAGE = 'fr'
-const LOCALIZED_TYPES = ['project', 'tool', 'insight']
+/** The plain type template and our per-language ones (`project-fr`, `project-en`, …). */
+const isLocalizedTemplate = (id: string) => LOCALIZED_TYPES.some((type) => id === type || id.startsWith(`${type}-`))
+const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
 
 export default defineConfig({
   name: 'default',
@@ -20,37 +19,42 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    structureTool(),
+    structureTool({structure}),
     visionTool(),
     table(),
     documentInternationalization({
       supportedLanguages: LANGUAGES,
-      schemaTypes: LOCALIZED_TYPES,
+      schemaTypes: [...LOCALIZED_TYPES],
     }),
   ],
 
   document: {
-    // New localized documents start in French; translations are created from the document itself.
-    newDocumentOptions: (prev) => [
-      ...prev.filter((item) => !LOCALIZED_TYPES.includes(item.templateId)),
-      ...LOCALIZED_TYPES.map((schemaType) => ({
-        templateId: `${schemaType}-${BASE_LANGUAGE}`,
-        parameters: {language: BASE_LANGUAGE},
-      })),
-    ],
+    // The global "create" menu starts localized documents in French; inside a language
+    // folder, the folder's own template (French or English) is used instead.
+    newDocumentOptions: (prev, {creationContext}) => {
+      if (creationContext.type !== 'global') return prev
+      return [
+        ...prev.filter((item) => !isLocalizedTemplate(item.templateId)),
+        ...LOCALIZED_TYPES.map((schemaType) => ({
+          templateId: `${schemaType}-${BASE_LANGUAGE}`,
+          parameters: {language: BASE_LANGUAGE},
+        })),
+      ]
+    },
   },
 
   schema: {
     types: schemaTypes,
     templates: (prev): Template[] => [
       ...prev,
-      ...LOCALIZED_TYPES.map((schemaType) => ({
-        id: `${schemaType}-${BASE_LANGUAGE}`,
-        title: `${schemaType} (${BASE_LANGUAGE})`,
-        schemaType,
-        parameters: [{name: 'language', type: 'string'}],
-        value: ({language}: {language: string}) => ({language}),
-      })),
+      ...LOCALIZED_TYPES.flatMap((schemaType) =>
+        LANGUAGES.map((lang) => ({
+          id: `${schemaType}-${lang.id}`,
+          title: `${capitalize(schemaType === 'insight' ? 'article' : schemaType)} (${lang.title})`,
+          schemaType,
+          value: {language: lang.id},
+        })),
+      ),
     ],
   },
 })

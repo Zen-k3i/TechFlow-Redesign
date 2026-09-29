@@ -9,7 +9,7 @@ import { Providers } from "@/components/site/providers";
 import { hasLocale } from "@/i18n/config";
 import { client } from "@/sanity/client";
 import { getProject, isSlug, redirectToTranslation } from "@/sanity/fetch";
-import { cmsAlternates } from "@/sanity/metadata";
+import { cmsAlternates, translationLinks } from "@/sanity/metadata";
 import { PROJECT_SLUGS_QUERY } from "@/sanity/queries";
 
 export async function generateStaticParams({ params }: { params: { lang: string } }) {
@@ -55,7 +55,7 @@ export default async function CaseStudy({ params }: PageProps<"/[lang]/projets/[
   }
 
   return (
-    <PageShell lang={lang} current="projects">
+    <PageShell lang={lang} current="projects" alternates={translationLinks("projects", lang, slug, study.translations)}>
       <CmsCaseStudyPage study={study} />
     </PageShell>
   );

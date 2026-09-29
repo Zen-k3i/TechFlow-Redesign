@@ -31,7 +31,7 @@ export function SanityImage({ image, alt, sizes, className, priority, width = 16
     alt: alt ?? image.alt ?? "",
     sizes,
     className,
-    priority,
+    preload: priority,
     placeholder: lqip ? ("blur" as const) : ("empty" as const),
     blurDataURL: lqip,
   };

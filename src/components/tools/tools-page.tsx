@@ -17,7 +17,7 @@ export function ToolLink({ tool, tone = "light" }: { tool: ToolCard; tone?: "lig
     <Link
       href={href(lang, "tools", tool.slug ?? "")}
       className={`group flex h-full flex-col rounded-3xl border p-6 transition-colors md:p-7 ${
-        light ? "border-ink/10 bg-white hover:border-brand-deep/40" : "border-white/10 bg-white/[0.03] hover:border-white/30"
+        light ? "border-ink/10 bg-white hover:border-brand/40" : "border-white/10 bg-white/[0.03] hover:border-white/30"
       }`}
     >
       <span className={`flex size-14 items-center justify-center rounded-2xl ${light ? "bg-paper" : "bg-white"}`}>

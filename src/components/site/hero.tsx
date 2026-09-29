@@ -333,7 +333,6 @@ function FanCard({
     >
       <motion.a
         href={caseStudyUrl(project.slug)}
-        data-cursor={t.hero.caseCursor}
         initial={{ opacity: 0, y: 160, rotate: 0 }}
         animate={{
           opacity: 1,
