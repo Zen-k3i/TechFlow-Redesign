@@ -1,52 +1,62 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { CaseStudyPage } from "@/components/case-study/case-study-page";
-import { caseStudies, getCaseStudy } from "@/components/case-study/data";
+import { CmsCaseStudyPage } from "@/components/case-study/cms-case-study-page";
 import { GrowthCaseStudyPage } from "@/components/growth/case-study-page";
 import { getGrowthCaseStudy, growthCaseStudies } from "@/components/growth/data";
-import { caseStudyUrl, projects } from "@/components/site/content";
+import { PageShell } from "@/components/page/shell";
+import { caseStudyUrl } from "@/components/site/content";
 import { Providers } from "@/components/site/providers";
+import { hasLocale } from "@/i18n/config";
+import { client } from "@/sanity/client";
+import { getProject, isSlug, redirectToTranslation } from "@/sanity/fetch";
+import { cmsAlternates } from "@/sanity/metadata";
+import { PROJECT_SLUGS_QUERY } from "@/sanity/queries";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return [...growthCaseStudies, ...caseStudies].map((c) => ({ slug: c.slug }));
+export async function generateStaticParams({ params }: { params: { lang: string } }) {
+  const slugs = await client.withConfig({ useCdn: false }).fetch(PROJECT_SLUGS_QUERY, { lang: params.lang });
+  // Growth case studies are still coded locally (French only).
+  return [...slugs.flatMap((slug) => (slug ? [{ slug }] : [])), ...growthCaseStudies.map((c) => ({ slug: c.slug }))];
 }
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/projets/[slug]">): Promise<Metadata> {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  if (!hasLocale(lang) || !isSlug(slug)) return {};
   const growth = getGrowthCaseStudy(slug);
   if (growth) {
-    return {
-      title: `${growth.client} | Étude de cas growth marketing · TechFlow Agency`,
-      description: growth.intro,
-    };
+    return { title: `${growth.client} | Étude de cas growth marketing · TechFlow Agency`, description: growth.intro };
   }
-  const study = getCaseStudy(slug);
-  const project = projects.find((p) => p.slug === slug);
-  if (!study || !project) return {};
-  return { title: `${project.name} | Étude de cas · TechFlow Agency`, description: study.summary };
+  const study = await getProject(lang, slug);
+  if (!study) return {};
+  return {
+    title: study.seo?.title ?? `${study.title} | Case Study · TechFlow Agency`,
+    description: study.seo?.description ?? study.summary ?? undefined,
+    alternates: cmsAlternates("projects", lang, slug, study.translations),
+  };
 }
 
 export default async function CaseStudy({ params }: PageProps<"/[lang]/projets/[slug]">) {
   const { lang, slug } = await params;
-  if (lang !== "fr") redirect(caseStudyUrl(slug));
-  const growth = getGrowthCaseStudy(slug);
-  const study = getCaseStudy(slug);
-  const project = projects.find((p) => p.slug === slug);
+  if (!hasLocale(lang) || !isSlug(slug)) notFound();
 
+  const growth = getGrowthCaseStudy(slug);
   if (growth) {
+    if (lang !== "fr") redirect(caseStudyUrl(slug));
     return (
       <Providers>
         <GrowthCaseStudyPage study={growth} />
       </Providers>
     );
   }
-  if (!study || !project) notFound();
+
+  const study = await getProject(lang, slug);
+  if (!study) {
+    await redirectToTranslation("project", lang, slug);
+    notFound();
+  }
 
   return (
-    <Providers>
-      <CaseStudyPage project={project} study={study} />
-    </Providers>
+    <PageShell lang={lang} current="projects">
+      <CmsCaseStudyPage study={study} />
+    </PageShell>
   );
 }

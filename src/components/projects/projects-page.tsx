@@ -10,18 +10,31 @@ import { FadeIn } from "../site/reveal";
 import { FilterChip } from "../site/work";
 import { ServiceCards } from "../page/service-cards";
 import { ClientMarquee, HumanActions, PageHero, SectionHeader } from "../page/ui";
+import { CmsProjectCard, type CmsProject } from "./cms-project-card";
 import { archive, projectsContent } from "./data";
 
-export function ProjectsPage() {
+/** Growth case studies are still coded locally; everything else comes from the CMS. */
+const growthProjects = projects.filter((p) => p.kind === "growth");
+
+type Entry = { key: string; sector: string } & ({ cms: CmsProject } | { local: (typeof growthProjects)[number] });
+
+export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
   const { lang, t } = useLocale();
   const c = projectsContent[lang];
+  const entries = useMemo<Entry[]>(
+    () => [
+      ...cmsProjects.map((p) => ({ key: p._id, sector: p.sector ?? "", cms: p })),
+      ...(lang === "fr" ? growthProjects.map((p) => ({ key: p.slug, sector: t.work.sectors[p.sector] ?? p.sector, local: p })) : []),
+    ],
+    [cmsProjects, lang, t],
+  );
   const sectors = useMemo(() => {
     const counts = new Map<string, number>();
-    for (const p of projects) counts.set(p.sector, (counts.get(p.sector) ?? 0) + 1);
+    for (const e of entries) if (e.sector) counts.set(e.sector, (counts.get(e.sector) ?? 0) + 1);
     return [...counts.entries()];
-  }, []);
+  }, [entries]);
   const [filter, setFilter] = useState<string | null>(null);
-  const visible = projects.filter((p) => !filter || p.sector === filter);
+  const visible = entries.filter((e) => !filter || e.sector === filter);
 
   return (
     <>
@@ -53,13 +66,13 @@ export function ProjectsPage() {
 
           <LayoutGroup>
             <div role="group" aria-label={t.work.filterLabel} className="mt-12 flex flex-wrap gap-2">
-              <FilterChip active={filter === null} onClick={() => setFilter(null)} label={t.work.all} count={projects.length} />
+              <FilterChip active={filter === null} onClick={() => setFilter(null)} label={t.work.all} count={entries.length} />
               {sectors.map(([sector, count]) => (
                 <FilterChip
                   key={sector}
                   active={filter === sector}
                   onClick={() => setFilter(sector)}
-                  label={t.work.sectors[sector] ?? sector}
+                  label={sector}
                   count={count}
                 />
               ))}
@@ -67,16 +80,16 @@ export function ProjectsPage() {
 
             <motion.ul layout className="mt-10 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
               <AnimatePresence mode="popLayout" initial={false}>
-                {visible.map((project) => (
+                {visible.map((entry) => (
                   <motion.li
-                    key={project.slug}
+                    key={entry.key}
                     layout
                     initial={{ opacity: 0, scale: 0.94 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.94 }}
                     transition={{ duration: 0.4, ease }}
                   >
-                    <ProjectCard project={project} />
+                    {"cms" in entry ? <CmsProjectCard project={entry.cms} /> : <ProjectCard project={entry.local} />}
                   </motion.li>
                 ))}
               </AnimatePresence>

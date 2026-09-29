@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { type ImageLoader } from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { href } from "@/i18n/routes";
@@ -251,10 +251,13 @@ export function BrowserFrame({
   preload = false,
   className = "aspect-[4/3]",
   tone = "dark",
+  loader,
 }: {
   src: string;
   alt: string;
   url: string;
+  /** Custom next/image loader, e.g. for CMS images the Sanity CDN resizes itself. */
+  loader?: ImageLoader;
   sizes?: string;
   preload?: boolean;
   className?: string;
@@ -291,6 +294,7 @@ export function BrowserFrame({
           fill
           sizes={sizes}
           preload={preload}
+          loader={loader}
           className="object-cover object-top transition-[object-position] duration-[4s] ease-in-out group-hover:object-bottom"
         />
       </div>

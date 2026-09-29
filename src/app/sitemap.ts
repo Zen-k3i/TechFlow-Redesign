@@ -1,12 +1,15 @@
 import type { MetadataRoute } from "next";
-import { caseStudies } from "@/components/case-study/data";
 import { growthCaseStudies } from "@/components/growth/data";
-import { articles } from "@/components/insights/data";
+import { hasLocale } from "@/i18n/config";
 import { href, routes, siteUrl, type RouteKey } from "@/i18n/routes";
+import { sanityFetch } from "@/sanity/client";
+import { SITEMAP_QUERY } from "@/sanity/queries";
 
 const url = (path: string) => `${siteUrl}${path === "/" ? "" : path}`;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+const cmsRoute: Record<"project" | "tool" | "insight", RouteKey> = { project: "projects", tool: "tools", insight: "insights" };
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = (Object.keys(routes) as RouteKey[]).map((key) => ({
     url: url(href("fr", key)),
     changeFrequency: "monthly" as const,
@@ -14,18 +17,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: { fr: url(href("fr", key)), en: url(href("en", key)) } },
   }));
 
-  const studies = [...growthCaseStudies, ...caseStudies].map((c) => ({
+  const growth = growthCaseStudies.map((c) => ({
     url: url(href("fr", "projects", c.slug)),
     changeFrequency: "yearly" as const,
     priority: 0.6,
   }));
 
-  const posts = articles.map((a) => ({
-    url: url(href("fr", "insights", a.slug)),
-    lastModified: a.date,
-    changeFrequency: "yearly" as const,
-    priority: 0.6,
-  }));
+  const cms = (await sanityFetch(SITEMAP_QUERY)).flatMap((doc) =>
+    doc.slug && doc.language && hasLocale(doc.language)
+      ? [
+          {
+            url: url(href(doc.language, cmsRoute[doc._type], doc.slug)),
+            lastModified: doc._updatedAt,
+            changeFrequency: "yearly" as const,
+            priority: doc._type === "tool" ? 0.5 : 0.6,
+          },
+        ]
+      : [],
+  );
 
-  return [...pages, ...studies, ...posts];
+  return [...pages, ...growth, ...cms];
 }

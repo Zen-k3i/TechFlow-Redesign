@@ -1,37 +1,43 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ArticlePage } from "@/components/insights/article-page";
-import { articles, getArticle } from "@/components/insights/data";
 import { PageShell } from "@/components/page/shell";
-import { href } from "@/i18n/routes";
+import { hasLocale } from "@/i18n/config";
+import { client } from "@/sanity/client";
+import { getInsight, isSlug, redirectToTranslation } from "@/sanity/fetch";
+import { cmsAlternates } from "@/sanity/metadata";
+import { INSIGHT_SLUGS_QUERY } from "@/sanity/queries";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams({ params }: { params: { lang: string } }) {
+  const slugs = await client.withConfig({ useCdn: false }).fetch(INSIGHT_SLUGS_QUERY, { lang: params.lang });
+  return slugs.flatMap((slug) => (slug ? [{ slug }] : []));
 }
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/nos-insights/[slug]">): Promise<Metadata> {
-  const { slug } = await params;
-  const article = getArticle(slug);
+  const { lang, slug } = await params;
+  if (!hasLocale(lang) || !isSlug(slug)) return {};
+  const article = await getInsight(lang, slug);
   if (!article) return {};
-  const url = href("fr", "insights", slug);
+  const alternates = cmsAlternates("insights", lang, slug, article.translations);
   return {
-    title: `${article.title.fr} | TechFlow Agency`,
-    description: article.excerpt.fr,
-    alternates: { canonical: url },
-    openGraph: { type: "article", publishedTime: article.date, url },
+    title: article.seo?.title ?? `${article.title} | TechFlow Agency`,
+    description: article.seo?.description ?? article.excerpt ?? undefined,
+    alternates,
+    openGraph: { type: "article", publishedTime: article.publishedAt ?? undefined, url: alternates?.canonical?.toString() },
   };
 }
 
 export default async function Article({ params }: PageProps<"/[lang]/nos-insights/[slug]">) {
   const { lang, slug } = await params;
-  if (lang !== "fr") redirect(href("fr", "insights", slug));
-  const article = getArticle(slug);
-  if (!article) notFound();
+  if (!hasLocale(lang) || !isSlug(slug)) notFound();
+  const article = await getInsight(lang, slug);
+  if (!article) {
+    await redirectToTranslation("insight", lang, slug);
+    notFound();
+  }
 
   return (
-    <PageShell lang="fr" current="insights">
+    <PageShell lang={lang} current="insights">
       <ArticlePage article={article} />
     </PageShell>
   );

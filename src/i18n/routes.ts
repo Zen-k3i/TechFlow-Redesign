@@ -12,6 +12,7 @@ export const routes = {
   aiAgents: { fr: "/agents-ia", en: "/ai-agents" },
   salesFunnel: { fr: "/tunnel-de-vente", en: "/sales-funnel" },
   projects: { fr: "/projets", en: "/projects" },
+  tools: { fr: "/outils", en: "/tools" },
   team: { fr: "/notre-equipe", en: "/our-team" },
   insights: { fr: "/nos-insights", en: "/our-insights" },
   contact: { fr: "/contact", en: "/contact" },

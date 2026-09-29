@@ -2,19 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useLocale } from "../site/locale";
+import { slugify } from "./slugify";
 
 export type Block =
   | { type: "p" | "h2" | "h3"; text: string }
   | { type: "ul" | "ol"; items: string[] }
   | { type: "table"; head: string[]; rows: string[][] };
 
-export const slugify = (text: string) =>
-  text
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+export { slugify };
 
 /** Bolds a short "Label : text" prefix in list items. */
 function Item({ text }: { text: string }) {

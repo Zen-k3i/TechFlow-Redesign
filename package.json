@@ -12,9 +12,12 @@
     "@mux/mux-player-react": "^3.13.4",
     "@react-three/drei": "^10.7.8",
     "@react-three/fiber": "^9.8.0",
+    "@sanity/client": "^7.27.0",
+    "@sanity/image-url": "^2.1.1",
     "lenis": "^1.3.26",
     "motion": "^13.4.1",
     "next": "16.3.6",
+    "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "three": "^0.186.0"

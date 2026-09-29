@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@/sanity.types": ["./sanity.types.ts"],
       "@/*": ["./src/*"]
     }
   },
@@ -30,5 +31,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "techflow-cms", ".recovered"]
 }

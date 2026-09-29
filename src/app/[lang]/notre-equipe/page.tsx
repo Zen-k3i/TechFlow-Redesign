@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound } from "next/navigation"; 
 import { PageShell } from "@/components/page/shell";
 import { teamContent } from "@/components/team/data";
 import { TeamPage } from "@/components/team/team-page";

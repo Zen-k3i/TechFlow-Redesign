@@ -1,0 +1,45 @@
+{
+  "name": "techflow-cms",
+  "private": true,
+  "version": "1.0.0",
+  "main": "package.json",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "deploy-graphql": "sanity graphql deploy",
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "typegen": "sanity schemas extract --force && sanity typegen generate",
+    "import:live": "sanity exec scripts/import-live.ts --with-user-token"
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "dependencies": {
+    "@sanity/document-internationalization": "^6.2.39",
+    "@sanity/icons": "^5.2.3",
+    "@sanity/table": "^3.1.17",
+    "@sanity/vision": "^6.16.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sanity": "^6.16.0",
+    "styled-components": "^6.1.18"
+  },
+  "devDependencies": {
+    "@portabletext/block-tools": "^6.0.2",
+    "@sanity/eslint-config-studio": "^7",
+    "@types/jsdom": "^30.0.0",
+    "@types/react": "^19.2.14",
+    "eslint": "^10.8.1",
+    "jsdom": "^30.1.1",
+    "prettier": "^3.5",
+    "typescript": "^5.8"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true
+  }
+}

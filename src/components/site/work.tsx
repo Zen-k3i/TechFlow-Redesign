@@ -62,7 +62,7 @@ export function Work() {
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} cursor={false} glow={false} />
                 </motion.li>
               ))}
             </AnimatePresence>

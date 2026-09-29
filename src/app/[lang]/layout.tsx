@@ -29,8 +29,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const dynamicParams = false;
-
+// No `dynamicParams = false` here: Next applies it to every child route, which would 404
+// CMS slugs published after the build. Unknown locales are rejected in the layout below.
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }

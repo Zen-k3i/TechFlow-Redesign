@@ -21,7 +21,19 @@ const STACK = [
   "translate3d(-8%,-70%,15px) rotateZ(-3deg) scale(0.8)",
 ];
 
-export function ProjectCard({ project, sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" }: { project: Project; sizes?: string }) {
+export function ProjectCard({
+  project,
+  sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
+  cursor = true,
+  glow = true,
+}: {
+  project: Project;
+  sizes?: string;
+  /** Show the "View case" cursor bubble on hover. */
+  cursor?: boolean;
+  /** Show the colored glow and pointer glare gradients on hover. */
+  glow?: boolean;
+}) {
   const { t } = useLocale();
   const reduce = useReducedMotion();
   const mx = useMotionValue(0);
@@ -50,7 +62,7 @@ export function ProjectCard({ project, sizes = "(min-width: 1024px) 33vw, (min-w
     <div className="[perspective:1100px]">
       <MotionLink
         href={caseStudyUrl(project.slug)}
-        data-cursor={t.hero.caseCursor}
+        data-cursor={cursor ? t.hero.caseCursor : undefined}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         onPointerEnter={(e) => {
           if (e.pointerType === "mouse") setHovered(true);
@@ -84,11 +96,13 @@ export function ProjectCard({ project, sizes = "(min-width: 1024px) 33vw, (min-w
                     stacked ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
                   }`}
                 />
-                <span
-                  aria-hidden
-                  className="absolute -right-1/4 -top-1/4 size-3/4 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-90"
-                  style={{ background: theme.glow }}
-                />
+                {glow && (
+                  <span
+                    aria-hidden
+                    className="absolute -right-1/4 -top-1/4 size-3/4 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-90"
+                    style={{ background: theme.glow }}
+                  />
+                )}
                 {stacked && (
                   <span
                     aria-hidden
@@ -98,7 +112,9 @@ export function ProjectCard({ project, sizes = "(min-width: 1024px) 33vw, (min-w
                 )}
               </>
             )}
-            <motion.span aria-hidden className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: glare }} />
+            {glow && (
+              <motion.span aria-hidden className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: glare }} />
+            )}
           </div>
 
           {stacked && (
