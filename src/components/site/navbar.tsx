@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
 import { locales, type Locale } from "@/i18n/config";
 import { href, isServiceKey, serviceKeys, type RouteKey } from "@/i18n/routes";
-import { ease, projectImage } from "./content";
+import { ease, serviceIllustration } from "./content";
 import { useLocale } from "./locale";
 
 const pageKeys = ["projects", "team", "insights", "contact"] as const;
@@ -41,7 +41,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
     return () => window.removeEventListener("keydown", onKey);
   }, [servicesOpen]);
 
-  const services = serviceKeys.map((key, i) => ({ key, ...t.services.items[i] }));
+  const services = serviceKeys.map((key, i) => ({ key, illustration: serviceIllustration(i), ...t.services.items[i] }));
 
   return (
     <>
@@ -161,13 +161,13 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
                           current === s.key ? "border-brand/60 bg-white/[0.06]" : "border-white/5 hover:border-white/15 hover:bg-white/[0.04]"
                         }`}
                       >
-                        <span className="relative h-24 w-28 shrink-0 overflow-hidden rounded-2xl bg-white/5">
+                        <span className="relative h-24 w-36 shrink-0 overflow-hidden rounded-2xl bg-[radial-gradient(80%_80%_at_50%_100%,rgba(71,102,255,0.35),transparent_70%)] bg-white/[0.04]">
                           <Image
-                            src={projectImage(s.image)}
+                            src={s.illustration}
                             alt=""
                             fill
-                            sizes="112px"
-                            className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                            sizes="144px"
+                            className="object-contain p-2.5 transition-transform duration-700 group-hover:scale-110"
                           />
                         </span>
                         <span className="py-1">

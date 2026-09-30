@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { href, serviceKeys, type ServiceKey } from "@/i18n/routes";
 import { ComparisonTable, ClientMarquee, HumanActions, SectionHeader } from "../page/ui";
-import { projectImage, projects } from "../site/content";
+import { projects, serviceIllustration } from "../site/content";
 import { Faq } from "../site/faq";
 import { useLocale } from "../site/locale";
 import { ProjectCard } from "../site/project-card";
@@ -76,7 +76,7 @@ export function ServicePage({ service }: { service: ServiceKey }) {
 
       <ComparisonAndWork content={c} work={work} />
       <Faq eyebrow="FAQ" heading={c.faq.heading} intro={c.faq.intro} items={c.faq.items} />
-      {next && <NextLink label={copy[lang].next} title={next.title} to={next.href} image={projectImage(next.image)} />}
+      {next && <NextLink label={copy[lang].next} title={next.title} to={next.href} image={serviceIllustration(serviceKeys.indexOf(nextKey))} />}
     </>
   );
 }

@@ -2,16 +2,18 @@
 
 import { useMemo, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import type { SanityImageSource } from "@sanity/image-url";
 import { href } from "@/i18n/routes";
+import { urlFor } from "@/sanity/image";
 import { ease, projects } from "../site/content";
 import { useLocale } from "../site/locale";
 import { ProjectCard } from "../site/project-card";
-import { FadeIn } from "../site/reveal";
 import { FilterChip } from "../site/work";
 import { ServiceCards } from "../page/service-cards";
-import { ClientMarquee, HumanActions, PageHero, SectionHeader } from "../page/ui";
+import { ClientMarquee, SectionHeader } from "../page/ui";
 import { CmsProjectCard, type CmsProject } from "./cms-project-card";
 import { archive, projectsContent } from "./data";
+import { CASES_ANCHOR, ProjectsHero, type WallProject } from "./projects-hero";
 
 /** Growth case studies are still coded locally; everything else comes from the CMS. */
 const growthProjects = projects.filter((p) => p.kind === "growth");
@@ -33,34 +35,33 @@ export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
     for (const e of entries) if (e.sector) counts.set(e.sector, (counts.get(e.sector) ?? 0) + 1);
     return [...counts.entries()];
   }, [entries]);
+  const wall = useMemo<WallProject[]>(
+    () =>
+      cmsProjects.map((p) => ({
+        key: p._id,
+        href: href(lang, "projects", p.slug ?? ""),
+        name: p.title ?? "",
+        sector: p.sector ?? undefined,
+        screens: p.previews.flatMap((img) =>
+          img?.asset?.url
+            ? [{ src: urlFor(img as SanityImageSource).width(1000).url(), blur: img.asset.metadata?.lqip ?? undefined }]
+            : [],
+        ),
+      })),
+    [cmsProjects, lang],
+  );
   const [filter, setFilter] = useState<string | null>(null);
   const visible = entries.filter((e) => !filter || e.sector === filter);
 
   return (
     <>
-      <PageHero
-        crumbs={[{ label: t.nav.pages.projects, href: href(lang, "projects") }]}
-        badge={c.badge}
-        title={c.title}
-        intro={c.intro}
-        actions={<HumanActions />}
-      />
+      <ProjectsHero projects={wall} />
 
-      <section className="bg-night px-5 pb-24 text-white md:px-10">
-        <dl className="mx-auto grid max-w-7xl grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-4">
-          {c.stats.map((s, i) => (
-            <FadeIn key={s.label} delay={i * 0.06} className="bg-night p-6 md:p-8">
-              <dd className="font-serif text-5xl leading-none md:text-6xl">{s.value}</dd>
-              <dt className="mt-3 text-sm text-white/55">{s.label}</dt>
-            </FadeIn>
-          ))}
-        </dl>
-        <div className="mt-20">
-          <ClientMarquee label={t.trust.eyebrow} />
-        </div>
+      <section className="bg-night px-5 pb-24 pt-8 text-white md:px-10">
+        <ClientMarquee label={t.trust.eyebrow} />
       </section>
 
-      <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+      <section id={CASES_ANCHOR} className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.grid.eyebrow} title={c.grid.heading} intro={c.grid.intro} tone="light" />
 
@@ -80,7 +81,7 @@ export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
 
             <motion.ul layout className="mt-10 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
               <AnimatePresence mode="popLayout" initial={false}>
-                {visible.map((entry) => (
+                {visible.map((entry, i) => (
                   <motion.li
                     key={entry.key}
                     layout
@@ -89,7 +90,20 @@ export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
                     exit={{ opacity: 0, scale: 0.94 }}
                     transition={{ duration: 0.4, ease }}
                   >
-                    {"cms" in entry ? <CmsProjectCard project={entry.cms} /> : <ProjectCard project={entry.local} cursor={false} glow={false} />}
+                    {/* Cards rise in row by row the first time they scroll into view. */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 70, rotateX: 8 }}
+                      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                      viewport={{ once: true, margin: "-8% 0px" }}
+                      transition={{ duration: 0.9, delay: (i % 3) * 0.12, ease }}
+                      style={{ transformPerspective: 1200 }}
+                    >
+                      {"cms" in entry ? (
+                        <CmsProjectCard project={entry.cms} />
+                      ) : (
+                        <ProjectCard project={entry.local} cursor={false} glow={false} />
+                      )}
+                    </motion.div>
                   </motion.li>
                 ))}
               </AnimatePresence>

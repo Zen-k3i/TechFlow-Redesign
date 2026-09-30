@@ -29,20 +29,20 @@ export function ButtonLink({
   const styles = {
     light: "bg-white text-night hover:bg-brand hover:text-white",
     dark: "bg-ink text-paper hover:bg-brand",
-    outline: "border border-white/20 text-white hover:border-white",
-    "outline-dark": "border border-ink/15 text-ink hover:border-ink",
+    outline: "border border-white/20 text-white hover:border-brand hover:bg-brand",
+    "outline-dark": "border border-ink/15 text-ink hover:border-brand hover:bg-brand hover:text-white",
   }[variant];
   const arrow = {
     light: "bg-night text-white",
     dark: "bg-paper text-ink",
-    outline: "bg-white/10 text-white",
-    "outline-dark": "bg-ink text-paper",
+    outline: "bg-white/10 text-white group-hover:bg-white group-hover:text-brand",
+    "outline-dark": "bg-ink text-paper group-hover:bg-white group-hover:text-brand",
   }[variant];
   const content = (
     <>
       {children}
       <span
-        className={`flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:-rotate-45 ${arrow}`}
+        className={`flex size-10 items-center justify-center rounded-full transition-[transform,background-color,color] duration-300 group-hover:-rotate-45 ${arrow}`}
       >
         →
       </span>
@@ -643,15 +643,15 @@ export function MuxCard({
             type="button"
             aria-label="Play video with sound"
             onClick={handlePlayWithSound}
-            className="absolute left-1/2 top-1/2 z-10 flex size-14 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#4766ff] shadow-lg transition-transform hover:scale-110 active:scale-95 md:size-16"
+            className="absolute left-1/2 top-1/2 z-10 flex size-11 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#4766ff] shadow-lg transition-transform hover:scale-110 active:scale-95"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="white"
-              className="ml-1"
+              className="ml-0.5"
             >
               <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
             </svg>

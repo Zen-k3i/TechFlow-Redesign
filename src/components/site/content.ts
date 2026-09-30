@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/config";
-import { href } from "@/i18n/routes";
+import { href, serviceKeys, type ServiceKey } from "@/i18n/routes";
 import { MuxVideoItem } from "../page/ui";
 
 const siteLink = (lang: Locale) => ({
@@ -122,6 +122,15 @@ export const featured = [
 
 export const caseStudyUrl = (slug: string) => `/projets/${slug}`;
 export const projectImage = (slug: string) => `/images/projects/${slug}.webp`;
+
+/** Illustration for each service, in `serviceKeys` order (the same order as `t.services.items`). */
+const serviceIllustrations: Record<ServiceKey, string> = {
+  design: "/images/service/design.svg",
+  development: "/images/service/development.svg",
+  aiAgents: "/images/service/ai-agents.svg",
+  salesFunnel: "/images/service/sales-funnel.svg",
+};
+export const serviceIllustration = (index: number) => serviceIllustrations[serviceKeys[index]];
 
 export const video1: MuxVideoItem = {
   kind: "video",

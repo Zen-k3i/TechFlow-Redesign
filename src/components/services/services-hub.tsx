@@ -9,10 +9,9 @@ import { Process } from "../site/process";
 import { FadeIn, RevealHeading } from "../site/reveal";
 import { Faq } from "../site/faq";
 import { Chip, HumanActions, SectionHeader } from "../page/ui";
-import { projectImage } from "../site/content";
-import { projectPreviews } from "../site/previews";
+import { serviceIllustration } from "../site/content";
 import { EditorialHero, HoverPreview, pad, WordMarquee } from "./editorial";
-import { servicesHub, tools } from "./hub-data";
+import { servicesHub, toolById, tools, type Tool } from "./hub-data";
 
 export function ServicesHub({ testimonials }: { testimonials: React.ReactNode }) {
   const { lang, t } = useLocale();
@@ -33,14 +32,13 @@ export function ServicesHub({ testimonials }: { testimonials: React.ReactNode })
       </section>
 
       <section className="bg-night px-5 pb-28 pt-16 text-white md:px-10 md:pb-36">
-        <HoverPreview images={services.map((s) => projectPreviews(s.image)[0] ?? projectImage(s.image))} className="mx-auto max-w-7xl">
+        <HoverPreview images={services.map((_, i) => serviceIllustration(i))} contain className="mx-auto max-w-7xl">
           {(bind) => (
             <ol className="border-t border-white/15">
               {services.map((s, i) => (
                 <li key={s.key} {...bind(i)} className="border-b border-white/15">
                   <Link
                     href={href(lang, s.key)}
-                    data-cursor={c.discover}
                     className="group relative grid gap-5 overflow-hidden py-10 md:grid-cols-[5rem_1fr_auto] md:items-center md:gap-8 md:py-14"
                   >
                     <span
@@ -97,9 +95,7 @@ export function ServicesHub({ testimonials }: { testimonials: React.ReactNode })
             {c.pipeline.steps.map((step, i) => (
               <FadeIn key={step.title} delay={i * 0.08}>
                 <li className="relative h-full rounded-3xl border border-white/10 bg-night-soft p-6">
-                  <span className="relative flex size-9 items-center justify-center rounded-xl bg-white p-2">
-                    <Image src={`/images/tools/${step.tool}.svg`} alt="" width={24} height={24} className="size-full object-contain" />
-                  </span>
+                  <ToolTile tool={toolById(step.tool)} className="size-10 rounded-xl" />
                   <p className="eyebrow mt-6 text-white/40">0{i + 1}</p>
                   <h3 className="mt-2 font-serif text-2xl leading-tight">{step.title}</h3>
                   <p className="mt-3 text-sm text-white/55">{step.text}</p>
@@ -119,9 +115,7 @@ export function ServicesHub({ testimonials }: { testimonials: React.ReactNode })
                 {tools.map((tool, i) => (
                   <FadeIn key={tool.name} delay={i * 0.04}>
                     <li className="group flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl border border-white/10 bg-white/[0.03] transition-colors hover:border-brand/50 hover:bg-white/[0.06]">
-                      <span className="flex size-12 items-center justify-center rounded-2xl bg-white p-2.5 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-6">
-                        <Image src={tool.src} alt="" width={32} height={32} className="size-full object-contain" />
-                      </span>
+                      <ToolTile tool={tool} className="size-14 rounded-2xl transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-6" />
                       <span className="text-xs text-white/60">{tool.name}</span>
                     </li>
                   </FadeIn>
@@ -143,5 +137,22 @@ export function ServicesHub({ testimonials }: { testimonials: React.ReactNode })
       {testimonials}
       <Faq />
     </>
+  );
+}
+
+/** A tool's logo on its brand colour, like an app icon. */
+function ToolTile({ tool, className = "" }: { tool: Tool | undefined; className?: string }) {
+  if (!tool) return null;
+  return (
+    <span
+      style={{ background: tool.bg }}
+      className={`relative flex shrink-0 items-center justify-center overflow-hidden ring-1 ring-white/10 ${className}`}
+    >
+      {tool.fullBleed ? (
+        <Image src={tool.src} alt="" fill sizes="56px" className="object-cover" />
+      ) : (
+        <Image src={tool.src} alt="" width={32} height={32} className="size-1/2 object-contain" />
+      )}
+    </span>
   );
 }

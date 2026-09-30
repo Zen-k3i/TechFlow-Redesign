@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { projectImage } from "../site/content";
+import { serviceIllustration } from "../site/content";
 import { useLocale } from "../site/locale";
 import { FadeIn } from "../site/reveal";
 import { SectionHeader } from "./ui";
@@ -21,15 +21,14 @@ export function ServiceCards({ eyebrow, heading }: { eyebrow: string; heading: s
                   href={s.href}
                   className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-night-soft transition-colors hover:border-brand/50"
                 >
-                  <span className="relative block aspect-[4/3] overflow-hidden">
+                  <span className="relative block aspect-[4/3] overflow-hidden bg-[radial-gradient(70%_70%_at_50%_100%,rgba(71,102,255,0.3),transparent_70%)]">
                     <Image
-                      src={projectImage(s.image)}
+                      src={serviceIllustration(i)}
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      className="object-contain p-6 transition-transform duration-700 group-hover:scale-105"
                     />
-                    <span className="absolute inset-0 bg-linear-to-t from-night-soft to-transparent" />
                   </span>
                   <span className="flex flex-1 flex-col p-6">
                     <span className="flex items-center justify-between">

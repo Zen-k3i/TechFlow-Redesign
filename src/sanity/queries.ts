@@ -37,6 +37,7 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
     "minutes": round(length(string::split(pt::text(body), " ")) / 220),
     metrics[]{ _key, value, label },
     logo ${image},
+    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),
     "gallery": ${heroMosaic}[defined(asset)]{ "_key": asset._ref, ...${image} },
     showcase[]{ _key, ...${image} },
     testimonial { quote, name, role, photo ${image} },

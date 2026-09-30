@@ -187,7 +187,13 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
   const testimonialCard = [...doc.querySelectorAll('.content_newsletter .testimonial_card')].find(
     (c) => !c.closest('.members_wrapper'),
   )
-  const quote = testimonialCard ? text(testimonialCard.lastElementChild).replace(/^["“]|["”]$/g, '') : ''
+  const author = testimonialCard?.querySelector('.testimonial_client-info')?.children
+  const authorName = text(author?.[0])
+  const authorRole = text(author?.[1])
+  // On French pages the last child also holds the author's name and role before the quote.
+  let quote = testimonialCard ? text(testimonialCard.lastElementChild) : ''
+  for (const prefix of [authorName, authorRole]) if (prefix && quote.startsWith(prefix)) quote = quote.slice(prefix.length).trim()
+  quote = quote.replace(/^["“]|["”]$/g, '')
 
   const refs: ProjectRefs = {
     tools: [...doc.querySelectorAll('.tool-tag_wrapper a')].map((a) => text(a)).filter(Boolean),
@@ -198,7 +204,8 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
   }
 
   const galleryImgs = [...doc.querySelectorAll('.case-study_images-layout .header_image')]
-  const showcaseImgs = [...new Set([...doc.querySelectorAll('.branding_image-wrapper img, .gallery_component img')].map((i) => imgSrc(i)))]
+  // Only the project's own visuals: `.gallery_component` is a site-wide block of testimonials and other projects.
+  const showcaseImgs = [...new Set([...doc.querySelectorAll('.branding_image-wrapper img')].map((i) => imgSrc(i)))]
 
   const draft: Draft = {
     _type: 'project',
@@ -227,8 +234,8 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
       ? {
           _type: 'testimonial',
           quote,
-          name: text(testimonialCard.querySelector('.testimonial_client-info')?.children[0]),
-          role: text(testimonialCard.querySelector('.testimonial_client-info')?.children[1]),
+          name: authorName,
+          role: authorRole,
           photo: await image(imgSrc(testimonialCard.querySelector('img'))),
         }
       : undefined,

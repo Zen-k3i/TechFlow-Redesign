@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
+import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from "motion/react";
 import { ease } from "./content";
 
 export function parseAccents(text: string) {
@@ -76,5 +77,38 @@ export function FadeIn({
     >
       {children}
     </motion.div>
+  );
+}
+
+/**
+ * Counts a figure like "45+", "+120%", "x3" or "2,5 s" up from zero the first time it is seen.
+ * Screen readers and crawlers get the final value; anything that isn't a plain number is shown as is.
+ */
+export function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const reduce = useReducedMotion();
+  const match = value.match(/^(\D*?)(\d+(?:[.,]\d+)?)([^]*)$/);
+  // "80 000" style thousands would count oddly, so leave them static.
+  const countable = match !== null && !/^[\s\u00a0\u202f]?\d/.test(match[3]);
+  const [, prefix = "", num = "0", suffix = ""] = match ?? [];
+  const decimals = num.split(/[.,]/)[1]?.length ?? 0;
+  const separator = num.includes(",") ? "," : ".";
+  const target = Number(num.replace(",", "."));
+  const count = useMotionValue(reduce ? target : 0);
+  const text = useTransform(count, (v) => `${prefix}${v.toFixed(decimals).replace(".", separator)}${suffix}`);
+
+  useEffect(() => {
+    if (!countable || !inView || reduce) return;
+    const controls = animate(count, target, { duration: 1.8, ease });
+    return () => controls.stop();
+  }, [countable, inView, reduce, count, target]);
+
+  if (!countable) return <>{value}</>;
+  return (
+    <span ref={ref}>
+      <span className="sr-only">{value}</span>
+      <motion.span aria-hidden>{text}</motion.span>
+    </span>
   );
 }

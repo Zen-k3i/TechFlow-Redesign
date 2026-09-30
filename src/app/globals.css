@@ -58,6 +58,12 @@
       transform: translateX(-50%);
     }
   }
+  --animate-marquee-up: marquee-up 60s linear infinite;
+  @keyframes marquee-up {
+    to {
+      transform: translateY(-50%);
+    }
+  }
 
   @keyframes progress {
     from {

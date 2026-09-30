@@ -57,10 +57,9 @@ export function Footer() {
               href={links.booking}
               target="_blank"
               rel="noreferrer"
-              data-cursor={f.cursor}
               className="group relative flex size-44 items-center justify-center rounded-full bg-white text-center text-lg font-medium leading-tight text-night md:size-52"
             >
-              <span className="absolute inset-0 scale-0 rounded-full bg-brand-sky transition-transform duration-500 ease-out group-hover:scale-100" />
+              <span className="absolute inset-0 scale-0 rounded-full bg-brand transition-transform duration-500 ease-out group-hover:scale-100" />
               <span className="relative transition-colors group-hover:text-white">
                 {f.book[0]}
                 <br />

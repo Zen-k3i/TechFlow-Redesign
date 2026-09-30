@@ -10,6 +10,12 @@ const fr = {
   title: "Chaque vision devient un produit *qui performe.*",
   intro:
     "Des produits numériques pensés pour les utilisateurs, dans tous les secteurs : sites, plateformes, SaaS, systèmes d'automatisation et agents IA.",
+  hero: {
+    eyebrow: "Nos réalisations",
+    explore: "Explorer les études de cas",
+    wall: "Aperçu des sites livrés",
+    open: "Lire le cas",
+  },
   stats: [
     { value: "45+", label: "projets livrés" },
     { value: "35+", label: "clients accompagnés" },
@@ -43,6 +49,12 @@ const en: typeof fr = {
   title: "Every vision becomes a product *that performs.*",
   intro:
     "Digital products designed for real users, across every industry: websites, platforms, SaaS, automation systems and AI agents.",
+  hero: {
+    eyebrow: "Selected work",
+    explore: "Explore the case studies",
+    wall: "Preview of shipped websites",
+    open: "Read the case",
+  },
   stats: [
     { value: "45+", label: "projects shipped" },
     { value: "35+", label: "clients served" },

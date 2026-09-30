@@ -32,10 +32,19 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
       tags={project.services ?? []}
       cover={
         cover
-          ? { src: urlFor(cover as SanityImageSource).width(1200).url(), blurDataURL: cover.asset?.metadata?.lqip ?? undefined }
+          ? {
+              src: urlFor(cover as SanityImageSource)
+                .width(1200)
+                .url(),
+              blurDataURL: cover.asset?.metadata?.lqip ?? undefined,
+            }
           : undefined
       }
-      previews={project.previews.map((p) => urlFor(p as SanityImageSource).width(1200).url())}
+      previews={project.previews.map((p) =>
+        urlFor(p as SanityImageSource)
+          .width(1200)
+          .url(),
+      )}
       domain={hostname(project.websiteUrl)}
       loader={sanityLoader}
       cursor={false}

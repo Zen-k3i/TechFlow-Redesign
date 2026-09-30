@@ -70,6 +70,15 @@ export const project = defineType({
     }),
     defineField({name: 'logo', title: 'Client logo', type: 'image', group: 'media'}),
     defineField({
+      name: 'logoFill',
+      title: 'Logo has its own background',
+      description:
+        'Show the logo edge to edge instead of on a white card. Detected automatically for fully opaque images; tick it for logos with a coloured box and rounded corners.',
+      type: 'boolean',
+      group: 'media',
+      hidden: ({document}) => !document?.logo,
+    }),
+    defineField({
       name: 'heroImage',
       title: 'Hero image',
       description: 'Centre screen of the header, also shown when hovering project cards.',

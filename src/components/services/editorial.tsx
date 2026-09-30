@@ -105,10 +105,13 @@ export function WordMarquee({ words, tone = "dark" }: { words: string[]; tone?: 
 /** Wraps a list and shows a cursor-following image for the hovered row. */
 export function HoverPreview({
   images,
+  contain = false,
   className = "",
   children,
 }: {
   images: string[];
+  /** Show each image whole and unframed (illustrations with their own shape), instead of cropped in a card. */
+  contain?: boolean;
   className?: string;
   children: (bind: (i: number) => { onPointerEnter: () => void }) => React.ReactNode;
 }) {
@@ -137,7 +140,9 @@ export function HoverPreview({
           <motion.div
             animate={{ opacity: active === null ? 0 : 1, scale: active === null ? 0.5 : 1, rotate: active === null ? -8 : active % 2 ? 3 : -3 }}
             transition={{ duration: 0.45, ease }}
-            className="relative aspect-[16/10] w-80 overflow-hidden rounded-2xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] ring-1 ring-white/10 lg:w-[26rem]"
+            className={`relative aspect-[16/10] w-80 lg:w-[26rem] ${
+              contain ? "drop-shadow-[0_40px_50px_rgba(0,0,0,0.6)]" : "overflow-hidden rounded-2xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] ring-1 ring-white/10"
+            }`}
           >
             {images.map((src, i) => (
               <Image
@@ -146,7 +151,7 @@ export function HoverPreview({
                 alt=""
                 fill
                 sizes="26rem"
-                className={`object-cover object-top transition-[opacity,transform] duration-500 ${active === i ? "scale-100 opacity-100" : "scale-110 opacity-0"}`}
+                className={`${contain ? "object-contain" : "object-cover object-top"} transition-[opacity,transform] duration-500 ${active === i ? "scale-100 opacity-100" : "scale-110 opacity-0"}`}
               />
             ))}
           </motion.div>
@@ -206,8 +211,8 @@ export function NextLink({ label, title, to, image }: { label: string; title: st
           <span className="font-serif text-[clamp(3.5rem,11vw,10rem)] leading-[0.9] tracking-[-0.03em] transition-[transform,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-6 group-hover:italic group-hover:text-brand-sky">
             {title}
           </span>
-          <span className="relative hidden aspect-[4/3] w-72 shrink-0 overflow-hidden rounded-2xl opacity-0 transition-[opacity,transform] duration-700 group-hover:-rotate-3 group-hover:opacity-100 md:block">
-            <Image src={image} alt="" fill sizes="18rem" className="object-cover object-top" />
+          <span className="relative hidden aspect-[16/10] w-80 shrink-0 opacity-0 transition-[opacity,transform] duration-700 group-hover:-rotate-3 group-hover:opacity-100 md:block">
+            <Image src={image} alt="" fill sizes="20rem" className="object-contain" />
           </span>
           <span className="flex size-16 shrink-0 items-center justify-center rounded-full border border-white/20 text-2xl transition-[transform,background-color,border-color] duration-500 group-hover:-rotate-45 group-hover:border-brand group-hover:bg-brand md:size-24 md:text-3xl">
             →

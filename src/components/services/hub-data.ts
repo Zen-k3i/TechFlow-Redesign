@@ -72,13 +72,17 @@ const en: typeof fr = {
 
 export const servicesHub: Record<Locale, typeof fr> = { fr, en };
 
+/** Logos sit on their brand colour: several are white and would vanish on a white tile. `fullBleed` logos are already a full tile. */
 export const tools = [
-  { name: "Figma", src: "/images/tools/figma.svg" },
-  { name: "Webflow", src: "/images/tools/webflow.svg" },
-  { name: "n8n", src: "/images/tools/n8n.svg" },
-  { name: "HubSpot", src: "/images/tools/hubspot.svg" },
-  { name: "Notion", src: "/images/tools/notion.svg" },
-  { name: "Twenty", src: "/images/tools/twenty.svg" },
-  { name: "Finsweet", src: "/images/tools/finsweet.png" },
-  { name: "Granola", src: "/images/tools/granola.png" },
+  { id: "figma", name: "Figma", src: "/images/tools/figma.svg", bg: "#1E1E1E" },
+  { id: "webflow", name: "Webflow", src: "/images/tools/webflow.svg", bg: "#146EF5" },
+  { id: "n8n", name: "n8n", src: "/images/tools/n8n.svg", bg: "#EA4B71" },
+  { id: "hubspot", name: "HubSpot", src: "/images/tools/hubspot.svg", bg: "#FF7A59" },
+  { id: "notion", name: "Notion", src: "/images/tools/notion.svg", bg: "#FFFFFF" },
+  { id: "twenty", name: "Twenty", src: "/images/tools/twenty.svg", bg: "#141414" },
+  { id: "finsweet", name: "Finsweet", src: "/images/tools/finsweet.png", bg: "#141414", fullBleed: true },
+  { id: "granola", name: "Granola", src: "/images/tools/granola.png", bg: "#A8C43A", fullBleed: true },
 ];
+
+export type Tool = (typeof tools)[number];
+export const toolById = (id: string) => tools.find((tool) => tool.id === id);

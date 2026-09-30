@@ -208,30 +208,24 @@ export function ProjectCardView({
             ))}
           </div>
 
-          {!growth && (
-            <div className="pointer-events-none absolute inset-x-5 bottom-5 flex items-center justify-between gap-3 opacity-0 transition-[opacity,transform] delay-150 duration-500 [transform:translate3d(0,12px,90px)] group-hover:opacity-100 group-hover:[transform:translate3d(0,0,90px)]">
-              <span className="flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-medium text-ink shadow-lg">
-                <span className="size-1.5 rounded-full" style={{ background: theme.accent }} />
-                {t.hero.caseCursor}
-              </span>
-              {stacked && (
-                <span aria-hidden className="flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 font-mono text-[11px] text-white backdrop-blur">
-                  <span className="flex gap-1">
-                    {previews.map((src, i) => (
-                      <span key={src} className="h-1 w-3 overflow-hidden rounded-full bg-white/25">
-                        <span
-                          className="block h-full origin-left rounded-full bg-white"
-                          style={{
-                            transform: `scaleX(${hovered && i < slide ? 1 : 0})`,
-                            animation: hovered && i === slide ? `progress ${SLIDE_MS}ms linear forwards` : undefined,
-                          }}
-                        />
-                      </span>
-                    ))}
-                  </span>
-                  {String(slide + 1).padStart(2, "0")}/{String(previews.length).padStart(2, "0")}
+          {stacked && (
+            <div className="pointer-events-none absolute inset-x-5 bottom-5 flex items-center justify-end gap-3 opacity-0 transition-[opacity,transform] delay-150 duration-500 [transform:translate3d(0,12px,90px)] group-hover:opacity-100 group-hover:[transform:translate3d(0,0,90px)]">
+              <span aria-hidden className="flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 font-mono text-[11px] text-white backdrop-blur">
+                <span className="flex gap-1">
+                  {previews.map((src, i) => (
+                    <span key={src} className="h-1 w-3 overflow-hidden rounded-full bg-white/25">
+                      <span
+                        className="block h-full origin-left rounded-full bg-white"
+                        style={{
+                          transform: `scaleX(${hovered && i < slide ? 1 : 0})`,
+                          animation: hovered && i === slide ? `progress ${SLIDE_MS}ms linear forwards` : undefined,
+                        }}
+                      />
+                    </span>
+                  ))}
                 </span>
-              )}
+                {String(slide + 1).padStart(2, "0")}/{String(previews.length).padStart(2, "0")}
+              </span>
             </div>
           )}
         </div>
