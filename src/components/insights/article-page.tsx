@@ -7,10 +7,10 @@ import { href } from "@/i18n/routes";
 import { headingsOf, PortableBody } from "../cms/portable-body";
 import { SanityImage } from "../cms/sanity-image";
 import { useActiveHeading } from "../page/blocks";
+import { ButtonLink } from "../page/ui";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { FadeIn, RevealHeading } from "../site/reveal";
-import Image from "next/image";
 import { insightsContent, type InsightDetail } from "./data";
 import { ArticleCard, formatDate } from "./insights-page";
 
@@ -96,26 +96,24 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
         </div>
       </section>
 
-      {/* The cover sits on the seam between the dark header and the page. */}
+      {/* The cover runs edge to edge between the dark header and the page. */}
       {hasCover && (
-        <div className="bg-[linear-gradient(to_bottom,var(--color-night)_50%,var(--color-paper)_50%)] px-5 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.25, ease }}
-            className="relative mx-auto aspect-[16/9] max-w-6xl overflow-hidden rounded-[1.5rem] bg-night-soft shadow-[0_40px_80px_-40px_rgba(7,8,13,0.6)] md:aspect-[2/1] md:rounded-[2rem]"
-          >
-            <SanityImage
-              image={article.coverImage}
-              alt={article.coverImage?.alt ?? ""}
-              fill
-              priority
-              width={2000}
-              sizes="(min-width: 1152px) 1152px, 100vw"
-              className="object-cover"
-            />
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.25, ease }}
+          className="relative h-[56vw] max-h-[85vh] min-h-[16rem] w-full bg-night-soft"
+        >
+          <SanityImage
+            image={article.coverImage}
+            alt={article.coverImage?.alt ?? ""}
+            fill
+            priority
+            width={2400}
+            sizes="100vw"
+            className="object-cover"
+          />
+        </motion.div>
       )}
 
       <section className="bg-paper px-5 pb-24 pt-14 text-ink md:px-10 md:pb-32 md:pt-20">
@@ -325,24 +323,15 @@ function Share({ copy, title }: { copy: Copy; title: string }) {
   );
 }
 
-/** "Un projet en tête ?" card with the founder's face on the booking button, as on the old site. */
+/** "Un projet en tête ?" card with the site's primary button to book a call. */
 function BookCall() {
   const { t, links } = useLocale();
   return (
     <div className="rounded-[1.25rem] border border-ink/15 bg-white px-4 py-7 text-center">
       <p className="font-serif text-[1.9rem] leading-tight">{t.common.cta.heading.replace(/\*/g, "")}</p>
-      <a
-        href={links.booking}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group mt-5 inline-flex items-center gap-2.5 whitespace-nowrap rounded-full bg-brand-deep py-1.5 pl-1.5 pr-5 text-[15px] font-medium text-white shadow-[0_8px_24px_-8px_rgba(54,71,245,0.7)] ring-1 ring-white/20 transition-colors hover:bg-brand"
-      >
-        <Image src="/images/team/maximilien-grolier.webp" alt="" width={36} height={36} className="size-9 rounded-full object-cover ring-2 ring-white/70" />
+      <ButtonLink href={links.booking} external variant="dark" className="mt-5 whitespace-nowrap">
         {t.nav.book}
-        <span aria-hidden className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-          ↗
-        </span>
-      </a>
+      </ButtonLink>
     </div>
   );
 }
