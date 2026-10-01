@@ -55,7 +55,7 @@ export default async function CaseStudy({ params }: PageProps<"/[lang]/projets/[
   }
 
   return (
-    <PageShell lang={lang} current="projects" alternates={translationLinks("projects", lang, slug, study.translations)} footerCta={false}>
+    <PageShell lang={lang} current="projects" alternates={translationLinks("projects", lang, slug, study.translations)}>
       <CmsCaseStudyPage study={study} />
     </PageShell>
   );

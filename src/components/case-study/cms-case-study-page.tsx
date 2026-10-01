@@ -18,7 +18,6 @@ import type { PROJECT_DETAIL_QUERY_RESULT } from "@/sanity.types";
 import { headingsOf, PortableBody, safeHref, type BodyValue } from "../cms/portable-body";
 import { SanityImage, type CmsImage } from "../cms/sanity-image";
 import { useActiveHeading } from "../page/blocks";
-import { GlowButton } from "../page/project-cta";
 import { ButtonLink } from "../page/ui";
 import { CmsProjectCard } from "../projects/cms-project-card";
 import { ease } from "../site/content";
@@ -54,8 +53,6 @@ const copy: Record<Locale, Record<string, string>> = {
     story: "L'histoire",
     chapter: "Chapitre",
     said: "Le mot du client",
-    ctaTitle: "Envie des mêmes résultats *pour votre site ?*",
-    ctaText: "Réservez un appel de 30 minutes pour voir ce que nous pouvons vous apporter.",
     related: "D'autres projets",
     back: "Tous les projets",
   },
@@ -74,8 +71,6 @@ const copy: Record<Locale, Record<string, string>> = {
     story: "The story",
     chapter: "Chapter",
     said: "In their words",
-    ctaTitle: "Want the same results *for your site?*",
-    ctaText: "Book a 30-minute call to see what we can do for you.",
     related: "More projects",
     back: "All projects",
   },
@@ -145,7 +140,7 @@ export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
       </section>
 
       <Quote study={study} />
-      <Closing study={study} />
+      <Related study={study} />
       {chapters.length > 1 && <ChapterNav chapters={chapters} target={storyRef} />}
     </div>
   );
@@ -633,55 +628,30 @@ function Quote({ study }: { study: CmsCaseStudy }) {
 }
 
 /** Dark close: the invitation full width, then the next projects to read. */
-function Closing({ study }: { study: CmsCaseStudy }) {
-  const { lang, t, links } = useLocale();
+/** Other case studies; the page then ends on the footer's "Un projet en tête ?" call to action, as everywhere else. */
+function Related({ study }: { study: CmsCaseStudy }) {
+  const { lang } = useLocale();
   const c = copy[lang];
+  if (study.related.length === 0) return null;
 
   return (
-    <section className="grain relative overflow-hidden bg-night px-5 pb-28 pt-28 text-white md:px-10 md:pt-40">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[36rem] bg-[radial-gradient(45%_60%_at_50%_0%,color-mix(in_oklab,var(--accent)_28%,transparent),transparent_70%)]"
-      />
+    <section className="grain relative overflow-hidden bg-night px-5 py-28 text-white md:px-10 md:py-36">
       <div className="relative mx-auto max-w-7xl">
-        <div className="flex flex-col items-center text-center">
-          <RevealHeading
-            text={c.ctaTitle}
-            accentClassName="italic text-[var(--accent)]"
-            className="max-w-5xl font-serif text-[clamp(3rem,7vw,6.5rem)] leading-[0.95] tracking-[-0.02em]"
-          />
-          <FadeIn delay={0.2}>
-            <p className="mt-6 max-w-lg text-lg text-white/60">{c.ctaText}</p>
-            {/* One action: book a call, with the site's primary button. */}
-            <div className="mt-10 flex justify-center">
-              <Magnetic>
-                <GlowButton href={links.booking} external>
-                  {t.nav.book}
-                </GlowButton>
-              </Magnetic>
-            </div>
-          </FadeIn>
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>
+          <Link href={href(lang, "projects")} className="text-white/60 underline-offset-4 hover:text-white hover:underline">
+            ← {c.back}
+          </Link>
         </div>
-
-        {study.related.length > 0 && (
-          <div className="mt-28 border-t border-white/10 pt-16 md:mt-40">
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>
-              <Link href={href(lang, "projects")} className="text-white/60 underline-offset-4 hover:text-white hover:underline">
-                ← {c.back}
-              </Link>
-            </div>
-            <ul className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-              {study.related.map((p, i) => (
-                <FadeIn key={p._id} delay={i * 0.08}>
-                  <li>
-                    <CmsProjectCard project={p} />
-                  </li>
-                </FadeIn>
-              ))}
-            </ul>
-          </div>
-        )}
+        <ul className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {study.related.map((p, i) => (
+            <FadeIn key={p._id} delay={i * 0.08}>
+              <li>
+                <CmsProjectCard project={p} />
+              </li>
+            </FadeIn>
+          ))}
+        </ul>
       </div>
     </section>
   );
