@@ -3,7 +3,7 @@
 Update at the end of every work session (see CLAUDE.md). Newest first. Link GitHub issues as `#N`.
 
 ## In progress
-- **Waiting on push + migration:** `scripts/migrate-taxonomies.ts` (studio) turns project sectors and article categories into Sanity lists. Push `main` first (the deployed site on Vercel reads the old text fields), then run it. The site works before and after.
+- **Waiting on push (403 for `kinnizen` on techflow-ag/TechFlow-Redesign):** someone with write access pushes `main`. Then run `scripts/migrate-taxonomies.ts` (studio) without flags: it switches article categories to the list and removes the hidden old project `sector` text; then delete the hidden `sector` field from `project.ts`. Project `sectors` are already filled (2026-10-01, `--projects-keep-text`).
 - **Waiting on a decision:** footer "Paramètres des cookies" / "Cookies Settings" link. The old site's `/politique-de-cookies` page is a draft (placeholder copied from the legal notices; the EN version names another company), so it has not been copied yet.
 - **To do in Sanity (#2):** tick "Logo has its own background" on Mandil Avocats (FR + EN).
 - **To do:** deploy the Studio (`pnpm deploy` in `techflow-cms/studio`) so the hosted Studio gets the new lists, FAQ folder, image groups, accent colour and slug fix.
