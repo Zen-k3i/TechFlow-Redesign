@@ -18,7 +18,8 @@ import type { PROJECT_DETAIL_QUERY_RESULT } from "@/sanity.types";
 import { headingsOf, PortableBody, safeHref, type BodyValue } from "../cms/portable-body";
 import { SanityImage, type CmsImage } from "../cms/sanity-image";
 import { useActiveHeading } from "../page/blocks";
-import { ButtonLink, HumanActions } from "../page/ui";
+import { GlowButton } from "../page/project-cta";
+import { ButtonLink } from "../page/ui";
 import { CmsProjectCard } from "../projects/cms-project-card";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
@@ -633,7 +634,7 @@ function Quote({ study }: { study: CmsCaseStudy }) {
 
 /** Dark close: the invitation full width, then the next projects to read. */
 function Closing({ study }: { study: CmsCaseStudy }) {
-  const { lang } = useLocale();
+  const { lang, t, links } = useLocale();
   const c = copy[lang];
 
   return (
@@ -651,8 +652,13 @@ function Closing({ study }: { study: CmsCaseStudy }) {
           />
           <FadeIn delay={0.2}>
             <p className="mt-6 max-w-lg text-lg text-white/60">{c.ctaText}</p>
+            {/* One action: book a call, with the site's primary button. */}
             <div className="mt-10 flex justify-center">
-              <HumanActions />
+              <Magnetic>
+                <GlowButton href={links.booking} external>
+                  {t.nav.book}
+                </GlowButton>
+              </Magnetic>
             </div>
           </FadeIn>
         </div>
