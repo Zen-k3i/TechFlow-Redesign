@@ -309,7 +309,6 @@ export const en: Dictionary = {
     legal: "Legal notices",
     terms: "Terms of service",
     cookies: "Cookies Settings",
-    top: "Back to top ↑",
     newTab: "opens in a new tab",
   },
 

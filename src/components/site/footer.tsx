@@ -147,9 +147,6 @@ export function Footer({ cta = true }: { cta?: boolean }) {
             <Link href={links.cookies} className="hover:text-white">
               {f.cookies}
             </Link>
-            <a href="#top" className="hover:text-white">
-              {f.top}
-            </a>
           </span>
         </div>
       </div>

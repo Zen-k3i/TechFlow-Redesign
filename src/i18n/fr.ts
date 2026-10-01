@@ -295,7 +295,6 @@ export const fr = {
     legal: "Mentions légales",
     terms: "Conditions générales",
     cookies: "Paramètres des cookies",
-    top: "Haut de page ↑",
     newTab: "nouvel onglet",
   },
 
