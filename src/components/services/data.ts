@@ -107,11 +107,6 @@ const fr: Record<ServiceKey, ServiceContent> = {
           text: "Des créations qui arrêtent le scroll, adaptées à chaque plateforme et chaque format, avec des variantes prêtes à être testées.",
           tags: ["Meta", "TikTok", "LinkedIn"],
         },
-        {
-          title: "Motion design",
-          text: "Micro-interactions du site, reels, vidéos de marque : le mouvement au service du message, jamais de la décoration.",
-          tags: ["Reels et TikTok", "Vidéos de marque", "Micro-interactions"],
-        },
       ],
     },
     quote: {
@@ -665,7 +660,6 @@ const en: Record<ServiceKey, ServiceContent> = {
         { title: "UI mockups & style guide", text: "High-fidelity mockups of every screen, delivered with a style guide (colors, type, components) so your product stays consistent after launch.", tags: ["UI mockups", "Design system", "Typography"] },
         { title: "Interactive prototype", text: "Click through your future site as if it already existed. We test journeys, remove friction and validate everything before a line of code.", tags: ["Figma prototype", "User testing", "Validated before dev"] },
         { title: "Social ads & marketing assets", text: "Scroll-stopping creative adapted to every platform and format, with variants ready to test.", tags: ["Meta", "TikTok", "LinkedIn"] },
-        { title: "Motion design", text: "Site micro-interactions, reels, brand videos: motion that serves the message, never decoration.", tags: ["Reels & TikTok", "Brand videos", "Micro-interactions"] },
       ],
     },
     quote: {
