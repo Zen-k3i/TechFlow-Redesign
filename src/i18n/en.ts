@@ -337,6 +337,7 @@ export const en: Dictionary = {
     legal: "Legal notices",
     terms: "Terms of service",
     top: "Back to top ↑",
+    newTab: "opens in a new tab",
   },
 
   common: {

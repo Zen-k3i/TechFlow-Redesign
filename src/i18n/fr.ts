@@ -323,6 +323,7 @@ export const fr = {
     legal: "Mentions légales",
     terms: "Conditions générales",
     top: "Haut de page ↑",
+    newTab: "nouvel onglet",
   },
 
   common: {
