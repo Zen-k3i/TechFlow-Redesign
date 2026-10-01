@@ -18,20 +18,15 @@ export function LegalPage({ doc: key }: { doc: "legal" | "terms" | "cookies" }) 
     <>
       <PageHero badge={doc.badge} title={doc.title} intro={doc.intro} crumbs={[{ label: t.footer[key], href: href(lang, key) }]} />
 
-      <section className="bg-night px-5 pb-28 md:px-10">
-        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-paper px-6 py-16 text-ink md:rounded-[3.5rem] md:px-16 md:py-24">
+      {/* Full-width paper page under the dark hero, like the articles. */}
+      <section className="bg-paper px-5 py-16 text-ink md:px-10 md:py-24">
+        <div className="mx-auto max-w-7xl">
           <div className="grid gap-14 lg:grid-cols-[280px_1fr] xl:gap-24">
             <aside className="hidden lg:block">
               <Toc label={doc.toc} items={doc.sections.map((s, i) => ({ id: id(i), title: `${label(i)} ${s.title}` }))} />
             </aside>
 
             <div className="max-w-3xl">
-              {doc.note && (
-                <p className="mb-12 rounded-2xl border border-brand-deep/20 bg-brand-deep/5 p-5 text-ink/70">
-                  <span aria-hidden>🇫🇷 </span>
-                  {doc.note}
-                </p>
-              )}
               <div className="divide-y divide-ink/10">
                 {doc.sections.map((s, i) => (
                   <section key={s.title} id={id(i)} aria-labelledby={`${id(i)}-title`} className="scroll-mt-28 py-12 first:pt-0">

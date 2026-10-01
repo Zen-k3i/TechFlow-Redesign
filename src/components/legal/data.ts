@@ -8,7 +8,6 @@ export type LegalDoc = {
   title: string;
   intro: string;
   toc: string;
-  note?: string;
   sections: LegalSection[];
 };
 
@@ -123,7 +122,6 @@ const legalEn: LegalDoc = {
   title: "Legal *notice.*",
   intro: "Who is behind techflow-agency.com and the rules that govern its use.",
   toc: "Contents",
-  note: "This is a translation provided for convenience. In the event of any discrepancy, the French version prevails.",
   sections: [
     {
       title: "About this website",
@@ -481,7 +479,6 @@ const termsEn: LegalDoc = {
   title: "Terms of *service.*",
   intro: "These terms and conditions (the “Terms”) set out the rights and obligations of Techflow Agency PTE LTD, trading as Techflow, and of its users when using its services.",
   toc: "Articles",
-  note: "This is a translation provided for convenience. As stated in Article 28, only the French text is binding in the event of a dispute.",
   sections: [
     {
       title: "Principles",
@@ -711,8 +708,8 @@ const termsEn: LegalDoc = {
 };
 
 /**
- * Copied from the old site's /politique-de-cookies and /en/cookie-policy (2026-10-01), draft notice included:
- * that page is itself a placeholder taken from the legal notices, pending the real cookie policy.
+ * Copied from the old site's /politique-de-cookies and /en/cookie-policy (2026-10-01). That page is itself a
+ * placeholder taken from the legal notices (its draft notice was removed here on request), pending the real policy.
  */
 const cookiesFr: LegalDoc = {
   meta: { title: "Politique de cookies | TechFlow Agency", description: "Les cookies utilisés par TechFlow Agency, le rôle de chacun, leur durée de conservation et la façon de modifier votre consentement à tout moment." },
@@ -720,7 +717,6 @@ const cookiesFr: LegalDoc = {
   title: "Politique de *cookies.*",
   intro: "Les cookies déposés lors de la navigation sur techflow-agency.com et vos droits.",
   toc: "Sommaire",
-  note: "BROUILLON : cette politique de cookies est en cours de finalisation et n'est pas encore en vigueur. Le texte ci-dessous est un contenu provisoire repris de nos mentions légales et ne décrit pas les cookies déposés par ce site. Elle sera complétée une fois la bannière de consentement installée.",
   sections: [
     {
       title: "Informations sur le site",
@@ -807,7 +803,6 @@ const cookiesEn: LegalDoc = {
   title: "Cookie *policy.*",
   intro: "The cookies set when browsing techflow-agency.com and your rights.",
   toc: "Contents",
-  note: "DRAFT — this Cookie Policy is being finalised and is not yet in force. The text below is placeholder content copied from our Legal Notices and does not describe the cookies this site sets. It will be completed once the consent banner is installed.",
   sections: [
     {
       title: "About this website",
