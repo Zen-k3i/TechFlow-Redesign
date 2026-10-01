@@ -66,7 +66,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
             <Image src="/images/techflow-logo.svg" alt="TechFlow" width={179} height={36} preload className="h-7 w-auto" />
           </Link>
 
-          <ul className="hidden items-center gap-1 text-[15px] lg:flex">
+          <ul className="hidden items-center gap-1 text-base lg:flex">
             <li>
               <button
                 type="button"
@@ -74,7 +74,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
                 aria-controls="services-menu"
                 onClick={() => setServicesOpen((v) => !v)}
                 onPointerEnter={(e) => e.pointerType === "mouse" && setServicesOpen(true)}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-2 transition-colors ${
+                className={`flex items-center gap-1.5 rounded-full px-3 py-2 transition-colors xl:px-4 ${
                   servicesActive || servicesOpen ? "bg-white/10 text-white" : "text-white/60 hover:text-white"
                 }`}
               >
@@ -89,7 +89,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
                 <Link
                   href={href(lang, key)}
                   aria-current={current === key ? "page" : undefined}
-                  className={`block rounded-full px-4 py-2 transition-colors ${
+                  className={`block rounded-full px-3 py-2 transition-colors xl:px-4 ${
                     current === key ? "bg-white/10 text-white" : "text-white/60 hover:text-white"
                   }`}
                 >

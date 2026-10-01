@@ -11,7 +11,7 @@ export const en: Dictionary = {
   nav: {
     pages: {
       services: "Services",
-      projects: "Work",
+      projects: "Projects",
       team: "Our team",
       insights: "Insights",
       contact: "Contact",
