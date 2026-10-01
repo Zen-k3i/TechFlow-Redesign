@@ -159,8 +159,8 @@ const insightCard = /* groq */ `
   title,
   "slug": slug.current,
   excerpt,
-  // Picked from the Article categories list; older documents held the names as text.
-  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),
+  // Picked in the Studio from the Article categories list (the field is named "topics").
+  "categories": array::compact(topics[]->title),
   publishedAt,
   author->{ ${member} },
   coverImage ${image},

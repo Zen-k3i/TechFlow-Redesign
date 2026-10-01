@@ -1,12 +1,12 @@
 /**
  * One-off migration (2026-10-01): project sectors and article categories go from free text
  * to `sector` / `category` documents (FR + EN, linked as translations) that editors pick from a list:
- * projects get `sectors` (one or more) in place of the old text `sector`, articles get `categories`.
+ * projects get `sectors` and articles `topics` (one or more each), in place of the old text `sector` / `categories`.
  *
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --dry-run   # show the mapping
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --lists-only  # only create the lists
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --projects-keep-text
- *     # fill project `sectors` but keep the old text `sector` and leave articles alone:
+ *     # fill project `sectors` and article `topics` but keep the old text fields:
  *     # safe while a deployment still runs code that reads the old fields
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token                # write
  *
@@ -60,8 +60,8 @@ async function run() {
   const projects = await client.fetch<{_id: string; language: Lang; sector: unknown; sectors?: unknown[]}[]>(
     `*[_type == "project" && defined(sector)]{_id, language, sector, sectors}`,
   )
-  const insights = await client.fetch<{_id: string; language: Lang; categories: unknown[]}[]>(
-    `*[_type == "insight" && defined(categories)]{_id, language, categories}`,
+  const insights = await client.fetch<{_id: string; language: Lang; categories: unknown[]; topics?: unknown[]}[]>(
+    `*[_type == "insight" && defined(categories)]{_id, language, categories, topics}`,
   )
 
   const missing: string[] = []
@@ -75,7 +75,7 @@ async function run() {
   })
   const insightPatches = insights.flatMap((doc) => {
     const strings = doc.categories.filter((c): c is string => typeof c === 'string')
-    if (strings.length === 0) return []
+    if (strings.length === 0 || (KEEP_TEXT && Array.isArray(doc.topics))) return []
     const pairs = strings.map((value) => {
       const pair = lookup(CATEGORIES, value)
       if (!pair) missing.push(`category "${value}" (${doc._id})`)
@@ -86,7 +86,7 @@ async function run() {
       const pair = CATEGORIES.find((p) => p.key === k)!
       return ref(docId('category', pair, doc.language), k)
     })
-    return [{id: doc._id, set: {categories: refs}, log: `${doc.language} [${strings.join(', ')}] → [${pairs.map((p) => p![doc.language]).join(', ')}]`}]
+    return [{id: doc._id, set: {topics: refs}, unset: ['categories'], log: `${doc.language} [${strings.join(', ')}] → [${pairs.map((p) => p![doc.language]).join(', ')}]`}]
   })
 
   if (missing.length) {
@@ -117,7 +117,7 @@ async function run() {
   }
   if (!LISTS_ONLY) {
     for (const p of projectPatches) tx.patch(p.id, (patch) => (KEEP_TEXT ? patch.set(p.set) : patch.set(p.set).unset(p.unset)))
-    if (!KEEP_TEXT) for (const p of insightPatches) tx.patch(p.id, (patch) => patch.set(p.set))
+    for (const p of insightPatches) tx.patch(p.id, (patch) => (KEEP_TEXT ? patch.set(p.set) : patch.set(p.set).unset(p.unset)))
   }
   await tx.commit()
   if (LISTS_ONLY) console.log('Lists created; projects and articles not switched yet.')

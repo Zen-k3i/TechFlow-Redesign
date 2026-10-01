@@ -412,7 +412,7 @@ function dropGenericSeoTitle(draft: Record<string, unknown>) {
  * Fields only set in the Studio, carried over when a document is replaced by a re-import.
  * Sectors and article categories are picked from Sanity lists (see scripts/migrate-taxonomies.ts).
  */
-const STUDIO_ONLY: Record<string, string[]> = {project: ['logoFill', 'accentColor', 'sectors'], insight: ['categories']}
+const STUDIO_ONLY: Record<string, string[]> = {project: ['logoFill', 'accentColor', 'sectors'], insight: ['topics']}
 
 async function upsert(draft: Record<string, unknown> & {_type: string; sourceUrl?: string}) {
   dropGenericSeoTitle(draft)

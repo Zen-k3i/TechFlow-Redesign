@@ -14,12 +14,21 @@ export const insight = defineType({
     slugField,
     defineField({name: 'excerpt', title: 'Excerpt', type: 'text', rows: 3}),
     defineField({
-      name: 'categories',
+      name: 'topics',
       title: 'Categories',
-      description: 'Pick one or more; add categories under Article categories in the sidebar.',
+      description: 'Pick one or more from the list; add categories under Article categories in the sidebar.',
       type: 'array',
       of: [defineArrayMember({type: 'reference', to: [{type: 'category'}], options: {filter: sameLanguage, disableNew: true}})],
       validation: (r) => r.unique(),
+    }),
+    // Free-text categories from the old site, replaced by `topics` (scripts/migrate-taxonomies.ts). Remove once migrated.
+    defineField({
+      name: 'categories',
+      title: 'Old categories (text)',
+      type: 'array',
+      of: [defineArrayMember({type: 'string'})],
+      hidden: true,
+      readOnly: true,
     }),
     defineField({name: 'publishedAt', title: 'Publish date', type: 'date'}),
     defineField({
