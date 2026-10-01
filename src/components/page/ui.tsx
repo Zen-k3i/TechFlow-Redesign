@@ -9,7 +9,7 @@ import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
 import { FadeIn, RevealHeading } from "../site/reveal";
 import { useEffect, useRef, useState } from "react";
-import MuxPlayer, { type MuxPlayerRefAttributes } from "@mux/mux-player-react";
+import MuxVideo from "@mux/mux-video-react";
 
 type Tone = "dark" | "light";
 
@@ -599,11 +599,14 @@ export type MuxVideoItem = {
   role?: string;
 };
 
+/** Fired when a testimonial starts playing with sound, so the others go back to their silent loop. */
+const SOUND_EVENT = "techflow:video-sound";
+
 /**
- * Video testimonial: a silent loop with the blue play button on top; a click swaps in the Mux
- * player, which restarts the video from the beginning with sound and its own controls.
- * The silent loop only loads and plays while the card is on screen (carousels render each
- * card several times), and never autoplays when the visitor prefers reduced motion.
+ * Video testimonial. Plays as a silent loop while on screen (the source only loads near the
+ * viewport; carousels render each card several times) and never autoplays with reduced motion.
+ * The blue button restarts the same video from the beginning with sound; while it talks, a click on
+ * the video pauses it and the button comes back. Only one testimonial plays with sound at a time.
  * `decorative` copies (a carousel's duplicate) are hidden from keyboard and screen readers.
  */
 export function MuxCard({
@@ -616,98 +619,126 @@ export function MuxCard({
   decorative?: boolean;
 }) {
   const { t } = useLocale();
-  const playLabel = t.common.playVideo;
-  const [isPlayingWithSound, setIsPlayingWithSound] = useState(false);
   const [near, setNear] = useState(false);
+  const [sound, setSound] = useState(false);
+  const [paused, setPaused] = useState(false);
   const still = useReducedMotion() ?? false;
-  const playerRef = useRef<MuxPlayerRefAttributes>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Load the loop once the card comes near the viewport, then play it only while it's visible.
   useEffect(() => {
     const card = cardRef.current;
-    if (!card || isPlayingWithSound) return;
+    if (!card) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setNear(true);
         const video = videoRef.current;
-        if (!video?.src || still) return;
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
+        if (!near || !video || (still && !sound)) return;
+        if (entry.isIntersecting) {
+          if (!sound) video.play().catch(() => {});
+        } else video.pause();
       },
       { rootMargin: "200px" },
     );
     observer.observe(card);
     return () => observer.disconnect();
-  }, [still, isPlayingWithSound, near]);
+  }, [still, sound, near]);
 
-  const handlePlayWithSound = () => {
-    setIsPlayingWithSound(true);
-  };
+  // Back to the silent loop when another testimonial starts talking.
+  useEffect(() => {
+    const onOther = (e: Event) => {
+      if ((e as CustomEvent<HTMLVideoElement>).detail !== videoRef.current) silence();
+    };
+    window.addEventListener(SOUND_EVENT, onOther);
+    return () => window.removeEventListener(SOUND_EVENT, onOther);
+  });
+
+  function silence() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.loop = true;
+    setSound(false);
+    setPaused(false);
+    if (!still) video.play().catch(() => {});
+    else video.pause();
+  }
+
+  function playWithSound() {
+    const video = videoRef.current;
+    if (!video) return;
+    if (!near) setNear(true);
+    video.currentTime = 0;
+    video.muted = false;
+    video.loop = false;
+    setSound(true);
+    setPaused(false);
+    window.dispatchEvent(new CustomEvent(SOUND_EVENT, { detail: video }));
+    // The source is set on the next render if the card was never near the viewport.
+    requestAnimationFrame(() => video.play().catch(() => setPaused(true)));
+  }
+
+  const showButton = !sound || paused;
 
   return (
     <div
       ref={cardRef}
+      data-playing={sound && !paused ? "" : undefined}
       className={`relative h-full w-auto shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-night-soft transition-colors hover:border-brand/50 ${className}`}
       style={{
         aspectRatio: item.aspectRatio || "9 / 16",
         contain: "paint layout",
       }}
     >
-      {!isPlayingWithSound ? (
-        <>
-          {/* Native HTML5 video: 100% smooth in CSS marquee, no shadow DOM reflow glitches */}
-          <video
-            ref={videoRef}
-            src={near ? `https://stream.mux.com/${item.playbackId}/medium.mp4` : undefined}
-            poster={`https://image.mux.com/${item.playbackId}/thumbnail.webp?time=1`}
-            autoPlay={!still}
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-hidden
-            className="h-full w-full object-cover"
-          />
+      {/* Mux only serves these videos as HLS streams (no MP4), which Chrome can't play in a plain
+          <video>; MuxVideo is a <video> with HLS support, sized to the card, without Mux Data tracking. */}
+      <MuxVideo
+        ref={(el) => {
+          videoRef.current = el ?? null;
+          // Native muted autoplay (MuxVideo's own \`autoplay\` prop leaks onto the DOM as an invalid attribute).
+          if (el && !sound) el.autoplay = !still;
+        }}
+        playbackId={near ? item.playbackId : undefined}
+        poster={`https://image.mux.com/${item.playbackId}/thumbnail.webp?time=1`}
+        muted
+        loop
+        playsInline
+        // The stream is only attached near the viewport (playbackId above), so load it right away then.
+        preload="auto"
+        capRenditionToPlayerSize
+        disableTracking
+        disableCookies
+        aria-hidden={!sound}
+        onClick={() => {
+          const video = videoRef.current;
+          if (!sound || !video) return;
+          if (video.paused) video.play().catch(() => {});
+          else video.pause();
+        }}
+        onPause={() => sound && setPaused(true)}
+        onPlay={() => setPaused(false)}
+        onEnded={silence}
+        className={`h-full w-full object-cover ${sound ? "cursor-pointer" : ""}`}
+      />
 
-          {/* Overlay gradient */}
-          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      {/* Darkens the silent loop so the button and caption stand out; lifts while it talks. */}
+      <div className={`pointer-events-none absolute inset-0 bg-black/20 transition-opacity duration-300 ${sound && !paused ? "opacity-0" : ""}`} />
 
-          {/* Play Button */}
-          <button
-            type="button"
-            aria-label={`${playLabel}${item.name ? `: ${item.name}` : ""}`}
-            tabIndex={decorative ? -1 : undefined}
-            onClick={handlePlayWithSound}
-            className="absolute left-1/2 top-1/2 z-10 flex size-11 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#4766ff] shadow-lg transition-transform hover:scale-110 active:scale-95"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="white"
-              className="ml-0.5"
-            >
-              <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
-            </svg>
-          </button>
-        </>
-      ) : (
-        /* Full interactive player mounts with sound from beginning on click */
-        <MuxPlayer
-          ref={playerRef}
-          playbackId={item.playbackId}
-          metadataVideoTitle={item.name || "Client Testimonial"}
-          autoPlay
-          playsInline
-          startTime={0}
-          className="h-full w-full object-cover"
-          style={{ width: "100%", height: "100%", display: "block" }}
-        />
+      {showButton && (
+        <button
+          type="button"
+          aria-label={`${t.common.playVideo}${item.name ? `: ${item.name}` : ""}`}
+          tabIndex={decorative ? -1 : undefined}
+          onClick={playWithSound}
+          className="absolute left-1/2 top-1/2 z-10 flex size-9 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#4766ff] shadow-lg transition-transform hover:scale-110 active:scale-95"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white" className="ml-0.5" aria-hidden>
+            <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
+          </svg>
+        </button>
       )}
-      <div className="absolute bottom-0 left-0 right-0 p-4">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-4">
         <h3 className="text-sm font-medium text-white">{item.name}</h3>
         <p className="text-sm text-white/55">{item.role}</p>
       </div>

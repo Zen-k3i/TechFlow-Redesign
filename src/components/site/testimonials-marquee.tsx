@@ -93,7 +93,7 @@ function ReviewRow({ row, reverse, textClass }: { row: Row; reverse: boolean; te
   return (
     <div className="marquee-row group flex overflow-hidden">
       <ul
-        className={`flex w-max items-center gap-5 pr-5 group-hover:[animation-play-state:paused] ${reverse ? "animate-marquee-reverse" : "animate-marquee"}`}
+        className={`flex w-max items-center gap-5 pr-5 group-hover:[animation-play-state:paused] has-[[data-playing]]:[animation-play-state:paused] ${reverse ? "animate-marquee-reverse" : "animate-marquee"}`}
         style={{ animationDuration: `${row.items.length * SECONDS_PER_ITEM}s` }}
       >
         {[0, 1].flatMap((copy) =>
