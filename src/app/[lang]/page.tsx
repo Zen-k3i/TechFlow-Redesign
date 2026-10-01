@@ -17,7 +17,7 @@ import { Work } from "@/components/site/work";
 import { PortraitStrip } from "@/components/team/portrait-strip";
 import { hasLocale, localePath } from "@/i18n/config";
 import { sanityFetch } from "@/sanity/client";
-import { TEAM_QUERY } from "@/sanity/queries";
+import { FAQ_QUERY, TEAM_QUERY } from "@/sanity/queries";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]">): Promis
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const members = await sanityFetch(TEAM_QUERY);
+  const [members, faq] = await Promise.all([sanityFetch(TEAM_QUERY), sanityFetch(FAQ_QUERY, { page: "home", lang })]);
 
   return (
     <Providers lang={lang}>
@@ -50,7 +50,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         <PortraitStrip members={members} className="pt-0" />
         <Testimonials />
         <Brief />
-        <Faq />
+        <Faq faq={faq} />
       </main>
       <Footer />
     </Providers>

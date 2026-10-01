@@ -7,13 +7,13 @@ import { href, serviceKeys } from "@/i18n/routes";
 import { useLocale } from "../site/locale";
 import { Process } from "../site/process";
 import { FadeIn, RevealHeading } from "../site/reveal";
-import { Faq } from "../site/faq";
+import { Faq, type FaqContent } from "../site/faq";
 import { Chip, HumanActions, SectionHeader } from "../page/ui";
 import { serviceIllustration } from "../site/content";
 import { EditorialHero, HoverPreview, pad, WordMarquee } from "./editorial";
 import { servicesHub, toolById, tools, type Tool } from "./hub-data";
 
-export function ServicesHub({ testimonials }: { testimonials: React.ReactNode }) {
+export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNode; faq: FaqContent }) {
   const { lang, t } = useLocale();
   const c = servicesHub[lang];
   const services = serviceKeys.map((key, i) => ({ key, url: c.urls[i], ...t.services.items[i] }));
@@ -135,7 +135,7 @@ export function ServicesHub({ testimonials }: { testimonials: React.ReactNode })
 
       <Process />
       {testimonials}
-      <Faq />
+      <Faq faq={faq} />
     </>
   );
 }

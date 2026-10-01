@@ -7,7 +7,9 @@ import {UserIcon} from '@sanity/icons/User'
 import {WrenchIcon} from '@sanity/icons/Wrench'
 import {PinIcon} from '@sanity/icons/Pin'
 import {TagIcon} from '@sanity/icons/Tag'
+import {HelpCircleIcon} from '@sanity/icons/HelpCircle'
 import {LANGUAGES, LOCALIZED_TYPES, type LocalizedType} from './languages'
+import {FAQ_PAGES} from './schemaTypes/documents/faq'
 
 const LOCALIZED: Record<LocalizedType, {title: string; icon: typeof CaseIcon; ordering: SortOrderingItem[]}> = {
   project: {title: 'Projects', icon: CaseIcon, ordering: [{field: 'order', direction: 'asc'}]},
@@ -48,11 +50,41 @@ function localizedFolder(S: StructureBuilder, type: LocalizedType) {
     )
 }
 
+/** FAQ folder with one sub-folder per page, each holding that page's French and English FAQ. */
+function faqFolder(S: StructureBuilder) {
+  return S.listItem()
+    .id('faq')
+    .title('FAQ')
+    .icon(HelpCircleIcon)
+    .child(
+      S.list()
+        .id('faq')
+        .title('FAQ by page')
+        .items(
+          FAQ_PAGES.map((page) =>
+            S.listItem()
+              .id(`faq-${page.id}`)
+              .title(page.title)
+              .icon(HelpCircleIcon)
+              .child(
+                S.documentTypeList('faq')
+                  .id(`faq-${page.id}`)
+                  .title(`FAQ · ${page.title}`)
+                  .filter('_type == "faq" && page == $page')
+                  .params({page: page.id})
+                  .initialValueTemplates(LANGUAGES.map((lang) => S.initialValueTemplateItem(`faq-${page.id}-${lang.id}`))),
+              ),
+          ),
+        ),
+    )
+}
+
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
       ...LOCALIZED_TYPES.map((type) => localizedFolder(S, type)),
+      faqFolder(S),
       S.divider(),
       S.documentTypeListItem('teamMember').title('Team members').icon(UserIcon),
       S.documentTypeListItem('review').title('Client reviews').icon(BlockquoteIcon),

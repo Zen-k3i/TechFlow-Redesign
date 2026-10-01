@@ -6,6 +6,8 @@ import { ServicesHub } from "@/components/services/services-hub";
 import { Testimonials } from "@/components/site/testimonials";
 import { hasLocale } from "@/i18n/config";
 import { pageMetadata } from "@/i18n/routes";
+import { sanityFetch } from "@/sanity/client";
+import { FAQ_QUERY } from "@/sanity/queries";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/services">): Promise<Metadata> {
   const { lang } = await params;
@@ -16,10 +18,11 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/services">
 export default async function Services({ params }: PageProps<"/[lang]/services">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
+  const faq = await sanityFetch(FAQ_QUERY, { page: "services", lang });
 
   return (
     <PageShell lang={lang} current="services">
-      <ServicesHub testimonials={<Testimonials />} />
+      <ServicesHub testimonials={<Testimonials />} faq={faq} />
     </PageShell>
   );
 }

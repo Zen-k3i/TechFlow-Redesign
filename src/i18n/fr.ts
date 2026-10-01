@@ -286,29 +286,6 @@ export const fr = {
 
   faq: {
     eyebrow: "FAQ",
-    heading: "Les questions qu'on nous pose *avant de signer.*",
-    items: [
-      {
-        q: "Combien ça coûte ?",
-        a: "Chaque système est dimensionné sur mesure. L'audit gratuit nous permet de chiffrer précisément vos besoins, et vous obtenez un budget ferme avant tout engagement (le périmètre est ensuite suivi sprint par sprint, il ne dérive jamais).",
-      },
-      {
-        q: "Combien de temps pour lancer un projet ?",
-        a: "La plupart de nos projets démarrent sous deux semaines. Un site vitrine se livre en 3 à 6 semaines, un système complet (site + funnel + agents IA) en 60 à 90 jours.",
-      },
-      {
-        q: "Travaillez-vous avec des petites structures ?",
-        a: "Oui. Nos offres sont modulaires : on commence là où l'impact est le plus rapide, et on étend le périmètre au rythme de vos résultats.",
-      },
-      {
-        q: "Que se passe-t-il après la livraison ?",
-        a: "On ne disparaît pas : maintenance, amélioration continue et suivi des métriques font partie de nos abonnements d'accompagnement.",
-      },
-      {
-        q: "Comment démarre une collaboration ?",
-        a: "Par un appel de 30 minutes, gratuit et sans engagement. On analyse votre besoin et vous repartez avec un plan d'action concret, que l'on travaille ensemble ou non.",
-      },
-    ],
   },
 
   footer: {

@@ -6,6 +6,7 @@ import {table} from '@sanity/table'
 import {schemaTypes} from './schemaTypes'
 import {BASE_LANGUAGE, LANGUAGES, LOCALIZED_TYPES} from './languages'
 import {structure} from './structure'
+import {FAQ_PAGES} from './schemaTypes/documents/faq'
 
 /** The plain type template and our per-language ones (`project-fr`, `project-en`, …). */
 const isLocalizedTemplate = (id: string) => LOCALIZED_TYPES.some((type) => id === type || id.startsWith(`${type}-`))
@@ -35,7 +36,7 @@ export default defineConfig({
     newDocumentOptions: (prev, {creationContext}) => {
       if (creationContext.type !== 'global') return prev
       return [
-        ...prev.filter((item) => !isLocalizedTemplate(item.templateId)),
+        ...prev.filter((item) => !isLocalizedTemplate(item.templateId) && !item.templateId.startsWith('faq')),
         ...LOCALIZED_TYPES.map((schemaType) => ({
           templateId: `${schemaType}-${BASE_LANGUAGE}`,
           parameters: {language: BASE_LANGUAGE},
@@ -54,6 +55,14 @@ export default defineConfig({
           title: `${TEMPLATE_NAMES[schemaType] ?? capitalize(schemaType)} (${lang.title})`,
           schemaType,
           value: {language: lang.id},
+        })),
+      ),
+      ...FAQ_PAGES.flatMap((page) =>
+        LANGUAGES.map((lang) => ({
+          id: `faq-${page.id}-${lang.id}`,
+          title: `FAQ ${page.title} (${lang.title})`,
+          schemaType: 'faq',
+          value: {language: lang.id, page: page.id},
         })),
       ),
     ],

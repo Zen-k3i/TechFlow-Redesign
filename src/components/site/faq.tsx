@@ -1,33 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import type { FAQ_QUERY_RESULT } from "@/sanity.types";
 import { AnimatePresence, motion } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";
 
-type FaqProps = { eyebrow?: string; heading?: string; intro?: string; items?: { q: string; a: string }[] };
+/** A page's FAQ as edited in Sanity (FAQ folder in the Studio). */
+export type FaqContent = FAQ_QUERY_RESULT;
 
-export function Faq({ eyebrow, heading, intro, items }: FaqProps = {}) {
+export function Faq({ faq }: { faq: FaqContent }) {
   const { t } = useLocale();
   const [open, setOpen] = useState<number | null>(0);
+  const items = (faq?.items ?? []).flatMap((item) => (item.q && item.a ? [{ ...item, q: item.q, a: item.a }] : []));
+  if (!faq?.heading || items.length === 0) return null;
 
   return (
     <section id="faq" className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="eyebrow text-brand-sky">{eyebrow ?? t.faq.eyebrow}</p>
+          <p className="eyebrow text-brand-sky">{t.faq.eyebrow}</p>
           <RevealHeading
-            text={heading ?? t.faq.heading}
+            text={faq.heading}
             className="mt-4 font-serif text-5xl leading-[0.95] md:text-6xl"
           />
-          {intro && <p className="mt-6 max-w-sm text-white/55">{intro}</p>}
+          {faq.intro && <p className="mt-6 max-w-sm text-white/55">{faq.intro}</p>}
         </div>
         <ul className="border-t border-white/10">
-          {(items ?? t.faq.items).map((item, i) => {
+          {items.map((item, i) => {
             const isOpen = open === i;
             return (
-              <li key={item.q} className="border-b border-white/10">
+              <li key={item._key} className="border-b border-white/10">
                 <button
                   type="button"
                   onClick={() => setOpen(isOpen ? null : i)}

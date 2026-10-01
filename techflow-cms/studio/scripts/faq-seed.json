@@ -1,0 +1,346 @@
+{
+ "fr": {
+  "home": {
+   "heading": "Les questions qu'on nous pose *avant de signer.*",
+   "items": [
+    {
+     "q": "Combien ça coûte ?",
+     "a": "Chaque système est dimensionné sur mesure. L'audit gratuit nous permet de chiffrer précisément vos besoins, et vous obtenez un budget ferme avant tout engagement (le périmètre est ensuite suivi sprint par sprint, il ne dérive jamais)."
+    },
+    {
+     "q": "Combien de temps pour lancer un projet ?",
+     "a": "La plupart de nos projets démarrent sous deux semaines. Un site vitrine se livre en 3 à 6 semaines, un système complet (site + funnel + agents IA) en 60 à 90 jours."
+    },
+    {
+     "q": "Travaillez-vous avec des petites structures ?",
+     "a": "Oui. Nos offres sont modulaires : on commence là où l'impact est le plus rapide, et on étend le périmètre au rythme de vos résultats."
+    },
+    {
+     "q": "Que se passe-t-il après la livraison ?",
+     "a": "On ne disparaît pas : maintenance, amélioration continue et suivi des métriques font partie de nos abonnements d'accompagnement."
+    },
+    {
+     "q": "Comment démarre une collaboration ?",
+     "a": "Par un appel de 30 minutes, gratuit et sans engagement. On analyse votre besoin et vous repartez avec un plan d'action concret, que l'on travaille ensemble ou non."
+    }
+   ]
+  },
+  "services": {
+   "heading": "Les questions qu'on nous pose *avant de signer.*",
+   "items": [
+    {
+     "q": "Combien ça coûte ?",
+     "a": "Chaque système est dimensionné sur mesure. L'audit gratuit nous permet de chiffrer précisément vos besoins, et vous obtenez un budget ferme avant tout engagement (le périmètre est ensuite suivi sprint par sprint, il ne dérive jamais)."
+    },
+    {
+     "q": "Combien de temps pour lancer un projet ?",
+     "a": "La plupart de nos projets démarrent sous deux semaines. Un site vitrine se livre en 3 à 6 semaines, un système complet (site + funnel + agents IA) en 60 à 90 jours."
+    },
+    {
+     "q": "Travaillez-vous avec des petites structures ?",
+     "a": "Oui. Nos offres sont modulaires : on commence là où l'impact est le plus rapide, et on étend le périmètre au rythme de vos résultats."
+    },
+    {
+     "q": "Que se passe-t-il après la livraison ?",
+     "a": "On ne disparaît pas : maintenance, amélioration continue et suivi des métriques font partie de nos abonnements d'accompagnement."
+    },
+    {
+     "q": "Comment démarre une collaboration ?",
+     "a": "Par un appel de 30 minutes, gratuit et sans engagement. On analyse votre besoin et vous repartez avec un plan d'action concret, que l'on travaille ensemble ou non."
+    }
+   ]
+  },
+  "design": {
+   "heading": "Vos questions sur le *design.*",
+   "intro": "Périmètre, délais, révisions et déroulé réel d'une phase de design.",
+   "items": [
+    {
+     "q": "Sous combien de temps voit-on les premières maquettes ?",
+     "a": "Les wireframes arrivent généralement une à deux semaines après le lancement, et les premières maquettes UI sous 14 jours. Un projet de design complet (branding + UX/UI + prototype) s'étale sur 4 à 8 semaines selon le périmètre."
+    },
+    {
+     "q": "Travaillez-vous sur Figma ? Que reçoit-on à la fin ?",
+     "a": "Oui, tout notre travail UX/UI se fait sur Figma. Vous recevez les fichiers sources organisés, le design system, le prototype interactif et un kit de passation prêt pour le développement. Tout vous appartient."
+    },
+    {
+     "q": "Développez-vous aussi les maquettes ?",
+     "a": "Oui. Notre équipe couvre le design et le développement. Les maquettes validées peuvent être intégrées par nos propres développeurs, sans rien perdre entre l'intention de départ et le résultat final. Voir notre page Développement web."
+    },
+    {
+     "q": "Combien de cycles de retours sont inclus ?",
+     "a": "Chaque étape (wireframes, maquettes, prototype) comprend des cycles de retours structurés. Comme vous validez à chaque jalon, les ajustements restent ciblés : on ne redessine jamais tout à la fin du projet."
+    },
+    {
+     "q": "Peut-on rafraîchir une marque existante sans repartir de zéro ?",
+     "a": "Tout à fait. Nous auditons d'abord ce qui fonctionne dans votre identité actuelle, puis nous faisons évoluer ce qui doit changer. Une refonte réussie conserve ce que vos clients reconnaissent et corrige ce qui vous freine."
+    },
+    {
+     "q": "Les social ads et le motion design sont-ils des prestations séparées ?",
+     "a": "Elles peuvent être commandées seules ou dans le cadre d'un projet de marque global. L'avantage d'une seule équipe pour les deux : vos créas publicitaires et vos vidéos collent exactement à votre identité."
+    }
+   ]
+  },
+  "development": {
+   "heading": "Vos questions sur le *développement.*",
+   "intro": "Stack, délais, SEO et ce qui se passe une fois le projet livré.",
+   "items": [
+    {
+     "q": "Combien de temps pour créer un site web ?",
+     "a": "Un site vitrine se livre en 3 à 6 semaines, une plateforme ou un SaaS en 2 à 4 mois selon le périmètre. Le développement par sprints vous donne une version testable très tôt (vous ne découvrez jamais le résultat à la fin)."
+    },
+    {
+     "q": "Webflow ou développement sur mesure ?",
+     "a": "Cela dépend de vos besoins (et nous vous le dirons honnêtement). Webflow excelle pour les sites éditoriaux et vitrines, avec une équipe qui veut de l'autonomie sur son contenu. Dès qu'il y a des comptes utilisateurs, des paiements complexes ou une logique métier spécifique, le développement sur mesure devient le bon choix. Nos recommandations techniques sont toujours argumentées."
+    },
+    {
+     "q": "Comment protégez-vous le SEO lors d'une refonte ?",
+     "a": "Avec méthode : un audit SEO complet avant la refonte, une cartographie de toutes les pages positionnées, un plan de redirections 301 exhaustif, les balises et les contenus performants préservés, puis un suivi des positions pendant les semaines qui suivent la mise en ligne. C'est pour cela que nous affichons 0 perte SEO sur nos refontes."
+    },
+    {
+     "q": "Comment suit-on l'avancement du projet ?",
+     "a": "Vous avez un accès continu au backlog, un canal direct avec l'équipe et une démo à la fin de chaque sprint. Le périmètre et le budget sont revus à chaque sprint : aucune surprise possible."
+    },
+    {
+     "q": "Qui gère l'hébergement, la sécurité et la maintenance ?",
+     "a": "Nous, si vous le souhaitez. Nos abonnements d'accompagnement incluent la surveillance continue, les sauvegardes, les mises à jour de sécurité et les petites évolutions. Vous restez propriétaire de tout : code, contenu, accès."
+    },
+    {
+     "q": "Peut-on démarrer petit, avec un MVP ?",
+     "a": "C'est exactement ce que nous recommandons quand l'incertitude est forte. Un MVP construit en quelques semaines valide la faisabilité et l'intérêt du marché ; s'il fonctionne, il devient la première brique du produit (rien n'est jeté)."
+    }
+   ]
+  },
+  "aiAgents": {
+   "heading": "Vos questions sur *l'IA.*",
+   "intro": "Ce que nous automatisons, en combien de temps, et ce que votre équipe doit changer.",
+   "items": [
+    {
+     "q": "Concrètement, qu'est-ce qu'un agent IA ?",
+     "a": "Un programme autonome qui exécute des tâches pour vous, 24h/24 et 7j/7. Contrairement à un chatbot, il ne se contente pas de répondre à des questions. Il agit : il surveille votre boîte mail, génère des rapports, relance vos clients, met à jour votre CRM. Tout seul."
+    },
+    {
+     "q": "En quoi est-ce différent de ChatGPT ?",
+     "a": "ChatGPT est un assistant générique. Nos agents sont construits pour votre entreprise : ils connaissent vos données, vos outils, vos processus. C'est la différence entre un stagiaire polyvalent et un membre de l'équipe entièrement formé."
+    },
+    {
+     "q": "Sous combien de temps voit-on des résultats ?",
+     "a": "Les compétences IA sont opérationnelles en 24 à 48 heures. Les agents autonomes demandent 1 à 4 semaines, l'infrastructure souveraine 4 à 8 semaines. Les gains mesurables apparaissent dès la première semaine."
+    },
+    {
+     "q": "Mes données sont-elles en sécurité ?",
+     "a": "Oui. Avec l'option souveraine, toute l'infrastructure tourne sur votre propre serveur (aucune donnée ne transite par des services tiers). Pour les déploiements cloud, nous utilisons des environnements sécurisés et conformes au RGPD, avec des permissions structurées et une supervision."
+    },
+    {
+     "q": "Et si un meilleur modèle d'IA sort ?",
+     "a": "C'est tout l'intérêt de notre architecture : l'orchestration est découplée du modèle. Via OpenRouter, vous passez de Claude à GPT, Mistral ou Llama en un clic, sans toucher à vos workflows. Zéro dépendance, à vie."
+    },
+    {
+     "q": "Faut-il des compétences techniques en interne ?",
+     "a": "Non. Nous prenons en charge toute la partie technique. Vos équipes utilisent les agents comme elles utilisent leur messagerie ou un tableur (et nous formons chaque utilisateur pendant le déploiement)."
+    }
+   ]
+  },
+  "salesFunnel": {
+   "heading": "Vos questions sur la *croissance.*",
+   "intro": "Trafic, conversion, tracking et ce que nous mesurons avant de considérer un tunnel comme abouti.",
+   "items": [
+    {
+     "q": "Qu'est-ce qu'un « système de croissance », exactement ?",
+     "a": "Un ensemble intégré d'outils et d'automatisations conçu pour générer, qualifier et convertir des prospects de façon autonome. Contrairement à des outils isolés, tout fonctionne ensemble : landing page, CRM, IA, automatisations et reporting (un seul système, un seul objectif)."
+    },
+    {
+     "q": "Sous combien de temps voit-on les premiers résultats ?",
+     "a": "Les premiers leads arrivent généralement 2 à 4 semaines après le lancement. Les résultats significatifs (un pipeline structuré, des rendez-vous qualifiés réguliers) sont visibles à 60 ou 90 jours."
+    },
+    {
+     "q": "Est-ce que cela fonctionne dans mon secteur ?",
+     "a": "Nos systèmes fonctionnent pour les entreprises de services B2B et B2C : cabinets de conseil, agences, immobilier, SaaS, e-commerce, formation. L'audit initial valide l'adéquation avec votre marché spécifique avant tout engagement."
+    },
+    {
+     "q": "L'IA va-t-elle remplacer mon équipe ?",
+     "a": "Non. L'IA prend en charge les tâches répétitives et à faible valeur (qualification, relances, reporting) pour que votre équipe se concentre sur l'essentiel : la stratégie, la relation client et la signature."
+    },
+    {
+     "q": "Que comprend l'audit gratuit ?",
+     "a": "Un appel de 30 minutes pendant lequel nous analysons votre acquisition actuelle, votre pipeline commercial et vos opérations. Vous repartez avec un plan d'action concret et chiffré (que l'on travaille ensemble ou non)."
+    },
+    {
+     "q": "Combien ça coûte ?",
+     "a": "Chaque système est dimensionné sur mesure. L'audit gratuit nous permet de chiffrer précisément vos besoins, et vous obtenez un budget ferme avant tout engagement (le périmètre est ensuite suivi sprint par sprint, il ne dérive jamais)."
+    }
+   ]
+  }
+ },
+ "en": {
+  "home": {
+   "heading": "What people ask us *before signing.*",
+   "items": [
+    {
+     "q": "How much does it cost?",
+     "a": "Every system is custom-scoped. The free audit lets us quantify your needs precisely, and you get a firm budget before any engagement (the scope is then tracked sprint by sprint, so it never drifts)."
+    },
+    {
+     "q": "How long does it take to launch a project?",
+     "a": "Most of our projects start within two weeks. A showcase site ships in 3 to 6 weeks, a complete system (site + funnel + AI agents) in 60 to 90 days."
+    },
+    {
+     "q": "Do you work with small companies?",
+     "a": "Yes. Our offers are modular: we start where the impact comes fastest, then widen the scope at the pace of your results."
+    },
+    {
+     "q": "What happens after delivery?",
+     "a": "We do not disappear: maintenance, continuous improvement and metrics tracking are part of our support subscriptions."
+    },
+    {
+     "q": "How does a collaboration start?",
+     "a": "With a 30 minute call, free and with no commitment. We look at what you need and you leave with a concrete action plan, whether we end up working together or not."
+    }
+   ]
+  },
+  "services": {
+   "heading": "What people ask us *before signing.*",
+   "items": [
+    {
+     "q": "How much does it cost?",
+     "a": "Every system is custom-scoped. The free audit lets us quantify your needs precisely, and you get a firm budget before any engagement (the scope is then tracked sprint by sprint, so it never drifts)."
+    },
+    {
+     "q": "How long does it take to launch a project?",
+     "a": "Most of our projects start within two weeks. A showcase site ships in 3 to 6 weeks, a complete system (site + funnel + AI agents) in 60 to 90 days."
+    },
+    {
+     "q": "Do you work with small companies?",
+     "a": "Yes. Our offers are modular: we start where the impact comes fastest, then widen the scope at the pace of your results."
+    },
+    {
+     "q": "What happens after delivery?",
+     "a": "We do not disappear: maintenance, continuous improvement and metrics tracking are part of our support subscriptions."
+    },
+    {
+     "q": "How does a collaboration start?",
+     "a": "With a 30 minute call, free and with no commitment. We look at what you need and you leave with a concrete action plan, whether we end up working together or not."
+    }
+   ]
+  },
+  "design": {
+   "heading": "Your questions about *design.*",
+   "intro": "Scope, timelines, revisions and what a design phase really looks like.",
+   "items": [
+    {
+     "q": "How fast do we see the first mockups?",
+     "a": "Wireframes usually arrive within one to two weeks after the kickoff, and the first UI mockups within 14 days. A complete design project (branding + UX/UI + prototype) runs over 4 to 8 weeks depending on scope."
+    },
+    {
+     "q": "Do you work in Figma? What do we receive at the end?",
+     "a": "Yes, all our UX/UI work is done in Figma. You receive the organized source files, the design system, the interactive prototype and a handoff kit ready for development. Everything belongs to you."
+    },
+    {
+     "q": "Do you also develop the designs?",
+     "a": "Yes. Our team covers both design and development. Validated mockups can be built by our own developers, with nothing lost between design intent and final result. See our Web Development page."
+    },
+    {
+     "q": "How many rounds of feedback are included?",
+     "a": "Each stage (wireframes, mockups, prototype) includes structured feedback cycles. Because you validate at every milestone, adjustments stay focused: we never redesign everything at the end of the project."
+    },
+    {
+     "q": "Can you refresh an existing brand without starting from scratch?",
+     "a": "Absolutely. We first audit what works in your current identity, then evolve what needs to change. A successful redesign keeps what your customers recognize and fixes what holds you back."
+    },
+    {
+     "q": "Are social ads and motion design separate services?",
+     "a": "They can be ordered on their own or as part of a global brand project. The advantage of one team doing both: your ad creatives and videos match your identity exactly."
+    }
+   ]
+  },
+  "development": {
+   "heading": "Your questions about *development.*",
+   "intro": "Stack, timelines, SEO and what happens once the project ships.",
+   "items": [
+    {
+     "q": "How long does it take to create a website?",
+     "a": "A showcase website ships in 3 to 6 weeks, a platform or SaaS in 2 to 4 months depending on scope. Sprint-based delivery gives you a testable version very early (you never discover the result at the end)."
+    },
+    {
+     "q": "Webflow or custom development?",
+     "a": "It depends on your needs (and we'll tell you honestly). Webflow excels for editorial and showcase sites with a team that wants autonomy over content. As soon as there are user accounts, complex payments or specific business logic, custom development becomes the right call. Our technical recommendations are always argued."
+    },
+    {
+     "q": "How do you protect SEO during a redesign?",
+     "a": "With method: a full SEO audit before the redesign, a map of every ranking page, an exhaustive 301 redirect plan, preserved tags and high-performing content, then position tracking for weeks after launch. That's why we show 0 SEO loss on our redesigns."
+    },
+    {
+     "q": "How do we follow the project's progress?",
+     "a": "You have continuous access to the backlog, a direct channel with the team, and a demo at the end of every sprint. Scope and budget are reviewed each sprint: no surprises possible."
+    },
+    {
+     "q": "Who handles hosting, security and maintenance?",
+     "a": "We do, if you want us to. Our follow-up subscriptions include continuous monitoring, backups, security updates and small evolutions. You remain the owner of everything: code, content, access."
+    },
+    {
+     "q": "Can we start small, with an MVP?",
+     "a": "That's exactly what we recommend when uncertainty is high. An MVP built in weeks validates feasibility and market interest; if it works, it becomes the first brick of the product (nothing is thrown away)."
+    }
+   ]
+  },
+  "aiAgents": {
+   "heading": "Your questions about *AI.*",
+   "intro": "What we automate, how fast, and what your team needs to change.",
+   "items": [
+    {
+     "q": "What is an AI agent, concretely?",
+     "a": "An autonomous program that executes tasks for you, 24/7. Unlike a chatbot, it doesn't just answer questions. It acts: monitoring your inbox, generating reports, following up with clients, updating your CRM. On its own."
+    },
+    {
+     "q": "How is this different from ChatGPT?",
+     "a": "ChatGPT is a generic assistant. Our agents are built for your business: they know your data, your tools, your processes. It's the difference between a versatile intern and a fully trained team member."
+    },
+    {
+     "q": "How fast do we see results?",
+     "a": "AI skills are operational within 24 to 48 hours. Autonomous agents take 1 to 4 weeks, sovereign infrastructure 4 to 8 weeks. Measurable gains show up in the very first week."
+    },
+    {
+     "q": "Is my data safe?",
+     "a": "Yes. With the sovereign option, the entire infrastructure runs on your own server (no data transits through third-party services). For cloud deployments, we use secured, GDPR-compliant environments with structured permissions and monitoring."
+    },
+    {
+     "q": "What if a better AI model comes out?",
+     "a": "That's the point of our architecture: orchestration is decoupled from the model. Via OpenRouter, you switch from Claude to GPT, Mistral or Llama in one click, without touching your workflows. Zero lock-in, for life."
+    },
+    {
+     "q": "Do we need technical skills in-house?",
+     "a": "No. We handle the entire technical side. Your teams use the agents the way they use email or a spreadsheet (and we train every user as part of the deployment)."
+    }
+   ]
+  },
+  "salesFunnel": {
+   "heading": "Your questions about *growth.*",
+   "intro": "Traffic, conversion, tracking and what we measure before calling a funnel done.",
+   "items": [
+    {
+     "q": "What exactly is a “growth system”?",
+     "a": "An integrated set of tools and automations built to generate, qualify and convert prospects autonomously. Unlike isolated tools, everything works together: landing page, CRM, AI, automations and reporting (one system, one goal)."
+    },
+    {
+     "q": "How fast do we see the first results?",
+     "a": "The first leads usually arrive within 2 to 4 weeks of launch. Significant results (a structured pipeline, regular qualified meetings) are visible at 60 to 90 days."
+    },
+    {
+     "q": "Does it work for my industry?",
+     "a": "Our systems work for B2B and B2C service businesses: consulting firms, agencies, real estate, SaaS, e-commerce, training. The initial audit validates the fit with your specific market before any commitment."
+    },
+    {
+     "q": "Will AI replace my team?",
+     "a": "No. The AI takes over repetitive, low-value tasks (qualification, follow-ups, reporting) so your team can focus on what matters: strategy, client relationships and closing."
+    },
+    {
+     "q": "What does the free audit include?",
+     "a": "A 30-minute call where we analyze your current acquisition, sales pipeline and operations. You leave with a concrete, quantified action plan (whether we work together or not)."
+    },
+    {
+     "q": "How much does it cost?",
+     "a": "Every system is custom-scoped. The free audit lets us quantify your needs precisely, and you get a firm budget before any engagement (the scope is then tracked sprint by sprint, so it never drifts)."
+    }
+   ]
+  }
+ }
+}

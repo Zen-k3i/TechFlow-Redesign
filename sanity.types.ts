@@ -114,6 +114,25 @@ export type BlockContent = Array<
     } & Table)
 >;
 
+export type Faq = {
+  _id: string;
+  _type: "faq";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  page?:
+    "home" | "services" | "design" | "development" | "aiAgents" | "salesFunnel";
+  heading?: string;
+  intro?: string;
+  items?: Array<{
+    question?: string;
+    answer?: string;
+    _type: "faqItem";
+    _key: string;
+  }>;
+};
+
 export type Review = {
   _id: string;
   _type: "review";
@@ -489,6 +508,7 @@ export type AllSanitySchemaTypes =
   | Metric
   | ImageWithAlt
   | BlockContent
+  | Faq
   | Review
   | SanityImageCrop
   | SanityImageHotspot
@@ -850,6 +870,19 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
       } | null;
     } | null>;
   }>;
+} | null;
+
+// Source: ../../src/sanity/queries.ts
+// Variable: FAQ_QUERY
+// Query: *[_type == "faq" && page == $page && language == $lang][0]{    heading,    intro,    "items": items[defined(question) && defined(answer)]{ _key, "q": question, "a": answer }  }
+export type FAQ_QUERY_RESULT = {
+  heading: string | null;
+  intro: string | null;
+  items: Array<{
+    _key: string;
+    q: string;
+    a: string;
+  }> | null;
 } | null;
 
 // Source: ../../src/sanity/queries.ts
@@ -1315,6 +1348,7 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "project" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n': PROJECTS_INDEX_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    accentColor,\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "faq" && page == $page && language == $lang][0]{\n    heading,\n    intro,\n    "items": items[defined(question) && defined(answer)]{ _key, "q": question, "a": answer }\n  }\n': FAQ_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && defined(slug.current)].slug.current\n': PROJECT_SLUGS_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TOOLS_INDEX_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;

@@ -300,29 +300,6 @@ export const en: Dictionary = {
 
   faq: {
     eyebrow: "FAQ",
-    heading: "What people ask us *before signing.*",
-    items: [
-      {
-        q: "How much does it cost?",
-        a: "Every system is custom-scoped. The free audit lets us quantify your needs precisely, and you get a firm budget before any engagement (the scope is then tracked sprint by sprint, so it never drifts).",
-      },
-      {
-        q: "How long does it take to launch a project?",
-        a: "Most of our projects start within two weeks. A showcase site ships in 3 to 6 weeks, a complete system (site + funnel + AI agents) in 60 to 90 days.",
-      },
-      {
-        q: "Do you work with small companies?",
-        a: "Yes. Our offers are modular: we start where the impact comes fastest, then widen the scope at the pace of your results.",
-      },
-      {
-        q: "What happens after delivery?",
-        a: "We do not disappear: maintenance, continuous improvement and metrics tracking are part of our support subscriptions.",
-      },
-      {
-        q: "How does a collaboration start?",
-        a: "With a 30 minute call, free and with no commitment. We look at what you need and you leave with a concrete action plan, whether we end up working together or not.",
-      },
-    ],
   },
 
   footer: {

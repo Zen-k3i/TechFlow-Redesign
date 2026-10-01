@@ -5,7 +5,7 @@ import Link from "next/link";
 import { href, serviceKeys, type ServiceKey } from "@/i18n/routes";
 import { ComparisonTable, ClientMarquee, HumanActions, SectionHeader } from "../page/ui";
 import { projects, serviceIllustration } from "../site/content";
-import { Faq } from "../site/faq";
+import { Faq, type FaqContent } from "../site/faq";
 import { useLocale } from "../site/locale";
 import { ProjectCard } from "../site/project-card";
 import { projectPreviews } from "../site/previews";
@@ -20,7 +20,7 @@ const copy = {
   en: { next: "Next service", project: "Project", book: "Book a call" },
 };
 
-export function ServicePage({ service }: { service: ServiceKey }) {
+export function ServicePage({ service, faq }: { service: ServiceKey; faq: FaqContent }) {
   const { lang, t } = useLocale();
   const c = serviceContent[lang][service];
   const index = serviceKeys.indexOf(service);
@@ -75,7 +75,7 @@ export function ServicePage({ service }: { service: ServiceKey }) {
       </section>
 
       <ComparisonAndWork content={c} work={work} />
-      <Faq eyebrow="FAQ" heading={c.faq.heading} intro={c.faq.intro} items={c.faq.items} />
+      <Faq faq={faq} />
       {next && <NextLink label={copy[lang].next} title={next.title} to={next.href} image={serviceIllustration(serviceKeys.indexOf(nextKey))} />}
     </>
   );

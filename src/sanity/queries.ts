@@ -55,6 +55,17 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
   }
 `);
 
+// ---------------------------------------------------------------- FAQ
+
+/** A page's FAQ (home, services, design, development, aiAgents, salesFunnel) in one language. */
+export const FAQ_QUERY = defineQuery(`
+  *[_type == "faq" && page == $page && language == $lang][0]{
+    heading,
+    intro,
+    "items": items[defined(question) && defined(answer)]{ _key, "q": question, "a": answer }
+  }
+`);
+
 export const PROJECT_SLUGS_QUERY = defineQuery(`
   *[_type == "project" && language == $lang && defined(slug.current)].slug.current
 `);
