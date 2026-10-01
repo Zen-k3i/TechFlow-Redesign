@@ -5,6 +5,11 @@
  *   npx sanity exec scripts/import-live.ts --with-user-token            # write
  *   npx sanity exec scripts/import-live.ts --with-user-token -- --dry-run  # extract only
  *
+ * One project from another copy of the site (e.g. the Webflow staging), keeping its live `sourceUrl`
+ * so the existing document is updated, and its position in lists:
+ *   npx sanity exec scripts/import-live.ts --with-user-token -- --only=project --slug=kretz-club --lang=fr \
+ *     --from=https://techflow-agency-staging.webflow.io
+ *
  * Re-running is safe: documents are matched on `sourceUrl` (team members and reviews on `name`) and updated in place.
  */
 import {randomUUID} from 'node:crypto'
@@ -18,6 +23,11 @@ const SITE = 'https://www.techflow-agency.com'
 const DRY_RUN = process.argv.includes('--dry-run')
 const ONLY = process.argv.find((a) => a.startsWith('--only='))?.slice(7) // e.g. --only=project
 const TEAM_PATH = '/notre-equipe'
+const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3)
+/** Where pages are read from; `sourceUrl` always points at the live site (it's how documents are matched). */
+const FROM = arg('from')?.replace(/\/$/, '') ?? SITE
+const SLUG = arg('slug')
+const ONLY_LANG = arg('lang') as Lang | undefined
 
 type Lang = 'fr' | 'en'
 type DocType = 'project' | 'tool' | 'insight'
@@ -37,7 +47,7 @@ const pageCache = new Map<string, Document>()
 async function page(path: string): Promise<Document> {
   const cached = pageCache.get(path)
   if (cached) return cached
-  const res = await fetch(SITE + path)
+  const res = await fetch(FROM + path)
   if (!res.ok) throw new Error(`${res.status} ${path}`)
   const doc = new JSDOM(await res.text()).window.document
   pageCache.set(path, doc)
@@ -423,7 +433,9 @@ async function upsert(draft: Record<string, unknown> & {_type: string; sourceUrl
     {type: draft._type, url: draft.sourceUrl ?? ''},
   )
   if (existing) {
-    const kept = Object.fromEntries((STUDIO_ONLY[draft._type] ?? []).map((f) => [f, existing[f]]))
+    // Reading from another copy of the site, its list order isn't the live one: keep ours.
+    const keep = [...(STUDIO_ONLY[draft._type] ?? []), ...(FROM !== SITE ? ['order'] : [])]
+    const kept = Object.fromEntries(keep.map((f) => [f, existing[f]]))
     await client.createOrReplace({...clean(kept), ...doc, _id: existing._id as string})
     return existing._id as string
   }
@@ -540,9 +552,9 @@ async function run() {
 
   if (!ONLY || ONLY === 'project') {
     const projectIds: Record<Lang, Map<string, string>> = {fr: new Map(), en: new Map()}
-    for (const lang of ['fr', 'en'] as Lang[]) {
+    for (const lang of (ONLY_LANG ? [ONLY_LANG] : ['fr', 'en']) as Lang[]) {
       const cards = await listing(PATHS.project[lang], PATHS.project[lang])
-      const slugs = [...new Set([...cards.keys(), ...slugsFor(PATHS.project[lang])])]
+      const slugs = SLUG ? [SLUG] : [...new Set([...cards.keys(), ...slugsFor(PATHS.project[lang])])]
       for (const slug of slugs) {
         const {draft, refs} = await extractProject(`${PATHS.project[lang]}/${slug}`, lang, cards.get(slug) ?? {order: 100})
         draft.tools = refs.tools
