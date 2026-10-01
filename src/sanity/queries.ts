@@ -33,13 +33,17 @@ export const PROJECTS_INDEX_QUERY = defineQuery(`
 export const PROJECT_DETAIL_QUERY = defineQuery(`
   *[_type == "project" && language == $lang && slug.current == $slug][0]{
     ${projectCard},
-    body[]{ ..., _type == "image" => ${image} },
+    body[]{
+      ...,
+      _type == "image" => ${image},
+      _type == "imageGroup" => { images[]{ _key, ...${image} } }
+    },
     "minutes": round(length(string::split(pt::text(body), " ")) / 220),
     metrics[]{ _key, value, label },
     logo ${image},
     "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),
+    accentColor,
     "gallery": ${heroMosaic}[defined(asset)]{ "_key": asset._ref, ...${image} },
-    showcase[]{ _key, ...${image} },
     testimonial { quote, name, role, photo ${image} },
     tools[]->{ _id, title, "slug": slug.current, logo ${image} },
     team[]->{ _id, name, role, photo ${image} },

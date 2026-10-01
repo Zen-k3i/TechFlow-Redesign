@@ -204,8 +204,6 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
   }
 
   const galleryImgs = [...doc.querySelectorAll('.case-study_images-layout .header_image')]
-  // Only the project's own visuals: `.gallery_component` is a site-wide block of testimonials and other projects.
-  const showcaseImgs = [...new Set([...doc.querySelectorAll('.branding_image-wrapper img')].map((i) => imgSrc(i)))]
 
   const draft: Draft = {
     _type: 'project',
@@ -227,9 +225,6 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
     coverImage: await image(card?.image, undefined, 'imageWithAlt'),
     logo: await image(imgSrc(info?.querySelector('img'))),
     ...(await heroFields(galleryImgs)),
-    showcase: (await Promise.all(showcaseImgs.map((src) => image(src, undefined, 'imageWithAlt'))))
-      .filter(Boolean)
-      .map((i) => ({...i, _key: key()})),
     testimonial: testimonialCard && quote
       ? {
           _type: 'testimonial',
@@ -239,10 +234,38 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
           photo: await image(imgSrc(testimonialCard.querySelector('img'))),
         }
       : undefined,
-    body: await richText([...doc.querySelectorAll('.content_content > .w-richtext, .content_content .text-rich-text')]),
+    body: await projectBody(doc),
     seo: seoFrom(doc),
   }
   return {draft, refs}
+}
+
+/**
+ * The case study in page order: rich text, and each block of project visuals (`.branding_image-wrapper`)
+ * as an image group exactly where it sits. `.gallery_component` below it is a site-wide block of
+ * testimonials and other projects, not this project's visuals.
+ */
+async function projectBody(doc: Document) {
+  const body: Record<string, unknown>[] = []
+  let pending: Element[] = []
+  const flush = async () => {
+    if (pending.length) body.push(...(await richText(pending)))
+    pending = []
+  }
+  for (const el of doc.querySelector('.content_content')?.children ?? []) {
+    if (el.classList.contains('w-condition-invisible')) continue
+    if (el.matches('.w-richtext, .text-rich-text')) pending.push(el)
+    else if (el.matches('.branding_image-wrapper')) {
+      await flush()
+      const imgs = [...new Map([...el.querySelectorAll('img')].map((i) => [imgSrc(i), i])).values()]
+      const images = (await Promise.all(imgs.map((i) => image(imgSrc(i), i.getAttribute('alt') || undefined, 'imageWithAlt'))))
+        .filter(Boolean)
+        .map((i) => ({...i, _key: key()}))
+      if (images.length) body.push({_type: 'imageGroup', _key: key(), images})
+    }
+  }
+  await flush()
+  return body
 }
 
 /** The header mosaic lists four sides, the hero image, then four more sides. */
@@ -388,17 +411,21 @@ function dropGenericSeoTitle(draft: Record<string, unknown>) {
   if (seo?.title && (seo.title === draft.title || /^techflow agency$/i.test(seo.title.trim()))) delete seo.title
 }
 
+/** Fields only set in the Studio, carried over when a document is replaced by a re-import. */
+const STUDIO_ONLY: Record<string, string[]> = {project: ['logoFill', 'accentColor']}
+
 async function upsert(draft: Record<string, unknown> & {_type: string; sourceUrl?: string}) {
   dropGenericSeoTitle(draft)
   const doc = clean(draft)
   if (DRY_RUN) return `dry-run.${draft._type}.${(draft.slug as {current: string} | undefined)?.current ?? draft.name}`
-  const existing = await client.fetch<string | null>(
-    `*[_type == $type && sourceUrl == $url && !(_id in path("drafts.**"))][0]._id`,
+  const existing = await client.fetch<Record<string, unknown> | null>(
+    `*[_type == $type && sourceUrl == $url && !(_id in path("drafts.**"))][0]`,
     {type: draft._type, url: draft.sourceUrl ?? ''},
   )
   if (existing) {
-    await client.createOrReplace({...doc, _id: existing})
-    return existing
+    const kept = Object.fromEntries((STUDIO_ONLY[draft._type] ?? []).map((f) => [f, existing[f]]))
+    await client.createOrReplace({...clean(kept), ...doc, _id: existing._id as string})
+    return existing._id as string
   }
   return (await client.create(doc))._id
 }
@@ -448,6 +475,18 @@ async function linkTranslations(type: DocType, ids: Partial<Record<Lang, string>
 }
 
 // ---------------------------------------------------------------- run
+
+/** One line per story, for checking a dry run against the live page: chapters, images and image groups in order. */
+function outline(body: Record<string, unknown>[]) {
+  return body
+    .flatMap((b) => {
+      if (b._type === 'image') return ['img']
+      if (b._type === 'imageGroup') return [`[group ${(b.images as unknown[]).length}]`]
+      if (b.style === 'h2') return [`| ${(b.children as {text: string}[]).map((c) => c.text).join('').trim()}:`]
+      return []
+    })
+    .join(' ')
+}
 
 async function run() {
   const urls = await sitemap()
@@ -515,11 +554,7 @@ async function run() {
           ;(draft.team as unknown[]).push({_type: 'reference', _ref: await upsertTeamMember(member), _key: key()})
         }
         projectIds[lang].set(slug, await upsert(draft))
-        if (DRY_RUN && slug === 'kretz-club') {
-          const {body, ...rest} = clean(draft)
-          console.log(JSON.stringify(rest, null, 1).slice(0, 3000))
-          console.log('body blocks:', (body as unknown[])?.length, JSON.stringify((body as unknown[])?.slice(0, 3)).slice(0, 800))
-        }
+        if (DRY_RUN) console.log(`${lang} ${slug}: ${outline(draft.body as Record<string, unknown>[])}`)
       }
       summary.push(`projects ${lang}: ${slugs.length}`)
     }

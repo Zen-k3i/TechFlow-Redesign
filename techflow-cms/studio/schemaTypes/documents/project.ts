@@ -36,6 +36,16 @@ export const project = defineType({
     }),
     defineField({name: 'websiteUrl', title: 'Client website', type: 'url', group: 'details'}),
     defineField({
+      name: 'accentColor',
+      title: 'Accent colour',
+      description:
+        'Hex colour code for the case study page (badges, key figures, quote card, glows), e.g. #7ee8ff. Pick a light, bright tone: it is shown on a dark background. Leave empty to use the default colour.',
+      type: 'string',
+      group: 'details',
+      validation: (rule) =>
+        rule.regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, {name: 'hex colour'}).error('Use a hex code like #7ee8ff.'),
+    }),
+    defineField({
       name: 'services',
       title: 'Services',
       type: 'array',
@@ -98,14 +108,6 @@ export const project = defineType({
         validation: (r) => r.required(),
       }),
     ),
-    defineField({
-      name: 'showcase',
-      title: 'Project visuals',
-      type: 'array',
-      group: 'media',
-      of: [defineArrayMember({type: 'imageWithAlt'})],
-      options: {layout: 'grid'},
-    }),
 
     {...seoField, group: 'seo'},
     defineField({

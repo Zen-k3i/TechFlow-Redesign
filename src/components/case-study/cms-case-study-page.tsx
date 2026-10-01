@@ -23,7 +23,7 @@ import { CmsProjectCard } from "../projects/cms-project-card";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
-import { projectTheme } from "../site/project-highlight";
+import { projectTheme, themeFromHex } from "../site/project-highlight";
 import { CountUp, FadeIn, RevealHeading } from "../site/reveal";
 
 export type CmsCaseStudy = NonNullable<PROJECT_DETAIL_QUERY_RESULT>;
@@ -39,7 +39,6 @@ const hasBrief = (study: CmsCaseStudy) =>
 
 const copy: Record<Locale, Record<string, string>> = {
   fr: {
-    eyebrow: "Étude de cas",
     visit: "Voir le site",
     read: "Découvrir le projet",
     brief: "Le projet en bref",
@@ -53,7 +52,6 @@ const copy: Record<Locale, Record<string, string>> = {
     minutes: "min",
     story: "L'histoire",
     chapter: "Chapitre",
-    visuals: "Le projet en images",
     said: "Le mot du client",
     ctaTitle: "Envie des mêmes résultats *pour votre site ?*",
     ctaText: "Réservez un appel de 30 minutes pour voir ce que nous pouvons vous apporter.",
@@ -61,7 +59,6 @@ const copy: Record<Locale, Record<string, string>> = {
     back: "Tous les projets",
   },
   en: {
-    eyebrow: "Case study",
     visit: "Visit the site",
     read: "Explore the project",
     brief: "At a glance",
@@ -75,7 +72,6 @@ const copy: Record<Locale, Record<string, string>> = {
     minutes: "min",
     story: "The story",
     chapter: "Chapter",
-    visuals: "The project in pictures",
     said: "In their words",
     ctaTitle: "Want the same results *for your site?*",
     ctaText: "Book a 30-minute call to see what we can do for you.",
@@ -120,14 +116,10 @@ const domainOf = (url: string | undefined) => url?.replace(/^https?:\/\/(www\.)?
 export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
   const { lang } = useLocale();
   const c = copy[lang];
-  const theme = projectTheme(study.slug ?? "");
+  // The colour set in Sanity wins; otherwise the built-in theme for this project.
+  const theme = themeFromHex(study.accentColor) ?? projectTheme(study.slug ?? "");
   const { intro, chapters } = useMemo(() => chaptersOf(study.body), [study.body]);
   const storyRef = useRef<HTMLElement>(null);
-
-  // Visuals sit two by two between chapters; the rest close the story.
-  const showcase = (study.showcase ?? []).filter((img) => img?.asset);
-  const breaks = chapters.slice(0, -1).map((_, i) => showcase.slice(i * 2, i * 2 + 2));
-  const rest = showcase.slice(breaks.flat().length);
 
   return (
     <div style={{ "--accent": theme.accent, "--glow": theme.glow } as CSSProperties}>
@@ -145,31 +137,9 @@ export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
 
           <div className="mt-20 space-y-24 md:mt-28 md:space-y-36">
             {chapters.map((chapter, i) => (
-              <div key={chapter.id}>
-                <ChapterBlock chapter={chapter} index={i} label={c.chapter} lang={lang} />
-                {breaks[i]?.length > 0 && <VisualBreak images={breaks[i]} title={study.title ?? ""} />}
-              </div>
+              <ChapterBlock key={chapter.id} chapter={chapter} index={i} label={c.chapter} lang={lang} />
             ))}
           </div>
-
-          {rest.length > 0 && (
-            <div className="mt-24 border-t border-ink/10 pt-16 md:mt-36">
-              <p className="eyebrow text-brand-deep">{c.visuals}</p>
-              {/* Masonry, so mockups, phone screens and portraits all show whole. */}
-              <div className="mt-8 gap-4 sm:columns-2 lg:columns-3">
-                {rest.map((img, i) => (
-                  <FadeIn key={`${img._key}-${i}`} delay={(i % 3) * 0.08} className="mb-4 break-inside-avoid">
-                    <SanityImage
-                      image={img}
-                      alt={img.alt ?? study.title ?? ""}
-                      sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
-                      className="h-auto w-full rounded-2xl border border-ink/10 bg-white"
-                    />
-                  </FadeIn>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
@@ -223,18 +193,8 @@ function Hero({ study }: { study: CmsCaseStudy }) {
 
         <div className="grid flex-1 items-center gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-10">
           <div>
-            <motion.div {...reveal(0.1)} className="flex items-center gap-4">
+            <motion.div {...reveal(0.1)} className="flex">
               <ClientLogo image={study.logo} name={study.title ?? ""} fill={study.logoFill} />
-              <span className="flex flex-col gap-1.5">
-                <span className="eyebrow flex items-center gap-2 text-[var(--accent)]">
-                  <span className="relative flex size-2">
-                    {!still && <span className="absolute inset-0 animate-ping rounded-full bg-[var(--accent)] opacity-60" />}
-                    <span className="relative size-2 rounded-full bg-[var(--accent)]" />
-                  </span>
-                  {c.eyebrow}
-                </span>
-                {study.sector && <span className="eyebrow text-white/50">{study.sector}</span>}
-              </span>
             </motion.div>
 
             <RevealHeading
@@ -554,8 +514,7 @@ function ChapterBlock({ chapter, index, label, lang }: { chapter: Chapter; index
     <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className="grid scroll-mt-28 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
       <div className="lg:sticky lg:top-28 lg:self-start">
         <FadeIn>
-          <p className="eyebrow flex items-center gap-3 text-ink/45">
-            <span aria-hidden className="h-px w-8 bg-[var(--accent)]" />
+          <p className="eyebrow text-ink/45">
             {label} {number}
           </p>
           <div className="mt-4 flex items-start gap-5">
@@ -574,31 +533,6 @@ function ChapterBlock({ chapter, index, label, lang }: { chapter: Chapter; index
         </article>
       </FadeIn>
     </section>
-  );
-}
-
-/** One or two visuals between chapters, shown whole whatever their ratio. */
-function VisualBreak({ images, title }: { images: NonNullable<CmsCaseStudy["showcase"]>; title: string }) {
-  return (
-    <div className={`mt-20 grid items-center gap-4 md:mt-28 ${images.length > 1 ? "sm:grid-cols-2" : ""}`}>
-      {images.map((img, i) => {
-        const dims = img.asset?.metadata?.dimensions;
-        const ratio = dims?.width && dims?.height ? dims.width / dims.height : 16 / 10;
-        return (
-          // Tall visuals are capped at 80vh by narrowing them, so they keep a size before they load.
-          <FadeIn key={`${img._key}-${i}`} delay={i * 0.1}>
-            <div style={{ maxWidth: `calc(80vh * ${ratio.toFixed(3)})` }} className="mx-auto">
-              <SanityImage
-                image={img}
-                alt={img.alt ?? title}
-                sizes={images.length > 1 ? "(min-width: 640px) 50vw, 100vw" : "(min-width: 1280px) 1280px, 100vw"}
-                className="h-auto w-full rounded-3xl border border-ink/10"
-              />
-            </div>
-          </FadeIn>
-        );
-      })}
-    </div>
   );
 }
 
@@ -652,20 +586,13 @@ function ChapterNav({ chapters, target }: { chapters: Chapter[]; target: React.R
 
 // ------------------------------------------------------------------ quote & closing
 
-/** Imported French quotes start with the author's name and role; keep only what they said. */
-function cleanQuote(quote: string, name?: string | null, role?: string | null) {
-  let q = quote.trim();
-  for (const prefix of [name, role]) if (prefix && q.startsWith(prefix)) q = q.slice(prefix.length).trim();
-  return q.replace(/^["“«]\s*|\s*["”»]$/g, "");
-}
-
 /** The client's words on a card in the project's colour, each word rising in as it scrolls into view. */
 function Quote({ study }: { study: CmsCaseStudy }) {
   const { lang } = useLocale();
   const c = copy[lang];
   const t = study.testimonial;
   if (!t?.quote) return null;
-  const words = cleanQuote(t.quote, t.name, t.role).split(/\s+/);
+  const words = t.quote.trim().split(/\s+/);
 
   return (
     <section className="bg-paper px-5 pb-24 text-ink md:px-10 md:pb-32">

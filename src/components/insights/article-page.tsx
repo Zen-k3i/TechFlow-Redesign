@@ -1,60 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { useRef, useState } from "react";
+import { motion, useScroll, useSpring } from "motion/react";
 import { href } from "@/i18n/routes";
-import { sanityLoader, urlFor } from "@/sanity/image";
 import { headingsOf, PortableBody } from "../cms/portable-body";
 import { SanityImage } from "../cms/sanity-image";
-import { BrowserFrame, HumanActions } from "../page/ui";
-import { Toc } from "../page/blocks";
+import { HumanActions } from "../page/ui";
+import { useActiveHeading } from "../page/blocks";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { FadeIn, RevealHeading } from "../site/reveal";
 import { insightsContent, type InsightDetail } from "./data";
 import { ArticleCard, formatDate } from "./insights-page";
 
-function Byline({ author, label }: { author: InsightDetail["author"]; label: string }) {
-  const name = author?.name ?? "TechFlow Agency";
-  return (
-    <span className="flex items-center gap-2.5">
-      {author?.photo?.asset && (
-        <span className="relative size-7 shrink-0 overflow-hidden rounded-full bg-night-soft">
-          <SanityImage image={author.photo} alt="" fill width={96} sizes="28px" className="object-cover object-top" />
-        </span>
-      )}
-      <span>
-        {label}{" "}
-        {author?.linkedin ? (
-          <a href={author.linkedin} target="_blank" rel="noopener noreferrer" className="text-white underline-offset-4 hover:underline">
-            {name}
-          </a>
-        ) : (
-          name
-        )}
-      </span>
-    </span>
-  );
-}
+type Heading = { id: string; title: string };
+type Copy = (typeof insightsContent)["fr"];
 
+const rise = (delay: number) => ({
+  initial: { opacity: 0, y: 14 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, delay, ease },
+});
+
+/**
+ * Insight article, laid out for long reads: a short dark header (what it is, who wrote it, how long
+ * it takes), the cover straddling header and page, then the text on a full-width paper background in
+ * a ~70-character column, with a numbered contents list that follows the reader (a collapsible one
+ * on small screens), the author and a call to action at the end.
+ */
 export function ArticlePage({ article }: { article: InsightDetail }) {
   const { lang, t } = useLocale();
   const c = insightsContent[lang];
   const headings = headingsOf(article.body);
-  const category = article.categories?.[0];
+  const articleRef = useRef<HTMLElement>(null);
+  const hasCover = Boolean(article.coverImage?.asset);
 
   return (
     <>
-      <section id="top" className="grain relative overflow-hidden bg-night px-5 pb-16 pt-32 text-white md:px-10 md:pt-44">
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_55%_at_85%_10%,rgba(71,102,255,0.28),transparent_70%)]" />
-        <div className="relative mx-auto max-w-5xl">
-          <motion.nav
-            aria-label="Breadcrumb"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease }}
-            className="eyebrow flex flex-wrap items-center gap-2 text-white/40"
-          >
+      <section id="top" className="grain relative overflow-hidden bg-night px-5 pt-32 text-white md:px-10 md:pt-40">
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_60%_at_80%_0%,rgba(71,102,255,0.3),transparent_70%)]" />
+        <div className={`relative mx-auto max-w-4xl ${hasCover ? "pb-14 md:pb-20" : "pb-20 md:pb-28"}`}>
+          <motion.nav aria-label="Breadcrumb" {...rise(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/40">
             <Link href={href(lang, "home")} className="hover:text-white">
               {t.common.breadcrumbHome}
             </Link>
@@ -62,88 +49,113 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
             <Link href={href(lang, "insights")} className="hover:text-white">
               {t.nav.pages.insights}
             </Link>
-            {category && (
-              <>
-                <span aria-hidden>/</span>
-                <span aria-current="page" className="text-white/70">
-                  {category}
-                </span>
-              </>
-            )}
           </motion.nav>
-          <RevealHeading as="h1" text={article.title ?? ""} className="mt-8 font-serif text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.98] tracking-[-0.02em]" />
+
+          {article.categories && article.categories.length > 0 && (
+            <motion.ul {...rise(0.05)} className="mt-8 flex flex-wrap gap-2 text-sm">
+              {article.categories.map((cat) => (
+                <li key={cat} className="rounded-full bg-brand-sky/15 px-3 py-1 text-brand-sky">
+                  {cat}
+                </li>
+              ))}
+            </motion.ul>
+          )}
+
+          <RevealHeading
+            as="h1"
+            text={article.title ?? ""}
+            className="mt-6 font-serif text-[clamp(2.5rem,5.6vw,4.75rem)] leading-[1.02] tracking-[-0.02em] text-balance"
+          />
           {article.excerpt && (
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease }}
-              className="mt-6 max-w-3xl text-lg text-white/65 md:text-xl"
-            >
+            <motion.p {...rise(0.2)} className="mt-6 max-w-3xl text-lg leading-relaxed text-white/65 md:text-xl">
               {article.excerpt}
             </motion.p>
           )}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease }}
-            className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-white/55"
-          >
-            {article.categories?.map((cat) => (
-              <span key={cat} className="rounded-full bg-brand-sky/15 px-3 py-1 text-brand-sky">
-                {cat}
-              </span>
-            ))}
-            {article.publishedAt && <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, lang)}</time>}
-            <span aria-hidden>·</span>
-            <span>
-              {Math.max(1, article.minutes)} {c.minutes}
-            </span>
-            <span aria-hidden>·</span>
-            <Byline author={article.author} label={c.by} />
+
+          <motion.div {...rise(0.3)} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5 border-t border-white/10 pt-6 text-sm">
+            <Author author={article.author} label={c.by} />
+            <dl className="flex gap-8">
+              {article.publishedAt && (
+                <div>
+                  <dt className="text-white/40">{c.published}</dt>
+                  <dd className="mt-0.5 text-white/85">
+                    <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, lang)}</time>
+                  </dd>
+                </div>
+              )}
+              <div>
+                <dt className="text-white/40">{c.reading}</dt>
+                <dd className="mt-0.5 text-white/85">
+                  {Math.max(1, article.minutes)} min
+                </dd>
+              </div>
+            </dl>
           </motion.div>
         </div>
-        {article.coverImage?.asset && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.25, ease }}
-            className="relative mx-auto mt-16 max-w-6xl"
-          >
-            <BrowserFrame
-              src={urlFor(article.coverImage).width(2000).url()}
-              alt={article.coverImage.alt ?? ""}
-              loader={sanityLoader}
-              url={`techflow-agency.com${href(lang, "insights", article.slug ?? "")}`}
-              preload
-              sizes="(min-width: 1152px) 1152px, 100vw"
-              className="aspect-[16/8]"
-            />
-          </motion.div>
-        )}
       </section>
 
-      <section className="bg-night px-5 md:px-10">
-        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-paper px-6 py-16 text-ink md:rounded-[3.5rem] md:px-16 md:py-24">
-          <div className="grid gap-14 lg:grid-cols-[260px_1fr] xl:gap-24">
-            <aside className="hidden lg:block">{headings.length > 0 && <Toc label={c.toc} items={headings} />}</aside>
+      {/* The cover sits on the seam between the dark header and the page. */}
+      {hasCover && (
+        <div className="bg-[linear-gradient(to_bottom,var(--color-night)_50%,var(--color-paper)_50%)] px-5 md:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.25, ease }}
+            className="relative mx-auto aspect-[16/9] max-w-6xl overflow-hidden rounded-[1.5rem] bg-night-soft shadow-[0_40px_80px_-40px_rgba(7,8,13,0.6)] md:aspect-[2/1] md:rounded-[2rem]"
+          >
+            <SanityImage
+              image={article.coverImage}
+              alt={article.coverImage?.alt ?? ""}
+              fill
+              priority
+              width={2000}
+              sizes="(min-width: 1152px) 1152px, 100vw"
+              className="object-cover"
+            />
+          </motion.div>
+        </div>
+      )}
 
-            <article lang={lang} className="max-w-3xl">
-              <PortableBody value={article.body} />
+      <section className="bg-paper px-5 pb-24 pt-14 text-ink md:px-10 md:pb-32 md:pt-20">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 xl:gap-24">
+          <aside className="max-lg:hidden">
+            <div className="sticky top-28 space-y-10">
+              {headings.length > 0 && <Contents label={c.toc} items={headings} target={articleRef} />}
+              <Share copy={c} title={article.title ?? ""} />
+            </div>
+          </aside>
 
-              <FadeIn className="mt-20 overflow-hidden rounded-[2rem] bg-night p-8 text-white md:p-12">
-                <RevealHeading text={t.common.cta.heading} accentClassName="italic text-brand-sky" className="font-serif text-4xl leading-[1.02] md:text-5xl" />
-                <p className="mt-4 max-w-lg text-white/60">{t.common.cta.text}</p>
-                <div className="mt-8">
-                  <HumanActions />
-                </div>
-              </FadeIn>
+          <div className="min-w-0 max-w-[44rem]">
+            {headings.length > 0 && <MobileContents label={c.toc} items={headings} />}
+
+            {/* The opening paragraph reads as a lead. */}
+            <article
+              ref={articleRef}
+              lang={lang}
+              className="[&>p:first-child]:mt-0 [&>p:first-child]:text-[1.3rem] [&>p:first-child]:leading-[1.6] [&>p:first-child]:text-ink md:[&>p:first-child]:text-[1.45rem]"
+            >
+              <PortableBody value={article.body} scale="article" />
             </article>
+
+            <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-ink/10 pt-8 lg:hidden">
+              <Share copy={c} title={article.title ?? ""} />
+            </div>
+
+            <AuthorCard author={article.author} label={c.by} />
+
+            <FadeIn className="mt-12 overflow-hidden rounded-[2rem] bg-night p-8 text-white md:p-12">
+              <RevealHeading text={t.common.cta.heading} accentClassName="italic text-brand-sky" className="font-serif text-4xl leading-[1.02] md:text-5xl" />
+              <p className="mt-4 max-w-lg text-white/60">{t.common.cta.text}</p>
+              <div className="mt-8">
+                <HumanActions />
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
       {article.related.length > 0 && (
-        <section className="bg-night px-5 py-28 text-white md:px-10">
+        <section className="bg-night px-5 py-24 text-white md:px-10 md:py-28">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>
@@ -160,5 +172,155 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
         </section>
       )}
     </>
+  );
+}
+
+function Avatar({ author, size }: { author: InsightDetail["author"]; size: string }) {
+  return (
+    <span className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-brand-deep font-semibold text-white ${size}`}>
+      {author?.photo?.asset ? (
+        <SanityImage image={author.photo} alt="" fill width={160} sizes="64px" className="object-cover object-top" />
+      ) : (
+        <span aria-hidden>TF</span>
+      )}
+    </span>
+  );
+}
+
+/** Byline in the header; without a named author the agency signs. */
+function Author({ author, label }: { author: InsightDetail["author"]; label: string }) {
+  return (
+    <span className="flex items-center gap-3">
+      <Avatar author={author} size="size-10 text-xs" />
+      <span>
+        <span className="block text-white/40">{label}</span>
+        <span className="mt-0.5 block text-white/85">
+          {author?.name ?? "TechFlow Agency"}
+          {author?.role && <span className="text-white/45"> · {author.role}</span>}
+        </span>
+      </span>
+    </span>
+  );
+}
+
+/** Who wrote it, after the text: a face and a way to follow up. */
+function AuthorCard({ author, label }: { author: InsightDetail["author"]; label: string }) {
+  if (!author?.name) return null;
+  return (
+    <FadeIn className="mt-16 flex items-center gap-5 rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-7">
+      <Avatar author={author} size="size-16 text-base" />
+      <div className="min-w-0">
+        <p className="text-sm text-ink/45">{label}</p>
+        <p className="mt-0.5 text-lg font-semibold">{author.name}</p>
+        {author.role && <p className="text-ink/60">{author.role}</p>}
+      </div>
+      {author.linkedin && (
+        <a
+          href={author.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-auto shrink-0 rounded-full border border-ink/15 px-4 py-2 text-sm font-medium transition-colors hover:border-brand-deep hover:text-brand-deep"
+        >
+          LinkedIn ↗
+        </a>
+      )}
+    </FadeIn>
+  );
+}
+
+/** Numbered contents that follow the reader, with a progress rail. */
+function Contents({ label, items, target }: { label: string; items: Heading[]; target: React.RefObject<HTMLElement | null> }) {
+  const [ids] = useState(() => items.map((i) => i.id));
+  const active = useActiveHeading(ids);
+  const { scrollYProgress } = useScroll({ target, offset: ["start 30%", "end 70%"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 40 });
+
+  return (
+    <nav aria-label={label} className="max-h-[calc(100vh-14rem)] overflow-y-auto">
+      <p className="eyebrow text-ink/40">{label}</p>
+      <div className="relative mt-5">
+        <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-ink/10" />
+        <motion.span aria-hidden style={{ scaleY: progress }} className="absolute inset-y-0 left-0 w-px origin-top bg-brand-deep" />
+        <ol className="space-y-0.5">
+          {items.map((item, i) => {
+            const on = active === item.id;
+            return (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  aria-current={on ? "location" : undefined}
+                  className={`flex gap-3 py-1.5 pl-4 text-sm leading-snug transition-colors ${on ? "text-ink" : "text-ink/45 hover:text-ink"}`}
+                >
+                  <span className={`font-mono text-xs leading-5 ${on ? "text-brand-deep" : "text-ink/30"}`}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={on ? "font-medium" : ""}>{item.title}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </nav>
+  );
+}
+
+/** Contents on small screens: closed by default so the text comes first. */
+function MobileContents({ label, items }: { label: string; items: Heading[] }) {
+  return (
+    <details className="group mb-12 rounded-2xl border border-ink/10 bg-white lg:hidden">
+      <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
+        <span>
+          {label} <span className="text-ink/40">· {items.length}</span>
+        </span>
+        <span aria-hidden className="text-xl leading-none text-ink/40 transition-transform group-open:rotate-45">
+          +
+        </span>
+      </summary>
+      <ol className="space-y-1 border-t border-ink/10 px-5 py-4">
+        {items.map((item, i) => (
+          <li key={item.id}>
+            <a href={`#${item.id}`} className="flex gap-3 py-1.5 text-sm text-ink/70 hover:text-ink">
+              <span className="font-mono text-xs leading-5 text-ink/30">{String(i + 1).padStart(2, "0")}</span>
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </details>
+  );
+}
+
+function Share({ copy, title }: { copy: Copy; title: string }) {
+  const [copied, setCopied] = useState(false);
+  const url = () => window.location.href.split("#")[0];
+  const button = "rounded-full border border-ink/15 px-3.5 py-1.5 text-sm transition-colors hover:border-brand-deep hover:text-brand-deep";
+
+  return (
+    <div>
+      <p className="eyebrow text-ink/40">{copy.share}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          className={button}
+          onClick={() => {
+            navigator.clipboard?.writeText(url()).then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            });
+          }}
+        >
+          <span aria-live="polite">{copied ? copy.copied : copy.copy}</span>
+        </button>
+        <button
+          type="button"
+          className={button}
+          onClick={() =>
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url())}`, "_blank", "noopener,noreferrer")
+          }
+          aria-label={`LinkedIn: ${title}`}
+        >
+          LinkedIn
+        </button>
+      </div>
+    </div>
   );
 }

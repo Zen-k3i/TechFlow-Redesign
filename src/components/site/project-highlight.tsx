@@ -37,6 +37,15 @@ const THEMES: Record<string, Theme> = {
 
 const FALLBACK: Theme = { accent: "#4791ff", glow: "rgba(71, 102, 255, 0.4)", motif: "foil" };
 
+/** Accent and glow from a hex colour set in Sanity (`accentColor`); undefined if it isn't a valid hex code. */
+export function themeFromHex(hex: string | null | undefined) {
+  const m = hex?.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (!m) return undefined;
+  const full = m[1].length === 3 ? [...m[1]].map((ch) => ch + ch).join("") : m[1];
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+  return { accent: `#${full}`, glow: `rgba(${r}, ${g}, ${b}, 0.45)` };
+}
+
 /** CMS slugs can be longer than the theme keys ("district-6-publishing"), so a prefix matches too. */
 export const projectTheme = (slug: string) =>
   THEMES[slug] ?? Object.entries(THEMES).find(([key]) => slug.startsWith(`${key}-`))?.[1] ?? FALLBACK;

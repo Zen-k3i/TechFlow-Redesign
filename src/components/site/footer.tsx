@@ -7,7 +7,8 @@ import { useLocale } from "./locale";
 import { Magnetic } from "./magnetic";
 import { RevealHeading } from "./reveal";
 
-export function Footer() {
+/** `cta` is the "Open for new projects" block; pages that end on their own call to action leave it out. */
+export function Footer({ cta = true }: { cta?: boolean }) {
   const { t, lang, links } = useLocale();
   const f = t.footer;
   const columns = [
@@ -40,8 +41,11 @@ export function Footer() {
   ];
 
   return (
-    <footer className="relative overflow-hidden bg-linear-to-b from-night via-navy-deep to-brand-deep px-5 pt-28 text-white md:px-10 md:pt-36">
+    <footer
+      className={`relative overflow-hidden bg-linear-to-b from-night via-navy-deep to-brand-deep px-5 text-white md:px-10 ${cta ? "pt-28 md:pt-36" : "pt-16 md:pt-20"}`}
+    >
       <div className="mx-auto max-w-7xl">
+        {cta && (
         <div className="flex flex-col items-start justify-between gap-12 md:flex-row md:items-end">
           <div>
             <p className="eyebrow text-white/60">{f.status}</p>
@@ -68,8 +72,9 @@ export function Footer() {
             </a>
           </Magnetic>
         </div>
+        )}
 
-        <div className="mt-28 grid gap-12 border-t border-white/15 pt-14 md:grid-cols-[1.2fr_repeat(3,1fr)]">
+        <div className={`grid gap-12 md:grid-cols-[1.2fr_repeat(3,1fr)] ${cta ? "mt-28 border-t border-white/15 pt-14" : ""}`}>
           <div>
             <Image
               src="/images/techflow-logo.svg"

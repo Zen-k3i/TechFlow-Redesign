@@ -28,12 +28,19 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 
 ## Case study page (/projets/[slug])
 - `cms-case-study-page.tsx` is a template: every block comes from the Sanity project and is left out when its fields are empty (brief needs more than the reading time, quote needs `testimonial.quote`, chapter nav needs ≥ 2 h2s).
-- Flow: `Hero` → `Brief` ("L'essentiel en 10 secondes": metrics as accent cards, then sector / services / tools / reading time / team) → story on paper → `Quote` (accent-coloured card) → dark `Closing` (CTA + related). The page root sets `--accent` and `--glow` from `projectTheme(slug)`.
-- Hero: pitch on the left (logo, sector, word-reveal title, summary, services, CTAs), `ScreenDeck` on the right: up to 5 screens (mosaic centre first, then sides) deal in, tilt with the cursor and rotate to the front every 3.8 s (paused on hover, static with reduced motion); the front card's chrome shows the website domain. Text is never laid over a screenshot (it was hard to read). Drifting accent `Aurora` behind.
-- The story is the body split at each h2 (`chaptersOf`): text before the first h2 is a serif lead, each h2 becomes a numbered chapter with a sticky number + title. `showcase` images go two per gap between chapters, the rest into a masonry at the end. A floating bottom pill (`ChapterNav`) tracks and jumps between chapters while the story is on screen. Editors: structure the body as Context / Approach / Results with h2s.
+- Flow: `Hero` → `Brief` ("L'essentiel en 10 secondes": metrics as accent cards, then sector / services / tools / reading time / team) → story on paper → `Quote` (accent-coloured card) → dark `Closing` (CTA + related). The page root sets `--accent` and `--glow` from the project's Sanity `accentColor` (hex, "Accent colour" in Details; `themeFromHex`), falling back to `projectTheme(slug)`. The case study ends on its own CTA, so it passes `footerCta={false}` to `PageShell` to drop the footer's "Open for new projects" block.
+- Hero: pitch on the left (client logo, word-reveal title, summary, services, CTAs), `ScreenDeck` on the right: up to 5 screens (mosaic centre first, then sides) deal in, tilt with the cursor and rotate to the front every 3.8 s (paused on hover, static with reduced motion); the front card's chrome shows the website domain. Text is never laid over a screenshot (it was hard to read). Drifting accent `Aurora` behind.
+- The story is the body split at each h2 (`chaptersOf`): text before the first h2 is a serif lead, each h2 becomes a numbered chapter with a sticky number + title. Project visuals are `imageGroup` blocks inside the body, placed exactly where the live Webflow page had its `.branding_image-wrapper` (odd count: first image full width, rest two by two). The old `showcase` field and its mechanical placement (two per chapter gap + a "Le projet en images" masonry) are gone. A floating bottom pill (`ChapterNav`) tracks and jumps between chapters while the story is on screen. Editors: structure the body as Context / Approach / Results with h2s.
 - Client logo (`ClientLogo`): transparent logos on a white card sized to the logo, logos with their own background edge to edge. `logoFill` = the Studio toggle "Logo has its own background", else the asset's `isOpaque`.
 - `projectTheme` also matches slug prefixes, because CMS slugs are longer than the theme keys (`district-6-publishing` → `district-6`).
 - `CountUp` (`src/components/site/reveal.tsx`) animates figures like "45+", "+48%", "×3,4" and keeps the real value in an sr-only span for screen readers and crawlers.
+
+## Insight article (/nos-insights/[slug])
+- `article-page.tsx`: short dark header (categories, title, excerpt, author + date + reading time), cover on the seam between header and a full-width paper page, text in a ~44rem column with a numbered sticky contents list + progress rail (collapsible on mobile) and share buttons, then author card and CTA. The navbar already has a page progress bar, so the article has none of its own.
+- `PortableBody` takes `scale="story" | "article"`; `article` is the larger long-read type scale.
+
+## Images
+- `sanityLoader` defaults to quality 90: imported images are already compressed WebP UI screenshots, and re-encoding them at 75 visibly softened their text. The import itself pulls Webflow's originals at full size; Webflow has no larger versions.
 
 ## Still local (not in Sanity)
 - Gato Tower growth case study.
@@ -48,8 +55,7 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 
 # Gotchas
 - Webflow, n8n, HubSpot and Twenty logos in `public/images/tools` are white: always show tool logos on their brand colour (`tools` in `services/hub-data.ts`, `TOOLS` in `site/convictions.tsx`), never on a white tile.
-- French testimonial quotes imported before 2026-09-30 start with "<name><role> \"". The page strips it (`cleanQuote`); the import script is fixed, but the data stays dirty until `pnpm import:live` is re-run.
-- Showcase images imported before 2026-09-30 are mostly junk: the import also read `.gallery_component`, a site-wide block of testimonials and other projects, so most projects show the same 4 images. Script fixed (only `.branding_image-wrapper`); re-run the import to clean the data.
+- The import replaces whole project documents (`createOrReplace`). Fields only set in the Studio must be listed in `STUDIO_ONLY` in `import-live.ts` (today: `logoFill`, `accentColor`) or a re-import erases them.
 - After any schema or query change, run `pnpm typegen` in `techflow-cms/studio`; it writes `sanity.types.ts` at the repo root.
 - `<Testimonials />` is an async server component, so client pages receive it as a `testimonials` slot prop — don't import it directly into a client component.
 - 3D wall effects: in Chrome a `mask-image` on the same element as `perspective` is ignored, and `transform-style: preserve-3d` breaks hit-testing on the tilted content (clicks land on the column, not the link). Fade with gradient overlays (`z-10` above an `isolate` 3D layer) and keep the tilted layer flat.

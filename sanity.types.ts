@@ -100,6 +100,15 @@ export type BlockContent = Array<
       _type: "image";
       _key: string;
     }
+  | {
+      images?: Array<
+        {
+          _key: string;
+        } & ImageWithAlt
+      >;
+      _type: "imageGroup";
+      _key: string;
+    }
   | ({
       _key: string;
     } & Table)
@@ -283,6 +292,7 @@ export type Project = {
     } & Metric
   >;
   websiteUrl?: string;
+  accentColor?: string;
   services?: Array<string>;
   tools?: Array<
     {
@@ -313,11 +323,6 @@ export type Project = {
   heroSide6?: ImageWithAlt;
   heroSide7?: ImageWithAlt;
   heroSide8?: ImageWithAlt;
-  showcase?: Array<
-    {
-      _key: string;
-    } & ImageWithAlt
-  >;
   seo?: Seo;
   sourceUrl?: string;
 };
@@ -515,7 +520,7 @@ export type PROJECTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: PROJECT_DETAIL_QUERY
-// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    showcase[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] {   _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }  }
+// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    accentColor,    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] {   _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }  }
 export type PROJECT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -598,6 +603,27 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
         _key: string;
       }
     | {
+        images: Array<{
+          _key: string;
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
+          } | null;
+        }> | null;
+        _type: "imageGroup";
+        _key: string;
+      }
+    | {
         _key: string;
         _type: "table";
         rows?: Array<
@@ -630,6 +656,7 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
     } | null;
   } | null;
   logoFill: boolean | false;
+  accentColor: string | null;
   gallery: Array<{
     _key: string | null;
     alt: string | null;
@@ -647,23 +674,6 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
       } | null;
     } | null;
   } | null>;
-  showcase: Array<{
-    _key: string;
-    alt: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-    asset: {
-      _id: string;
-      url: string | null;
-      metadata: {
-        lqip: string | null;
-        dimensions: {
-          width: number | null;
-          height: number | null;
-        } | null;
-      } | null;
-    } | null;
-  }> | null;
   testimonial: {
     quote: string | null;
     name: string | null;
@@ -1129,6 +1139,15 @@ export type INSIGHT_DETAIL_QUERY_RESULT = {
         _key: string;
       }
     | {
+        images?: Array<
+          {
+            _key: string;
+          } & ImageWithAlt
+        >;
+        _type: "imageGroup";
+        _key: string;
+      }
+    | {
         _key: string;
         _type: "table";
         rows?: Array<
@@ -1248,7 +1267,7 @@ export type SITEMAP_QUERY_RESULT = Array<
 declare global {
   interface SanityQueries {
     '\n  *[_type == "project" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n': PROJECTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    showcase[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    accentColor,\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && defined(slug.current)].slug.current\n': PROJECT_SLUGS_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TOOLS_INDEX_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;

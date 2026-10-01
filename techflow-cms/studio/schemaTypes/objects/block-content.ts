@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons/Image'
+import {ImagesIcon} from '@sanity/icons/Images'
 import {LinkIcon} from '@sanity/icons/Link'
 
 /** Rich text used for case study, tool and insight bodies. */
@@ -53,6 +54,31 @@ export const blockContent = defineType({
         defineField({name: 'alt', title: 'Alt text', type: 'string'}),
         defineField({name: 'caption', title: 'Caption', type: 'string'}),
       ],
+    }),
+    defineArrayMember({
+      name: 'imageGroup',
+      title: 'Image group',
+      type: 'object',
+      icon: ImagesIcon,
+      description:
+        'Project visuals shown full width at this point of the case study. With an odd number, the first image spans the width; the rest go two by two.',
+      fields: [
+        defineField({
+          name: 'images',
+          type: 'array',
+          of: [defineArrayMember({type: 'imageWithAlt'})],
+          options: {layout: 'grid'},
+          validation: (rule) => rule.min(1),
+        }),
+      ],
+      preview: {
+        select: {images: 'images', media: 'images.0'},
+        prepare: ({images, media}) => ({
+          title: 'Image group',
+          subtitle: `${Object.keys(images ?? {}).length} images`,
+          media,
+        }),
+      },
     }),
     defineArrayMember({type: 'table'}),
   ],
