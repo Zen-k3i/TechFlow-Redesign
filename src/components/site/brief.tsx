@@ -165,7 +165,7 @@ export function Brief() {
                       href={links.booking}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex h-13 w-full items-center justify-center gap-2 rounded-full bg-white px-6 font-medium text-night transition-colors hover:bg-brand hover:text-white"
+                      className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white px-6 font-medium text-night transition-colors hover:bg-brand hover:text-white"
                     >
                       {b.book}
                     </a>
@@ -173,7 +173,7 @@ export function Brief() {
                   <button
                     type="button"
                     onClick={copy}
-                    className="h-13 rounded-full border border-white/20 px-6 text-sm transition-colors hover:border-white"
+                    className="h-14 rounded-full border border-white/20 px-6 text-sm transition-colors hover:border-white"
                   >
                     {copied ? b.copied : b.copy}
                   </button>

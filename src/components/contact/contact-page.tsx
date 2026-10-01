@@ -64,7 +64,7 @@ export function ContactPage() {
                   </address>
                   <a
                     href={`tel:${o.phone.replace("(0)", "").replace(/[^\d+]/g, "")}`}
-                    className="mt-auto inline-flex items-center justify-between gap-3 rounded-full border border-white/15 py-2 pl-5 pr-2 transition-colors hover:border-white"
+                    className="mt-auto inline-flex h-14 items-center justify-between gap-3 rounded-full border border-white/15 pl-5 pr-2 transition-colors hover:border-white"
                   >
                     <span>
                       <span className="text-white/45">{c.offices.call} · </span>
