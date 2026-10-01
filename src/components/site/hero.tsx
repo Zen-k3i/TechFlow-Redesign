@@ -131,7 +131,7 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
               className="group relative isolate block overflow-hidden rounded-full p-px shadow-[0_0_50px_-6px_rgba(71,102,255,0.8)]"
             >
               <span className="absolute inset-[-100%] -z-10 animate-shine bg-[conic-gradient(from_0deg,rgba(71,102,255,0.9)_0deg,transparent_60deg,transparent_300deg,rgba(71,102,255,0.9)_360deg)]" />
-              <span className="flex h-14 items-center gap-3 rounded-full bg-white pl-6 pr-2 text-[15px] font-medium text-night">
+              <span className="flex h-13 items-center gap-3 rounded-full bg-white pl-6 pr-1.5 text-[15px] font-medium text-night">
                 {t.hero.start}
                 <span className="flex size-10 items-center justify-center rounded-full bg-brand text-white transition-transform duration-300 group-hover:-rotate-45">
                   →
@@ -144,7 +144,7 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
               href={links.booking}
               target="_blank"
               rel="noreferrer"
-              className="flex h-14 items-center gap-3 rounded-full border border-white/15 bg-white/[0.04] pl-2 pr-6 text-[15px] text-white backdrop-blur transition-colors hover:bg-white/10"
+              className="flex h-13 items-center gap-3 rounded-full border border-white/15 bg-white/[0.04] pl-1.5 pr-6 text-[15px] text-white backdrop-blur transition-colors hover:bg-white/10"
             >
               <span className="relative">
                 <Image
