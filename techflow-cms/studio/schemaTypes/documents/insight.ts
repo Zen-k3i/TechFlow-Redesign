@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {languageField, seoField, slugField} from './shared'
+import {sameLanguage} from './taxonomy'
 
 export const insight = defineType({
   name: 'insight',
@@ -15,9 +16,10 @@ export const insight = defineType({
     defineField({
       name: 'categories',
       title: 'Categories',
+      description: 'Pick one or more; add categories under Article categories in the sidebar.',
       type: 'array',
-      of: [defineArrayMember({type: 'string'})],
-      options: {layout: 'tags'},
+      of: [defineArrayMember({type: 'reference', to: [{type: 'category'}], options: {filter: sameLanguage, disableNew: true}})],
+      validation: (r) => r.unique(),
     }),
     defineField({name: 'publishedAt', title: 'Publish date', type: 'date'}),
     defineField({

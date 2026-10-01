@@ -183,7 +183,6 @@ function seoFrom(doc: Document) {
 async function extractProject(path: string, lang: Lang, card?: {image?: string; order: number}) {
   const doc = await page(path)
   const info = doc.querySelector('.project_info-wrapper')
-  const sector = text(info?.querySelector('.w-embed')).replace(/^(Secteur|Sector)\s*:\s*/i, '')
   const testimonialCard = [...doc.querySelectorAll('.content_newsletter .testimonial_card')].find(
     (c) => !c.closest('.members_wrapper'),
   )
@@ -212,7 +211,6 @@ async function extractProject(path: string, lang: Lang, card?: {image?: string; 
     title: text(doc.querySelector('h1')),
     slug: {current: path.split('/').pop()!},
     summary: text(doc.querySelector('.portfolio-header11_content-right')),
-    sector,
     metrics: [...doc.querySelectorAll('.impact_matric')].map((m) => ({
       _type: 'metric',
       _key: key(),
@@ -375,7 +373,6 @@ async function extractInsight(path: string, lang: Lang) {
     title: text(header?.querySelector('h1')),
     slug: {current: path.split('/').pop()!},
     excerpt: text(header?.querySelector('.blog-post-header2_meta-wrapper > p')),
-    categories: [...new Set([...(header?.querySelectorAll('.tag') ?? [])].map((t) => text(t)).filter(Boolean))],
     publishedAt: parseDate(text(doc.querySelector('.blog-post-header_date'))),
     author: text(doc.querySelector('.blog-post-header_author')).replace(/^(Écrit par|Written by)\s*/i, '') || 'TechFlow Agency',
     coverImage: await image(imgSrc(cover), cover?.getAttribute('alt') || undefined, 'imageWithAlt'),
@@ -411,8 +408,11 @@ function dropGenericSeoTitle(draft: Record<string, unknown>) {
   if (seo?.title && (seo.title === draft.title || /^techflow agency$/i.test(seo.title.trim()))) delete seo.title
 }
 
-/** Fields only set in the Studio, carried over when a document is replaced by a re-import. */
-const STUDIO_ONLY: Record<string, string[]> = {project: ['logoFill', 'accentColor']}
+/**
+ * Fields only set in the Studio, carried over when a document is replaced by a re-import.
+ * Sectors and article categories are picked from Sanity lists (see scripts/migrate-taxonomies.ts).
+ */
+const STUDIO_ONLY: Record<string, string[]> = {project: ['logoFill', 'accentColor', 'sector'], insight: ['categories']}
 
 async function upsert(draft: Record<string, unknown> & {_type: string; sourceUrl?: string}) {
   dropGenericSeoTitle(draft)

@@ -187,10 +187,39 @@ export type InsightReference = {
   [internalGroqTypeReferenceTo]?: "insight";
 };
 
+export type SectorReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sector";
+};
+
+export type CategoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "category";
+};
+
 export type InternationalizedArrayReferenceValue = {
   _type: "internationalizedArrayReferenceValue";
-  value?: ProjectReference | ToolReference | InsightReference;
+  value?:
+    | ProjectReference
+    | ToolReference
+    | InsightReference
+    | SectorReference
+    | CategoryReference;
   language?: string;
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  title?: string;
 };
 
 export type TeamMemberReference = {
@@ -210,7 +239,11 @@ export type Insight = {
   title?: string;
   slug?: Slug;
   excerpt?: string;
-  categories?: Array<string>;
+  categories?: Array<
+    {
+      _key: string;
+    } & CategoryReference
+  >;
   publishedAt?: string;
   author?: TeamMemberReference;
   coverImage?: ImageWithAlt;
@@ -285,7 +318,7 @@ export type Project = {
   summary?: string;
   body?: BlockContent;
   testimonial?: Testimonial;
-  sector?: string;
+  sector?: SectorReference;
   metrics?: Array<
     {
       _key: string;
@@ -325,6 +358,16 @@ export type Project = {
   heroSide8?: ImageWithAlt;
   seo?: Seo;
   sourceUrl?: string;
+};
+
+export type Sector = {
+  _id: string;
+  _type: "sector";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  title?: string;
 };
 
 export type Table = {
@@ -454,13 +497,17 @@ export type AllSanitySchemaTypes =
   | ProjectReference
   | ToolReference
   | InsightReference
+  | SectorReference
+  | CategoryReference
   | InternationalizedArrayReferenceValue
+  | Category
   | TeamMemberReference
   | Insight
   | TeamMember
   | Tool
   | Slug
   | Project
+  | Sector
   | Table
   | TableRow
   | SanityImagePaletteSwatch
@@ -474,7 +521,7 @@ export type AllSanitySchemaTypes =
 
 // Source: ../../src/sanity/queries.ts
 // Variable: PROJECTS_INDEX_QUERY
-// Query: *[_type == "project" && language == $lang && defined(slug.current)]    | order(coalesce(order, 999) asc, title asc) {   _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }
+// Query: *[_type == "project" && language == $lang && defined(slug.current)]    | order(coalesce(order, 999) asc, title asc) {   _id,  title,  "slug": slug.current,  // Picked from the Sector list; older documents held the name as text.  "sector": coalesce(sector->title, string(sector)),  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }
 export type PROJECTS_INDEX_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -520,7 +567,7 @@ export type PROJECTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: PROJECT_DETAIL_QUERY
-// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    accentColor,    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] {   _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }  }
+// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  // Picked from the Sector list; older documents held the name as text.  "sector": coalesce(sector->title, string(sector)),  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    accentColor,    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] {   _id,  title,  "slug": slug.current,  // Picked from the Sector list; older documents held the name as text.  "sector": coalesce(sector->title, string(sector)),  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }  }
 export type PROJECT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -838,7 +885,7 @@ export type TOOLS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: TOOL_DETAIL_QUERY
-// Query: *[_type == "tool" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    benefitsTitle,    benefitsIntro,    benefits[]{ _key, title, text },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "projects": *[_type == "project" && language == $lang && references(^._id)]      | order(coalesce(order, 999) asc) {   _id,  title,  "slug": slug.current,  sector,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...8] {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  }
+// Query: *[_type == "tool" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    benefitsTitle,    benefitsIntro,    benefits[]{ _key, title, text },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "projects": *[_type == "project" && language == $lang && references(^._id)]      | order(coalesce(order, 999) asc) {   _id,  title,  "slug": slug.current,  // Picked from the Sector list; older documents held the name as text.  "sector": coalesce(sector->title, string(sector)),  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...8] {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  }
 export type TOOL_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1000,7 +1047,7 @@ export type REVIEWS_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHTS_INDEX_QUERY
-// Query: *[_type == "insight" && language == $lang && defined(slug.current)]    | order(publishedAt desc) {   _id,  title,  "slug": slug.current,  excerpt,  categories,  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }
+// Query: *[_type == "insight" && language == $lang && defined(slug.current)]    | order(publishedAt desc) {   _id,  title,  "slug": slug.current,  excerpt,  // Picked from the Article categories list; older documents held the names as text.  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }
 export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -1051,7 +1098,7 @@ export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHT_DETAIL_QUERY
-// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  categories,  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  categories,  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
+// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked from the Article categories list; older documents held the names as text.  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked from the Article categories list; older documents held the names as text.  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
 export type INSIGHT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1266,16 +1313,16 @@ export type SITEMAP_QUERY_RESULT = Array<
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '\n  *[_type == "project" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n': PROJECTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    accentColor,\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "project" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n': PROJECTS_INDEX_QUERY_RESULT;
+    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    accentColor,\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && defined(slug.current)].slug.current\n': PROJECT_SLUGS_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TOOLS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  sector,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked from the Sector list; older documents held the name as text.\n  "sector": coalesce(sector->title, string(sector)),\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)].slug.current\n': TOOL_SLUGS_QUERY_RESULT;
     '\n  *[_type == "teamMember" && defined(photo.asset)]\n    | order(coalesce(order, 999) asc, name asc) { \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TEAM_QUERY_RESULT;
     '\n  *[_type == "review" && defined(quote)] | order(coalesce(order, 999) asc, name asc) {\n    _id,\n    quote,\n    name,\n    role,\n    photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n  }\n': REVIEWS_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  categories,\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  categories,\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  categories,\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked from the Article categories list; older documents held the names as text.\n  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked from the Article categories list; older documents held the names as text.\n  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked from the Article categories list; older documents held the names as text.\n  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "insight" && language == $lang && defined(slug.current)].slug.current\n': INSIGHT_SLUGS_QUERY_RESULT;
     '\n  *[_type == $type && slug.current == $slug][0]{\n    language,\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': SLUG_LOOKUP_QUERY_RESULT;
     '\n  *[_type in ["project", "tool", "insight"] && defined(slug.current) && defined(language)]{\n    _type,\n    language,\n    "slug": slug.current,\n    _updatedAt\n  }\n': SITEMAP_QUERY_RESULT;

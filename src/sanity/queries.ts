@@ -17,7 +17,8 @@ const projectCard = /* groq */ `
   _id,
   title,
   "slug": slug.current,
-  sector,
+  // Picked from the Sector list; older documents held the name as text.
+  "sector": coalesce(sector->title, string(sector)),
   summary,
   services,
   websiteUrl,
@@ -126,7 +127,8 @@ const insightCard = /* groq */ `
   title,
   "slug": slug.current,
   excerpt,
-  categories,
+  // Picked from the Article categories list; older documents held the names as text.
+  "categories": array::compact(select(defined(categories[0]._ref) => categories[]->title, string::split(array::join(categories, "|"), "|"))),
   publishedAt,
   author->{ ${member} },
   coverImage ${image},

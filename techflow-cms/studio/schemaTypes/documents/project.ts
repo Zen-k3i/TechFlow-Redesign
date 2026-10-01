@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CaseIcon} from '@sanity/icons/Case'
 import {languageField, orderField, seoField, slugField} from './shared'
+import {sameLanguage} from './taxonomy'
 
 /** The case-study header is a 3×3 mosaic: four sides, the hero image in the middle, four sides. */
 const HERO_SIDES = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -25,7 +26,15 @@ export const project = defineType({
     defineField({name: 'body', title: 'Case study', type: 'blockContent', group: 'content'}),
     defineField({name: 'testimonial', title: 'Client testimonial', type: 'testimonial', group: 'content'}),
 
-    defineField({name: 'sector', title: 'Sector', type: 'string', group: 'details'}),
+    defineField({
+      name: 'sector',
+      title: 'Sector',
+      description: 'Pick from the list; add sectors under Sectors in the sidebar.',
+      type: 'reference',
+      to: [{type: 'sector'}],
+      group: 'details',
+      options: {filter: sameLanguage, disableNew: true},
+    }),
     defineField({
       name: 'metrics',
       title: 'Key figures',

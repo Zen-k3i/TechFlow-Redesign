@@ -5,12 +5,16 @@ import {CaseIcon} from '@sanity/icons/Case'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {UserIcon} from '@sanity/icons/User'
 import {WrenchIcon} from '@sanity/icons/Wrench'
+import {PinIcon} from '@sanity/icons/Pin'
+import {TagIcon} from '@sanity/icons/Tag'
 import {LANGUAGES, LOCALIZED_TYPES, type LocalizedType} from './languages'
 
 const LOCALIZED: Record<LocalizedType, {title: string; icon: typeof CaseIcon; ordering: SortOrderingItem[]}> = {
   project: {title: 'Projects', icon: CaseIcon, ordering: [{field: 'order', direction: 'asc'}]},
   tool: {title: 'Tools', icon: WrenchIcon, ordering: [{field: 'order', direction: 'asc'}]},
   insight: {title: 'Articles', icon: DocumentTextIcon, ordering: [{field: 'publishedAt', direction: 'desc'}]},
+  sector: {title: 'Sectors', icon: PinIcon, ordering: [{field: 'title', direction: 'asc'}]},
+  category: {title: 'Article categories', icon: TagIcon, ordering: [{field: 'title', direction: 'asc'}]},
 }
 
 /** A folder per localized type, holding one list per language; new documents start in that language. */

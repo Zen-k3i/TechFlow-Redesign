@@ -1,6 +1,7 @@
 import {insight} from './documents/insight'
 import {project} from './documents/project'
 import {review} from './documents/review'
+import {category, sector} from './documents/taxonomy'
 import {teamMember} from './documents/team-member'
 import {tool} from './documents/tool'
 import {blockContent} from './objects/block-content'
@@ -12,6 +13,8 @@ export const schemaTypes = [
   insight,
   teamMember,
   review,
+  sector,
+  category,
   blockContent,
   imageWithAlt,
   metric,
