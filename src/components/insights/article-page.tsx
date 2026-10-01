@@ -7,7 +7,7 @@ import { href } from "@/i18n/routes";
 import { headingsOf, PortableBody } from "../cms/portable-body";
 import { SanityImage } from "../cms/sanity-image";
 import { useActiveHeading } from "../page/blocks";
-import { ButtonLink } from "../page/ui";
+import { QuoteButton, TalkToHumanButton } from "../page/project-cta";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { FadeIn, RevealHeading } from "../site/reveal";
@@ -30,7 +30,7 @@ const rise = (delay: number) => ({
  * on small screens) and a "book a call" card beside it (after the text on small screens).
  */
 export function ArticlePage({ article }: { article: InsightDetail }) {
-  const { lang, t } = useLocale();
+  const { lang } = useLocale();
   const c = insightsContent[lang];
   const headings = headingsOf(article.body);
   const articleRef = useRef<HTMLElement>(null);
@@ -323,15 +323,17 @@ function Share({ copy, title }: { copy: Copy; title: string }) {
   );
 }
 
-/** "Un projet en tête ?" card with the site's primary button to book a call. */
+/** "Un projet en tête ?" card with the same buttons as the footer's call to action, stacked to fit the sidebar. */
 function BookCall() {
-  const { t, links } = useLocale();
+  const { t } = useLocale();
   return (
     <div className="rounded-[1.25rem] border border-ink/15 bg-white px-4 py-7 text-center">
       <p className="font-serif text-[1.9rem] leading-tight">{t.common.cta.heading.replace(/\*/g, "")}</p>
-      <ButtonLink href={links.booking} external variant="dark" className="mt-5 whitespace-nowrap">
-        {t.nav.book}
-      </ButtonLink>
+      <div className="mt-5 flex flex-col gap-2.5">
+        <TalkToHumanButton className="w-full" />
+        <QuoteButton tone="light" className="w-full" />
+      </div>
+      <p className="mt-4 text-xs text-ink/50">{t.common.reassurance}</p>
     </div>
   );
 }

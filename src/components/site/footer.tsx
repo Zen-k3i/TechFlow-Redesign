@@ -3,9 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { href } from "@/i18n/routes";
+import { ProjectCta } from "../page/project-cta";
 import { useLocale } from "./locale";
-import { Magnetic } from "./magnetic";
-import { RevealHeading } from "./reveal";
 
 /** `cta` is the "Open for new projects" block; pages that end on their own call to action leave it out. */
 export function Footer({ cta = true }: { cta?: boolean }) {
@@ -51,32 +50,16 @@ export function Footer({ cta = true }: { cta?: boolean }) {
     >
       <div className="mx-auto max-w-7xl">
         {cta && (
-        <div className="flex flex-col items-start justify-between gap-12 md:flex-row md:items-end">
-          <div>
-            <p className="eyebrow text-white/60">{f.status}</p>
-            <RevealHeading
-              text={f.heading}
-              accentClassName="italic text-brand-sky"
-              className="mt-5 font-serif text-[clamp(3.5rem,10vw,9rem)] leading-[0.9]"
+          <div className="relative py-8 md:py-12">
+            {/* Blue glow behind the call to action, fading into the footer's own gradient. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 -top-28 bottom-0 -z-0 bg-[radial-gradient(60%_70%_at_50%_30%,rgba(54,71,245,0.45),transparent_70%)] md:-top-36"
             />
-            <p className="mt-6 max-w-md text-white/60">{f.text}</p>
+            <div className="relative">
+              <ProjectCta />
+            </div>
           </div>
-          <Magnetic strength={0.4}>
-            <a
-              href={links.booking}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative flex size-44 items-center justify-center rounded-full bg-white text-center text-lg font-medium leading-tight text-night md:size-52"
-            >
-              <span className="absolute inset-0 scale-0 rounded-full bg-brand transition-transform duration-500 ease-out group-hover:scale-100" />
-              <span className="relative transition-colors group-hover:text-white">
-                {f.book[0]}
-                <br />
-                {f.book[1]}
-              </span>
-            </a>
-          </Magnetic>
-        </div>
         )}
 
         <div className={`grid gap-12 md:grid-cols-[1.2fr_repeat(3,1fr)] ${cta ? "mt-28 border-t border-white/15 pt-14" : ""}`}>

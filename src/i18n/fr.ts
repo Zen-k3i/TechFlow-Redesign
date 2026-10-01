@@ -289,11 +289,6 @@ export const fr = {
   },
 
   footer: {
-    status: "Ouverts aux nouveaux projets",
-    heading: "Parlons de *votre projet.*",
-    text: "Trente minutes avec l'équipe qui construira votre projet, pas avec un commercial. Vous repartez avec un périmètre, un délai et un ordre de grandeur.",
-    cursor: "Réserver",
-    book: ["Réserver", "un appel ↗"],
     tagline: "Start-up studio : design, développement et agents IA pour les entreprises qui veulent aller vite.",
     columns: { services: "Services", agency: "Agence", follow: "Suivez-nous" },
     agency: { projects: "Projets", tools: "Outils", team: "Notre équipe", insights: "Ressources", contact: "Contact" },
@@ -305,6 +300,7 @@ export const fr = {
 
   common: {
     human: "Parler à un humain",
+    quote: "Demander un devis",
     start: "Démarrer un projet",
     reassurance: "Gratuit · Sans engagement · 30 minutes",
     viewCase: "Voir le cas",
@@ -356,6 +352,7 @@ export const fr = {
     },
     cta: {
       heading: "Un projet en *tête ?*",
+      scope: "Trente minutes pour cadrer votre projet : périmètre, stack, délais, budget indicatif. Vous repartez avec un plan, que vous travailliez avec nous ou non.",
       text: "TechFlow transforme les idées en résultats. Nos clients lancent 40 % plus vite et constatent une croissance mesurable dès le premier trimestre.",
     },
   },

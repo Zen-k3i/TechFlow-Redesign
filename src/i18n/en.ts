@@ -303,11 +303,6 @@ export const en: Dictionary = {
   },
 
   footer: {
-    status: "Open for new projects",
-    heading: "Let's talk about *your project.*",
-    text: "Thirty minutes with the team that will build your project, not a salesperson. You leave with a scope, a timeline and a ballpark budget.",
-    cursor: "Book",
-    book: ["Book", "a call ↗"],
     tagline: "Startup studio: design, development and AI agents for companies that want to move fast.",
     columns: { services: "Services", agency: "Agency", follow: "Follow us" },
     agency: { projects: "Projects", tools: "Tools", team: "Our team", insights: "Insights", contact: "Contact" },
@@ -319,6 +314,7 @@ export const en: Dictionary = {
 
   common: {
     human: "Talk to a human",
+    quote: "Ask for a quote",
     start: "Start a project",
     reassurance: "Free · No commitment · 30 minutes",
     viewCase: "View case",
@@ -368,7 +364,8 @@ export const en: Dictionary = {
       ],
     },
     cta: {
-      heading: "Got a project in *mind?*",
+      heading: "Have a project in *mind?*",
+      scope: "Thirty minutes to scope your project: perimeter, stack, timeline, ballpark budget. You leave with a plan, whether or not you work with us.",
       text: "TechFlow turns ideas into results. Our clients launch 40% faster and see measurable growth from the first quarter.",
     },
   },

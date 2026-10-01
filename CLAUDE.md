@@ -46,6 +46,7 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 
 ## Header / footer
 - Desktop menu is 16px with narrower item padding below 1280px so French fits at 1024px; below 1024px the burger menu takes over. EN menu label is "Projects" (`nav.pages.projects`).
+- Call to action "Un projet en tête ?" (`page/project-cta.tsx`): centred heading, scope text, blue "Parler à un humain" button with Maximilien's photo (booking) + dark "Demander un devis" (contact), reassurance line. It is the top of the footer (hidden on case studies via `footerCta={false}`); the article sidebar card uses the same two buttons, stacked.
 - Footer: Instagram and LinkedIn icons (inline SVG from the old site) + the Webflow Premium Partner badge under the tagline; external links use `rel="noopener noreferrer"`.
 
 ## Still local (not in Sanity)
