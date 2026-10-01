@@ -48,11 +48,12 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         <Trust />
         <Industries />
         <Manifesto />
+        {/* Why we work this way (Manifesto), who does the work, then what we do (Services). */}
+        <PortraitStrip members={members} className="pt-28 md:pt-36" />
         <Services />
         <Work sectorList={sectorList.flatMap((name) => (name ? [name] : []))} projectSectors={projectSectors} />
         <Convictions />
         <Process />
-        <PortraitStrip members={members} className="pt-0" />
         <Testimonials />
         <Brief />
         <Faq faq={faq} />
