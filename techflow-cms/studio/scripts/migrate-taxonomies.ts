@@ -3,6 +3,7 @@
  * to `sector` / `category` documents (FR + EN, linked as translations) that editors pick from a dropdown.
  *
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --dry-run   # show the mapping
+ *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --lists-only  # only create the lists
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token                # write
  *
  * Re-running is safe: the lists use fixed ids, and documents that already hold references are left alone.
@@ -11,6 +12,8 @@
 import {getCliClient} from 'sanity/cli'
 
 const DRY_RUN = process.argv.includes('--dry-run')
+// The lists alone don't change what the website reads; switching documents to them does.
+const LISTS_ONLY = process.argv.includes('--lists-only')
 const client = getCliClient({apiVersion: '2026-09-29'})
 
 type Lang = 'fr' | 'en'
@@ -105,8 +108,9 @@ async function run() {
       })
     }
   }
-  for (const p of [...projectPatches, ...insightPatches]) tx.patch(p.id, (patch) => patch.set(p.set))
+  if (!LISTS_ONLY) for (const p of [...projectPatches, ...insightPatches]) tx.patch(p.id, (patch) => patch.set(p.set))
   await tx.commit()
+  if (LISTS_ONLY) console.log('Lists created; projects and articles not switched yet.')
   console.log('Done.')
 }
 

@@ -12,6 +12,7 @@ import { FilterChip } from "../site/work";
 import { ServiceCards } from "../page/service-cards";
 import { ClientMarquee, SectionHeader } from "../page/ui";
 import { CmsProjectCard, type CmsProject } from "./cms-project-card";
+import { filterOptions } from "../page/filters";
 import { archive, projectsContent } from "./data";
 import { CASES_ANCHOR, ProjectsHero, type WallProject } from "./projects-hero";
 
@@ -20,7 +21,7 @@ const growthProjects = projects.filter((p) => p.kind === "growth");
 
 type Entry = { key: string; sector: string } & ({ cms: CmsProject } | { local: (typeof growthProjects)[number] });
 
-export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
+export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProject[]; sectorList: string[] }) {
   const { lang, t } = useLocale();
   const c = projectsContent[lang];
   const entries = useMemo<Entry[]>(
@@ -30,11 +31,8 @@ export function ProjectsPage({ cmsProjects }: { cmsProjects: CmsProject[] }) {
     ],
     [cmsProjects, lang, t],
   );
-  const sectors = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const e of entries) if (e.sector) counts.set(e.sector, (counts.get(e.sector) ?? 0) + 1);
-    return [...counts.entries()];
-  }, [entries]);
+  // Filter buttons: the Sector list from Sanity, as used by these projects.
+  const sectors = useMemo(() => filterOptions(sectorList, entries.map((e) => [e.sector])), [sectorList, entries]);
   const wall = useMemo<WallProject[]>(
     () =>
       cmsProjects.map((p) => ({

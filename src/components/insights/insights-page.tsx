@@ -10,6 +10,7 @@ import { PageHero } from "../page/ui";
 import { useLocale } from "../site/locale";
 import { FadeIn } from "../site/reveal";
 import { FilterChip } from "../site/work";
+import { filterOptions } from "../page/filters";
 import { insightsContent, type InsightCard } from "./data";
 
 export const formatDate = (iso: string, lang: string) =>
@@ -116,7 +117,7 @@ function FeaturedArticle({ article }: { article: InsightCard }) {
   );
 }
 
-export function InsightsPage({ articles }: { articles: InsightCard[] }) {
+export function InsightsPage({ articles, categoryList }: { articles: InsightCard[]; categoryList: string[] }) {
   const { lang, t } = useLocale();
   const c = insightsContent[lang];
   const [latest, ...rest] = articles;
@@ -126,7 +127,7 @@ export function InsightsPage({ articles }: { articles: InsightCard[] }) {
     <>
       <PageHero badge={c.badge} title={c.title} intro={c.intro} crumbs={[{ label: t.nav.pages.insights, href: href(lang, "insights") }]} />
 
-      {latest && <ArticleIndex articles={articles} latest={latest} showGrid={rest.length > 0} />}
+      {latest && <ArticleIndex articles={articles} categoryList={categoryList} latest={latest} showGrid={rest.length > 0} />}
 
       <ServiceCards eyebrow={c.services.eyebrow} heading={c.services.heading} />
     </>
@@ -140,19 +141,25 @@ const normalize = (text: string) =>
     .toLowerCase();
 
 /** Every article in a 3-column grid, filterable by category and searchable by text. */
-function ArticleIndex({ articles, latest, showGrid }: { articles: InsightCard[]; latest: InsightCard; showGrid: boolean }) {
+function ArticleIndex({
+  articles,
+  categoryList,
+  latest,
+  showGrid,
+}: {
+  articles: InsightCard[];
+  categoryList: string[];
+  latest: InsightCard;
+  showGrid: boolean;
+}) {
   const { lang } = useLocale();
   const f = insightsContent[lang].filters;
   const [category, setCategory] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const search = normalize(useDeferredValue(query).trim());
 
-  // [category, article count], most-used first.
-  const categories = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const a of articles) for (const cat of a.categories ?? []) counts.set(cat, (counts.get(cat) ?? 0) + 1);
-    return [...counts].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
-  }, [articles]);
+  // Filter buttons: the Article categories list from Sanity, as used by these articles, most-used first.
+  const categories = useMemo(() => filterOptions(categoryList, articles.map((a) => a.categories ?? [])), [categoryList, articles]);
 
   const filtering = category !== null || search !== "";
   const shown = articles.filter((a) => {

@@ -55,6 +55,18 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
   }
 `);
 
+// ---------------------------------------------------------------- filter lists
+
+/** Sector names editors manage in the Studio (Sectors folder), for the projects filter. */
+export const SECTORS_QUERY = defineQuery(`
+  *[_type == "sector" && language == $lang && defined(title)] | order(title asc).title
+`);
+
+/** Article category names editors manage in the Studio (Article categories folder), for the insights filter. */
+export const CATEGORIES_QUERY = defineQuery(`
+  *[_type == "category" && language == $lang && defined(title)] | order(title asc).title
+`);
+
 // ---------------------------------------------------------------- FAQ
 
 /** A page's FAQ (home, services, design, development, aiAgents, salesFunnel) in one language. */
