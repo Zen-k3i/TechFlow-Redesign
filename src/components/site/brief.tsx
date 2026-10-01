@@ -10,7 +10,8 @@ import { RevealHeading } from "./reveal";
 function estimate(picked: string[]) {
   if (picked.length === 0) return null;
   const hasDev = picked.includes("developpement");
-  const hasSystem = picked.includes("agents-ia") || picked.includes("tunnel-de-vente");
+  const hasSystem =
+    picked.includes("agents-ia") || picked.includes("tunnel-de-vente");
   if (hasDev && hasSystem) return "full";
   if (!hasSystem) return "site";
   return "custom";
@@ -26,10 +27,16 @@ export function Brief() {
   const [copied, setCopied] = useState(false);
   const kind = estimate(picked);
   const result = kind && b.estimates[kind];
-  const pickedTitles = services.filter((s) => picked.includes(s.id)).map((s) => s.title);
+  const pickedTitles = services
+    .filter((s) => picked.includes(s.id))
+    .map((s) => s.title);
 
   const toggle = (id: string) =>
-    setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : services.map((s) => s.id).filter((x) => p.includes(x) || x === id)));
+    setPicked((p) =>
+      p.includes(id)
+        ? p.filter((x) => x !== id)
+        : services.map((s) => s.id).filter((x) => p.includes(x) || x === id),
+    );
 
   const summary = [
     `${b.goal.label}${b.colon}${b.goals[goal]}`,
@@ -47,7 +54,10 @@ export function Brief() {
   };
 
   return (
-    <section id="brief" className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section
+      id="brief"
+      className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36"
+    >
       <div className="mx-auto max-w-7xl">
         <p className="eyebrow text-brand-deep">{b.eyebrow}</p>
         <RevealHeading
@@ -60,7 +70,12 @@ export function Brief() {
           <div className="space-y-12">
             <Question index={1} title={b.needs.title} hint={b.needs.hint}>
               {services.map((s) => (
-                <Chip key={s.id} active={picked.includes(s.id)} onClick={() => toggle(s.id)} multi>
+                <Chip
+                  key={s.id}
+                  active={picked.includes(s.id)}
+                  onClick={() => toggle(s.id)}
+                  multi
+                >
                   {s.title}
                 </Chip>
               ))}
@@ -74,7 +89,11 @@ export function Brief() {
             </Question>
             <Question index={3} title={b.timing.title}>
               {b.timings.map((label, i) => (
-                <Chip key={label} active={timing === i} onClick={() => setTiming(i)}>
+                <Chip
+                  key={label}
+                  active={timing === i}
+                  onClick={() => setTiming(i)}
+                >
                   {label}
                 </Chip>
               ))}
@@ -90,9 +109,9 @@ export function Brief() {
               <div className="relative">
                 <div className="flex items-center justify-between">
                   <p className="eyebrow text-white/50">{b.card}</p>
-                  <span className="flex items-center gap-2 text-xs text-white/60">
+                  {/* <span className="flex items-center gap-2 text-xs text-white/60">
                     <span className="size-2 rounded-full bg-emerald-400" /> {b.live}
-                  </span>
+                  </span> */}
                 </div>
 
                 <p className="mt-8 eyebrow text-white/40">{b.estimate}</p>
@@ -131,7 +150,9 @@ export function Brief() {
                           </motion.span>
                         ))}
                       </AnimatePresence>
-                      {picked.length === 0 && <span className="text-white/35">{b.tbd}</span>}
+                      {picked.length === 0 && (
+                        <span className="text-white/35">{b.tbd}</span>
+                      )}
                     </dd>
                   </div>
                   <Row label={b.timing.label} value={b.timings[timing]} />
@@ -157,9 +178,7 @@ export function Brief() {
                     {copied ? b.copied : b.copy}
                   </button>
                 </div>
-                <p className="mt-4 text-xs text-white/40">
-                  {b.note}
-                </p>
+                <p className="mt-4 text-xs text-white/40">{b.note}</p>
               </div>
             </div>
           </div>
@@ -210,7 +229,9 @@ function Chip({
       aria-pressed={active}
       whileTap={{ scale: 0.95 }}
       className={`flex items-center gap-2 rounded-full border px-5 py-3 text-[15px] transition-colors ${
-        active ? "border-brand-deep bg-brand-deep text-white" : "border-ink/15 bg-white hover:border-ink/40"
+        active
+          ? "border-brand-deep bg-brand-deep text-white"
+          : "border-ink/15 bg-white hover:border-ink/40"
       }`}
     >
       {multi && (

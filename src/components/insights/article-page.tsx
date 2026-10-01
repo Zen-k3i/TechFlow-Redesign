@@ -6,11 +6,11 @@ import { motion, useScroll, useSpring } from "motion/react";
 import { href } from "@/i18n/routes";
 import { headingsOf, PortableBody } from "../cms/portable-body";
 import { SanityImage } from "../cms/sanity-image";
-import { HumanActions } from "../page/ui";
 import { useActiveHeading } from "../page/blocks";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { FadeIn, RevealHeading } from "../site/reveal";
+import Image from "next/image";
 import { insightsContent, type InsightDetail } from "./data";
 import { ArticleCard, formatDate } from "./insights-page";
 
@@ -27,7 +27,7 @@ const rise = (delay: number) => ({
  * Insight article, laid out for long reads: a short dark header (what it is, who wrote it, how long
  * it takes), the cover straddling header and page, then the text on a full-width paper background in
  * a ~70-character column, with a numbered contents list that follows the reader (a collapsible one
- * on small screens), the author and a call to action at the end.
+ * on small screens) and a "book a call" card beside it (after the text on small screens).
  */
 export function ArticlePage({ article }: { article: InsightDetail }) {
   const { lang, t } = useLocale();
@@ -41,15 +41,17 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
       <section id="top" className="grain relative overflow-hidden bg-night px-5 pt-32 text-white md:px-10 md:pt-40">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_60%_at_80%_0%,rgba(71,102,255,0.3),transparent_70%)]" />
         <div className={`relative mx-auto max-w-4xl ${hasCover ? "pb-14 md:pb-20" : "pb-20 md:pb-28"}`}>
-          <motion.nav aria-label="Breadcrumb" {...rise(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/40">
-            <Link href={href(lang, "home")} className="hover:text-white">
-              {t.common.breadcrumbHome}
+          <motion.div {...rise(0)}>
+            <Link
+              href={href(lang, "insights")}
+              className="group inline-flex items-center gap-2 rounded-full border border-white/15 py-2 pl-3 pr-4 text-sm text-white/75 transition-colors hover:border-white/40 hover:text-white"
+            >
+              <span aria-hidden className="transition-transform group-hover:-translate-x-0.5">
+                ←
+              </span>
+              {c.backToList}
             </Link>
-            <span aria-hidden>/</span>
-            <Link href={href(lang, "insights")} className="hover:text-white">
-              {t.nav.pages.insights}
-            </Link>
-          </motion.nav>
+          </motion.div>
 
           {article.categories && article.categories.length > 0 && (
             <motion.ul {...rise(0.05)} className="mt-8 flex flex-wrap gap-2 text-sm">
@@ -117,10 +119,11 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
       )}
 
       <section className="bg-paper px-5 pb-24 pt-14 text-ink md:px-10 md:pb-32 md:pt-20">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 xl:gap-24">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:gap-16 xl:gap-24">
           <aside className="max-lg:hidden">
             <div className="sticky top-28 space-y-10">
               {headings.length > 0 && <Contents label={c.toc} items={headings} target={articleRef} />}
+              <BookCall />
               <Share copy={c} title={article.title ?? ""} />
             </div>
           </aside>
@@ -143,12 +146,9 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
 
             <AuthorCard author={article.author} label={c.by} />
 
-            <FadeIn className="mt-12 overflow-hidden rounded-[2rem] bg-night p-8 text-white md:p-12">
-              <RevealHeading text={t.common.cta.heading} accentClassName="italic text-brand-sky" className="font-serif text-4xl leading-[1.02] md:text-5xl" />
-              <p className="mt-4 max-w-lg text-white/60">{t.common.cta.text}</p>
-              <div className="mt-8">
-                <HumanActions />
-              </div>
+            {/* On large screens the same card sits in the sidebar, under the contents. */}
+            <FadeIn className="mt-12 lg:hidden">
+              <BookCall />
             </FadeIn>
           </div>
         </div>
@@ -321,6 +321,28 @@ function Share({ copy, title }: { copy: Copy; title: string }) {
           LinkedIn
         </button>
       </div>
+    </div>
+  );
+}
+
+/** "Un projet en tête ?" card with the founder's face on the booking button, as on the old site. */
+function BookCall() {
+  const { t, links } = useLocale();
+  return (
+    <div className="rounded-[1.25rem] border border-ink/15 bg-white px-4 py-7 text-center">
+      <p className="font-serif text-[1.9rem] leading-tight">{t.common.cta.heading.replace(/\*/g, "")}</p>
+      <a
+        href={links.booking}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group mt-5 inline-flex items-center gap-2.5 whitespace-nowrap rounded-full bg-brand-deep py-1.5 pl-1.5 pr-5 text-[15px] font-medium text-white shadow-[0_8px_24px_-8px_rgba(54,71,245,0.7)] ring-1 ring-white/20 transition-colors hover:bg-brand"
+      >
+        <Image src="/images/team/maximilien-grolier.webp" alt="" width={36} height={36} className="size-9 rounded-full object-cover ring-2 ring-white/70" />
+        {t.nav.book}
+        <span aria-hidden className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+          ↗
+        </span>
+      </a>
     </div>
   );
 }
