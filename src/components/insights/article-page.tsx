@@ -330,8 +330,8 @@ function BookCall() {
     <div className="rounded-[1.25rem] border border-ink/15 bg-white px-3 py-7 text-center">
       <p className="font-serif text-[1.9rem] leading-tight">{t.common.cta.heading.replace(/\*/g, "")}</p>
       <div className="mt-5 flex flex-col gap-2.5">
-        <TalkToHumanButton tone="light" className="w-full justify-between" />
-        <QuoteButton tone="light" className="w-full justify-between" />
+        <QuoteButton tone="light" block />
+        <TalkToHumanButton tone="light" block />
       </div>
       <p className="mt-4 text-xs text-ink/50">{t.common.reassurance}</p>
     </div>

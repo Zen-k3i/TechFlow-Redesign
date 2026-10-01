@@ -46,7 +46,7 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 
 ## Header / footer
 - Desktop menu is 16px with narrower item padding below 1280px so French fits at 1024px; below 1024px the burger menu takes over. EN menu label is "Projects" (`nav.pages.projects`).
-- Call to action "Un projet en tête ?" (`page/project-cta.tsx`): centred heading, scope text, "Parler à un humain" (booking) + "Demander un devis" (contact) as the site's standard `ButtonLink` pair (white + outline on dark, ink + outline-dark on light). Don't reintroduce the old site's blue photo button: all CTAs use `ButtonLink`, reassurance line. It is the top of the footer (hidden on case studies via `footerCta={false}`); the article sidebar card uses the same two buttons, stacked.
+- CTA buttons are the hero's pair, shared from `page/project-cta.tsx`: `GlowButton` (pill with a turning blue edge light, glow and round blue arrow; white on dark, ink on light) and `HumanButton` (founder avatar with an online dot, opens the booking page), both 52px / 15px. The hero, the footer's "Un projet en tête ?" block (`ProjectCta`: heading, scope text, "Demander un devis" + "Parler à un humain", reassurance line; hidden on case studies via `footerCta={false}`) and the article sidebar card (same buttons, `block`, stacked) all use them, so they stay identical.
 - Footer: Instagram and LinkedIn icons (inline SVG from the old site) + the Webflow Premium Partner badge under the tagline; external links use `rel="noopener noreferrer"`.
 
 ## Still local (not in Sanity)
