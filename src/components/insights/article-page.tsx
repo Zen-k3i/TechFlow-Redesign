@@ -327,11 +327,11 @@ function Share({ copy, title }: { copy: Copy; title: string }) {
 function BookCall() {
   const { t } = useLocale();
   return (
-    <div className="rounded-[1.25rem] border border-ink/15 bg-white px-4 py-7 text-center">
+    <div className="rounded-[1.25rem] border border-ink/15 bg-white px-3 py-7 text-center">
       <p className="font-serif text-[1.9rem] leading-tight">{t.common.cta.heading.replace(/\*/g, "")}</p>
       <div className="mt-5 flex flex-col gap-2.5">
-        <TalkToHumanButton className="w-full" />
-        <QuoteButton tone="light" className="w-full" />
+        <TalkToHumanButton tone="light" className="w-full justify-between" />
+        <QuoteButton tone="light" className="w-full justify-between" />
       </div>
       <p className="mt-4 text-xs text-ink/50">{t.common.reassurance}</p>
     </div>

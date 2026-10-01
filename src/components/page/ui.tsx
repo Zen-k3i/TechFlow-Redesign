@@ -51,7 +51,7 @@ export function ButtonLink({
   const cls = `group inline-flex h-14 shrink-0 items-center gap-3 rounded-full pl-7 pr-2 font-medium transition-colors ${styles} ${className}`;
 
   return external ? (
-    <a href={to} target="_blank" rel="noreferrer" className={cls}>
+    <a href={to} target="_blank" rel="noopener noreferrer" className={cls}>
       {content}
     </a>
   ) : (
