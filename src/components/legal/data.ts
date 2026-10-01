@@ -710,7 +710,186 @@ const termsEn: LegalDoc = {
   ],
 };
 
-export const legalDocs: Record<"legal" | "terms", Record<Locale, LegalDoc>> = {
+/**
+ * Copied from the old site's /politique-de-cookies and /en/cookie-policy (2026-10-01), draft notice included:
+ * that page is itself a placeholder taken from the legal notices, pending the real cookie policy.
+ */
+const cookiesFr: LegalDoc = {
+  meta: { title: "Politique de cookies | TechFlow Agency", description: "Les cookies utilisés par TechFlow Agency, le rôle de chacun, leur durée de conservation et la façon de modifier votre consentement à tout moment." },
+  badge: "Informations légales",
+  title: "Politique de *cookies.*",
+  intro: "Les cookies déposés lors de la navigation sur techflow-agency.com et vos droits.",
+  toc: "Sommaire",
+  note: "BROUILLON : cette politique de cookies est en cours de finalisation et n'est pas encore en vigueur. Le texte ci-dessous est un contenu provisoire repris de nos mentions légales et ne décrit pas les cookies déposés par ce site. Elle sera complétée une fois la bannière de consentement installée.",
+  sections: [
+    {
+      title: "Informations sur le site",
+      blocks: [
+        p("Conformément à l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, les utilisateurs de techflow-agency.com, site détenu par Techflow Agency PTE LTD, sont informés de l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi :"),
+        p("Propriétaire : Techflow Agency PTE LTD"),
+        p("Siège social : 229 160 ROBINSON ROAD, #14-04, SINGAPORE BUSINESS FEDERATION CENTER, SINGAPORE 068914"),
+        p("Numéro d'enregistrement : 929698140"),
+        p("Dirigeant et directeur de la publication : Maximilien Grolier – maximilien@techflow-agency.com"),
+        p("Hébergement du site : Webflow, Inc. 398 11th Street, 2nd Floor San Francisco, CA 94103"),
+      ],
+    },
+    {
+      title: "Conditions d'utilisation",
+      blocks: [
+        p("L'utilisation de techflow-agency.com implique l'acceptation pleine et entière des conditions d'utilisation décrites ci-après. Ces conditions d'utilisation peuvent être modifiées ou complétées à tout moment : les utilisateurs de techflow-agency.com sont donc invités à les consulter régulièrement."),
+        p("Le site est normalement accessible aux utilisateurs à tout moment. Une interruption pour maintenance technique peut toutefois être décidée par techflow-agency.com, qui s'efforcera alors de communiquer préalablement aux utilisateurs les dates et heures de l'intervention."),
+        p("De la même manière, les mentions légales peuvent être modifiées à tout moment : l'utilisateur est invité à les consulter le plus souvent possible."),
+      ],
+    },
+    {
+      title: "Description des services",
+      blocks: [
+        p("techflow-agency.com a pour objet de fournir une information sur l'ensemble des activités de la société. Techflow Agency s'efforce de fournir sur techflow-agency.com des informations aussi précises que possible. La société ne saurait toutefois être tenue responsable des omissions, des inexactitudes ou des carences dans la mise à jour, qu'elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations."),
+      ],
+    },
+    {
+      title: "Limitations techniques",
+      blocks: [
+        p("Le site utilise la technologie Webflow. Le site ne pourra être tenu responsable de dommages matériels liés à son utilisation. Par ailleurs, l'utilisateur s'engage à accéder au site en utilisant un matériel récent, ne contenant pas de virus et doté d'un navigateur à jour."),
+      ],
+    },
+    {
+      title: "Propriété intellectuelle",
+      blocks: [
+        p("Techflow Agency est propriétaire des droits de propriété intellectuelle ou détient les droits d'usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logos, icônes, sons et logiciels. Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans l'autorisation écrite préalable de Techflow Agency."),
+      ],
+    },
+    {
+      title: "Limitation de responsabilité",
+      blocks: [
+        p("Techflow Agency ne peut être tenue responsable des dommages directs ou indirects causés au matériel de l'utilisateur lors de l'accès à techflow-agency.com."),
+        p("Techflow Agency se réserve le droit de supprimer, sans mise en demeure préalable, tout contenu déposé dans les espaces interactifs qui contreviendrait à la législation française applicable."),
+      ],
+    },
+    {
+      title: "Gestion des données personnelles",
+      blocks: [
+        p("En France, la protection des données personnelles est encadrée par le Règlement général sur la protection des données (RGPD), la loi n° 78-17 du 6 janvier 1978, la loi n° 2004-801 du 6 août 2004 et l'article L. 226-13 du Code pénal."),
+        p("Conformément au RGPD, l'utilisateur dispose d'un droit d'accès, de rectification et d'opposition sur ses données personnelles."),
+      ],
+    },
+    {
+      title: "Liens hypertextes et cookies",
+      blocks: [
+        p("Le site techflow-agency.com contient des liens hypertextes vers d'autres sites et décline toute responsabilité quant à ces liens externes, ainsi qu'aux liens créés par d'autres sites vers techflow-agency.com."),
+        p("La navigation sur techflow-agency.com est susceptible d'entraîner l'installation d'un ou plusieurs cookies sur l'ordinateur de l'utilisateur."),
+      ],
+    },
+    {
+      title: "Droit applicable et juridiction",
+      blocks: [
+        p("Tout litige en relation avec l'utilisation de techflow-agency.com est soumis au droit français. Compétence exclusive est attribuée aux tribunaux compétents de Paris."),
+      ],
+    },
+    {
+      title: "Principaux textes applicables",
+      blocks: [
+        ul("Loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés", "Loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique", "Règlement général sur la protection des données (RGPD) (UE) 2016/679"),
+      ],
+    },
+    {
+      title: "Glossaire",
+      blocks: [
+        ul("Utilisateur : Tout internaute se connectant au site susnommé et l'utilisant", "Informations personnelles : « Les informations qui permettent, sous quelque forme que ce soit, directement ou non, l'identification des personnes physiques auxquelles elles s'appliquent »"),
+      ],
+    },
+  ],
+};
+
+const cookiesEn: LegalDoc = {
+  meta: { title: "Cookie Policy | TechFlow Agency", description: "Which cookies TechFlow Agency uses, what each one does, how long it lasts, and how you can change your consent at any time." },
+  badge: "Legal information",
+  title: "Cookie *policy.*",
+  intro: "The cookies set when browsing techflow-agency.com and your rights.",
+  toc: "Contents",
+  note: "DRAFT — this Cookie Policy is being finalised and is not yet in force. The text below is placeholder content copied from our Legal Notices and does not describe the cookies this site sets. It will be completed once the consent banner is installed.",
+  sections: [
+    {
+      title: "About this website",
+      blocks: [
+        p("Pursuant to Article 6 of French Law No. 2004-575 of June 21, 2004, regarding confidence in the digital economy, users of techflow-agency.com, owned by Techflow Agency PTE LTD, are informed of the identity of the various parties involved in its creation and monitoring:"),
+        p("Owner: Techflow Agency PTE LTD"),
+        p("Registered office: 229 160 ROBINSON ROAD, #14-04, SINGAPORE BUSINESS FEDERATION CENTER, SINGAPORE 068914"),
+        p("Registration number: 929698140"),
+        p("CEO and Publication Director: Maximilien Grolier – maximilien@techflow-agency.com"),
+        p("Website Hosting: Webflow, Inc. 398 11th Street, 2nd Floor San Francisco, CA 94103"),
+      ],
+    },
+    {
+      title: "Terms and Conditions of Use",
+      blocks: [
+        p("The use of techflow-agency.com implies full acceptance of the terms and conditions of use described below. These terms of use may be modified or supplemented at any time; therefore, users of techflow-agency.com are invited to consult them regularly."),
+        p("The site is normally accessible to users at all times. However, techflow-agency.com may decide to interrupt access for technical maintenance and will endeavor to inform users in advance of maintenance dates and times."),
+        p("Similarly, the legal notice may be modified at any time: users are encouraged to refer to it as often as possible."),
+      ],
+    },
+    {
+      title: "Description of Services",
+      blocks: [
+        p("The purpose of techflow-agency.com is to provide information about all activities of the company. Avia Creative Solutions strives to provide accurate information on techflow-agency.com. However, it cannot be held responsible for omissions, inaccuracies, or outdated information, whether caused by itself or third-party partners who provide this information."),
+      ],
+    },
+    {
+      title: "Technical Limitations",
+      blocks: [
+        p("The website uses Webflow technology. The website cannot be held liable for any material damage related to the use of the site. Furthermore, users commit to accessing the site using recent equipment, free from viruses, and with an up-to-date browser."),
+      ],
+    },
+    {
+      title: "Intellectual Property",
+      blocks: [
+        p("Avia Creative Solutions owns the intellectual property rights or holds usage rights for all elements accessible on the site, including texts, images, graphics, logos, icons, sounds, and software. Any reproduction, representation, modification, publication, or adaptation of all or part of the site elements, regardless of the means or process used, is prohibited without prior written authorization from Avia Creative Solutions."),
+      ],
+    },
+    {
+      title: "Liability Limitations",
+      blocks: [
+        p("Avia Creative Solutions cannot be held liable for direct or indirect damage to users' equipment while accessing techflow-agency.com."),
+        p("Avia Creative Solutions reserves the right to remove, without prior notice, any content posted in interactive spaces that would violate applicable French legislation."),
+      ],
+    },
+    {
+      title: "Personal Data Management",
+      blocks: [
+        p("Personal data protection in France is governed by the General Data Protection Regulation (GDPR), Law No. 78-87 of January 6, 1978, Law No. 2004-801 of August 6, 2004, and Article L. 226-13 of the Criminal Code."),
+        p("In accordance with the GDPR, users have the right to access, rectify, and oppose their personal data."),
+      ],
+    },
+    {
+      title: "Hyperlinks and Cookies",
+      blocks: [
+        p("The techflow-agency.com website contains hyperlinks to other websites and disclaims any responsibility regarding these external links or links created by other sites to techflow-agency.com."),
+        p("Browsing techflow-agency.com may result in the installation of cookie(s) on the user's computer."),
+      ],
+    },
+    {
+      title: "Applicable Law and Jurisdiction",
+      blocks: [
+        p("Any dispute relating to the use of techflow-agency.com is subject to French law. Exclusive jurisdiction is given to the competent courts of Paris."),
+      ],
+    },
+    {
+      title: "Key Applicable Laws",
+      blocks: [
+        ul("French Law No. 78-17 of January 6, 1978, on Information Technology, Data Files, and Civil Liberties", "French Law No. 2004-575 of June 21, 2004, on Confidence in the Digital Economy", "General Data Protection Regulation (GDPR) (EU) 2016/679"),
+      ],
+    },
+    {
+      title: "Glossary",
+      blocks: [
+        ul("User: Any internet user connecting to and using the aforementioned website", "Personal Information: \"Information that allows, in any form whatsoever, directly or indirectly, the identification of the natural persons to whom it applies\""),
+      ],
+    },
+  ],
+};
+
+export const legalDocs: Record<"legal" | "terms" | "cookies", Record<Locale, LegalDoc>> = {
   legal: { fr: legalFr, en: legalEn },
   terms: { fr: termsFr, en: termsEn },
+  cookies: { fr: cookiesFr, en: cookiesEn },
 };

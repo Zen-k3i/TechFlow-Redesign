@@ -294,6 +294,7 @@ export const fr = {
     agency: { projects: "Projets", tools: "Outils", team: "Notre équipe", insights: "Ressources", contact: "Contact" },
     legal: "Mentions légales",
     terms: "Conditions générales",
+    cookies: "Paramètres des cookies",
     top: "Haut de page ↑",
     newTab: "nouvel onglet",
   },

@@ -308,6 +308,7 @@ export const en: Dictionary = {
     agency: { projects: "Projects", tools: "Tools", team: "Our team", insights: "Insights", contact: "Contact" },
     legal: "Legal notices",
     terms: "Terms of service",
+    cookies: "Cookies Settings",
     top: "Back to top ↑",
     newTab: "opens in a new tab",
   },

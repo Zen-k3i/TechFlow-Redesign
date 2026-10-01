@@ -7,7 +7,7 @@ import { PageHero } from "../page/ui";
 import { useLocale } from "../site/locale";
 import { legalDocs } from "./data";
 
-export function LegalPage({ doc: key }: { doc: "legal" | "terms" }) {
+export function LegalPage({ doc: key }: { doc: "legal" | "terms" | "cookies" }) {
   const { lang, t, links } = useLocale();
   const doc = legalDocs[key][lang];
   const other = key === "legal" ? "terms" : "legal";

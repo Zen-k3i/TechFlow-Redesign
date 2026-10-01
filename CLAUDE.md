@@ -47,6 +47,7 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 ## Header / footer
 - Desktop menu is 16px with narrower item padding below 1280px so French fits at 1024px; below 1024px the burger menu takes over. EN menu label is "Projects" (`nav.pages.projects`).
 - CTA buttons are the hero's pair, shared from `page/project-cta.tsx`: `GlowButton` (pill with a turning blue edge light, glow and round blue arrow; white on dark, ink on light) and `HumanButton` (founder avatar with an online dot, opens the booking page), both 52px / 15px. The hero, the footer's "Un projet en tête ?" block (`ProjectCta`: heading, scope text, "Demander un devis" + "Parler à un humain", reassurance line; hidden on case studies via `footerCta={false}`) and the article sidebar card (same buttons, `block`, stacked) all use them, so they stay identical.
+- Footer bottom row: Mentions légales, Conditions générales, "Paramètres des cookies" / "Cookies Settings" → `/politique-de-cookies` / `/en/cookie-policy` (same URLs and labels as the old site). The cookie policy (`cookies` in `legal/data.ts`) is a copy of the old site's page, which is itself a **draft** placeholder taken from the legal notices (its notice says so); the EN copy names "Avia Creative Solutions" in sections 3, 5 and 6 as on the old site. Replace it with the real policy when it exists.
 - Footer: Instagram and LinkedIn icons (inline SVG from the old site) + the Webflow Premium Partner badge under the tagline; external links use `rel="noopener noreferrer"`.
 
 ## Still local (not in Sanity)

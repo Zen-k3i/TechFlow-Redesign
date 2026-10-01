@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = (Object.keys(routes) as RouteKey[]).map((key) => ({
     url: url(href("fr", key)),
     changeFrequency: "monthly" as const,
-    priority: key === "home" ? 1 : key === "legal" || key === "terms" ? 0.3 : 0.8,
+    priority: key === "home" ? 1 : key === "legal" || key === "terms" || key === "cookies" ? 0.3 : 0.8,
     alternates: { languages: { fr: url(href("fr", key)), en: url(href("en", key)) } },
   }));
 

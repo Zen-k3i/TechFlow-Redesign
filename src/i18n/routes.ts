@@ -18,6 +18,7 @@ export const routes = {
   contact: { fr: "/contact", en: "/contact" },
   legal: { fr: "/mentions-legales", en: "/legal-notices" },
   terms: { fr: "/conditions-generales", en: "/terms-of-service" },
+  cookies: { fr: "/politique-de-cookies", en: "/cookie-policy" },
 } satisfies Record<string, Record<Locale, string>>;
 
 export type RouteKey = keyof typeof routes;

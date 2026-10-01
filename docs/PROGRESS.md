@@ -4,7 +4,7 @@ Update at the end of every work session (see CLAUDE.md). Newest first. Link GitH
 
 ## In progress
 - **Waiting on push (403 for `kinnizen` on techflow-ag/TechFlow-Redesign):** someone with write access pushes `main`. Project `sectors` and article `topics` (Categories) are filled from the Sanity lists and the site reads only them (2026-10-01). After the push: run `scripts/migrate-taxonomies.ts` (studio) without flags to remove the hidden old text, then delete the hidden `sector` (project.ts) and `categories` (insight.ts) fields.
-- **Waiting on a decision:** footer "Paramètres des cookies" / "Cookies Settings" link. The old site's `/politique-de-cookies` page is a draft (placeholder copied from the legal notices; the EN version names another company), so it has not been copied yet.
+- **Cookie policy:** the footer link and pages are in (copied from the old site, 2026-10-01), but that text is a draft placeholder from the legal notices; the EN version names "Avia Creative Solutions". Needs the real cookie policy (and a consent banner if analytics are added).
 - **To do in Sanity (#2):** tick "Logo has its own background" on Mandil Avocats (FR + EN).
 - **To do:** deploy the Studio (`pnpm deploy` in `techflow-cms/studio`) so the hosted Studio gets the new lists, FAQ folder, image groups, accent colour and slug fix.
 
