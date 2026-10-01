@@ -2,6 +2,7 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CaseIcon} from '@sanity/icons/Case'
 import {languageField, orderField, seoField, slugField} from './shared'
 import {sameLanguage} from './taxonomy'
+import {ColorInput} from '../../components/color-input'
 
 /** The case-study header is a 3×3 mosaic: four sides, the hero image in the middle, four sides. */
 const HERO_SIDES = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -23,6 +24,18 @@ export const project = defineType({
     defineField({name: 'title', title: 'Project name', type: 'string', group: 'content', validation: (r) => r.required()}),
     {...slugField, group: 'content'},
     defineField({name: 'summary', title: 'Summary', type: 'text', rows: 3, group: 'content'}),
+    defineField({
+      name: 'accentColor',
+      title: 'Template colour',
+      description:
+        "The case study's colour: key figures, quote card, glows, and the project card's hover light. Click the swatch to pick it or type a hex code. Choose a light, bright tone: it is shown on dark backgrounds.",
+      type: 'string',
+      group: 'content',
+      initialValue: '#4791ff',
+      components: {input: ColorInput},
+      validation: (rule) =>
+        rule.regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, {name: 'hex colour'}).error('Use a hex code like #7ee8ff.'),
+    }),
     defineField({name: 'body', title: 'Case study', type: 'blockContent', group: 'content'}),
     defineField({name: 'testimonial', title: 'Client testimonial', type: 'testimonial', group: 'content'}),
 
@@ -46,16 +59,6 @@ export const project = defineType({
       validation: (r) => r.max(4),
     }),
     defineField({name: 'websiteUrl', title: 'Client website', type: 'url', group: 'details'}),
-    defineField({
-      name: 'accentColor',
-      title: 'Accent colour',
-      description:
-        'Hex colour code for the case study page (badges, key figures, quote card, glows), e.g. #7ee8ff. Pick a light, bright tone: it is shown on a dark background. Leave empty to use the default colour.',
-      type: 'string',
-      group: 'details',
-      validation: (rule) =>
-        rule.regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, {name: 'hex colour'}).error('Use a hex code like #7ee8ff.'),
-    }),
     defineField({
       name: 'services',
       title: 'Services',

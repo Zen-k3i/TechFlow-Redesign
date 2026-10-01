@@ -20,6 +20,8 @@ const projectCard = /* groq */ `
   // Picked in the Studio from the Sectors list (one or more).
   "sectors": array::compact(sectors[]->title),
   "sector": sectors[0]->title,
+  // "Template colour" in the Studio: the project's accent on its card and case study.
+  accentColor,
   summary,
   services,
   websiteUrl,
@@ -44,7 +46,6 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
     metrics[]{ _key, value, label },
     logo ${image},
     "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),
-    accentColor,
     "gallery": ${heroMosaic}[defined(asset)]{ "_key": asset._ref, ...${image} },
     testimonial { quote, name, role, photo ${image} },
     tools[]->{ _id, title, "slug": slug.current, logo ${image} },
@@ -72,7 +73,8 @@ export const CATEGORIES_QUERY = defineQuery(`
 export const PROJECT_SECTORS_QUERY = defineQuery(`
   *[_type == "project" && language == $lang && defined(slug.current)]{
     "slug": slug.current,
-    "sectors": array::compact(sectors[]->title)
+    "sectors": array::compact(sectors[]->title),
+    accentColor
   }
 `);
 

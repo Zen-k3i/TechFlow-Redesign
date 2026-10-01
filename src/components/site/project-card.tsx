@@ -8,7 +8,7 @@ import { GrowthCover } from "../case-study/growth-cover";
 import { caseStudyUrl, projectImage, type Project } from "./content";
 import { useLocale } from "./locale";
 import { projectDomain, projectPreviews } from "./previews";
-import { projectTheme } from "./project-highlight";
+import { projectTheme, themeFromHex } from "./project-highlight";
 
 const MotionLink = motion.create(Link);
 const SLIDE_MS = 1600;
@@ -30,13 +30,19 @@ type CardOptions = {
 };
 
 /** Card for a locally coded project (homepage, service pages, growth case studies). */
-export function ProjectCard({ project, sector, ...options }: { project: Project; /** Overrides the local sector label. */ sector?: string } & CardOptions) {
+export function ProjectCard({
+  project,
+  sector,
+  accent,
+  ...options
+}: { project: Project; /** Overrides the local sector label. */ sector?: string; /** Sanity colour, overrides the coded theme. */ accent?: string | null } & CardOptions) {
   const { t } = useLocale();
   return (
     <ProjectCardView
       {...options}
       href={caseStudyUrl(project.slug)}
       slug={project.slug}
+      accent={accent}
       name={project.name}
       sector={sector ?? t.work.sectors[project.sector] ?? project.sector}
       tags={project.disciplines.map((d) => t.work.disciplines[d] ?? d)}
@@ -57,6 +63,7 @@ type CardImage = { src: string; blurDataURL?: string };
 export function ProjectCardView({
   href: to,
   slug,
+  accent,
   name,
   sector,
   tags,
@@ -70,8 +77,10 @@ export function ProjectCardView({
   glow = true,
 }: {
   href: string;
-  /** Picks the accent color. */
+  /** Picks the accent color when no `accent` is given (themes coded by slug). */
   slug: string;
+  /** Hex accent from Sanity ("Template colour"); wins over the coded theme. */
+  accent?: string | null;
   name: string;
   sector?: string;
   tags: string[];
@@ -92,7 +101,7 @@ export function ProjectCardView({
   const glareY = useTransform(my, [-0.5, 0.5], [0, 100]);
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.22), transparent 55%)`;
 
-  const theme = projectTheme(slug);
+  const theme = themeFromHex(accent) ?? projectTheme(slug);
   const stacked = !growth && previews.length > 0;
   const [hovered, setHovered] = useState(false);
   const [slide, setSlide] = useState(0);

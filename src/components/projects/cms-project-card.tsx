@@ -27,6 +27,7 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
     <ProjectCardView
       href={href(lang, "projects", project.slug ?? "")}
       slug={project.slug ?? ""}
+      accent={project.accentColor}
       name={project.title ?? ""}
       sector={project.sectors?.join(" · ") || undefined}
       tags={project.services ?? []}

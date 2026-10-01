@@ -9,7 +9,7 @@ import { useLocale } from "./locale";
 import { ProjectCard } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
 
-type ProjectSectors = { slug: string | null; sectors: string[] | null };
+type ProjectSectors = { slug: string | null; sectors: string[] | null; accentColor: string | null };
 
 /**
  * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
@@ -22,7 +22,11 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
     () =>
       projects.map((project) => {
         const cms = projectSectors.find((p) => p.slug === project.slug || p.slug?.startsWith(`${project.slug}-`));
-        return { project, sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector] };
+        return {
+          project,
+          sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector],
+          accent: cms?.accentColor,
+        };
       }),
     [projectSectors, t],
   );
@@ -65,7 +69,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
 
           <motion.ul layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map(({ project, sectors: names }) => (
+              {visible.map(({ project, sectors: names, accent }) => (
                 <motion.li
                   key={project.slug}
                   layout
@@ -74,7 +78,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ProjectCard project={project} sector={names.join(" · ")} cursor={false} glow={false} />
+                  <ProjectCard project={project} sector={names.join(" · ")} accent={accent} cursor={false} glow={false} />
                 </motion.li>
               ))}
             </AnimatePresence>
