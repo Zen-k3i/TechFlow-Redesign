@@ -1,8 +1,9 @@
 "use client";
 
 import Image, { type ImageLoader } from "next/image";
+import { useStill } from "../site/use-still";
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { href } from "@/i18n/routes";
 import { clients, ease } from "../site/content";
 import { useLocale } from "../site/locale";
@@ -622,7 +623,7 @@ export function MuxCard({
   const [near, setNear] = useState(false);
   const [sound, setSound] = useState(false);
   const [paused, setPaused] = useState(false);
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 

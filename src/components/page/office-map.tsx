@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useStill } from "../site/use-still";
 
 /** Coordinate space of `/images/world-dots.svg`, a dotted version of the studio's world map. */
 const W = 1545;
@@ -51,7 +52,7 @@ const PULSES = [
  * The routes draw in when the map scrolls into view, then pulses travel both ways along each one.
  */
 export function OfficeMap({ className = "" }: { className?: string }) {
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
 
   return (
     <div className={`relative aspect-[1545/768] w-full ${className}`}>

@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useStill } from "../site/use-still";
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 import { href } from "@/i18n/routes";
 import { sanityLoader } from "@/sanity/image";
 import { ease } from "../site/content";
@@ -36,7 +37,7 @@ const SPEEDS = [70, 58, 82];
 export function ProjectsHero({ projects }: { projects: WallProject[] }) {
   const { lang, t, links } = useLocale();
   const c = projectsContent[lang];
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const ref = useRef<HTMLElement>(null);
 
   // Pointer tilts the wall a little; scrolling away lifts it and fades the copy.

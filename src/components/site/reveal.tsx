@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from "motion/react";
+import { useStill } from "./use-still";
+import { animate, motion, useInView, useMotionValue, useTransform } from "motion/react";
 import { ease } from "./content";
 
 export function parseAccents(text: string) {
@@ -87,7 +88,7 @@ export function FadeIn({
 export function CountUp({ value }: { value: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const match = value.match(/^(\D*?)(\d+(?:[.,]\d+)?)([^]*)$/);
   // "80 000" style thousands would count oddly, so leave them static.
   const countable = match !== null && !/^[\s\u00a0\u202f]?\d/.test(match[3]);

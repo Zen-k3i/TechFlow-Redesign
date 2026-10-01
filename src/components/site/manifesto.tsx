@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { useStill } from "./use-still";
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { FadeIn, RevealHeading, parseAccents } from "./reveal";
@@ -81,7 +82,7 @@ function Word({
   range: [number, number];
   accent: boolean;
 }) {
-  const still = useReducedMotion();
+  const still = useStill();
   const opacity = useTransform(progress, range, [0.14, 1]);
 
   return (

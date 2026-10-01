@@ -1,8 +1,9 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { useStill } from "./use-still";
 import type { MotionValue } from "motion/react";
-import { motion, useReducedMotion, useTransform } from "motion/react";
+import { motion, useTransform } from "motion/react";
 
 type Motif =
   | "speed"
@@ -59,7 +60,7 @@ export function ProjectHighlight({
   mx: MotionValue<number>;
   my: MotionValue<number>;
 }) {
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
   const theme = THEMES[slug] ?? FALLBACK;
   const lx = useTransform(mx, [-0.5, 0.5], ["12%", "88%"]);
   const ly = useTransform(my, [-0.5, 0.5], ["14%", "86%"]);

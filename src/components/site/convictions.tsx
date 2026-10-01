@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useStill } from "./use-still";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";
@@ -35,7 +36,7 @@ function ToolLogo({ tool, size }: { tool: Tool; size: number }) {
 export function Convictions() {
   const { t } = useLocale();
   const c = t.convictions;
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const Visual = [BuildVisual, ToolsVisual, UnderstandVisual][active];

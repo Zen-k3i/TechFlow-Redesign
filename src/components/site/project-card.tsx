@@ -1,9 +1,10 @@
 "use client";
 
 import Image, { type ImageLoader } from "next/image";
+import { useStill } from "./use-still";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
 import { GrowthCover } from "../case-study/growth-cover";
 import { caseStudyUrl, projectImage, type Project } from "./content";
 import { useLocale } from "./locale";
@@ -92,7 +93,7 @@ export function ProjectCardView({
   growth?: boolean;
 } & CardOptions) {
   const { t } = useLocale();
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-9, 9]), spring);

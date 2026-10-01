@@ -1,14 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useStill } from "./use-still";
 import { useEffect, useRef, useState } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from "motion/react";
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { GlowButton, HumanButton } from "../page/project-cta";
 import { caseStudyUrl, ease, featured, projectImage } from "./content";
 import { BuildWord, DesignWord, GrowWord } from "./hero-words";
@@ -26,7 +21,7 @@ const acts = [
 export function Hero({ stacked = false }: { stacked?: boolean }) {
   const { t } = useLocale();
   const ref = useRef<HTMLElement>(null);
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
   const [active, setActive] = useState(-1);
   const [paused, setPaused] = useState(false);
 

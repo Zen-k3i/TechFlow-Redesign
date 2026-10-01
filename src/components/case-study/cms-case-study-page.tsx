@@ -1,17 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useStill } from "../site/use-still";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "motion/react";
+import { AnimatePresence, motion, useInView, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 import type { Locale } from "@/i18n/config";
 import { href } from "@/i18n/routes";
 import type { PROJECT_DETAIL_QUERY_RESULT } from "@/sanity.types";
@@ -155,7 +147,7 @@ export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
 function Hero({ study }: { study: CmsCaseStudy }) {
   const { lang, t } = useLocale();
   const c = copy[lang];
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
   const website = safeHref(study.websiteUrl);
 
   const reveal = (delay: number) => ({
