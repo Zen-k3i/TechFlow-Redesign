@@ -17,9 +17,9 @@ const projectCard = /* groq */ `
   _id,
   title,
   "slug": slug.current,
-  // Picked from the Sectors list (one or more); older documents held one name as text.
-  "sectors": array::compact(select(defined(sectors[0]._ref) => sectors[]->title, [string(sector)])),
-  "sector": coalesce(sectors[0]->title, string(sector)),
+  // Picked in the Studio from the Sectors list (one or more).
+  "sectors": array::compact(sectors[]->title),
+  "sector": sectors[0]->title,
   summary,
   services,
   websiteUrl,
@@ -72,7 +72,7 @@ export const CATEGORIES_QUERY = defineQuery(`
 export const PROJECT_SECTORS_QUERY = defineQuery(`
   *[_type == "project" && language == $lang && defined(slug.current)]{
     "slug": slug.current,
-    "sectors": array::compact(select(defined(sectors[0]._ref) => sectors[]->title, [string(sector)]))
+    "sectors": array::compact(sectors[]->title)
   }
 `);
 

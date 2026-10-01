@@ -9,7 +9,7 @@ import { useLocale } from "./locale";
 import { ProjectCard } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
 
-type ProjectSectors = { slug: string | null; sectors: string[] };
+type ProjectSectors = { slug: string | null; sectors: string[] | null };
 
 /**
  * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
@@ -22,11 +22,9 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
     () =>
       projects.map((project) => {
         const cms = projectSectors.find((p) => p.slug === project.slug || p.slug?.startsWith(`${project.slug}-`));
-        // Names outside the list (old free text, not yet migrated) fall back to the local label.
-        const listed = cms?.sectors.filter((name) => sectorList.includes(name)) ?? [];
-        return { project, sectors: listed.length ? listed : [t.work.sectors[project.sector] ?? project.sector] };
+        return { project, sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector] };
       }),
-    [projectSectors, sectorList, t],
+    [projectSectors, t],
   );
   const sectors = useMemo(() => filterOptions(sectorList, items.map((i) => i.sectors)), [sectorList, items]);
   const [filter, setFilter] = useState<string | null>(null);

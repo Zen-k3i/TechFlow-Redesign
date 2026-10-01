@@ -5,6 +5,9 @@
  *
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --dry-run   # show the mapping
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --lists-only  # only create the lists
+ *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --projects-keep-text
+ *     # fill project `sectors` but keep the old text `sector` and leave articles alone:
+ *     # safe while a deployment still runs code that reads the old fields
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token                # write
  *
  * Re-running is safe: the lists use fixed ids, and documents that already hold references are left alone.
@@ -15,6 +18,7 @@ import {getCliClient} from 'sanity/cli'
 const DRY_RUN = process.argv.includes('--dry-run')
 // The lists alone don't change what the website reads; switching documents to them does.
 const LISTS_ONLY = process.argv.includes('--lists-only')
+const KEEP_TEXT = process.argv.includes('--projects-keep-text')
 const client = getCliClient({apiVersion: '2026-09-29'})
 
 type Lang = 'fr' | 'en'
@@ -53,8 +57,8 @@ function lookup(pairs: Pair[], value: string) {
 }
 
 async function run() {
-  const projects = await client.fetch<{_id: string; language: Lang; sector: unknown}[]>(
-    `*[_type == "project" && defined(sector)]{_id, language, sector}`,
+  const projects = await client.fetch<{_id: string; language: Lang; sector: unknown; sectors?: unknown[]}[]>(
+    `*[_type == "project" && defined(sector)]{_id, language, sector, sectors}`,
   )
   const insights = await client.fetch<{_id: string; language: Lang; categories: unknown[]}[]>(
     `*[_type == "insight" && defined(categories)]{_id, language, categories}`,
@@ -62,7 +66,7 @@ async function run() {
 
   const missing: string[] = []
   const projectPatches = projects.flatMap((p) => {
-    if (typeof p.sector !== 'string') return [] // already migrated
+    if (typeof p.sector !== 'string' || (KEEP_TEXT && Array.isArray(p.sectors))) return [] // already migrated
     const pair = lookup(SECTORS, p.sector)
     if (!pair) missing.push(`sector "${p.sector}" (${p._id})`)
     return pair
@@ -112,8 +116,8 @@ async function run() {
     }
   }
   if (!LISTS_ONLY) {
-    for (const p of projectPatches) tx.patch(p.id, (patch) => patch.set(p.set).unset(p.unset))
-    for (const p of insightPatches) tx.patch(p.id, (patch) => patch.set(p.set))
+    for (const p of projectPatches) tx.patch(p.id, (patch) => (KEEP_TEXT ? patch.set(p.set) : patch.set(p.set).unset(p.unset)))
+    if (!KEEP_TEXT) for (const p of insightPatches) tx.patch(p.id, (patch) => patch.set(p.set))
   }
   await tx.commit()
   if (LISTS_ONLY) console.log('Lists created; projects and articles not switched yet.')
