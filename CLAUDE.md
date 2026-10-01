@@ -21,6 +21,8 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 - `insight.author` references a `teamMember`; empty means "TechFlow Agency". `teamMember` fields: name, role, photo, linkedin, order.
 - Project header images mirror Webflow: `heroImage` + `heroSide1`–`heroSide8`. Queries rebuild the 3×3 mosaic as `gallery`; card hover stacks use `previews` = hero + sides 1–2.
 - Detail pages pass `alternates` (from `translationLinks`) to `PageShell` so the language switch keeps the translated slug.
+- Project sectors and article categories are `sector` / `category` documents (FR + EN, linked like projects; Studio folders "Sectors" and "Article categories"), picked from a dropdown limited to the document's language. Queries return their names (`"sector": coalesce(sector->title, string(sector))`, same idea for categories), so components get plain strings. One-off migration from the old free text: `scripts/migrate-taxonomies.ts`.
+- FAQs are `faq` documents, one per page (`home`, `services`, `design`, `development`, `aiAgents`, `salesFunnel`) and language; Studio folder FAQ → one sub-folder per page. Pages fetch `FAQ_QUERY` and pass it to `Faq`, which renders nothing if the FAQ is missing or empty. Add a page: add it to `FAQ_PAGES` (`schemaTypes/documents/faq.ts`) and fetch it in the page.
 
 ## Projects page (/projets)
 - Custom hero (`src/components/projects/projects-hero.tsx`), not the shared `PageHero`, but styled like it for consistency (badge pill, grid overlay, same padding; no scroll cue), with a tilted wall of each CMS case study's website screens (`previews`) auto-scrolling behind the pitch; every screen links to its case study, hovering a column pauses it. Stats live in the hero and count up. "Explore" scrolls to `#etudes-de-cas` (Lenis handles the anchor).
@@ -42,10 +44,15 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 ## Images
 - `sanityLoader` defaults to quality 90: imported images are already compressed WebP UI screenshots, and re-encoding them at 75 visibly softened their text. The import itself pulls Webflow's originals at full size; Webflow has no larger versions.
 
+## Header / footer
+- Desktop menu is 16px with narrower item padding below 1280px so French fits at 1024px; below 1024px the burger menu takes over. EN menu label is "Projects" (`nav.pages.projects`).
+- Footer: Instagram and LinkedIn icons (inline SVG from the old site) + the Webflow Premium Partner badge under the tagline; external links use `rel="noopener noreferrer"`.
+
 ## Still local (not in Sanity)
 - Gato Tower growth case study.
 - The 3 Mux video testimonials (`src/components/site/content.ts`).
 - Team `members` used by the contact page and services hero (`src/components/team/data.ts`).
+- The team portrait strip (`team/portrait-strip.tsx`, on the home and team pages) shows the Sanity team members; its eyebrow/headline copy is in the component.
 
 ## Home page
 - Méthode (`src/components/site/process.tsx`): heading spans the full width; only the app window is sticky (vertically centred), so it never overflows short viewports. Step screens have mixed ratios, so they're shown whole (`object-contain` over a blurred copy), not cropped.
@@ -57,6 +64,7 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 - Webflow, n8n, HubSpot and Twenty logos in `public/images/tools` are white: always show tool logos on their brand colour (`tools` in `services/hub-data.ts`, `TOOLS` in `site/convictions.tsx`), never on a white tile.
 - The import replaces whole project documents (`createOrReplace`). Fields only set in the Studio must be listed in `STUDIO_ONLY` in `import-live.ts` (today: `logoFill`, `accentColor`) or a re-import erases them.
 - After any schema or query change, run `pnpm typegen` in `techflow-cms/studio`; it writes `sanity.types.ts` at the repo root.
+- Video testimonials (`MuxCard`): the silent loop only gets its source near the viewport and pauses off screen (carousels render each video up to 10 times); a click swaps in Mux's player from 0 with sound. Verifying playback needs a visible browser: a hidden preview pane runs no IntersectionObserver or autoplay.
 - `<Testimonials />` is an async server component, so client pages receive it as a `testimonials` slot prop — don't import it directly into a client component.
 - 3D wall effects: in Chrome a `mask-image` on the same element as `perspective` is ignored, and `transform-style: preserve-3d` breaks hit-testing on the tilted content (clicks land on the column, not the link). Fade with gradient overlays (`z-10` above an `isolate` 3D layer) and keep the tilted layer flat.
 - Case-study chapter ids come from the h2 text; ids equal to the page's own anchors (`histoire`, `en-bref`) get a `chapitre-` prefix (`RESERVED` in `cms-case-study-page.tsx`). Add new fixed anchors there.
