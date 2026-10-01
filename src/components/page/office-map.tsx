@@ -38,8 +38,17 @@ const ROUTES = [
 ];
 
 /**
+ * Two light pulses per route: white from Paris out to Asia (the brief), sky blue back the other way
+ * (the work coming back), so the map reads as a back-and-forth conversation rather than one-way orders.
+ */
+const PULSES = [
+  { id: "out", back: false, color: "#ffffff" },
+  { id: "back", back: true, color: "#8fc2ff" },
+] as const;
+
+/**
  * Dotted world map with glowing routes between the Paris, Phnom Penh and Singapore offices.
- * The routes draw in when the map scrolls into view and a light pulse travels along each one.
+ * The routes draw in when the map scrolls into view, then pulses travel both ways along each one.
  */
 export function OfficeMap({ className = "" }: { className?: string }) {
   const still = useReducedMotion() ?? false;
@@ -92,14 +101,27 @@ export function OfficeMap({ className = "" }: { className?: string }) {
               viewport={{ once: true, margin: "-10% 0px" }}
               transition={{ duration: 1.6, delay: 0.3 + i * 0.25, ease: [0.22, 1, 0.36, 1] }}
             />
-            {!still && (
-              <circle r={4} fill="#fff" filter="url(#glow)">
-                <animateMotion dur={`${3.2 + i * 0.6}s`} begin={`${2 + i * 0.4}s`} repeatCount="indefinite" rotate="auto">
-                  <mpath href={`#${route.id}`} />
-                </animateMotion>
-                <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + i * 0.6}s`} begin={`${2 + i * 0.4}s`} repeatCount="indefinite" />
-              </circle>
-            )}
+            {!still &&
+              PULSES.map((pulse) => {
+                const dur = 3.2 + i * 0.6;
+                // The return pulse leaves half a cycle later, so the two cross mid-route.
+                const begin = `${2 + i * 0.4 + (pulse.back ? dur / 2 : 0)}s`;
+                return (
+                  <circle key={pulse.id} r={pulse.back ? 3.5 : 4} fill={pulse.color} filter="url(#glow)">
+                    <animateMotion
+                      dur={`${dur}s`}
+                      begin={begin}
+                      repeatCount="indefinite"
+                      calcMode="linear"
+                      keyPoints={pulse.back ? "1;0" : "0;1"}
+                      keyTimes="0;1"
+                    >
+                      <mpath href={`#${route.id}`} />
+                    </animateMotion>
+                    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${dur}s`} begin={begin} repeatCount="indefinite" />
+                  </circle>
+                );
+              })}
           </g>
         ))}
 
