@@ -2,13 +2,13 @@
 
 import Image, { type ImageLoader } from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { href } from "@/i18n/routes";
 import { clients, ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
 import { FadeIn, RevealHeading } from "../site/reveal";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MuxPlayer, { type MuxPlayerRefAttributes } from "@mux/mux-player-react";
 
 type Tone = "dark" | "light";
@@ -599,15 +599,48 @@ export type MuxVideoItem = {
   role?: string;
 };
 
+/**
+ * Video testimonial: a silent loop with the blue play button on top; a click swaps in the Mux
+ * player, which restarts the video from the beginning with sound and its own controls.
+ * The silent loop only loads and plays while the card is on screen (carousels render each
+ * card several times), and never autoplays when the visitor prefers reduced motion.
+ * `decorative` copies (a carousel's duplicate) are hidden from keyboard and screen readers.
+ */
 export function MuxCard({
   item,
   className = "",
+  decorative = false,
 }: {
   item: MuxVideoItem;
   className?: string;
+  decorative?: boolean;
 }) {
+  const { t } = useLocale();
+  const playLabel = t.common.playVideo;
   const [isPlayingWithSound, setIsPlayingWithSound] = useState(false);
+  const [near, setNear] = useState(false);
+  const still = useReducedMotion() ?? false;
   const playerRef = useRef<MuxPlayerRefAttributes>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Load the loop once the card comes near the viewport, then play it only while it's visible.
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card || isPlayingWithSound) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setNear(true);
+        const video = videoRef.current;
+        if (!video?.src || still) return;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, [still, isPlayingWithSound, near]);
 
   const handlePlayWithSound = () => {
     setIsPlayingWithSound(true);
@@ -615,6 +648,7 @@ export function MuxCard({
 
   return (
     <div
+      ref={cardRef}
       className={`relative h-full w-auto shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-night-soft transition-colors hover:border-brand/50 ${className}`}
       style={{
         aspectRatio: item.aspectRatio || "9 / 16",
@@ -625,13 +659,15 @@ export function MuxCard({
         <>
           {/* Native HTML5 video: 100% smooth in CSS marquee, no shadow DOM reflow glitches */}
           <video
-            src={`https://stream.mux.com/${item.playbackId}/medium.mp4`}
+            ref={videoRef}
+            src={near ? `https://stream.mux.com/${item.playbackId}/medium.mp4` : undefined}
             poster={`https://image.mux.com/${item.playbackId}/thumbnail.webp?time=1`}
-            autoPlay
+            autoPlay={!still}
             muted
             loop
             playsInline
-            preload="auto"
+            preload="none"
+            aria-hidden
             className="h-full w-full object-cover"
           />
 
@@ -641,7 +677,8 @@ export function MuxCard({
           {/* Play Button */}
           <button
             type="button"
-            aria-label="Play video with sound"
+            aria-label={`${playLabel}${item.name ? `: ${item.name}` : ""}`}
+            tabIndex={decorative ? -1 : undefined}
             onClick={handlePlayWithSound}
             className="absolute left-1/2 top-1/2 z-10 flex size-11 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#4766ff] shadow-lg transition-transform hover:scale-110 active:scale-95"
           >

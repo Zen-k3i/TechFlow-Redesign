@@ -336,6 +336,7 @@ export const fr = {
     deliverable: "Livrable",
     step: "Étape",
     breadcrumbHome: "Accueil",
+    playVideo: "Lire la vidéo avec le son",
     comparison: {
       eyebrow: "Comparatif",
       heading: "Pourquoi nous sommes le *choix naturel.*",

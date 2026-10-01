@@ -104,7 +104,7 @@ function ReviewRow({ row, reverse, textClass }: { row: Row; reverse: boolean; te
               className="flex shrink-0"
               style={{ height: row.height, width: "video" in item ? "auto" : row.cardWidth }}
             >
-              {"video" in item ? <MuxCard item={item.video} /> : <Card review={item.review} textClass={textClass} />}
+              {"video" in item ? <MuxCard item={item.video} decorative={copy === 1} /> : <Card review={item.review} textClass={textClass} />}
             </li>
           )),
         )}

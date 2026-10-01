@@ -350,6 +350,7 @@ export const en: Dictionary = {
     deliverable: "Deliverable",
     step: "Step",
     breadcrumbHome: "Home",
+    playVideo: "Play the video with sound",
     comparison: {
       eyebrow: "Comparison",
       heading: "Why we're the *natural choice.*",
