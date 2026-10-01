@@ -30,7 +30,7 @@ type CardOptions = {
 };
 
 /** Card for a locally coded project (homepage, service pages, growth case studies). */
-export function ProjectCard({ project, ...options }: { project: Project } & CardOptions) {
+export function ProjectCard({ project, sector, ...options }: { project: Project; /** Overrides the local sector label. */ sector?: string } & CardOptions) {
   const { t } = useLocale();
   return (
     <ProjectCardView
@@ -38,7 +38,7 @@ export function ProjectCard({ project, ...options }: { project: Project } & Card
       href={caseStudyUrl(project.slug)}
       slug={project.slug}
       name={project.name}
-      sector={t.work.sectors[project.sector] ?? project.sector}
+      sector={sector ?? t.work.sectors[project.sector] ?? project.sector}
       tags={project.disciplines.map((d) => t.work.disciplines[d] ?? d)}
       cover={{ src: projectImage(project.slug) }}
       previews={projectPreviews(project.slug)}

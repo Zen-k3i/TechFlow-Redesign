@@ -27,14 +27,16 @@ export const project = defineType({
     defineField({name: 'testimonial', title: 'Client testimonial', type: 'testimonial', group: 'content'}),
 
     defineField({
-      name: 'sector',
-      title: 'Sector',
-      description: 'Pick from the list; add sectors under Sectors in the sidebar.',
-      type: 'reference',
-      to: [{type: 'sector'}],
+      name: 'sectors',
+      title: 'Sectors',
+      description: 'Pick one or more from the list; add sectors under Sectors in the sidebar.',
+      type: 'array',
       group: 'details',
-      options: {filter: sameLanguage, disableNew: true},
+      of: [defineArrayMember({type: 'reference', to: [{type: 'sector'}], options: {filter: sameLanguage, disableNew: true}})],
+      validation: (r) => r.unique(),
     }),
+    // Free-text sector from the old site, replaced by `sectors` (scripts/migrate-taxonomies.ts). Remove once migrated.
+    defineField({name: 'sector', title: 'Old sector (text)', type: 'string', group: 'details', hidden: true, readOnly: true}),
     defineField({
       name: 'metrics',
       title: 'Key figures',

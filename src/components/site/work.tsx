@@ -3,20 +3,34 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { filterOptions } from "../page/filters";
 import { projects } from "./content";
 import { useLocale } from "./locale";
 import { ProjectCard } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
 
-export function Work() {
+type ProjectSectors = { slug: string | null; sectors: string[] };
+
+/**
+ * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
+ * project's Sanity document (CMS slugs can be longer: `district-6` → `district-6-publishing`) and the
+ * filter buttons from the Sanity Sectors list; projects not in Sanity keep their local label.
+ */
+export function Work({ sectorList, projectSectors }: { sectorList: string[]; projectSectors: ProjectSectors[] }) {
   const { t, links } = useLocale();
-  const sectors = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const p of projects) counts.set(p.sector, (counts.get(p.sector) ?? 0) + 1);
-    return [...counts.entries()];
-  }, []);
+  const items = useMemo(
+    () =>
+      projects.map((project) => {
+        const cms = projectSectors.find((p) => p.slug === project.slug || p.slug?.startsWith(`${project.slug}-`));
+        // Names outside the list (old free text, not yet migrated) fall back to the local label.
+        const listed = cms?.sectors.filter((name) => sectorList.includes(name)) ?? [];
+        return { project, sectors: listed.length ? listed : [t.work.sectors[project.sector] ?? project.sector] };
+      }),
+    [projectSectors, sectorList, t],
+  );
+  const sectors = useMemo(() => filterOptions(sectorList, items.map((i) => i.sectors)), [sectorList, items]);
   const [filter, setFilter] = useState<string | null>(null);
-  const visible = projects.filter((p) => !filter || p.sector === filter);
+  const visible = items.filter((i) => !filter || i.sectors.includes(filter));
 
   return (
     <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
@@ -45,7 +59,7 @@ export function Work() {
                 key={sector}
                 active={filter === sector}
                 onClick={() => setFilter(sector)}
-                label={t.work.sectors[sector] ?? sector}
+                label={sector}
                 count={count}
               />
             ))}
@@ -53,7 +67,7 @@ export function Work() {
 
           <motion.ul layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map((project) => (
+              {visible.map(({ project, sectors: names }) => (
                 <motion.li
                   key={project.slug}
                   layout
@@ -62,7 +76,7 @@ export function Work() {
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ProjectCard project={project} cursor={false} glow={false} />
+                  <ProjectCard project={project} sector={names.join(" · ")} cursor={false} glow={false} />
                 </motion.li>
               ))}
             </AnimatePresence>

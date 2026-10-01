@@ -28,7 +28,7 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
       href={href(lang, "projects", project.slug ?? "")}
       slug={project.slug ?? ""}
       name={project.title ?? ""}
-      sector={project.sector ?? undefined}
+      sector={project.sectors?.join(" · ") || undefined}
       tags={project.services ?? []}
       cover={
         cover

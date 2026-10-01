@@ -1,6 +1,7 @@
 /**
  * One-off migration (2026-10-01): project sectors and article categories go from free text
- * to `sector` / `category` documents (FR + EN, linked as translations) that editors pick from a dropdown.
+ * to `sector` / `category` documents (FR + EN, linked as translations) that editors pick from a list:
+ * projects get `sectors` (one or more) in place of the old text `sector`, articles get `categories`.
  *
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --dry-run   # show the mapping
  *   npx sanity exec scripts/migrate-taxonomies.ts --with-user-token -- --lists-only  # only create the lists
@@ -61,10 +62,12 @@ async function run() {
 
   const missing: string[] = []
   const projectPatches = projects.flatMap((p) => {
-    if (typeof p.sector !== 'string') return [] // already a reference
+    if (typeof p.sector !== 'string') return [] // already migrated
     const pair = lookup(SECTORS, p.sector)
     if (!pair) missing.push(`sector "${p.sector}" (${p._id})`)
-    return pair ? [{id: p._id, set: {sector: ref(docId('sector', pair, p.language))}, log: `${p.language} ${p.sector} → ${pair[p.language]}`}] : []
+    return pair
+      ? [{id: p._id, set: {sectors: [ref(docId('sector', pair, p.language), pair.key)]}, unset: ['sector'], log: `${p.language} ${p.sector} → ${pair[p.language]}`}]
+      : []
   })
   const insightPatches = insights.flatMap((doc) => {
     const strings = doc.categories.filter((c): c is string => typeof c === 'string')
@@ -108,7 +111,10 @@ async function run() {
       })
     }
   }
-  if (!LISTS_ONLY) for (const p of [...projectPatches, ...insightPatches]) tx.patch(p.id, (patch) => patch.set(p.set))
+  if (!LISTS_ONLY) {
+    for (const p of projectPatches) tx.patch(p.id, (patch) => patch.set(p.set).unset(p.unset))
+    for (const p of insightPatches) tx.patch(p.id, (patch) => patch.set(p.set))
+  }
   await tx.commit()
   if (LISTS_ONLY) console.log('Lists created; projects and articles not switched yet.')
   console.log('Done.')

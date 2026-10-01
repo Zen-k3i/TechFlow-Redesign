@@ -19,20 +19,20 @@ import { CASES_ANCHOR, ProjectsHero, type WallProject } from "./projects-hero";
 /** Growth case studies are still coded locally; everything else comes from the CMS. */
 const growthProjects = projects.filter((p) => p.kind === "growth");
 
-type Entry = { key: string; sector: string } & ({ cms: CmsProject } | { local: (typeof growthProjects)[number] });
+type Entry = { key: string; sectors: string[] } & ({ cms: CmsProject } | { local: (typeof growthProjects)[number] });
 
 export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProject[]; sectorList: string[] }) {
   const { lang, t } = useLocale();
   const c = projectsContent[lang];
   const entries = useMemo<Entry[]>(
     () => [
-      ...cmsProjects.map((p) => ({ key: p._id, sector: p.sector ?? "", cms: p })),
-      ...(lang === "fr" ? growthProjects.map((p) => ({ key: p.slug, sector: t.work.sectors[p.sector] ?? p.sector, local: p })) : []),
+      ...cmsProjects.map((p) => ({ key: p._id, sectors: p.sectors ?? [], cms: p })),
+      ...(lang === "fr" ? growthProjects.map((p) => ({ key: p.slug, sectors: [t.work.sectors[p.sector] ?? p.sector], local: p })) : []),
     ],
     [cmsProjects, lang, t],
   );
   // Filter buttons: the Sector list from Sanity, as used by these projects.
-  const sectors = useMemo(() => filterOptions(sectorList, entries.map((e) => [e.sector])), [sectorList, entries]);
+  const sectors = useMemo(() => filterOptions(sectorList, entries.map((e) => e.sectors)), [sectorList, entries]);
   const wall = useMemo<WallProject[]>(
     () =>
       cmsProjects.map((p) => ({
@@ -49,7 +49,7 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
     [cmsProjects, lang],
   );
   const [filter, setFilter] = useState<string | null>(null);
-  const visible = entries.filter((e) => !filter || e.sector === filter);
+  const visible = entries.filter((e) => !filter || e.sectors.includes(filter));
 
   return (
     <>

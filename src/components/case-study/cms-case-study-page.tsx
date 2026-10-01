@@ -35,7 +35,7 @@ const RESERVED = [BRIEF_ANCHOR, STORY_ANCHOR];
 
 /** The brief is worth a section only with more than the reading time in it. */
 const hasBrief = (study: CmsCaseStudy) =>
-  Boolean(study.metrics?.some((m) => m.value) || study.sector || study.services?.length || study.tools?.length || study.team?.length);
+  Boolean(study.metrics?.some((m) => m.value) || study.sectors?.length || study.services?.length || study.tools?.length || study.team?.length);
 
 const copy: Record<Locale, Record<string, string>> = {
   fr: {
@@ -432,10 +432,10 @@ function Brief({ study }: { study: CmsCaseStudy }) {
         )}
 
         <dl className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {study.sector && (
+          {study.sectors && study.sectors.length > 0 && (
             <FadeIn className={cell}>
               <dt className={label}>{c.sector}</dt>
-              <dd className="mt-3 font-serif text-3xl">{study.sector}</dd>
+              <dd className="mt-3 font-serif text-3xl">{(study.sectors ?? []).join(" · ")}</dd>
             </FadeIn>
           )}
 
