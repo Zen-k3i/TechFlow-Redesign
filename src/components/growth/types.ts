@@ -12,19 +12,8 @@ export const asPlatform = (value: string | null | undefined): Platform =>
 /** Placeholders ("[TBD]") are kept in Sanity until real figures exist, and never shown on the site. */
 export const isReal = (value: string | null | undefined): value is string => Boolean(value?.trim()) && !/TBD/i.test(value ?? "");
 
-/** Section ids, used by the funnel's "see how" links. */
-export const SECTION_IDS = {
-  funnel: "methode",
-  creative: "creation",
-  gallery: "tournage",
-  ads: "publicites",
-  abTest: "ab-testing",
-  leads: "leads",
-  community: "communaute",
-  results: "resultats",
-} as const;
-
-export type SectionKey = keyof typeof SECTION_IDS;
+/** Section ids the hero links to. */
+export const SECTION_IDS = { ads: "publicites" } as const;
 
 /** Who sees the ad: the brand's name and avatar on the overlays. */
 export type Brand = { name: string; handle: string; logo: string | null; accent: string };

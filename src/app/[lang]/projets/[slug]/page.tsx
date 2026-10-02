@@ -23,8 +23,6 @@ export async function generateStaticParams({ params }: { params: { lang: string 
   return [...projects, ...growth].flatMap((slug) => (slug ? [{ slug }] : []));
 }
 
-const plain = (text: string | null | undefined) => text?.replaceAll("*", "") ?? undefined;
-
 /** Social share image: the SEO image, else the key visual, else the first ad's poster. */
 function growthShareImage(study: GrowthStudy) {
   const image = [study.seo?.image, study.heroImage, study.ads?.find((a) => a.poster?.asset?.url)?.poster].find((img) => img?.asset?.url);
@@ -38,7 +36,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/projets/[s
   const growth = await getGrowthCaseStudy(lang, slug);
   if (growth) {
     const title = growth.seo?.title ?? `${growth.title} | ${lang === "fr" ? "Étude de cas growth marketing" : "Growth marketing case study"} · TechFlow Agency`;
-    const description = growth.seo?.description ?? growth.summary ?? plain(growth.hero?.intro);
+    const description = growth.seo?.description ?? growth.summary ?? undefined;
     const image = growthShareImage(growth);
     return {
       title,
@@ -85,7 +83,7 @@ function growthJsonLd(study: GrowthStudy, lang: Locale, slug: string) {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: `${study.title}${study.hero?.headline ? ` · ${study.hero.headline}` : ""}`,
-    description: plain(study.hero?.intro),
+    description: study.summary ?? undefined,
     url,
     inLanguage: lang,
     dateModified: study._updatedAt,
@@ -104,8 +102,8 @@ export default async function CaseStudy({ params }: PageProps<"/[lang]/projets/[
   const growth = await getGrowthCaseStudy(lang, slug);
   if (growth) {
     return (
-      // The page ends on its own call to action, so the footer's generic one is turned off.
-      <PageShell lang={lang} current="projects" footerCta={false} alternates={translationLinks("projects", lang, slug, growth.translations)}>
+      // Ends like every case study: related projects, then the footer's "Un projet en tête ?" call to action.
+      <PageShell lang={lang} current="projects" alternates={translationLinks("projects", lang, slug, growth.translations)}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(growthJsonLd(growth, lang, slug)).replace(/</g, "\\u003c") }} />
         <GrowthCaseStudyPage study={growth} />
       </PageShell>

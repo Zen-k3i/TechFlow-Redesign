@@ -12,6 +12,7 @@ type IndexItem = PROJECTS_INDEX_QUERY_RESULT[number];
 export type CmsProject = Omit<IndexItem, "_type" | "previews"> & {
   _type?: IndexItem["_type"];
   previews: Extract<IndexItem, { _type: "project" }>["previews"];
+  phones?: Extract<IndexItem, { _type: "growthCaseStudy" }>["phones"];
 };
 
 const hostname = (url: string | null) => {
@@ -56,6 +57,7 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
       )}
       domain={hostname(project.websiteUrl)}
       growth={project._type === "growthCaseStudy" && !cover}
+      phones={project.phones ?? []}
       loader={sanityLoader}
       cursor={false}
       glow={false}

@@ -44,6 +44,7 @@ const copy: Record<Locale, Record<string, string>> = {
     minutes: "min",
     story: "L'histoire",
     chapter: "Chapitre",
+    step: "Étape",
     said: "Le mot du client",
     related: "D'autres projets",
     back: "Tous les projets",
@@ -62,6 +63,7 @@ const copy: Record<Locale, Record<string, string>> = {
     minutes: "min",
     story: "The story",
     chapter: "Chapter",
+    step: "Step",
     said: "In their words",
     related: "More projects",
     back: "All projects",
@@ -102,18 +104,34 @@ const domainOf = (url: string | undefined) => url?.replace(/^https?:\/\/(www\.)?
  * Everything comes from the Sanity project; blocks without content are left out.
  */
 export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
-  const { lang } = useLocale();
-  const c = copy[lang];
   // The colour set in Sanity wins; otherwise the built-in theme for this project.
   const theme = themeFromHex(study.accentColor) ?? projectTheme(study.slug ?? "");
-  const { intro, chapters } = useMemo(() => chaptersOf(study.body), [study.body]);
-  const storyRef = useRef<HTMLElement>(null);
 
   return (
     <div style={{ "--accent": theme.accent, "--glow": theme.glow } as CSSProperties}>
       <Hero study={study} />
       <Brief study={study} />
+      <Story body={study.body} />
+      <ClientQuote testimonial={study.testimonial} />
+      <Related study={study} />
+    </div>
+  );
+}
 
+/**
+ * The story on paper: text before the first h2 as a large serif lead, then one numbered chapter
+ * per h2 (images placed in the body show between paragraphs), with the floating chapter pill.
+ * Shared by website and growth case studies.
+ */
+export function Story({ body, variant = "chapters" }: { body: BodyValue | null | undefined; variant?: StoryVariant }) {
+  const { lang } = useLocale();
+  const c = copy[lang];
+  const { intro, chapters } = useMemo(() => chaptersOf(body), [body]);
+  const storyRef = useRef<HTMLElement>(null);
+  if (intro.length === 0 && chapters.length === 0) return null;
+
+  return (
+    <>
       <section id={STORY_ANCHOR} ref={storyRef} className="scroll-mt-20 bg-paper px-5 py-24 text-ink md:px-10 md:py-32">
         <div className="mx-auto max-w-7xl">
           <p className="eyebrow text-brand-deep">{c.story}</p>
@@ -123,18 +141,27 @@ export function CmsCaseStudyPage({ study }: { study: CmsCaseStudy }) {
             </FadeIn>
           )}
 
-          <div className="mt-20 space-y-24 md:mt-28 md:space-y-36">
-            {chapters.map((chapter, i) => (
-              <ChapterBlock key={chapter.id} chapter={chapter} index={i} label={c.chapter} lang={lang} />
-            ))}
-          </div>
+          {variant === "steps" ? (
+            // Campaign steps on a rail, like a funnel read top to bottom.
+            <ol className="relative mt-20 space-y-20 md:mt-28 md:space-y-28 lg:pl-16">
+              <span aria-hidden className="absolute bottom-0 left-[11px] top-2 hidden w-px bg-linear-to-b from-[var(--accent)] via-ink/15 to-transparent lg:block" />
+              {chapters.map((chapter, i) => (
+                <li key={chapter.id}>
+                  <StepBlock chapter={chapter} index={i} label={c.step} lang={lang} />
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="mt-20 space-y-24 md:mt-28 md:space-y-36">
+              {chapters.map((chapter, i) => (
+                <ChapterBlock key={chapter.id} chapter={chapter} index={i} label={c.chapter} lang={lang} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
-
-      <Quote study={study} />
-      <Related study={study} />
       {chapters.length > 1 && <ChapterNav chapters={chapters} target={storyRef} />}
-    </div>
+    </>
   );
 }
 
@@ -495,6 +522,36 @@ function Brief({ study }: { study: CmsCaseStudy }) {
 
 // ------------------------------------------------------------------ story
 
+type StoryVariant = "chapters" | "steps";
+
+/** A step of a campaign story: a dot on the rail, the step label and title, then the text, in one column. */
+function StepBlock({ chapter, index, label, lang }: { chapter: Chapter; index: number; label: string; lang: Locale }) {
+  const number = String(index + 1).padStart(2, "0");
+  return (
+    <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className="relative scroll-mt-28">
+      <span
+        aria-hidden
+        className="absolute -left-16 top-0.5 hidden size-6 place-items-center rounded-full bg-[var(--accent)] font-mono text-[10px] text-night ring-4 ring-paper lg:grid"
+      >
+        {number}
+      </span>
+      <FadeIn className="grid gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
+        <div>
+          <p className="eyebrow text-ink/45">
+            {label} {number}
+          </p>
+          <h2 id={`${chapter.id}-title`} className="mt-3 font-serif text-4xl leading-[1.02] md:text-5xl">
+            {chapter.title}
+          </h2>
+        </div>
+        <article lang={lang} className="max-w-2xl [&>*:first-child]:mt-0">
+          <PortableBody value={chapter.blocks} />
+        </article>
+      </FadeIn>
+    </section>
+  );
+}
+
 /** One chapter of the story: a big number and title that stay pinned while its text scrolls. */
 function ChapterBlock({ chapter, index, label, lang }: { chapter: Chapter; index: number; label: string; lang: Locale }) {
   const number = String(index + 1).padStart(2, "0");
@@ -574,11 +631,12 @@ function ChapterNav({ chapters, target }: { chapters: Chapter[]; target: React.R
 
 // ------------------------------------------------------------------ quote & closing
 
+type Testimonial = { quote: string | null; name: string | null; role: string | null; photo: CmsImage } | null | undefined;
+
 /** The client's words on a card in the project's colour, each word rising in as it scrolls into view. */
-function Quote({ study }: { study: CmsCaseStudy }) {
+export function ClientQuote({ testimonial: t }: { testimonial: Testimonial }) {
   const { lang } = useLocale();
   const c = copy[lang];
-  const t = study.testimonial;
   if (!t?.quote) return null;
   const words = t.quote.trim().split(/\s+/);
 

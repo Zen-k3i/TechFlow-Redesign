@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { SOUND_EVENT } from "../page/ui";
 import { ease } from "../site/content";
@@ -97,7 +97,7 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
         <ul
           ref={list}
           aria-label={heading?.replaceAll("*", "") ?? undefined}
-          className="-mx-5 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-[19vw] pb-6 [scrollbar-width:none] sm:px-[30vw] md:mx-0 md:grid md:snap-none md:overflow-visible md:px-0"
+          className="-mx-5 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-[19vw] pb-6 [scrollbar-width:none] sm:px-[30vw] md:mx-auto md:grid md:max-w-4xl md:snap-none md:gap-8 md:overflow-visible md:px-0"
           style={{ gridTemplateColumns: `repeat(${ads.length}, minmax(0, 1fr))` }}
         >
           {ads.map((ad, i) => (
@@ -108,7 +108,7 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10% 0px" }}
               transition={{ duration: 0.8, delay: i * 0.08, ease }}
-              className={`w-[62vw] shrink-0 snap-center sm:w-[40vw] md:w-auto ${i % 2 === 1 ? "md:translate-y-12" : ""}`}
+              className="w-[62vw] shrink-0 snap-center sm:w-[40vw] md:w-auto"
             >
               <button
                 type="button"
@@ -122,18 +122,16 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
                 onBlur={() => setHovered(null)}
                 className="group block w-full rounded-[2.6rem] text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
               >
-                <motion.div whileHover={still ? undefined : { y: -10, rotate: i % 2 ? 1.5 : -1.5 }} transition={{ type: "spring", stiffness: 260, damping: 20 }}>
-                  <PhoneMockup>
-                    <SocialAd ad={ad} brand={brand} platform={pick(platform, ad)} playing={playing === i} compact />
-                    <span className={`absolute inset-0 z-20 flex items-center justify-center transition-opacity duration-300 ${playing === i ? "opacity-0" : "opacity-100"}`}>
-                      <span className="flex size-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
-                        <svg viewBox="0 0 24 24" className="ml-1 size-6" fill="white" aria-hidden>
-                          <path d="M7 4.5v15l12-7.5z" />
-                        </svg>
-                      </span>
+                <TiltPhone still={still}>
+                  <SocialAd ad={ad} brand={brand} platform={pick(platform, ad)} playing={playing === i} compact />
+                  <span className={`absolute inset-0 z-20 flex items-center justify-center transition-opacity duration-300 ${playing === i ? "opacity-0" : "opacity-100"}`}>
+                    <span className="flex size-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
+                      <svg viewBox="0 0 24 24" className="ml-1 size-6" fill="white" aria-hidden>
+                        <path d="M7 4.5v15l12-7.5z" />
+                      </svg>
                     </span>
-                  </PhoneMockup>
-                </motion.div>
+                  </span>
+                </TiltPhone>
                 <div className="mt-5 px-1">
                   <div className="flex items-baseline justify-between gap-3">
                     <span className="eyebrow text-white/40">
@@ -141,9 +139,7 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
                     </span>
                     {ad.duration && <span className="eyebrow text-white/40">{ad.duration}</span>}
                   </div>
-                  <span className="mt-1 block font-medium">{ad.angle}</span>
-                  {ad.variant && <span className="mt-2 inline-block rounded-full border border-(--accent)/40 px-2.5 py-0.5 text-xs text-(--accent)">{ad.variant}</span>}
-                  {ad.note && <span className="mt-2 block text-sm leading-snug text-white/50">{ad.note}</span>}
+                  <span className="mt-1 block text-xl font-medium">{ad.angle}</span>
                 </div>
               </button>
             </motion.li>
@@ -305,28 +301,9 @@ function AdModal({
                   {ad.hook && <p className="mt-4 text-lg text-white/70">&ldquo;{ad.hook}&rdquo;</p>}
                   {ad.note && (
                     <p className="mt-5 rounded-2xl border border-(--accent)/30 bg-(--accent)/10 p-4 text-sm text-white/80">
-                      <span className="eyebrow mb-1 block text-(--accent)">
-                        {c.tested}
-                        {ad.variant ? ` · ${ad.variant}` : ""}
-                      </span>
+                      <span className="eyebrow mb-1 block text-(--accent)">{c.tested}</span>
                       {ad.note}
                     </p>
-                  )}
-                  {ad.script && ad.script.length > 0 && (
-                    <>
-                      <p className="eyebrow mt-7 text-white/40">{c.script}</p>
-                      <ol className="mt-3 space-y-2">
-                        {ad.script.map((s) => (
-                          <li key={s._key} className="grid grid-cols-[4.5rem_1fr] gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-3.5">
-                            <span>
-                              <span className="block text-sm font-medium text-(--accent)">{s.beat}</span>
-                              <span className="eyebrow text-white/40">{s.time}</span>
-                            </span>
-                            <span className="text-sm leading-relaxed text-white/75">{s.line}</span>
-                          </li>
-                        ))}
-                      </ol>
-                    </>
                   )}
                 </motion.div>
               </AnimatePresence>
@@ -346,5 +323,46 @@ function AdModal({
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+const tiltSpring = { stiffness: 180, damping: 18 };
+
+/**
+ * The project cards' hover, on a phone: it tilts toward the cursor, a soft light follows the
+ * pointer across the screen and the accent glows behind it. Flat with reduced motion.
+ */
+function TiltPhone({ still, children }: { still: boolean; children: React.ReactNode }) {
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-10, 10]), tiltSpring);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [10, -10]), tiltSpring);
+  const glareX = useTransform(mx, [-0.5, 0.5], [0, 100]);
+  const glareY = useTransform(my, [-0.5, 0.5], [0, 100]);
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.22), transparent 55%)`;
+
+  return (
+    <div className="relative [perspective:1100px]">
+      <span aria-hidden className="absolute inset-x-[10%] bottom-[5%] top-[30%] rounded-full bg-(--glow) opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100" />
+      <motion.div
+        style={{ rotateX, rotateY }}
+        onPointerMove={(e) => {
+          if (e.pointerType !== "mouse" || still) return;
+          const r = e.currentTarget.getBoundingClientRect();
+          mx.set((e.clientX - r.left) / r.width - 0.5);
+          my.set((e.clientY - r.top) / r.height - 0.5);
+        }}
+        onPointerLeave={() => {
+          mx.set(0);
+          my.set(0);
+        }}
+        className="relative transition-shadow duration-700"
+      >
+        <PhoneMockup className="transition-shadow duration-700 group-hover:shadow-[0_50px_80px_-30px_rgba(0,0,0,0.85)]">
+          {children}
+          {!still && <motion.span aria-hidden className="pointer-events-none absolute inset-0 z-30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: glare }} />}
+        </PhoneMockup>
+      </motion.div>
+    </div>
   );
 }

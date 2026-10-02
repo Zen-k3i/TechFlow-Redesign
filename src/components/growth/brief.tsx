@@ -2,54 +2,53 @@
 
 import Link from "next/link";
 import { href } from "@/i18n/routes";
-import { SanityImage } from "../cms/sanity-image";
 import { useLocale } from "../site/locale";
 import { CountUp, FadeIn, RevealHeading } from "../site/reveal";
 import { growthCopy } from "./copy";
-import type { GrowthStudy } from "./types";
+import { isReal, type GrowthStudy } from "./types";
 
 export const BRIEF_ID = "en-bref";
 
-const GRID: Record<number, string> = {
-  1: "grid-cols-1",
-  2: "sm:grid-cols-2",
-  3: "sm:grid-cols-3",
-  4: "sm:grid-cols-2 lg:grid-cols-4",
+/** Real results first (placeholders are skipped); until there are some, what was delivered. */
+const figuresOf = (s: GrowthStudy) => {
+  const results = s.results?.metrics?.filter((m) => isReal(m.value) && isReal(m.label)) ?? [];
+  return results.length > 0 ? results : (s.hero?.stats?.filter((m) => m.value) ?? []);
 };
 
-/** Is there anything for "The campaign in 10 seconds"? */
-export const hasBrief = (s: GrowthStudy) =>
-  Boolean(s.hero?.stats?.some((m) => m.value) || s.sectors?.length || s.services?.length || s.channels?.length || s.tools?.length || s.team?.length);
-
 /**
- * The project template's "10 seconds" brief, for a campaign: what was delivered as large accent
- * figures, then sector, services, channels, tools and team. Same layout as on website case
- * studies, so both read the same way; the channels row is the growth twist.
+ * The campaign at a glance, under the same heading as a website case study's brief, kept minimal:
+ * one row of large figures between hairlines, then a single line of facts (sector, channels,
+ * reading time, tools, team). The website case study uses accent cards here; this is the growth
+ * template's lighter take on the same block.
  */
 export function GrowthBrief({ study }: { study: GrowthStudy }) {
   const { lang } = useLocale();
   const c = growthCopy[lang];
-  if (!hasBrief(study)) return null;
-  const stats = study.hero?.stats?.filter((m) => m.value) ?? [];
-  const cell = "border-t border-white/15 pt-5";
-  const label = "eyebrow text-white/45";
+  const figures = figuresOf(study);
+  const facts = [
+    study.sectors?.length ? { label: c.sector, value: study.sectors.join(" · ") } : null,
+    study.channels?.length ? { label: c.channels, value: study.channels.join(", ") } : null,
+    study.minutes > 0 ? { label: c.reading, value: `${study.minutes} ${c.minutes}` } : null,
+    study.team?.length ? { label: c.team, value: study.team.map((m) => m.name).join(", ") } : null,
+  ].filter((f) => f !== null);
+  const tools = study.tools ?? [];
+  if (figures.length === 0 && facts.length === 0) return null;
 
   return (
-    <section id={BRIEF_ID} className="scroll-mt-20 bg-night px-5 pb-24 pt-8 text-white md:px-10 md:pb-32">
+    <section id={BRIEF_ID} className="scroll-mt-20 bg-night px-5 pb-20 pt-8 text-white md:px-10 md:pb-28">
       <div className="mx-auto max-w-7xl">
         <p className="eyebrow text-(--accent)">{c.brief}</p>
         <RevealHeading text={c.briefTitle} accentClassName="italic text-(--accent)" className="mt-4 font-serif text-5xl leading-none md:text-6xl" />
-
-        {stats.length > 0 && (
-          <dl className={`mt-14 grid gap-4 ${GRID[Math.min(stats.length, 4)]}`}>
-            {stats.map((m, i) => (
+        {figures.length > 0 && (
+          <dl className="mt-12 grid grid-cols-2 border-y border-white/10 md:flex">
+            {figures.map((m, i) => (
               <FadeIn
                 key={m._key}
-                delay={i * 0.1}
-                className="flex h-full flex-col-reverse justify-end rounded-3xl bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] p-8 ring-1 ring-[color-mix(in_oklab,var(--accent)_30%,transparent)]"
+                delay={i * 0.08}
+                className={`flex flex-1 flex-col-reverse gap-2 px-1 py-8 md:px-8 md:first:pl-0 ${i > 0 ? "md:border-l md:border-white/10" : ""} ${i % 2 === 1 ? "border-l border-white/10 pl-5 md:pl-8" : ""} ${i > 1 ? "border-t border-white/10 md:border-t-0" : ""}`}
               >
-                <dt className="mt-4 max-w-xs text-lg leading-snug text-white/70">{m.label}</dt>
-                <dd className="font-serif text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.85] tracking-[-0.03em] text-(--accent)">
+                <dt className="text-sm text-white/55">{m.label}</dt>
+                <dd className="font-serif text-5xl leading-none tracking-[-0.02em] text-(--accent) md:text-6xl">
                   <CountUp value={m.value ?? ""} />
                 </dd>
               </FadeIn>
@@ -57,82 +56,29 @@ export function GrowthBrief({ study }: { study: GrowthStudy }) {
           </dl>
         )}
 
-        <dl className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {study.sectors && study.sectors.length > 0 && (
-            <FadeIn className={cell}>
-              <dt className={label}>{c.sector}</dt>
-              <dd className="mt-3 font-serif text-3xl">{study.sectors.join(" · ")}</dd>
-            </FadeIn>
-          )}
-          {study.services && study.services.length > 0 && (
-            <FadeIn delay={0.05} className={cell}>
-              <dt className={label}>{c.services}</dt>
-              <dd>
-                <ul className="mt-3 space-y-1.5">
-                  {study.services.map((s) => (
-                    <li key={s} className="flex items-center gap-2.5 text-lg">
-                      <span aria-hidden className="size-1.5 rounded-full bg-(--accent)" />
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </FadeIn>
-          )}
-          {study.channels && study.channels.length > 0 && (
-            <FadeIn delay={0.1} className={cell}>
-              <dt className={label}>{c.channels}</dt>
-              <dd className="mt-3 flex flex-wrap gap-2">
-                {study.channels.map((ch) => (
-                  <span key={ch} className="rounded-full border border-(--accent)/40 bg-(--accent)/10 px-3.5 py-1.5 text-sm text-(--accent)">
-                    {ch}
+        {(facts.length > 0 || tools.length > 0) && (
+          <FadeIn className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
+            {facts.map((f) => (
+              <p key={f.label}>
+                <span className="eyebrow mr-2 text-white/40">{f.label}</span>
+                <span className="text-white/80">{f.value}</span>
+              </p>
+            ))}
+            {tools.length > 0 && (
+              <p>
+                <span className="eyebrow mr-2 text-white/40">{c.tools}</span>
+                {tools.map((tool, i) => (
+                  <span key={tool._id}>
+                    {i > 0 && <span className="text-white/30">, </span>}
+                    <Link href={href(lang, "tools", tool.slug ?? "")} className="text-white/80 underline-offset-4 hover:text-(--accent) hover:underline">
+                      {tool.title}
+                    </Link>
                   </span>
                 ))}
-              </dd>
-            </FadeIn>
-          )}
-          {study.tools && study.tools.length > 0 && (
-            <FadeIn delay={0.15} className={cell}>
-              <dt className={label}>{c.tools}</dt>
-              <dd className="mt-3 flex flex-wrap gap-2">
-                {study.tools.map((tool) => (
-                  <Link
-                    key={tool._id}
-                    href={href(lang, "tools", tool.slug ?? "")}
-                    className="flex items-center gap-2 rounded-full border border-white/15 py-1 pl-1 pr-3.5 text-sm transition-colors hover:border-(--accent) hover:text-(--accent)"
-                  >
-                    <span className="flex size-7 items-center justify-center rounded-full bg-white">
-                      <SanityImage image={tool.logo} alt="" width={80} sizes="16px" className="size-4 object-contain" />
-                    </span>
-                    {tool.title}
-                  </Link>
-                ))}
-              </dd>
-            </FadeIn>
-          )}
-          {study.team && study.team.length > 0 && (
-            <FadeIn delay={0.2} className={`${cell} sm:col-span-2`}>
-              <dt className={label}>{c.team}</dt>
-              <dd className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
-                {study.team.map((m) => (
-                  <div key={m._id} className="flex items-center gap-3">
-                    {m.photo?.asset ? (
-                      <span className="relative size-9 shrink-0 overflow-hidden rounded-full bg-white/10">
-                        <SanityImage image={m.photo} alt="" fill width={144} sizes="36px" className="object-cover object-top" />
-                      </span>
-                    ) : (
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-deep font-serif">{m.name?.[0]}</span>
-                    )}
-                    <span>
-                      <span className="block text-sm font-medium">{m.name}</span>
-                      <span className="block text-xs text-white/50">{m.role}</span>
-                    </span>
-                  </div>
-                ))}
-              </dd>
-            </FadeIn>
-          )}
-        </dl>
+              </p>
+            )}
+          </FadeIn>
+        )}
       </div>
     </section>
   );

@@ -1,44 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import { href } from "@/i18n/routes";
 import { urlFor } from "@/sanity/image";
 import { SanityImage } from "../cms/sanity-image";
 import { safeHref } from "../cms/portable-body";
-import { Aurora, ClientLogo } from "../case-study/cms-case-study-page";
+import { Aurora, ClientLogo, ClientQuote, Story } from "../case-study/cms-case-study-page";
 import { ButtonLink } from "../page/ui";
 import { CmsProjectCard } from "../projects/cms-project-card";
-import { GlowButton, HumanButton } from "../page/project-cta";
+import { GlowButton } from "../page/project-cta";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
 import { projectTheme, themeFromHex } from "../site/project-highlight";
-import { FadeIn, RevealHeading } from "../site/reveal";
+import { RevealHeading } from "../site/reveal";
 import { useStill } from "../site/use-still";
-import { ABTestComparison } from "./ab-test-comparison";
-import { BehindTheScenes } from "./behind-the-scenes";
-import { GrowthBrief } from "./brief";
 import { AdsShowcase } from "./ads-showcase";
-import { Community } from "./community";
+import { GrowthBrief } from "./brief";
 import { growthCopy } from "./copy";
-import { Creative } from "./creative";
-import { FunnelSteps } from "./funnel-steps";
-import { LeadFlow } from "./lead-flow";
-import { MetricCounter } from "./metric-counter";
 import { PhoneMockup } from "./phone-mockup";
-import { posterUrl } from "./media";
 import { SocialAd } from "./social-ad";
-import { asPlatform, isReal, SECTION_IDS, type Brand, type GrowthStudy } from "./types";
+import { asPlatform, isReal, SECTION_IDS, type Brand, type Ad, type GrowthStudy } from "./types";
+
+/** The ads section shows the first three ads (Sanity order), large enough to read the feed UI. */
+const SHOWCASE_PHONES = 3;
 
 /**
- * Growth marketing case study, built from a Sanity `growthCaseStudy`. It shares the website case
- * study's frame (breadcrumb, client logo, tags, "10 seconds" brief, related cards) so both templates
- * feel like one site, and swaps the story for the marketing funnel: hero → brief → challenge →
- * approach (funnel) → creative → behind the scenes → ads → A/B → leads → community → results →
- * deliverables & CTA → related case studies. Sections without content are left out.
+ * Growth marketing case study, built from a Sanity `growthCaseStudy`. Same frame and order as a
+ * website case study so both read alike (hero → brief → story → quote → related, then the footer's
+ * call to action), with its own twists: the ads as a fan of phones in the hero, a single row of
+ * figures, the story as numbered steps on a rail, and the ads section. Sections without
+ * content are left out.
  */
 export function GrowthCaseStudyPage({ study }: { study: GrowthStudy }) {
   const theme = themeFromHex(study.accentColor) ?? projectTheme(study.slug ?? "");
@@ -49,85 +43,52 @@ export function GrowthCaseStudyPage({ study }: { study: GrowthStudy }) {
     logo: study.logo?.asset?.url ? urlFor(study.logo as SanityImageSource).width(120).height(120).fit("crop").url() : null,
     accent: theme.accent,
   };
-  const { funnel, creative, adsSection, abTest, leads, community } = study;
+  const testimonial = study.results?.testimonial;
 
   return (
     <div style={{ "--accent": theme.accent, "--glow": theme.glow } as React.CSSProperties} className="bg-night">
       <Hero study={study} brand={brand} />
       <GrowthBrief study={study} />
-      <Challenge study={study} />
-      {funnel?.stages && funnel.stages.length > 0 && <FunnelSteps heading={funnel.heading} intro={funnel.intro} stages={funnel.stages} />}
-      {ads.some((a) => a.hook) && (creative?.heading || creative?.intro) && <Creative ads={ads} heading={creative.heading} intro={creative.intro} />}
-      {study.gallery?.images && study.gallery.images.length > 0 && (
-        <BehindTheScenes heading={study.gallery.heading} intro={study.gallery.intro} images={study.gallery.images} />
-      )}
-      {ads.length > 0 && <AdsShowcase ads={ads} brand={brand} heading={adsSection?.heading ?? null} intro={adsSection?.intro ?? null} />}
-      {abTest?.variants && abTest.variants.length > 0 && (
-        <ABTestComparison heading={abTest.heading} intro={abTest.intro} illustrative={abTest.illustrative} variants={abTest.variants} weeks={abTest.weeks ?? []} />
-      )}
-      {leads && (leads.flow?.length || leads.sampleLeads?.length) ? (
-        <LeadFlow
-          heading={leads.heading}
-          intro={leads.intro}
-          flow={leads.flow ?? []}
-          criteria={leads.criteria ?? []}
-          leads={leads.sampleLeads ?? []}
-          tiers={leads.tiers}
-          note={leads.note}
-        />
-      ) : null}
-      {community && (community.heading || community.thread?.length) ? (
-        <Community
-          heading={community.heading}
-          intro={community.intro}
-          perWeek={community.perWeek}
-          calendar={community.calendar ?? []}
-          posts={community.posts?.length ? community.posts : ads.flatMap((a) => posterUrl(a, 300) ?? [])}
-          thread={community.thread ?? []}
-          brand={brand}
-        />
-      ) : null}
-      <Results study={study} />
-      <Offer study={study} />
+      <Story body={study.body} variant="steps" />
+      {ads.length > 0 && <AdsShowcase ads={ads.slice(0, SHOWCASE_PHONES)} brand={brand} heading={study.adsSection?.heading ?? null} intro={study.adsSection?.intro ?? null} />}
+      <ClientQuote testimonial={testimonial && isReal(testimonial.quote) ? testimonial : null} />
       <Related study={study} />
     </div>
   );
 }
 
+/** Where the three hero phones sit in their square stage: the middle one in front, the others tilted behind it. */
+const HERO_PHONES = [
+  { left: "3%", top: "12%", rotate: -8, z: 0, width: "36%" },
+  { left: "28.5%", top: "1%", rotate: 0, z: 10, width: "43%" },
+  { left: "61%", top: "12%", rotate: 8, z: 0, width: "36%" },
+];
+
+/**
+ * Same frame as a website case study's hero (breadcrumb, pitch on the left, grid and aurora,
+ * full viewport) so both templates read as one site; where websites show a deck of screens, a
+ * campaign shows its ads as a fan of phones, the front one playing muted.
+ */
 function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
   const { lang, t } = useLocale();
   const c = growthCopy[lang];
   const still = useStill();
-  const ads = study.ads ?? [];
+  const ads = (study.ads ?? []).slice(0, 3);
   const hero = study.hero;
   const website = safeHref(study.websiteUrl);
-  const [current, setCurrent] = useState(0);
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const rotateY = useSpring(useTransform(px, [-0.5, 0.5], [8, -8]), { stiffness: 80, damping: 18 });
-  const rotateX = useSpring(useTransform(py, [-0.5, 0.5], [-5, 5]), { stiffness: 80, damping: 18 });
-  const count = ads.length;
-
-  useEffect(() => {
-    if (still || count < 2) return;
-    const id = setInterval(() => setCurrent((i) => (i + 1) % count), 7000);
-    return () => clearInterval(id);
-  }, [count, still]);
-
-  const side = count > 2 ? [(current + count - 1) % count, (current + 1) % count] : [];
   const reveal = (delay: number) => ({ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, delay, ease } });
   const tags = [...(study.sectors ?? []).map((label) => ({ label, sector: true })), ...(study.services ?? []).map((label) => ({ label, sector: false }))];
+  // With fewer than 3 ads, the middle slot is filled first.
+  const slots = ads.length === 3 ? [0, 1, 2] : ads.length === 2 ? [1, 2] : [1];
 
   return (
-    <section
-      id="top"
-      onPointerMove={(e) => {
-        if (still || e.pointerType !== "mouse") return;
-        px.set(e.clientX / window.innerWidth - 0.5);
-        py.set(e.clientY / window.innerHeight - 0.5);
-      }}
-      className="grain relative flex min-h-svh flex-col overflow-hidden bg-night px-5 pb-16 pt-32 text-white md:px-10 md:pb-20"
-    >
+    <section id="top" className="grain relative flex min-h-svh flex-col overflow-hidden bg-night px-5 pb-16 pt-32 text-white md:px-10 md:pb-20">
+      {study.heroImage?.asset && (
+        <div aria-hidden className="absolute inset-0">
+          <SanityImage image={study.heroImage} alt="" fill priority width={2000} sizes="100vw" className="object-cover opacity-20" />
+          <span className="absolute inset-0 bg-linear-to-b from-night/40 via-night/80 to-night" />
+        </div>
+      )}
       <Aurora still={still} />
       <div
         aria-hidden
@@ -153,23 +114,18 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
           <div>
             <motion.div {...reveal(0.1)} className="flex flex-wrap items-center gap-4">
               <ClientLogo image={study.logo} name={study.title ?? ""} fill={study.logoFill} />
-              {hero?.tagline && (
-                <span className="inline-flex items-center gap-2 rounded-full border border-(--accent)/40 bg-(--accent)/10 px-3.5 py-1.5 text-sm text-(--accent)">
-                  <span aria-hidden className="size-1.5 rounded-full bg-(--accent)" />
-                  {hero.tagline}
-                </span>
-              )}
+              {hero?.tagline && <span className="rounded-full border border-(--accent)/40 bg-(--accent)/10 px-3.5 py-1.5 text-sm text-(--accent)">{hero.tagline}</span>}
             </motion.div>
 
             <RevealHeading as="h1" text={study.title ?? ""} className="mt-8 font-serif text-[clamp(3.25rem,7.5vw,7.5rem)] leading-[0.9] tracking-[-0.03em]" />
             {hero?.headline && (
-              <motion.p {...reveal(0.35)} className="mt-5 max-w-xl font-serif text-3xl italic leading-tight text-(--accent) md:text-4xl">
+              <motion.p {...reveal(0.35)} className="mt-4 font-serif text-3xl italic leading-tight text-(--accent) md:text-4xl">
                 {hero.headline}
               </motion.p>
             )}
-            {(study.summary || hero?.intro) && (
-              <motion.p {...reveal(0.45)} className="mt-6 max-w-xl text-lg text-white/70">
-                {hero?.intro ?? study.summary}
+            {study.summary && (
+              <motion.p {...reveal(0.45)} className="mt-6 max-w-xl text-lg text-white/70 md:text-xl">
+                {study.summary}
               </motion.p>
             )}
 
@@ -195,262 +151,78 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
                   {c.seeAds}
                 </ButtonLink>
               )}
-              {website && (
-                <a href={website} target="_blank" rel="noopener noreferrer" className="px-2 text-sm text-white/60 underline-offset-4 hover:text-white hover:underline">
-                  {c.visit} ↗
-                </a>
-              )}
             </motion.div>
-            {hero?.status && (
-              <p className="mt-6 flex items-center gap-2.5 text-sm text-white/60">
-                <span className="relative flex size-2.5">
-                  {!still && <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/70" />}
-                  <span className="relative size-2.5 rounded-full bg-emerald-400" />
-                </span>
-                {hero.status}
-              </p>
+            {(hero?.status || website) && (
+              <motion.p {...reveal(0.7)} className="mt-5 flex items-center gap-2 text-sm text-white/50">
+                {hero?.status && <span aria-hidden className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,0.2)]" />}
+                {hero?.status}
+                {hero?.status && website && <span className="text-white/25">·</span>}
+                {website && (
+                  <a href={website} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-white hover:underline">
+                    {c.visit} ↗
+                  </a>
+                )}
+              </motion.p>
             )}
           </div>
 
-          {ads.length > 0 && (
-            <div className="relative mx-auto h-[480px] w-full max-w-[520px] [perspective:1400px] md:h-[600px]">
-              {/* The client's key visual, darkened, as the set the phones stand in. */}
-              {study.heroImage?.asset && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.4, ease }}
-                  className="absolute inset-x-[4%] bottom-[6%] top-[8%] overflow-hidden rounded-[2rem] ring-1 ring-white/10"
-                >
-                  <SanityImage image={study.heroImage} alt={study.heroImage.alt ?? ""} fill priority width={1200} sizes="(min-width: 1024px) 40vw, 90vw" className="object-cover" />
-                  <span aria-hidden className="absolute inset-0 bg-linear-to-t from-night via-night/60 to-night/30" />
-                </motion.div>
-              )}
-              <motion.div style={{ rotateX, rotateY }} className="relative h-full w-full">
-                {side.map((adIndex, i) => (
-                  <motion.div
-                    key={`side-${i}`}
-                    initial={{ opacity: 0, x: "-50%", rotate: 0 }}
-                    animate={{ opacity: 1, x: i === 0 ? "-110%" : "10%", rotate: i === 0 ? -9 : 9, y: 40 }}
-                    transition={{ duration: 1.1, delay: 0.5, ease }}
-                    className="absolute left-1/2 top-0 w-[190px] md:w-[225px]"
-                    aria-hidden
-                  >
-                    <PhoneMockup>
-                      <SocialAd ad={ads[adIndex]} brand={brand} platform={i === 0 ? "tiktok" : "facebook"} playing={false} compact />
-                      <span className="absolute inset-0 z-20 bg-night/45" />
-                    </PhoneMockup>
-                  </motion.div>
-                ))}
-                <motion.a
-                  href={`#${SECTION_IDS.ads}`}
-                  data-cursor={c.watch}
-                  aria-label={c.seeAds}
-                  initial={{ opacity: 0, y: 80, x: "-50%" }}
-                  animate={{ opacity: 1, y: 0, x: "-50%" }}
-                  transition={{ duration: 1.1, delay: 0.3, ease }}
-                  className="absolute left-1/2 top-0 z-10 block w-[225px] md:w-[265px]"
-                >
-                  <motion.div animate={still ? undefined : { y: [0, -12, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
-                    <PhoneMockup className="shadow-[0_60px_120px_-30px_color-mix(in_oklab,var(--accent)_55%,transparent)]">
-                      <SocialAd key={current} ad={ads[current]} brand={brand} platform={asPlatform(ads[current].platform)} playing={!still} />
-                    </PhoneMockup>
-                  </motion.div>
-                </motion.a>
-              </motion.div>
-            </div>
-          )}
+          {ads.length > 0 && <PhoneFan ads={ads} slots={slots} brand={brand} still={still} label={c.seeAds} cursor={c.watch} />}
         </div>
       </div>
     </section>
   );
 }
 
-function Challenge({ study }: { study: GrowthStudy }) {
-  const { lang } = useLocale();
-  const c = growthCopy[lang];
-  const ch = study.challenge;
-  const client = study.client;
-  if (!ch?.heading && !ch?.text) return null;
-  const facts = client?.facts?.filter((f) => f.value) ?? [];
+/** The hero's three ads as phones dealt into a fan; the front one plays muted, the stage leans with the cursor. */
+function PhoneFan({ ads, slots, brand, still, label, cursor }: { ads: Ad[]; slots: number[]; brand: Brand; still: boolean; label: string; cursor: string }) {
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-6, 6]), { stiffness: 120, damping: 18 });
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), { stiffness: 120, damping: 18 });
+  const onMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    if (still || e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const reset = () => {
+    mx.set(0);
+    my.set(0);
+  };
 
   return (
-    <section className="bg-night px-5 pb-28 text-white md:px-10 md:pb-36">
-      <div className="mx-auto grid max-w-7xl gap-12 border-t border-white/10 pt-16 lg:grid-cols-[1.2fr_0.8fr]">
-        <div>
-          {ch.heading && <RevealHeading text={ch.heading} accentClassName="italic text-(--accent)" className="font-serif text-5xl leading-[0.95] md:text-7xl" />}
-          {ch.text && (
-            <FadeIn>
-              <p className="mt-6 max-w-2xl text-lg text-white/65">{ch.text}</p>
-            </FadeIn>
-          )}
-          {ch.points && ch.points.length > 0 && (
-            <ul className="mt-10 grid gap-3 md:grid-cols-3">
-              {ch.points.map((p, i) => (
-                <motion.li
-                  key={p._key}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.08, ease }}
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
-                >
-                  <span className="eyebrow text-(--accent)">0{i + 1}</span>
-                  <span className="mt-2 block font-medium leading-snug">{p.title}</span>
-                  {p.text && <span className="mt-2 block text-sm text-white/55">{p.text}</span>}
-                </motion.li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {(client?.meta?.length || facts.length > 0) && (
-          <FadeIn className="self-end rounded-3xl border border-white/10 bg-night-soft p-6 md:p-8">
-            {client?.meta && client.meta.length > 0 && (
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-4 border-b border-white/10 pb-6">
-                {client.meta.map((m) => (
-                  <div key={m._key}>
-                    <dt className="eyebrow text-white/40">{m.label}</dt>
-                    <dd className="mt-1 text-sm">{m.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            {facts.length > 0 && (
-              <dl className="mt-6 grid grid-cols-2 gap-6">
-                {facts.map((f) => (
-                  <div key={f._key} className="flex flex-col-reverse">
-                    <dt className="mt-1 text-sm text-white/50">{f.label}</dt>
-                    <dd className="font-serif text-4xl leading-none">{f.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            {client?.sourceUrl && (
-              <a href={client.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block text-xs text-white/40 hover:text-white/70">
-                {c.sourceLink} : {client.sourceLabel ?? new URL(client.sourceUrl).hostname} ↗
-              </a>
-            )}
-          </FadeIn>
-        )}
-      </div>
-    </section>
-  );
-}
-
-/** Real figures only: values containing "TBD" are hidden. Until there are some, the tracked KPIs are listed instead. */
-function Results({ study }: { study: GrowthStudy }) {
-  const { lang } = useLocale();
-  const c = growthCopy[lang];
-  const r = study.results;
-  const metrics = r?.metrics?.filter((m) => isReal(m.value) && isReal(m.label)) ?? [];
-  const quote = r?.testimonial && isReal(r.testimonial.quote) ? r.testimonial : null;
-  const tracked = r?.tracked?.filter(Boolean) ?? [];
-  if (metrics.length === 0 && !quote && tracked.length === 0) return null;
-
-  return (
-    <section id={SECTION_IDS.results} className="grain relative overflow-hidden bg-night px-5 py-28 text-white md:px-10 md:py-36">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_60%_at_50%_100%,color-mix(in_oklab,var(--accent)_18%,transparent),transparent_70%)]" />
-      <div className="relative mx-auto max-w-7xl">
-        <RevealHeading text={r?.heading ?? c.results} accentClassName="italic text-(--accent)" className="max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl" />
-        {metrics.length > 0 ? (
-          <dl className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {metrics.map((m) => (
-              <MetricCounter key={m._key} value={m.value!} label={m.label} className="border-t border-white/15 pt-6" />
-            ))}
-          </dl>
-        ) : (
-          tracked.length > 0 && (
-            <FadeIn className="mt-10">
-              <p className="max-w-xl text-white/60">{c.inProgress}</p>
-              <p className="eyebrow mt-8 text-white/45">{c.tracked}</p>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {tracked.map((t) => (
-                  <li key={t} className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/80">
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </FadeIn>
-          )
-        )}
-        {quote && (
-          <FadeIn className="mt-16">
-            <figure className="rounded-[2rem] bg-(--accent) p-8 text-night md:p-14">
-              <blockquote className="font-serif text-3xl leading-tight md:text-5xl">&ldquo;{quote.quote}&rdquo;</blockquote>
-              {(quote.name || quote.role) && (
-                <figcaption className="mt-8 flex items-center gap-4">
-                  {quote.photo?.asset && (
-                    <span className="relative size-12 overflow-hidden rounded-full">
-                      <SanityImage image={quote.photo} alt="" fill width={144} sizes="48px" className="object-cover" />
-                    </span>
-                  )}
-                  <span>
-                    <span className="block font-medium">{quote.name}</span>
-                    <span className="block text-sm text-night/60">{quote.role}</span>
-                  </span>
-                </figcaption>
-              )}
-            </figure>
-          </FadeIn>
-        )}
-      </div>
-    </section>
-  );
-}
-
-/** What's included, then the call to action (the footer's generic one is turned off on this page). */
-function Offer({ study }: { study: GrowthStudy }) {
-  const { lang, t } = useLocale();
-  const c = growthCopy[lang];
-  const cta = study.cta;
-  if (!cta?.heading) return null;
-  const items = cta.deliverables?.filter(Boolean) ?? [];
-
-  return (
-    <section className="relative overflow-hidden bg-night px-5 pb-10 pt-28 text-white md:px-10 md:pt-36">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-linear-to-br from-[#16130d] via-night-soft to-navy-deep p-8 md:rounded-[3.5rem] md:p-16">
-        <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 size-[28rem] rounded-full bg-(--accent)/25 blur-3xl" />
-        <div className="relative grid gap-14 xl:grid-cols-[1.1fr_0.9fr] xl:items-end">
-          <div>
-            {cta.eyebrow && <p className="eyebrow text-(--accent)">{cta.eyebrow}</p>}
-            <RevealHeading text={cta.heading} accentClassName="italic text-(--accent)" className="mt-4 font-serif text-5xl leading-[0.95] md:text-7xl" />
-            {cta.text && <p className="mt-6 max-w-lg text-white/65">{cta.text}</p>}
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <Magnetic>
-                <GlowButton href={href(lang, "contact")}>{study.hero?.ctaLabel ?? c.quote}</GlowButton>
-              </Magnetic>
-              <Magnetic>
-                <HumanButton />
-              </Magnetic>
-            </div>
-            <p className="mt-6 text-sm text-white/55">{t.common.reassurance}</p>
-          </div>
-          {items.length > 0 && (
-            <div>
-              <p className="eyebrow mb-4 text-white/45">{c.included}</p>
-              <ul className="space-y-3">
-                {items.map((o, i) => (
-                  <motion.li
-                    key={o}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.06, duration: 0.5, ease }}
-                    className="flex items-start gap-3 border-b border-white/10 pb-3"
-                  >
-                    <span aria-hidden className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-(--accent) text-[11px] text-night">
-                      ✓
-                    </span>
-                    <span className="text-white/85">{o}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+    <a
+      href={`#${SECTION_IDS.ads}`}
+      aria-label={label}
+      data-cursor={cursor}
+      onPointerMove={onMove}
+      onPointerLeave={reset}
+      className="relative mx-auto block aspect-square w-full max-w-[34rem] [perspective:1400px]"
+    >
+      <span aria-hidden className="absolute inset-[18%] rounded-full bg-(--glow) blur-3xl" />
+      <motion.div style={{ rotateX, rotateY }} className="absolute inset-0">
+        {ads.map((ad, i) => {
+          const pose = HERO_PHONES[slots[i]];
+          const front = slots[i] === 1;
+          return (
+            <motion.div
+              key={`${ad._key}-${i}`}
+              aria-hidden
+              initial={{ opacity: 0, y: 80, rotate: 0 }}
+              animate={{ opacity: 1, y: 0, rotate: pose.rotate }}
+              transition={{ duration: 1.1, delay: 0.4 + (front ? 0 : 0.18), ease }}
+              style={{ left: pose.left, top: pose.top, width: pose.width, zIndex: pose.z }}
+              className="absolute origin-bottom"
+            >
+              <PhoneMockup className={front ? "shadow-[0_60px_120px_-30px_color-mix(in_oklab,var(--accent)_55%,transparent)]" : ""}>
+                <SocialAd ad={ad} brand={brand} platform={asPlatform(ad.platform)} playing={front && !still} compact={!front} />
+                {!front && <span className="absolute inset-0 z-20 bg-night/45" />}
+              </PhoneMockup>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+    </a>
   );
 }
 

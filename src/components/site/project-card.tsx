@@ -23,6 +23,15 @@ const STACK = [
   "translate3d(-8%,-70%,15px) rotateZ(-3deg) scale(0.8)",
 ];
 
+// Growth case studies fan their ads out as phones: front phone in the middle, the others behind.
+const PHONE_STACK = [
+  "translate3d(-50%,0,80px) rotateZ(0deg) scale(1)",
+  "translate3d(-5%,6%,40px) rotateZ(9deg) scale(0.86)",
+  "translate3d(-95%,6%,40px) rotateZ(-9deg) scale(0.86)",
+];
+
+export type CardPhone = { _key: string; angle: string | null; hook: string | null; poster: string | null };
+
 type CardOptions = {
   sizes?: string;
   /** Show the "View case" cursor bubble on hover. */
@@ -74,6 +83,7 @@ export function ProjectCardView({
   domain,
   loader,
   growth = false,
+  phones = [],
   sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
   cursor = true,
   glow = true,
@@ -91,7 +101,10 @@ export function ProjectCardView({
   domain?: string;
   /** Image loader for every image of the card, e.g. the Sanity CDN loader. */
   loader?: ImageLoader;
+  /** Show the designed growth cover instead of an image. */
   growth?: boolean;
+  /** Growth case studies: ads shown as phones on hover, in place of the browser screens. */
+  phones?: CardPhone[];
 } & CardOptions) {
   const { t } = useLocale();
   const reduce = useStill();
@@ -104,15 +117,18 @@ export function ProjectCardView({
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.22), transparent 55%)`;
 
   const theme = themeFromHex(accent) ?? projectTheme(slug);
-  const stacked = !growth && previews.length > 0;
+  const phoneStack = phones.length > 0;
+  const stacked = !growth && !phoneStack && previews.length > 0;
+  // Either stack cycles the same way: browser screens for websites, phones for campaigns.
+  const count = phoneStack ? phones.length : stacked ? previews.length : 0;
   const [hovered, setHovered] = useState(false);
   const [slide, setSlide] = useState(0);
 
   useEffect(() => {
-    if (!hovered || previews.length < 2) return;
-    const id = setInterval(() => setSlide((s) => (s + 1) % previews.length), SLIDE_MS);
+    if (!hovered || count < 2) return;
+    const id = setInterval(() => setSlide((s) => (s + 1) % count), SLIDE_MS);
     return () => clearInterval(id);
-  }, [hovered, previews.length]);
+  }, [hovered, count]);
 
   return (
     <div className="[perspective:1100px]">
@@ -140,38 +156,38 @@ export function ProjectCardView({
         <div className="relative aspect-[4/5] [transform-style:preserve-3d]" style={{ "--accent": theme.accent } as CSSProperties}>
           <div className="absolute inset-0 overflow-hidden rounded-3xl bg-[color-mix(in_oklab,var(--accent)_28%,#0c0e16)] shadow-[0_0_0_rgba(0,0,0,0)] transition-shadow duration-700 group-hover:shadow-[0_50px_80px_-30px_rgba(0,0,0,0.55)]">
             {growth ? (
-              <GrowthCover videos={t.work.growthCover.videos} title={t.work.growthCover.title} />
+              <div className={`absolute inset-0 transition-[opacity,filter] duration-700 ${phoneStack ? "group-hover:opacity-30 group-hover:blur-[6px]" : ""}`}>
+                <GrowthCover videos={t.work.growthCover.videos} title={t.work.growthCover.title} labels={tags.length === 0} />
+              </div>
             ) : (
-              <>
-                {cover && (
-                  <Image
-                    src={cover.src}
-                    loader={loader}
-                    placeholder={cover.blurDataURL ? "blur" : "empty"}
-                    blurDataURL={cover.blurDataURL}
-                    alt={`${t.hero.caseAlt} ${name}`}
-                    fill
-                    sizes={sizes}
-                    className={`object-cover object-top transition-[transform,opacity,filter,object-position] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${
-                      stacked ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
-                    }`}
-                  />
-                )}
-                {glow && (
-                  <span
-                    aria-hidden
-                    className="absolute -right-1/4 -top-1/4 size-3/4 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-90"
-                    style={{ background: theme.glow }}
-                  />
-                )}
-                {stacked && (
-                  <span
-                    aria-hidden
-                    className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-                    style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px)", backgroundSize: "18px 18px" }}
-                  />
-                )}
-              </>
+              cover && (
+                <Image
+                  src={cover.src}
+                  loader={loader}
+                  placeholder={cover.blurDataURL ? "blur" : "empty"}
+                  blurDataURL={cover.blurDataURL}
+                  alt={`${t.hero.caseAlt} ${name}`}
+                  fill
+                  sizes={sizes}
+                  className={`object-cover object-top transition-[transform,opacity,filter,object-position] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${
+                    stacked || phoneStack ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
+                  }`}
+                />
+              )
+            )}
+            {glow && (
+              <span
+                aria-hidden
+                className="absolute -right-1/4 -top-1/4 size-3/4 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-90"
+                style={{ background: theme.glow }}
+              />
+            )}
+            {(stacked || phoneStack) && (
+              <span
+                aria-hidden
+                className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px)", backgroundSize: "18px 18px" }}
+              />
             )}
             {glow && (
               <motion.span aria-hidden className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: glare }} />
@@ -211,6 +227,45 @@ export function ProjectCardView({
             </div>
           )}
 
+          {phoneStack && (
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-[8%] top-[14%] [transform-style:preserve-3d]">
+              {phones.map((phone, i) => {
+                const pos = (i - slide + phones.length) % phones.length;
+                return (
+                  <div
+                    key={phone._key}
+                    className="absolute left-1/2 top-0 h-full transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    style={{
+                      transform: hovered ? PHONE_STACK[pos] ?? PHONE_STACK[PHONE_STACK.length - 1] : "translate3d(-50%,40%,1px) rotateX(20deg) scale(0.8)",
+                      opacity: hovered ? 1 : 0,
+                      filter: hovered && pos > 0 ? "brightness(0.7)" : "none",
+                      zIndex: phones.length - pos,
+                      transitionDelay: hovered ? `${pos * 60}ms` : "0ms",
+                    }}
+                  >
+                    <div className="relative aspect-[9/19.5] h-full overflow-hidden rounded-[1.3rem] border-[3px] border-[#1c1c1f] bg-[#0b0a08] shadow-[0_30px_50px_-15px_rgba(0,0,0,0.75)]">
+                      {phone.poster ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- small CDN poster inside a decorative stack
+                        <img src={`${phone.poster}?w=360&auto=format`} alt="" className="absolute inset-0 size-full object-cover" />
+                      ) : (
+                        <div
+                          className="absolute inset-0 p-3 text-white"
+                          style={{ background: `radial-gradient(120% 60% at 30% 0%, ${theme.accent}aa, transparent 65%), radial-gradient(90% 50% at 80% 100%, #2a3a9b, transparent 70%), linear-gradient(180deg, #2a2112, #07080d)` }}
+                        >
+                          <p className="mt-[38%] font-mono text-[8px] uppercase tracking-[0.18em]" style={{ color: theme.accent }}>
+                            {phone.angle}
+                          </p>
+                          <p className="mt-1 font-serif text-sm leading-tight">{phone.hook}</p>
+                        </div>
+                      )}
+                      <span className="absolute left-1/2 top-1.5 h-2.5 w-1/3 -translate-x-1/2 rounded-full bg-black" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           <div className="absolute left-4 top-4 z-20 flex flex-wrap gap-1.5 transition-opacity duration-300 group-hover:opacity-0">
             {tags.map((tag) => (
               <span key={tag} className="rounded-full bg-white/90 px-2.5 py-1 text-xs text-ink backdrop-blur">
@@ -219,12 +274,12 @@ export function ProjectCardView({
             ))}
           </div>
 
-          {stacked && (
+          {count > 0 && (
             <div className="pointer-events-none absolute inset-x-5 bottom-5 flex items-center justify-end gap-3 opacity-0 transition-[opacity,transform] delay-150 duration-500 [transform:translate3d(0,12px,90px)] group-hover:opacity-100 group-hover:[transform:translate3d(0,0,90px)]">
               <span aria-hidden className="flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 font-mono text-[11px] text-white backdrop-blur">
                 <span className="flex gap-1">
-                  {previews.map((src, i) => (
-                    <span key={src} className="h-1 w-3 overflow-hidden rounded-full bg-white/25">
+                  {Array.from({ length: count }, (_, i) => (
+                    <span key={i} className="h-1 w-3 overflow-hidden rounded-full bg-white/25">
                       <span
                         className="block h-full origin-left rounded-full bg-white"
                         style={{
@@ -235,7 +290,7 @@ export function ProjectCardView({
                     </span>
                   ))}
                 </span>
-                {String(slide + 1).padStart(2, "0")}/{String(previews.length).padStart(2, "0")}
+                {String(slide + 1).padStart(2, "0")}/{String(count).padStart(2, "0")}
               </span>
             </div>
           )}

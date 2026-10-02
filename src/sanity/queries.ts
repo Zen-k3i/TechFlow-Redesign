@@ -28,7 +28,9 @@ const projectCard = /* groq */ `
   // Growth case studies without a card image use their key visual.
   "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) ${image},
   // Website screens, for the card hover stack and the /projets wall; growth case studies have none.
-  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} }, [])
+  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} }, []),
+  // Growth case studies stack their first ads as phones on card hover instead.
+  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])
 `;
 
 /** Website projects and growth case studies together: same cards, same sector filters. */
@@ -106,8 +108,24 @@ export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     accentColor,
-    handle,
     summary,
+    hero { tagline, headline, status, ctaLabel, stats[]{ _key, value, label } },
+    // Same story as a website case study: chapters at each h2, image groups between paragraphs.
+    body[]{
+      ...,
+      _type == "image" => ${image},
+      _type == "imageGroup" => { images[]{ _key, ...${image} } }
+    },
+    "minutes": round(length(string::split(pt::text(body), " ")) / 220),
+    results { metrics[]{ _key, value, label }, testimonial { quote, name, role, photo ${image} } },
+    handle,
+    adsSection { heading, intro },
+    ads[]{
+      _key, angle, hook, caption, cta, platform, note, duration,
+      "video": video.asset->url,
+      poster ${image},
+      "captions": captions.asset->url
+    },
     "sectors": array::compact(sectors[]->title),
     services,
     channels,
@@ -117,25 +135,6 @@ export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
     logo ${image},
     "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),
     heroImage ${image},
-    gallery { heading, intro, images[]{ _key, ...${image} } },
-    hero { tagline, headline, intro, status, ctaLabel, stats[]{ _key, value, label } },
-    challenge { heading, text, points[]{ _key, title, text } },
-    client { meta[]{ _key, label, value }, facts[]{ _key, value, label }, sourceLabel, sourceUrl },
-    funnel { heading, intro, stages[]{ _key, name, icon, title, text, tasks, kpi, section } },
-    creative { heading, intro },
-    adsSection { heading, intro },
-    ads[]{
-      _key, angle, hook, caption, cta, platform, variant, note, duration,
-      "video": video.asset->url,
-      poster ${image},
-      "captions": captions.asset->url,
-      script[]{ _key, time, beat, line }
-    },
-    abTest { heading, intro, "illustrative": coalesce(illustrative, true), variants[]{ _key, label, hook, angle }, weeks[]{ _key, label, budget, cpl, note } },
-    leads { heading, intro, flow[]{ _key, title, text }, criteria[]{ _key, label, points }, sampleLeads[]{ _key, name, source, interest, score }, tiers, note },
-    community { heading, intro, perWeek, calendar[]{ _key, day, format, title }, posts[]{ _key, ...${image} }, thread[]{ _key, author, text, reply } },
-    results { heading, metrics[]{ _key, value, label }, tracked, testimonial { quote, name, role, photo ${image} } },
-    cta { eyebrow, heading, text, deliverables },
     // The chosen next case study first, then the others in list order (deduplicated in the page).
     "related": [
       ...select(defined(next) => [next->{ _type, ${projectCard} }], []),
