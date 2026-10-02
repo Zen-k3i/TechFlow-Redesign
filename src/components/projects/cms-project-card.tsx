@@ -26,7 +26,8 @@ const hostname = (url: string | null) => {
 
 /**
  * Card for a case study stored in the CMS. Website projects stack their hero screens on hover;
- * growth case studies have no screens, and without a card image they get the designed growth cover.
+ * growth case studies fan their "Card hover" images out as posters (else their ads as phones), and
+ * without a card image they get the designed growth cover.
  */
 export function CmsProjectCard({ project }: { project: CmsProject }) {
   const { lang } = useLocale();
@@ -57,6 +58,7 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
       )}
       domain={hostname(project.websiteUrl)}
       growth={project._type === "growthCaseStudy" && !cover}
+      posters={project._type === "growthCaseStudy"}
       phones={project.phones ?? []}
       loader={sanityLoader}
       cursor={false}

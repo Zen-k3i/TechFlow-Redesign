@@ -30,6 +30,13 @@ const PHONE_STACK = [
   "translate3d(-95%,6%,40px) rotateZ(-9deg) scale(0.86)",
 ];
 
+// Growth case studies fan their hover images out as posters, like printed ads dealt on a table.
+const POSTER_FAN = [
+  "translate3d(0,0,80px) rotateZ(0deg) scale(1)",
+  "translate3d(36%,5%,40px) rotateZ(9deg) scale(0.86)",
+  "translate3d(-36%,5%,40px) rotateZ(-9deg) scale(0.86)",
+];
+
 export type CardPhone = { _key: string; angle: string | null; hook: string | null; poster: string | null };
 
 type CardOptions = {
@@ -53,7 +60,7 @@ export function ProjectCard({
   /** Overrides the local sector label. */ sector?: string;
   /** Sanity colour, overrides the coded theme. */ accent?: string | null;
   /** Growth case studies: their Sanity ads, stacked as phones on hover. */ phones?: CardPhone[];
-  /** Growth case studies: their Sanity "Card hover" images (URLs), in place of the local screens. */ previews?: string[];
+  /** Growth case studies: their Sanity "Card hover" images (URLs), shown as posters on hover. */ previews?: string[];
 } & CardOptions) {
   const { t, lang } = useLocale();
   return (
@@ -69,6 +76,7 @@ export function ProjectCard({
       previews={previews?.length ? previews.map((src) => `${src}?w=1200&auto=format`) : projectPreviews(project.slug)}
       domain={projectDomain(project.slug)}
       growth={project.kind === "growth"}
+      posters={project.kind === "growth"}
       phones={phones}
     />
   );
@@ -92,6 +100,7 @@ export function ProjectCardView({
   domain,
   loader,
   growth = false,
+  posters = false,
   phones = [],
   sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
   cursor = true,
@@ -112,7 +121,9 @@ export function ProjectCardView({
   loader?: ImageLoader;
   /** Show the designed growth cover instead of an image. */
   growth?: boolean;
-  /** Growth case studies: ads shown as phones on hover, in place of the browser screens. */
+  /** Growth case studies: `previews` are marketing posters, fanned out on hover instead of browser screens. */
+  posters?: boolean;
+  /** Growth case studies: ads shown as phones on hover when there are no poster images. */
   phones?: CardPhone[];
 } & CardOptions) {
   const { t } = useLocale();
@@ -126,11 +137,12 @@ export function ProjectCardView({
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.22), transparent 55%)`;
 
   const theme = themeFromHex(accent) ?? projectTheme(slug);
-  // Images (website screens, or a growth case study's hover images) win over the ad phones.
-  const stacked = previews.length > 0;
-  const phoneStack = !stacked && phones.length > 0;
-  // Either stack cycles the same way: browser screens for websites, phones for campaigns.
-  const count = phoneStack ? phones.length : stacked ? previews.length : 0;
+  // Websites stack browser screens; growth case studies fan their posters, else their ad phones.
+  const posterFan = posters && previews.length > 0;
+  const stacked = !posters && previews.length > 0;
+  const phoneStack = !posterFan && !stacked && phones.length > 0;
+  // Every stack cycles the same way.
+  const count = phoneStack ? phones.length : stacked || posterFan ? previews.length : 0;
   const [hovered, setHovered] = useState(false);
   const [slide, setSlide] = useState(0);
 
@@ -166,7 +178,7 @@ export function ProjectCardView({
         <div className="relative aspect-[4/5] [transform-style:preserve-3d]" style={{ "--accent": theme.accent } as CSSProperties}>
           <div className="absolute inset-0 overflow-hidden rounded-3xl bg-[color-mix(in_oklab,var(--accent)_28%,#0c0e16)] shadow-[0_0_0_rgba(0,0,0,0)] transition-shadow duration-700 group-hover:shadow-[0_50px_80px_-30px_rgba(0,0,0,0.55)]">
             {growth ? (
-              <div className={`absolute inset-0 transition-[opacity,filter] duration-700 ${stacked || phoneStack ? "group-hover:opacity-30 group-hover:blur-[6px]" : ""}`}>
+              <div className={`absolute inset-0 transition-[opacity,filter] duration-700 ${stacked || phoneStack || posterFan ? "group-hover:opacity-30 group-hover:blur-[6px]" : ""}`}>
                 <GrowthCover videos={t.work.growthCover.videos} title={t.work.growthCover.title} labels={tags.length === 0} />
               </div>
             ) : (
@@ -180,7 +192,7 @@ export function ProjectCardView({
                   fill
                   sizes={sizes}
                   className={`object-cover object-top transition-[transform,opacity,filter,object-position] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${
-                    stacked || phoneStack ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
+                    stacked || phoneStack || posterFan ? "group-hover:opacity-25 group-hover:blur-[6px]" : "group-hover:object-bottom group-hover:duration-[5s]"
                   }`}
                 />
               )
@@ -192,7 +204,7 @@ export function ProjectCardView({
                 style={{ background: theme.glow }}
               />
             )}
-            {(stacked || phoneStack) && (
+            {(stacked || phoneStack || posterFan) && (
               <span
                 aria-hidden
                 className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
@@ -229,6 +241,33 @@ export function ProjectCardView({
                       </div>
                       <div className="relative aspect-[16/10]">
                         <Image src={src} loader={loader} alt="" fill sizes="(min-width: 1024px) 28vw, 85vw" className="object-cover object-top" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {posterFan && (
+            <div aria-hidden className="pointer-events-none absolute left-[21%] top-[19%] aspect-[4/5] w-[58%] [transform-style:preserve-3d]">
+              {previews.map((src, i) => {
+                const pos = (i - slide + previews.length) % previews.length;
+                return (
+                  <div
+                    key={`${src}-${i}`}
+                    className="absolute inset-0 transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    style={{
+                      transform: hovered ? POSTER_FAN[pos] ?? POSTER_FAN[POSTER_FAN.length - 1] : "translate3d(0,45%,1px) rotateX(25deg) scale(0.75)",
+                      opacity: hovered ? 1 : 0,
+                      filter: hovered && pos > 0 ? "brightness(0.65)" : "none",
+                      zIndex: previews.length - pos,
+                      transitionDelay: hovered ? `${pos * 70}ms` : "0ms",
+                    }}
+                  >
+                    <div className="relative size-full overflow-hidden rounded-md bg-white p-[3%] shadow-[0_35px_60px_-20px_rgba(0,0,0,0.8)]">
+                      <div className="relative size-full overflow-hidden rounded-[3px]">
+                        <Image src={src} loader={loader} alt="" fill sizes="(min-width: 1024px) 20vw, 60vw" className="object-cover" />
                       </div>
                     </div>
                   </div>
