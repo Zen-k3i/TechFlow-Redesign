@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/config";
-import { href, siteUrl, type RouteKey } from "@/i18n/routes";
-import { absoluteUrl, type SiteSettings } from "@/sanity/seo";
+import { absoluteUrl, href, siteUrl, type RouteKey } from "@/i18n/routes";
+import type { SiteSettings } from "@/sanity/seo";
 
 type Thing = Record<string, unknown>;
 

@@ -1,7 +1,7 @@
 import { createClient, type QueryParams } from "next-sanity";
+import { dataset, projectId } from "./env";
 
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "ce31dig5";
-export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
+export { dataset, projectId };
 
 export const client = createClient({
   projectId,

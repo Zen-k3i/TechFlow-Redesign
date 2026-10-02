@@ -43,11 +43,11 @@ export function LegalPage({ doc: key }: { doc: "legal" | "terms" | "cookies" }) 
 
               <div className="mt-8 grid gap-4 border-t border-ink/10 pt-12 sm:grid-cols-2">
                 <a href={`mailto:${links.email}`} className="group rounded-3xl border border-ink/10 bg-white p-6 transition-colors hover:border-ink/30">
-                  <span className="eyebrow text-ink/40">{t.footer.agency.contact}</span>
+                  <span className="eyebrow text-ink/60">{t.footer.agency.contact}</span>
                   <span className="mt-3 block break-all font-medium group-hover:text-brand-deep">{links.email}</span>
                 </a>
                 <Link href={href(lang, other)} className="group rounded-3xl border border-ink/10 bg-white p-6 transition-colors hover:border-ink/30">
-                  <span className="eyebrow text-ink/40">{legalDocs[other][lang].badge}</span>
+                  <span className="eyebrow text-ink/60">{legalDocs[other][lang].badge}</span>
                   <span className="mt-3 flex items-center justify-between font-medium group-hover:text-brand-deep">
                     {t.footer[other]}
                     <span aria-hidden>→</span>

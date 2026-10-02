@@ -22,6 +22,9 @@ export const routes = {
 
 export type RouteKey = keyof typeof routes;
 
+/** Absolute URL of a path on the site (no trailing slash, no query). */
+export const absoluteUrl = (path: string) => `${siteUrl}${path === "/" ? "" : path}`;
+
 export const serviceKeys = ["design", "development", "aiAgents", "salesFunnel"] as const satisfies RouteKey[];
 export type ServiceKey = (typeof serviceKeys)[number];
 

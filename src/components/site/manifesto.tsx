@@ -17,7 +17,7 @@ export function Manifesto() {
         <div className="flex items-center gap-4">
           <p className="eyebrow text-brand-deep">{m.eyebrow}</p>
           <span className="h-px flex-1 bg-ink/10" />
-          <span className="eyebrow text-ink/40">TechFlow</span>
+          <span className="eyebrow text-ink/60">TechFlow</span>
         </div>
 
         <Statement

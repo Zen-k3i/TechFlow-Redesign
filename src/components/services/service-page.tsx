@@ -104,14 +104,12 @@ function Audience({ content }: { content: ServiceContent }) {
           </div>
           <ol className="border-b border-ink/15">
             {a.items.map((item, i) => (
-              <FadeIn key={item.title}>
-                <li className="group grid grid-cols-[3rem_1fr] gap-2 border-t border-ink/15 py-9 md:grid-cols-[4rem_1fr]">
-                  <span className="pt-2 font-mono text-xs text-ink/40">({pad(i + 1)})</span>
-                  <div className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3">
-                    <h3 className="font-serif text-3xl leading-tight transition-colors group-hover:text-brand-deep md:text-4xl">{item.title}</h3>
-                    <p className="mt-3 max-w-lg text-ink/60">{item.text}</p>
-                  </div>
-                </li>
+              <FadeIn as="li" key={item.title} className="group grid grid-cols-[3rem_1fr] gap-2 border-t border-ink/15 py-9 md:grid-cols-[4rem_1fr]">
+                <span className="pt-2 font-mono text-xs text-ink/60">({pad(i + 1)})</span>
+                <div className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3">
+                  <h3 className="font-serif text-3xl leading-tight transition-colors group-hover:text-brand-deep md:text-4xl">{item.title}</h3>
+                  <p className="mt-3 max-w-lg text-ink/60">{item.text}</p>
+                </div>
               </FadeIn>
             ))}
             <li className="border-t border-ink/15">
@@ -145,7 +143,7 @@ function Offer({ content, previews }: { content: ServiceContent; previews: strin
               {o.items.map((item, i) => (
                 <li key={item.title} {...bind(i)} className="group border-b border-white/10">
                   <div className="grid gap-4 py-8 md:grid-cols-[5rem_1fr_auto] md:items-start md:gap-8 md:py-10">
-                    <span className="pt-3 font-mono text-xs text-white/35">({pad(i + 1)})</span>
+                    <span className="pt-3 font-mono text-xs text-white/55">({pad(i + 1)})</span>
                     <div>
                       <h3 className="font-serif text-4xl leading-none transition-[transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-4 group-hover:text-brand-sky md:text-6xl">
                         {item.title}
@@ -221,12 +219,10 @@ function Highlight({ highlight }: { highlight: NonNullable<ServiceContent["highl
         <SectionHeader eyebrow={highlight.eyebrow} title={highlight.heading} intro={highlight.intro} />
         <ul className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
           {highlight.items.map((item, i) => (
-            <FadeIn key={item.title} delay={(i % 3) * 0.06}>
-              <li className="group border-t border-white/15 pt-6">
-                <span className="font-mono text-xs text-brand-sky">({pad(i + 1)})</span>
-                <h3 className="mt-5 font-serif text-3xl leading-tight">{item.title}</h3>
-                <p className="mt-3 text-white/55">{item.text}</p>
-              </li>
+            <FadeIn as="li" key={item.title} delay={(i % 3) * 0.06} className="group border-t border-white/15 pt-6">
+              <span className="font-mono text-xs text-brand-sky">({pad(i + 1)})</span>
+              <h3 className="mt-5 font-serif text-3xl leading-tight">{item.title}</h3>
+              <p className="mt-3 text-white/55">{item.text}</p>
             </FadeIn>
           ))}
         </ul>
@@ -242,22 +238,20 @@ function Cases({ cases }: { cases: NonNullable<ServiceContent["cases"]> }) {
         <SectionHeader eyebrow={cases.eyebrow} title={cases.heading} />
         <ol className="mt-16 border-t border-white/10">
           {cases.items.map((item) => (
-            <FadeIn key={item.title}>
-              <li className="grid gap-8 border-b border-white/10 py-10 lg:grid-cols-[1fr_auto] lg:items-end">
-                <div>
-                  <span className="eyebrow text-brand-sky">{item.sector}</span>
-                  <h3 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">{item.title}</h3>
-                  <p className="mt-3 max-w-xl text-white/55">{item.text}</p>
-                </div>
-                <dl className="flex gap-10">
-                  {item.metrics.map((m) => (
-                    <div key={m.label}>
-                      <dd className="font-serif text-6xl leading-none text-brand-sky">{m.value}</dd>
-                      <dt className="mt-2 max-w-[10rem] text-sm text-white/50">{m.label}</dt>
-                    </div>
-                  ))}
-                </dl>
-              </li>
+            <FadeIn as="li" key={item.title} className="grid gap-8 border-b border-white/10 py-10 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div>
+                <span className="eyebrow text-brand-sky">{item.sector}</span>
+                <h3 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">{item.title}</h3>
+                <p className="mt-3 max-w-xl text-white/55">{item.text}</p>
+              </div>
+              <dl className="flex gap-10">
+                {item.metrics.map((m) => (
+                  <div key={m.label}>
+                    <dd className="font-serif text-6xl leading-none text-brand-sky">{m.value}</dd>
+                    <dt className="mt-2 max-w-[10rem] text-sm text-white/50">{m.label}</dt>
+                  </div>
+                ))}
+              </dl>
             </FadeIn>
           ))}
         </ol>
@@ -286,8 +280,8 @@ function ComparisonAndWork({ content, work, cmsProjects }: { content: ServiceCon
             // The same Sanity card as the home page and /projets; the coded card only if the slug isn't in the CMS.
             const cms = cmsProjects.find((cp) => cp.slug === p.slug || cp.slug?.startsWith(`${p.slug}-`));
             return (
-              <FadeIn key={p.slug} delay={i * 0.08}>
-                <li>{cms ? <CmsProjectCard project={cms} /> : <ProjectCard project={p} />}</li>
+              <FadeIn as="li" key={p.slug} delay={i * 0.08}>
+                {cms ? <CmsProjectCard project={cms} /> : <ProjectCard project={p} />}
               </FadeIn>
             );
           })}

@@ -27,7 +27,7 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
         sector: p.sector ?? undefined,
         screens: p.previews.flatMap((img) =>
           img?.asset?.url
-            ? [{ src: urlFor(img as SanityImageSource).width(1000).url(), blur: img.asset.metadata?.lqip ?? undefined }]
+            ? [{ src: urlFor(img as SanityImageSource).width(1000).url() }]
             : [],
         ),
       })),
@@ -51,7 +51,7 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
           <div className="mt-32">
             <SectionHeader eyebrow={c.archive.eyebrow} title={c.archive.heading} intro={c.archive.intro} tone="light" />
             <div className="mt-12 border-t border-ink/15">
-              <div className="eyebrow hidden grid-cols-[1.2fr_1fr_1.4fr] gap-6 py-4 text-ink/40 md:grid">
+              <div className="eyebrow hidden grid-cols-[1.2fr_1fr_1.4fr] gap-6 py-4 text-ink/60 md:grid">
                 <span>{c.archive.columns.client}</span>
                 <span>{c.archive.columns.sector}</span>
                 <span>{c.archive.columns.scope}</span>

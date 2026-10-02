@@ -49,12 +49,10 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
           <SectionHeader eyebrow={c.pillars.eyebrow} title={c.pillars.heading} intro={c.pillars.intro} tone="light" />
           <ul className="mt-16 grid gap-4 md:grid-cols-3">
             {c.pillars.items.map((p, i) => (
-              <FadeIn key={p.title} delay={i * 0.08}>
-                <li className="flex h-full flex-col rounded-3xl border border-ink/10 bg-white p-8">
-                  <span className="font-serif text-6xl leading-none text-brand-deep/20">0{i + 1}</span>
-                  <h3 className="mt-8 font-serif text-3xl leading-tight">{p.title}</h3>
-                  <p className="mt-4 text-ink/60">{p.text}</p>
-                </li>
+              <FadeIn as="li" key={p.title} delay={i * 0.08} className="flex h-full flex-col rounded-3xl border border-ink/10 bg-white p-8">
+                <span className="font-serif text-6xl leading-none text-brand-deep/20">0{i + 1}</span>
+                <h3 className="mt-8 font-serif text-3xl leading-tight">{p.title}</h3>
+                <p className="mt-4 text-ink/60">{p.text}</p>
               </FadeIn>
             ))}
           </ul>
@@ -142,14 +140,12 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
               <RevealHeading text={c.cambodia.heading} className="mt-4 font-serif text-5xl leading-[0.95] md:text-7xl" />
               <ul className="mt-10 space-y-6">
                 {c.cambodia.points.map((p, i) => (
-                  <FadeIn key={p.title} delay={i * 0.08}>
-                    <li className="flex gap-5 border-t border-white/10 pt-6">
-                      <span className="eyebrow pt-1.5 text-brand-sky">0{i + 1}</span>
-                      <span>
-                        <span className="block font-serif text-2xl">{p.title}</span>
-                        <span className="mt-2 block text-white/55">{p.text}</span>
-                      </span>
-                    </li>
+                  <FadeIn as="li" key={p.title} delay={i * 0.08} className="flex gap-5 border-t border-white/10 pt-6">
+                    <span className="eyebrow pt-1.5 text-brand-sky">0{i + 1}</span>
+                    <span>
+                      <span className="block font-serif text-2xl">{p.title}</span>
+                      <span className="mt-2 block text-white/55">{p.text}</span>
+                    </span>
                   </FadeIn>
                 ))}
               </ul>

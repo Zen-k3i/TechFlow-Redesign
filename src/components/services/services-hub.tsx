@@ -45,7 +45,7 @@ export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNo
                       aria-hidden
                       className="absolute inset-0 origin-bottom scale-y-0 bg-white/[0.03] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100"
                     />
-                    <span className="relative font-mono text-xs text-white/40">({pad(i + 1)})</span>
+                    <span className="relative font-mono text-xs text-white/60">({pad(i + 1)})</span>
                     <span className="relative">
                       <span className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
                         <span className="font-serif text-6xl leading-[0.9] tracking-[-0.02em] transition-[transform,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-4 group-hover:italic group-hover:text-brand-sky md:text-8xl">
@@ -93,13 +93,11 @@ export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNo
               className="absolute top-[37px] hidden size-1.5 rounded-full bg-brand-sky shadow-[0_0_14px_4px_rgba(71,145,255,0.6)] md:block"
             />
             {c.pipeline.steps.map((step, i) => (
-              <FadeIn key={step.title} delay={i * 0.08}>
-                <li className="relative h-full rounded-3xl border border-white/10 bg-night-soft p-6">
-                  <ToolTile tool={toolById(step.tool)} className="size-10 rounded-xl" />
-                  <p className="eyebrow mt-6 text-white/40">0{i + 1}</p>
-                  <h3 className="mt-2 font-serif text-2xl leading-tight">{step.title}</h3>
-                  <p className="mt-3 text-sm text-white/55">{step.text}</p>
-                </li>
+              <FadeIn as="li" key={step.title} delay={i * 0.08} className="relative h-full rounded-3xl border border-white/10 bg-night-soft p-6">
+                <ToolTile tool={toolById(step.tool)} className="size-10 rounded-xl" />
+                <p className="eyebrow mt-6 text-white/40">0{i + 1}</p>
+                <h3 className="mt-2 font-serif text-2xl leading-tight">{step.title}</h3>
+                <p className="mt-3 text-sm text-white/55">{step.text}</p>
               </FadeIn>
             ))}
           </ol>
@@ -113,11 +111,9 @@ export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNo
             <div>
               <ul className="grid grid-cols-4 gap-3">
                 {tools.map((tool, i) => (
-                  <FadeIn key={tool.name} delay={i * 0.04}>
-                    <li className="group flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl border border-white/10 bg-white/[0.03] transition-colors hover:border-brand/50 hover:bg-white/[0.06]">
-                      <ToolTile tool={tool} className="size-14 rounded-2xl transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-6" />
-                      <span className="text-xs text-white/60">{tool.name}</span>
-                    </li>
+                  <FadeIn as="li" key={tool.name} delay={i * 0.04} className="group flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl border border-white/10 bg-white/[0.03] transition-colors hover:border-brand/50 hover:bg-white/[0.06]">
+                    <ToolTile tool={tool} className="size-14 rounded-2xl transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-6" />
+                    <span className="text-xs text-white/60">{tool.name}</span>
                   </FadeIn>
                 ))}
               </ul>

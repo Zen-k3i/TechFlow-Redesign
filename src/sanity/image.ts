@@ -1,6 +1,6 @@
 import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
 import type { ImageLoader } from "next/image";
-import { dataset, projectId } from "./client";
+import { dataset, projectId } from "./env";
 
 const builder = createImageUrlBuilder({ projectId, dataset });
 

@@ -52,10 +52,8 @@ export function ToolsPage({ tools }: { tools: ToolCard[] }) {
           <p className="eyebrow text-brand-deep">{c.all}</p>
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {tools.map((tool, i) => (
-              <FadeIn key={tool._id} delay={(i % 4) * 0.05}>
-                <li className="h-full">
-                  <ToolLink tool={tool} />
-                </li>
+              <FadeIn as="li" key={tool._id} delay={(i % 4) * 0.05} className="h-full">
+                <ToolLink tool={tool} />
               </FadeIn>
             ))}
           </ul>

@@ -73,8 +73,8 @@ function DesignShowcase() {
               {c.stages.map((s, i) => (
                 <li key={s.label}>
                   <button type="button" onClick={() => goTo(i)} className="group flex w-full items-baseline gap-4 py-2 text-left">
-                    <span className={`font-mono text-xs transition-colors ${i === active ? "text-brand-deep" : "text-ink/30"}`}>{pad(i + 1)}</span>
-                    <span className={`font-serif text-3xl leading-tight transition-colors duration-500 md:text-4xl ${i === active ? "text-ink" : "text-ink/25 group-hover:text-ink/50"}`}>
+                    <span className={`font-mono text-xs transition-colors ${i === active ? "text-brand-deep" : "text-ink/60"}`}>{pad(i + 1)}</span>
+                    <span className={`font-serif text-3xl leading-tight transition-colors duration-500 md:text-4xl ${i === active ? "text-ink" : "text-ink/55 group-hover:text-ink/75"}`}>
                       {s.label}
                     </span>
                   </button>
@@ -95,7 +95,7 @@ function DesignShowcase() {
                 <span className="size-2.5 rounded-full bg-[#ff5f57]" />
                 <span className="size-2.5 rounded-full bg-[#febc2e]" />
                 <span className="size-2.5 rounded-full bg-[#28c840]" />
-                <span className="mx-auto font-mono text-[11px] text-ink/45">
+                <span className="mx-auto font-mono text-[11px] text-ink/60">
                   {c.project} · {c.stages[active].label}
                 </span>
                 <span className="w-10" />
@@ -107,7 +107,7 @@ function DesignShowcase() {
                     src={s.src}
                     alt={`${c.project} · ${s.label}`}
                     fill
-                    sizes="(min-width: 1024px) 60vw, 100vw"
+                    sizes="(min-width: 1024px) 50vw, 88vw"
                     className={`transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${s.contain ? "object-contain p-6" : "object-cover object-top"} ${
                       i === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
                     }`}
@@ -226,7 +226,7 @@ function BeforeAfter({ card }: { card: Card }) {
             </div>
           ))}
         </dl>
-        <p className="mt-3 text-xs text-white/35">{card.title}</p>
+        <p className="mt-3 text-xs text-white/55">{card.title}</p>
       </div>
     </section>
   );
@@ -302,7 +302,7 @@ function AgentLive() {
         <div className="mt-14 grid gap-4 lg:grid-cols-3">
           <Panel title={c.inbox} index={1}>
             <motion.div key={round} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease }} className="rounded-2xl bg-white p-5 text-ink">
-              <p className="flex items-center justify-between text-xs text-ink/45">
+              <p className="flex items-center justify-between text-xs text-ink/60">
                 <span>{mail.from}</span>
                 <span className="size-2 rounded-full bg-brand-deep" />
               </p>
@@ -410,7 +410,7 @@ function FunnelLive({ card }: { card: Card }) {
           {rows.map((r, i) => (
             <li key={r.label} className="grid items-center gap-3 md:grid-cols-[12rem_1fr_7rem]">
               <span className="flex items-center gap-3">
-                <span className="font-mono text-xs text-ink/40">{pad(i + 1)}</span>
+                <span className="font-mono text-xs text-ink/60">{pad(i + 1)}</span>
                 <span className="font-serif text-2xl">{r.label}</span>
               </span>
               <div className="relative h-16 overflow-hidden rounded-2xl bg-ink/5">
@@ -433,7 +433,7 @@ function FunnelLive({ card }: { card: Card }) {
                   <Counter to={r.value} run={inView} />
                 </span>
                 {i > 0 && (
-                  <span className="text-xs text-ink/45">
+                  <span className="text-xs text-ink/60">
                     {Math.round((r.value / rows[i - 1].value) * 100)}%
                   </span>
                 )}

@@ -132,7 +132,7 @@ export function Toc({ label, items }: { label: string; items: { id: string; titl
   const active = useActiveHeading(ids);
   return (
     <nav aria-label={label} className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto pb-6">
-      <p className="eyebrow text-ink/40">{label}</p>
+      <p className="eyebrow text-ink/60">{label}</p>
       <ol className="mt-5 space-y-1 border-l border-ink/10">
         {items.map((item) => (
           <li key={item.id}>

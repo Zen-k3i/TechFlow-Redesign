@@ -50,7 +50,7 @@ export function DesignWord({ text, on }: { text: string; on: boolean }) {
             {handles.map((h) => (
               <span key={h} className={`absolute size-2 border-[1.5px] border-brand-sky bg-white ${h}`} />
             ))}
-            <span className="absolute bottom-full left-0 mb-2 rounded bg-brand-sky px-1.5 py-1 font-sans text-[11px] font-medium not-italic leading-none tracking-normal text-white">
+            <span className="absolute bottom-full left-0 mb-2 rounded bg-brand-sky px-1.5 py-1 font-sans text-[11px] font-medium not-italic leading-none tracking-normal text-night">
               {size.w} × {size.h}
             </span>
             <motion.span
@@ -62,7 +62,7 @@ export function DesignWord({ text, on }: { text: string; on: boolean }) {
               <svg width="20" height="20" viewBox="0 0 24 24" className="-ml-1 -mt-1 drop-shadow-lg">
                 <path d="M4 3l15 8.5-6.5 1.8L9.5 20z" fill="#4791ff" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
               </svg>
-              <span className="mt-4 rounded-full bg-brand-sky px-2 py-1 font-medium text-white shadow-lg">TechFlow</span>
+              <span className="mt-4 rounded-full bg-brand-sky px-2 py-1 font-medium text-night shadow-lg">TechFlow</span>
             </motion.span>
           </motion.span>
         )}

@@ -195,7 +195,7 @@ function ArticleIndex({
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={f.search}
-                  className="w-full rounded-full border border-brand/40 bg-white py-2 pl-10 pr-4 text-sm outline-none transition-[border-color,box-shadow] placeholder:text-ink/40 hover:border-brand/70 focus:border-brand focus:shadow-[0_0_0_3px_rgba(71,102,255,0.15)]"
+                  className="w-full rounded-full border border-brand/40 bg-white py-2 pl-10 pr-4 text-sm outline-none transition-[border-color,box-shadow] placeholder:text-ink/60 hover:border-brand/70 focus:border-brand focus:shadow-[0_0_0_3px_rgba(71,102,255,0.15)]"
                 />
               </label>
             </div>

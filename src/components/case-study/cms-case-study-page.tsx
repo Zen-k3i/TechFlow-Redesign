@@ -177,9 +177,10 @@ function Hero({ study }: { study: CmsCaseStudy }) {
   const still = useStill();
   const website = safeHref(study.websiteUrl);
 
-  const reveal = (delay: number) => ({
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
+  // `fade: false` only slides: for the summary, the page's largest text, visible from the server HTML (LCP).
+  const reveal = (delay: number, fade = true) => ({
+    initial: fade ? { opacity: 0, y: 20 } : { y: 20 },
+    animate: fade ? { opacity: 1, y: 0 } : { y: 0 },
     transition: { duration: 0.9, delay, ease },
   });
 
@@ -219,7 +220,7 @@ function Hero({ study }: { study: CmsCaseStudy }) {
             />
 
             {study.summary && (
-              <motion.p {...reveal(0.4)} className="mt-8 max-w-xl text-lg text-white/70 md:text-xl">
+              <motion.p {...reveal(0.4, false)} className="mt-8 max-w-xl text-lg text-white/70 md:text-xl">
                 {study.summary}
               </motion.p>
             )}
@@ -695,10 +696,8 @@ function Related({ study }: { study: CmsCaseStudy }) {
         </div>
         <ul className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {study.related.map((p, i) => (
-            <FadeIn key={p._id} delay={i * 0.08}>
-              <li>
-                <CmsProjectCard project={p} />
-              </li>
+            <FadeIn as="li" key={p._id} delay={i * 0.08}>
+              <CmsProjectCard project={p} />
             </FadeIn>
           ))}
         </ul>

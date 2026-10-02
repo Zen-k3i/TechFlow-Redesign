@@ -454,7 +454,7 @@ function BuildVisual({ still }: { still: boolean }) {
         animate={{ ...note, boxShadow: cardShadow(grab) }}
         transition={{ duration: step === 3 ? 0.8 : 0.4, ease }}
       >
-        <p className="eyebrow flex items-center gap-2 text-[9px] text-ink/40">
+        <p className="eyebrow flex items-center gap-2 text-[9px] text-ink/60">
           <span className="size-1.5 animate-pulse rounded-full bg-brand" />
           {b.prompt}
         </p>
@@ -595,7 +595,7 @@ function ToolsVisual({ still }: { still: boolean }) {
         }}
       >
         <div className="flex items-center justify-between">
-          <p className="eyebrow text-[9px] text-ink/40">{tools.label}</p>
+          <p className="eyebrow text-[9px] text-ink/60">{tools.label}</p>
           <span
             className={`rounded-full px-2 py-0.5 font-mono text-[10px] transition-colors duration-500 ${
               done ? "bg-emerald-500/15 text-emerald-700" : "bg-brand/15 text-brand-deep"

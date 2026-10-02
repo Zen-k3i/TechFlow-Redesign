@@ -1,4 +1,4 @@
-import { PortableText, type PortableTextBlock, type PortableTextComponents } from "next-sanity";
+import { PortableText, type PortableTextBlock, type PortableTextComponents } from "@portabletext/react";
 import { slugify } from "../page/slugify";
 import { SanityImage, type CmsImage } from "./sanity-image";
 

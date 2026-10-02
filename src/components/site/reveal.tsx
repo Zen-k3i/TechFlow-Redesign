@@ -63,13 +63,17 @@ export function FadeIn({
   children,
   delay = 0,
   className = "",
+  as = "div",
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  /** "li" inside a list, so the list keeps only <li> children (screen readers). */
+  as?: "div" | "li";
 }) {
+  const Tag = as === "li" ? motion.li : motion.div;
   return (
-    <motion.div
+    <Tag
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}
@@ -77,7 +81,7 @@ export function FadeIn({
       className={className}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 }
 

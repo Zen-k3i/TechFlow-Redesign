@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
 import { hasLocale, locales, type Locale } from "@/i18n/config";
-import { href, routes, type RouteKey } from "@/i18n/routes";
+import { absoluteUrl, href, routes, type RouteKey } from "@/i18n/routes";
 import { sanityFetch } from "@/sanity/client";
 import { translationLinks } from "@/sanity/metadata";
 import { REDIRECTS_QUERY, SITEMAP_PAGES_QUERY, SITEMAP_QUERY } from "@/sanity/queries";
-import { absoluteUrl } from "@/sanity/seo";
 
 const cmsRoute: Record<"project" | "growthCaseStudy" | "tool" | "insight", RouteKey> = { project: "projects", growthCaseStudy: "projects", tool: "tools", insight: "insights" };
 

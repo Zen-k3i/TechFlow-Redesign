@@ -36,7 +36,7 @@ const copy = {
         "Footer",
       ],
       type: "Typographie",
-      comment: "Cette version est validée, on passe au dev ✅",
+      comment: "Cette version est validée, on passe au dev",
     },
     dev: {
       deploy: "Déployé en production",
@@ -479,8 +479,8 @@ function DesignStage({ content }: { content: ServiceContent }) {
               src={shots[0] ?? projectImage(slug)}
               alt={name}
               fill
-              preload
-              sizes="(min-width: 768px) 50vw, 90vw"
+              // Not preloaded: on phones the intro text is the main content and this sits below it.
+              sizes="(min-width: 1024px) 40vw, (min-width: 768px) 56vw, 88vw"
               className="object-cover object-top"
             />
           </div>
@@ -514,10 +514,10 @@ function DesignStage({ content }: { content: ServiceContent }) {
         <div className="rounded-[1.4rem] bg-[#1b1d27] p-1.5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.9)] ring-1 ring-white/10">
           <div className="relative aspect-[9/18] overflow-hidden rounded-[1.1rem] bg-white">
             <Image
-              src="/images/service/little-green-spark-mobile.png"
+              src="/images/service/little-green-spark-mobile.jpg"
               alt=""
               fill
-              sizes="10rem"
+              sizes="(min-width: 768px) 10rem, 24vw"
               className="object-cover object-top"
             />
           </div>
@@ -695,7 +695,7 @@ function DevStage({ content }: { content: ServiceContent }) {
               src={shot}
               alt=""
               fill
-              preload
+              // Not preloaded, like the design stage: the intro text is the main content on phones.
               sizes="(min-width: 768px) 50vw, 85vw"
               className="object-cover object-top"
             />

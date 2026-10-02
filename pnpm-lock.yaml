@@ -11,6 +11,9 @@ importers:
       '@mux/mux-video-react':
         specifier: 0.31.4
         version: 0.31.4(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@portabletext/react':
+        specifier: ^7.0.1
+        version: 7.0.1(react@19.2.8)
       '@react-three/drei':
         specifier: ^10.7.8
         version: 10.7.9(@react-three/fiber@9.8.1(@types/react@19.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.186.1))(@types/react@19.3.0)(@types/three@0.186.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.186.1)

@@ -343,7 +343,7 @@ export function ProjectCardView({
         <div className="mt-4 flex items-start justify-between gap-4 px-1">
           <div>
             <h3 className="text-xl font-medium">{name}</h3>
-            {sector && <p className="mt-0.5 text-sm opacity-55">{sector}</p>}
+            {sector && <p className="mt-0.5 text-sm opacity-75">{sector}</p>}
           </div>
           <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-current/15 transition-[transform,background-color,color,border-color] group-hover:-rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-white">
             →

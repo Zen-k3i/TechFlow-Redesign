@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
     // image-url builder's query string (?w=…&auto=format) is allowed.
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io", pathname: "/images/ce31dig5/**" }],
   },
+  experimental: {
+    // Tailwind CSS is small: inlined in the HTML, it no longer blocks the first paint on slow phones.
+    inlineCss: true,
+  },
   redirects: sanityRedirects,
   async headers() {
     // Previews and branch deployments must never be indexed (robots.txt disallows them too).

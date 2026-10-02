@@ -1,6 +1,8 @@
 import { defineQuery } from "next-sanity";
 
 const image = /* groq */ `{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }`;
+/** Same without the blur placeholder: for images that aren't on screen at first (hover stacks), whose ~1 KB LQIP would only bloat the page data. */
+const imageNoBlur = /* groq */ `{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } }`;
 
 /** The SEO tab of a document; the website fills empty fields from the page content (`src/sanity/seo.ts`). */
 const seo = /* groq */ `seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image ${image}, canonicalUrl, noIndex, noFollow }`;
@@ -32,8 +34,8 @@ const projectCard = /* groq */ `
   "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) ${image},
   // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.
   "previews": select(
-    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} },
-    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...${image} }
+    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${imageNoBlur} },
+    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...${imageNoBlur} }
   ),
   // Growth case studies without hover images stack their first ads as phones instead.
   "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])

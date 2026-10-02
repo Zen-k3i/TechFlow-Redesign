@@ -28,6 +28,8 @@ const instrumentSerif = Instrument_Serif({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  // Only small labels use it: not worth competing with the hero text and images on first load.
+  preload: false,
 });
 
 // No `dynamicParams = false` here: Next applies it to every child route, which would 404

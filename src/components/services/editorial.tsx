@@ -36,7 +36,7 @@ export function EditorialHero({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease }}
-        className="eyebrow flex flex-wrap items-center gap-2 text-white/40"
+        className="eyebrow flex flex-wrap items-center gap-2 text-white/60"
       >
         {trail.map((c, i) => (
           <span key={c.href} className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export function EditorialHero({
         className="mt-10 flex origin-left items-center justify-between border-b border-white/15 pb-5"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/55">{kicker}</span>
-        {counter && <span className="font-mono text-xs tracking-[0.2em] text-white/35">{counter}</span>}
+        {counter && <span className="font-mono text-xs tracking-[0.2em] text-white/55">{counter}</span>}
       </motion.div>
 
       <RevealHeading
@@ -70,13 +70,15 @@ export function EditorialHero({
         className="mt-10 font-serif text-[clamp(3.2rem,9vw,9.5rem)] leading-[0.9] tracking-[-0.03em]"
       />
 
+      {/* Visible from the server HTML (only slides): this paragraph is the page's largest content,
+          and starting it at opacity 0 delayed LCP until the JavaScript had loaded. */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.35, ease }}
+        initial={{ y: 16 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, ease }}
         className="mt-12 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end"
       >
-        <p className="max-w-xl text-lg leading-relaxed text-white/60 md:text-xl">{intro}</p>
+        <p className="max-w-xl text-lg leading-relaxed text-white/70 md:text-xl">{intro}</p>
         {actions}
       </motion.div>
     </div>
@@ -93,7 +95,7 @@ export function WordMarquee({ words, tone = "dark" }: { words: string[]; tone?: 
       <div className="flex w-max animate-marquee items-center whitespace-nowrap">
         {list.map((w, i) => (
           <span key={i} className="flex items-center font-serif text-[clamp(3rem,8vw,7.5rem)] leading-[1.1]">
-            <span className={i % 2 ? `italic ${filled}` : `text-transparent ${outline}`}>{w}</span>
+            <span className={i % 2 ? `italic ${filled}` : `${tone === "dark" ? "text-white" : "text-ink"} [-webkit-text-fill-color:transparent] ${outline}`}>{w}</span>
             <span className={`mx-[0.35em] text-[0.35em] ${filled}`}>✦</span>
           </span>
         ))}
@@ -172,7 +174,7 @@ export function StackedSteps({
   const themes = [
     { card: "bg-night-soft text-white ring-1 ring-white/10", num: "text-brand-sky", muted: "text-white/60", pill: "bg-white/10 text-white" },
     { card: "bg-paper text-ink", num: "text-brand-deep", muted: "text-ink/60", pill: "bg-ink text-paper" },
-    { card: "bg-brand-deep text-white", num: "text-white", muted: "text-white/75", pill: "bg-white text-brand-deep" },
+    { card: "bg-brand-deep text-white", num: "text-white", muted: "text-white/90", pill: "bg-white text-brand-deep" },
   ];
   return (
     <ol className="space-y-5">
@@ -189,7 +191,7 @@ export function StackedSteps({
                 <h3 className="font-serif text-4xl leading-[1] md:text-6xl">{s.title}</h3>
                 <p className={`mt-5 max-w-lg text-lg leading-relaxed ${th.muted}`}>{s.text}</p>
                 <p className={`mt-8 inline-flex items-center gap-3 self-start rounded-full px-4 py-2 text-sm ${th.pill}`}>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-60">{label}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em]">{label}</span>
                   {s.deliverable}
                 </p>
               </div>
@@ -206,7 +208,7 @@ export function NextLink({ label, title, to, image }: { label: string; title: st
   return (
     <section className="bg-night px-5 pb-10 text-white md:px-10">
       <Link href={to} className="group relative mx-auto block max-w-7xl overflow-hidden border-y border-white/10 py-16 md:py-24">
-        <span className="eyebrow text-white/40">{label}</span>
+        <span className="eyebrow text-white/60">{label}</span>
         <span className="mt-4 flex items-center justify-between gap-6">
           <span className="font-serif text-[clamp(3.5rem,11vw,10rem)] leading-[0.9] tracking-[-0.03em] transition-[transform,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-6 group-hover:italic group-hover:text-brand-sky">
             {title}

@@ -10,7 +10,10 @@ import { useLocale } from "../site/locale";
 import { Magnetic } from "../site/magnetic";
 import { FadeIn, RevealHeading } from "../site/reveal";
 import { useEffect, useRef, useState } from "react";
-import MuxVideo from "@mux/mux-video-react";
+import dynamic from "next/dynamic";
+
+// The HLS player (hls.js, ~300 KB) is only downloaded once a testimonial comes near the viewport.
+const MuxVideo = dynamic(() => import("@mux/mux-video-react"), { ssr: false });
 
 type Tone = "dark" | "light";
 
@@ -132,7 +135,7 @@ export function PageHero({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease }}
-              className="eyebrow mb-8 flex flex-wrap items-center gap-2 text-white/40"
+              className="eyebrow mb-8 flex flex-wrap items-center gap-2 text-white/60"
             >
               {trail.map((c, i) => (
                 <span key={c.href} className="flex items-center gap-2">
@@ -167,8 +170,9 @@ export function PageHero({
           />
           {intro && (
             <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
+              // Slides only: the page's largest text, visible from the server HTML (LCP).
+              initial={{ y: 14 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease }}
               className="mt-7 max-w-xl text-lg text-white/65 md:text-xl"
             >
@@ -447,7 +451,7 @@ export function ClientMarquee({
     <div>
       {label && (
         <p
-          className={`eyebrow text-center ${light ? "text-ink/40" : "text-white/40"}`}
+          className={`eyebrow text-center ${light ? "text-ink/60" : "text-white/60"}`}
         >
           {label}
         </p>
@@ -462,8 +466,9 @@ export function ClientMarquee({
                 <Image
                   src={client.src}
                   alt={i < clients.length ? client.name : ""}
-                  width={client.width}
-                  height={client.height}
+                  // Displayed size, so the srcset offers ~1x/2x of it instead of the full 1000 px files.
+                  width={Math.round(size.width)}
+                  height={Math.round(size.height)}
                   style={{
                     width: `calc(${size.width.toFixed(1)}px * var(--logo-scale))`,
                     height: `calc(${size.height.toFixed(1)}px * var(--logo-scale))`,
@@ -547,23 +552,21 @@ export function NextSteps({
             className="absolute left-0 right-0 top-6 hidden h-px bg-linear-to-r from-brand-sky via-white/15 to-transparent md:block"
           />
           {steps.map((s, i) => (
-            <FadeIn key={s.title} delay={i * 0.08}>
-              <li className="relative h-full">
-                <span
-                  className={`relative flex size-12 items-center justify-center rounded-full border font-serif text-xl ${i === 0 ? "border-brand bg-brand text-white" : "border-white/15 bg-night text-white/70"}`}
-                >
-                  {i + 1}
-                </span>
-                <p className="eyebrow mt-6 text-white/40">
-                  {t.common.step} {i + 1}
-                </p>
-                <h3 className="mt-2 font-serif text-2xl leading-tight">
-                  {s.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/55">
-                  {s.text}
-                </p>
-              </li>
+            <FadeIn as="li" key={s.title} delay={i * 0.08} className="relative h-full">
+              <span
+                className={`relative flex size-12 items-center justify-center rounded-full border font-serif text-xl ${i === 0 ? "border-brand bg-brand text-white" : "border-white/15 bg-night text-white/70"}`}
+              >
+                {i + 1}
+              </span>
+              <p className="eyebrow mt-6 text-white/60">
+                {t.common.step} {i + 1}
+              </p>
+              <h3 className="mt-2 font-serif text-2xl leading-tight">
+                {s.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/55">
+                {s.text}
+              </p>
             </FadeIn>
           ))}
         </ol>
@@ -694,18 +697,19 @@ export function MuxCard({
     >
       {/* Mux only serves these videos as HLS streams (no MP4), which Chrome can't play in a plain
           <video>; MuxVideo is a <video> with HLS support, sized to the card, without Mux Data tracking. */}
+      {near ? (
       <MuxVideo
-        ref={(el) => {
+        ref={(el: HTMLVideoElement | null) => {
           videoRef.current = el ?? null;
           // Native muted autoplay (MuxVideo's own \`autoplay\` prop leaks onto the DOM as an invalid attribute).
           if (el && !sound) el.autoplay = !still;
         }}
-        playbackId={near ? item.playbackId : undefined}
+        playbackId={item.playbackId}
         poster={`https://image.mux.com/${item.playbackId}/thumbnail.webp?time=1`}
         muted
         loop
         playsInline
-        // The stream is only attached near the viewport (playbackId above), so load it right away then.
+        // The player only mounts near the viewport, so load the stream right away then.
         preload="auto"
         capRenditionToPlayerSize
         disableTracking
@@ -722,6 +726,10 @@ export function MuxCard({
         onEnded={silence}
         className={`h-full w-full object-cover ${sound ? "cursor-pointer" : ""}`}
       />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element -- Mux thumbnail until the player loads
+        <img src={`https://image.mux.com/${item.playbackId}/thumbnail.webp?time=1`} alt="" loading="lazy" className="h-full w-full object-cover" />
+      )}
 
       {/* Darkens the silent loop so the button and caption stand out; lifts while it talks. */}
       <div className={`pointer-events-none absolute inset-0 bg-black/20 transition-opacity duration-300 ${sound && !paused ? "opacity-0" : ""}`} />

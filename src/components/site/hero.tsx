@@ -104,10 +104,11 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
           )}
         </h1>
 
+        {/* Slides in but is visible from the server HTML: it's the page's largest text (LCP). */}
         <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.85, ease }}
+          initial={{ y: 12 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease }}
           className="mt-6 max-w-2xl text-balance text-base leading-relaxed text-white/65 md:text-lg"
         >
           <Accented text={t.hero.subtitle} className="text-white" />

@@ -17,9 +17,10 @@ import { ArticleCard, formatDate } from "./insights-page";
 type Heading = { id: string; title: string };
 type Copy = (typeof insightsContent)["fr"];
 
-const rise = (delay: number) => ({
-  initial: { opacity: 0, y: 14 },
-  animate: { opacity: 1, y: 0 },
+/** `fade: false` only slides: for the page's largest text, which must be visible from the server HTML (LCP). */
+const rise = (delay: number, fade = true) => ({
+  initial: fade ? { opacity: 0, y: 14 } : { y: 14 },
+  animate: fade ? { opacity: 1, y: 0 } : { y: 0 },
   transition: { duration: 0.8, delay, ease },
 });
 
@@ -69,7 +70,7 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
             className="mt-6 font-serif text-[clamp(2.5rem,5.6vw,4.75rem)] leading-[1.02] tracking-[-0.02em] text-balance"
           />
           {article.excerpt && (
-            <motion.p {...rise(0.2)} className="mt-6 max-w-3xl text-lg leading-relaxed text-white/65 md:text-xl">
+            <motion.p {...rise(0.2, false)} className="mt-6 max-w-3xl text-lg leading-relaxed text-white/65 md:text-xl">
               {article.excerpt}
             </motion.p>
           )}
@@ -235,7 +236,7 @@ function Contents({ label, items, target }: { label: string; items: Heading[]; t
 
   return (
     <nav aria-label={label} className="max-h-[calc(100vh-14rem)] overflow-y-auto">
-      <p className="eyebrow text-ink/40">{label}</p>
+      <p className="eyebrow text-ink/60">{label}</p>
       <div className="relative mt-5">
         <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-ink/10" />
         <motion.span aria-hidden style={{ scaleY: progress }} className="absolute inset-y-0 left-0 w-px origin-top bg-brand-deep" />
@@ -267,9 +268,9 @@ function MobileContents({ label, items }: { label: string; items: Heading[] }) {
     <details className="group mb-12 rounded-2xl border border-ink/10 bg-white lg:hidden">
       <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
         <span>
-          {label} <span className="text-ink/40">· {items.length}</span>
+          {label} <span className="text-ink/60">· {items.length}</span>
         </span>
-        <span aria-hidden className="text-xl leading-none text-ink/40 transition-transform group-open:rotate-45">
+        <span aria-hidden className="text-xl leading-none text-ink/60 transition-transform group-open:rotate-45">
           +
         </span>
       </summary>
@@ -294,7 +295,7 @@ function Share({ copy, title }: { copy: Copy; title: string }) {
 
   return (
     <div>
-      <p className="eyebrow text-ink/40">{copy.share}</p>
+      <p className="eyebrow text-ink/60">{copy.share}</p>
       <div className="mt-4 flex flex-wrap gap-2">
         <button
           type="button"

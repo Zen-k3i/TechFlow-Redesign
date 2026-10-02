@@ -3,7 +3,7 @@ import { cache } from "react";
 import type { SanityImageSource } from "@sanity/image-url";
 import type { PAGE_SEO_QUERY_RESULT, SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 import { defaultLocale, type Locale } from "@/i18n/config";
-import { href, siteUrl, type RouteKey } from "@/i18n/routes";
+import { absoluteUrl, href, type RouteKey } from "@/i18n/routes";
 import { sanityFetch } from "./client";
 import { urlFor } from "./image";
 import { PAGE_SEO_QUERY, SITE_SETTINGS_QUERY } from "./queries";
@@ -35,8 +35,6 @@ export function withTemplate(title: string, settings: SiteSettings | null) {
   return full.length > TITLE_MAX ? title : full;
 }
 
-/** Absolute URL of a path on the site (no trailing slash, no query). */
-export const absoluteUrl = (path: string) => `${siteUrl}${path === "/" ? "" : path}`;
 
 const shareImage = (image: SanityImageSource) => urlFor(image).width(1200).height(630).fit("crop").url();
 const hasAsset = (image: unknown): image is SanityImageSource =>

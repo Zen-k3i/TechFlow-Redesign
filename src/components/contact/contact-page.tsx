@@ -217,16 +217,14 @@ function BriefForm() {
           />
           <ul className="mt-12 space-y-6">
             {f.promises.map((p, i) => (
-              <FadeIn key={p.title} delay={i * 0.08}>
-                <li className="flex gap-4">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-deep/10 font-serif text-lg text-brand-deep">
-                    {i + 1}
-                  </span>
-                  <span>
-                    <span className="block font-medium">{p.title}</span>
-                    <span className="mt-1 block text-ink/60">{p.text}</span>
-                  </span>
-                </li>
+              <FadeIn as="li" key={p.title} delay={i * 0.08} className="flex gap-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-deep/10 font-serif text-lg text-brand-deep">
+                  {i + 1}
+                </span>
+                <span>
+                  <span className="block font-medium">{p.title}</span>
+                  <span className="mt-1 block text-ink/60">{p.text}</span>
+                </span>
               </FadeIn>
             ))}
           </ul>

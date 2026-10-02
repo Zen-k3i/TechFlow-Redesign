@@ -162,8 +162,9 @@ export function ProjectsHero({ projects }: { projects: WallProject[] }) {
           />
 
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
+            // Slides only: the page's largest text, visible from the server HTML (LCP).
+            initial={{ y: 14 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease }}
             className="mt-7 max-w-lg text-lg text-white/65 md:text-xl"
           >

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mux/mux-video-react": "0.31.4",
+    "@portabletext/react": "^7.0.1",
     "@react-three/drei": "^10.7.8",
     "@react-three/fiber": "^9.8.0",
     "@sanity/client": "^7.27.0",
