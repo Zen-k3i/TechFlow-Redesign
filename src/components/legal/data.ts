@@ -16,7 +16,7 @@ const h = (text: string): Block => ({ type: "h3", text });
 const ul = (...items: string[]): Block => ({ type: "ul", items });
 
 const ADDRESS = "160 Robinson Road, #14-04, Singapore Business Federation Center, Singapore 068914";
-const HOST = "Webflow, Inc., 398 11th Street, 2nd Floor, San Francisco, CA 94103";
+const HOST = "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA";
 const EMAIL = "maximilien@techflow-agency.com";
 
 const legalFr: LegalDoc = {
@@ -58,7 +58,7 @@ const legalFr: LegalDoc = {
     {
       title: "Limitations techniques",
       blocks: [
-        p("Le site utilise la technologie Webflow. Le site ne pourra être tenu responsable de dommages matériels liés à son utilisation. Par ailleurs, l'utilisateur s'engage à accéder au site en utilisant un matériel récent, ne contenant pas de virus et doté d'un navigateur à jour."),
+        p("Le site est développé avec Next.js et hébergé par Vercel. Le site ne pourra être tenu responsable de dommages matériels liés à son utilisation. Par ailleurs, l'utilisateur s'engage à accéder au site en utilisant un matériel récent, ne contenant pas de virus et doté d'un navigateur à jour."),
       ],
     },
     {
@@ -152,7 +152,7 @@ const legalEn: LegalDoc = {
     {
       title: "Technical limitations",
       blocks: [
-        p("The website is built with Webflow. The website cannot be held responsible for material damage related to its use. Users also agree to access the website using up-to-date, virus-free equipment with a current browser."),
+        p("The website is built with Next.js and hosted by Vercel. The website cannot be held responsible for material damage related to its use. Users also agree to access the website using up-to-date, virus-free equipment with a current browser."),
       ],
     },
     {
@@ -708,198 +708,252 @@ const termsEn: LegalDoc = {
 };
 
 /**
- * Copied from the old site's /politique-de-cookies and /en/cookie-policy (2026-10-01). That page is itself a
- * placeholder taken from the legal notices (its draft notice was removed here on request), pending the real policy.
+ * Privacy and cookie policies written for the new site (2026-10-02), replacing the old site's placeholders
+ * (a copy of the legal notices). Describe what the site really does today: no analytics, no cookies, the
+ * brief form opens the visitor's mail app. Update them when that changes (analytics, a stored contact form,
+ * a newsletter): the cookie policy then needs a consent banner. To be validated by the company before go-live.
  */
-const cookiesFr: LegalDoc = {
-  meta: { title: "Politique de cookies | TechFlow Agency", description: "Les cookies utilisés par TechFlow Agency, le rôle de chacun, leur durée de conservation et la façon de modifier votre consentement à tout moment." },
+const UPDATED_FR = "2 octobre 2026";
+const UPDATED_EN = "2 October 2026";
+
+const privacyFr: LegalDoc = {
+  meta: { title: "Politique de confidentialité | TechFlow Agency", description: "Comment TechFlow Agency collecte, utilise et protège vos données personnelles, vos droits au titre du RGPD et la façon de nous contacter à ce sujet." },
   badge: "Informations légales",
-  title: "Politique de *cookies.*",
-  intro: "Les cookies déposés lors de la navigation sur techflow-agency.com et vos droits.",
+  title: "Politique de *confidentialité.*",
+  intro: `Quelles données personnelles nous recevons quand vous utilisez techflow-agency.com ou nous contactez, ce que nous en faisons et vos droits. Dernière mise à jour : ${UPDATED_FR}.`,
   toc: "Sommaire",
   sections: [
     {
-      title: "Informations sur le site",
+      title: "Responsable du traitement",
       blocks: [
-        p("Conformément à l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, les utilisateurs de techflow-agency.com, site détenu par Techflow Agency PTE LTD, sont informés de l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi :"),
-        p("Propriétaire : Techflow Agency PTE LTD"),
-        p("Siège social : 229 160 ROBINSON ROAD, #14-04, SINGAPORE BUSINESS FEDERATION CENTER, SINGAPORE 068914"),
-        p("Numéro d'enregistrement : 929698140"),
-        p("Dirigeant et directeur de la publication : Maximilien Grolier – maximilien@techflow-agency.com"),
-        p("Hébergement du site : Webflow, Inc. 398 11th Street, 2nd Floor San Francisco, CA 94103"),
+        p(`Le responsable du traitement est Techflow Agency PTE LTD, société de droit singapourien, ${ADDRESS}. Pour toute question sur vos données : ${EMAIL}.`),
+        p("Nous appliquons le Règlement général sur la protection des données (RGPD) à toutes les personnes situées dans l'Union européenne, ainsi que le Personal Data Protection Act (PDPA) de Singapour."),
       ],
     },
     {
-      title: "Conditions d'utilisation",
+      title: "Les données que nous recevons",
       blocks: [
-        p("L'utilisation de techflow-agency.com implique l'acceptation pleine et entière des conditions d'utilisation décrites ci-après. Ces conditions d'utilisation peuvent être modifiées ou complétées à tout moment : les utilisateurs de techflow-agency.com sont donc invités à les consulter régulièrement."),
-        p("Le site est normalement accessible aux utilisateurs à tout moment. Une interruption pour maintenance technique peut toutefois être décidée par techflow-agency.com, qui s'efforcera alors de communiquer préalablement aux utilisateurs les dates et heures de l'intervention."),
-        p("De la même manière, les mentions légales peuvent être modifiées à tout moment : l'utilisateur est invité à les consulter le plus souvent possible."),
+        h("Quand vous nous écrivez ou demandez un devis"),
+        p("Le formulaire de brief du site ne stocke rien : il prépare un e-mail dans votre propre messagerie, que vous choisissez d'envoyer. Nous recevons alors ce que vous y écrivez : nom, adresse e-mail, entreprise, description du projet, budget et délais éventuels."),
+        h("Quand vous réservez un appel"),
+        p("La prise de rendez-vous se fait sur Calendly. Nous recevons votre nom, votre adresse e-mail, le créneau choisi et les réponses que vous donnez au moment de réserver."),
+        h("Quand vous naviguez sur le site"),
+        p("Le site n'utilise aucun outil de mesure d'audience ni de publicité et ne dépose aucun cookie. Comme tout site web, nos prestataires techniques reçoivent votre adresse IP et les informations de votre navigateur pour afficher les pages, les images et les vidéos ; ces journaux techniques servent uniquement à la sécurité et au bon fonctionnement du service."),
       ],
     },
     {
-      title: "Description des services",
+      title: "Pourquoi nous les utilisons",
       blocks: [
-        p("techflow-agency.com a pour objet de fournir une information sur l'ensemble des activités de la société. Techflow Agency s'efforce de fournir sur techflow-agency.com des informations aussi précises que possible. La société ne saurait toutefois être tenue responsable des omissions, des inexactitudes ou des carences dans la mise à jour, qu'elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations."),
+        ul(
+          "Répondre à votre demande, préparer un devis et organiser un rendez-vous (mesures précontractuelles prises à votre demande).",
+          "Exécuter et suivre le projet si vous devenez client (exécution du contrat).",
+          "Vous envoyer, si vous l'avez accepté, des informations sur nos services ; vous pouvez vous désinscrire à tout moment (consentement).",
+          "Assurer la sécurité du site et respecter nos obligations légales et comptables (intérêt légitime et obligation légale).",
+        ),
+        p("Nous ne vendons pas vos données et ne les utilisons pas pour de la publicité ciblée."),
       ],
     },
     {
-      title: "Limitations techniques",
+      title: "Qui y a accès",
       blocks: [
-        p("Le site utilise la technologie Webflow. Le site ne pourra être tenu responsable de dommages matériels liés à son utilisation. Par ailleurs, l'utilisateur s'engage à accéder au site en utilisant un matériel récent, ne contenant pas de virus et doté d'un navigateur à jour."),
+        p("Seule l'équipe TechFlow qui traite votre demande. Nous faisons appel aux prestataires suivants, qui agissent pour notre compte et selon nos instructions :"),
+        ul(
+          "Vercel Inc. (États-Unis) : hébergement du site.",
+          "Sanity AS (Norvège) : gestion des contenus et diffusion des images du site.",
+          "Mux, Inc. (États-Unis) : diffusion des vidéos de témoignages.",
+          "Google (Google Workspace) : messagerie et documents de travail.",
+          "Calendly LLC (États-Unis) : prise de rendez-vous.",
+          "Brevo (France) : envoi d'e-mails, uniquement si vous avez accepté de recevoir nos informations.",
+        ),
+        p("Certains de ces prestataires sont situés hors de l'Union européenne. Ces transferts sont encadrés par les clauses contractuelles types de la Commission européenne ou par le cadre de protection des données UE–États-Unis lorsque le prestataire y adhère."),
       ],
     },
     {
-      title: "Propriété intellectuelle",
+      title: "Combien de temps nous les gardons",
       blocks: [
-        p("Techflow Agency est propriétaire des droits de propriété intellectuelle ou détient les droits d'usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logos, icônes, sons et logiciels. Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans l'autorisation écrite préalable de Techflow Agency."),
+        ul(
+          "Demandes sans suite : 3 ans après notre dernier échange.",
+          "Clients : pendant la relation commerciale, puis le temps imposé par nos obligations comptables et fiscales.",
+          "Journaux techniques d'hébergement : quelques semaines au plus, selon les durées de nos prestataires.",
+        ),
       ],
     },
     {
-      title: "Limitation de responsabilité",
+      title: "Vos droits",
       blocks: [
-        p("Techflow Agency ne peut être tenue responsable des dommages directs ou indirects causés au matériel de l'utilisateur lors de l'accès à techflow-agency.com."),
-        p("Techflow Agency se réserve le droit de supprimer, sans mise en demeure préalable, tout contenu déposé dans les espaces interactifs qui contreviendrait à la législation française applicable."),
+        p("Vous pouvez à tout moment demander l'accès à vos données, leur rectification, leur effacement, leur portabilité, la limitation de leur traitement, vous opposer à leur utilisation ou retirer votre consentement. Écrivez-nous à " + EMAIL + " ; nous répondons dans un délai d'un mois."),
+        p("Si vous estimez que vos droits ne sont pas respectés, vous pouvez saisir l'autorité de protection des données de votre pays (en France, la CNIL : www.cnil.fr)."),
       ],
     },
     {
-      title: "Gestion des données personnelles",
+      title: "Sécurité",
+      blocks: [p("Le site est servi uniquement en HTTPS, les accès à nos outils sont nominatifs et protégés, et nous limitons les données collectées à ce qui est utile pour vous répondre.")],
+    },
+    {
+      title: "Modifications",
+      blocks: [p("Nous mettrons cette politique à jour si nos pratiques changent, par exemple si nous ajoutons un outil de mesure d'audience. La date de dernière mise à jour figure en haut de la page.")],
+    },
+  ],
+};
+
+const privacyEn: LegalDoc = {
+  meta: { title: "Privacy Policy | TechFlow Agency", description: "How TechFlow Agency collects, uses and protects your personal data, your rights under GDPR, and how to contact us about them." },
+  badge: "Legal information",
+  title: "Privacy *policy.*",
+  intro: `What personal data we receive when you use techflow-agency.com or contact us, what we do with it, and your rights. Last updated: ${UPDATED_EN}.`,
+  toc: "Contents",
+  sections: [
+    {
+      title: "Data controller",
       blocks: [
-        p("En France, la protection des données personnelles est encadrée par le Règlement général sur la protection des données (RGPD), la loi n° 78-17 du 6 janvier 1978, la loi n° 2004-801 du 6 août 2004 et l'article L. 226-13 du Code pénal."),
-        p("Conformément au RGPD, l'utilisateur dispose d'un droit d'accès, de rectification et d'opposition sur ses données personnelles."),
+        p(`The data controller is Techflow Agency PTE LTD, a Singapore company, ${ADDRESS}. For any question about your data: ${EMAIL}.`),
+        p("We apply the EU General Data Protection Regulation (GDPR) to everyone located in the European Union, as well as Singapore's Personal Data Protection Act (PDPA)."),
       ],
     },
     {
-      title: "Liens hypertextes et cookies",
+      title: "The data we receive",
       blocks: [
-        p("Le site techflow-agency.com contient des liens hypertextes vers d'autres sites et décline toute responsabilité quant à ces liens externes, ainsi qu'aux liens créés par d'autres sites vers techflow-agency.com."),
-        p("La navigation sur techflow-agency.com est susceptible d'entraîner l'installation d'un ou plusieurs cookies sur l'ordinateur de l'utilisateur."),
+        h("When you write to us or ask for a quote"),
+        p("The brief form on this website stores nothing: it prepares an email in your own mail app, which you choose to send. We then receive what you write in it: name, email address, company, project description, and any budget or timeline."),
+        h("When you book a call"),
+        p("Bookings are made on Calendly. We receive your name, email address, the time slot you pick and the answers you give when booking."),
+        h("When you browse the website"),
+        p("The website uses no analytics or advertising tools and sets no cookies. Like any website, our technical providers receive your IP address and browser information in order to serve pages, images and videos; these technical logs are used only for security and to keep the service running."),
       ],
     },
     {
-      title: "Droit applicable et juridiction",
+      title: "Why we use it",
       blocks: [
-        p("Tout litige en relation avec l'utilisation de techflow-agency.com est soumis au droit français. Compétence exclusive est attribuée aux tribunaux compétents de Paris."),
+        ul(
+          "To answer your request, prepare a quote and arrange a meeting (steps taken at your request before a contract).",
+          "To deliver and follow up the project if you become a client (performance of the contract).",
+          "To send you news about our services if you agreed to it; you can unsubscribe at any time (consent).",
+          "To keep the website secure and meet our legal and accounting obligations (legitimate interest and legal obligation).",
+        ),
+        p("We do not sell your data and do not use it for targeted advertising."),
       ],
     },
     {
-      title: "Principaux textes applicables",
+      title: "Who can access it",
       blocks: [
-        ul("Loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés", "Loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique", "Règlement général sur la protection des données (RGPD) (UE) 2016/679"),
+        p("Only the TechFlow team handling your request. We use the following providers, who act on our behalf and on our instructions:"),
+        ul(
+          "Vercel Inc. (United States): website hosting.",
+          "Sanity AS (Norway): content management and delivery of the website's images.",
+          "Mux, Inc. (United States): streaming of the testimonial videos.",
+          "Google (Google Workspace): email and working documents.",
+          "Calendly LLC (United States): meeting booking.",
+          "Brevo (France): sending emails, only if you agreed to receive our news.",
+        ),
+        p("Some of these providers are based outside the European Union. These transfers rely on the European Commission's standard contractual clauses or on the EU–US Data Privacy Framework where the provider is certified."),
       ],
     },
     {
-      title: "Glossaire",
+      title: "How long we keep it",
       blocks: [
-        ul("Utilisateur : Tout internaute se connectant au site susnommé et l'utilisant", "Informations personnelles : « Les informations qui permettent, sous quelque forme que ce soit, directement ou non, l'identification des personnes physiques auxquelles elles s'appliquent »"),
+        ul(
+          "Requests that don't lead to a project: 3 years after our last exchange.",
+          "Clients: for the duration of the business relationship, then as long as our accounting and tax obligations require.",
+          "Hosting technical logs: a few weeks at most, according to our providers' retention periods.",
+        ),
+      ],
+    },
+    {
+      title: "Your rights",
+      blocks: [
+        p("You can at any time ask to access, correct, erase or port your data, restrict its processing, object to its use or withdraw your consent. Write to " + EMAIL + "; we reply within one month."),
+        p("If you believe your rights have not been respected, you can contact the data protection authority of your country (in France, the CNIL: www.cnil.fr)."),
+      ],
+    },
+    {
+      title: "Security",
+      blocks: [p("The website is served over HTTPS only, access to our tools is personal and protected, and we limit the data we collect to what we need to answer you.")],
+    },
+    {
+      title: "Changes",
+      blocks: [p("We will update this policy if our practices change, for example if we add an analytics tool. The date of the last update is shown at the top of the page.")],
+    },
+  ],
+};
+
+const cookiesFr: LegalDoc = {
+  meta: { title: "Politique de cookies | TechFlow Agency", description: "Les cookies et traceurs utilisés sur techflow-agency.com : aujourd'hui aucun. Ce qui se passe quand vous cliquez vers un service tiers, et vos choix." },
+  badge: "Informations légales",
+  title: "Politique de *cookies.*",
+  intro: `Les cookies et autres traceurs sur techflow-agency.com. Dernière mise à jour : ${UPDATED_FR}.`,
+  toc: "Sommaire",
+  sections: [
+    {
+      title: "En bref",
+      blocks: [
+        p("Le site techflow-agency.com ne dépose aucun cookie et n'utilise aucun traceur : pas de mesure d'audience, pas de publicité, pas de pixel de réseau social. C'est pourquoi aucun bandeau de consentement ne s'affiche."),
+      ],
+    },
+    {
+      title: "Qu'est-ce qu'un cookie ?",
+      blocks: [
+        p("Un cookie est un petit fichier enregistré par votre navigateur quand vous visitez un site. Il peut servir au fonctionnement du site (cookies strictement nécessaires) ou à suivre votre navigation, mesurer l'audience ou afficher de la publicité. Ces derniers ne peuvent être déposés qu'avec votre accord préalable."),
+      ],
+    },
+    {
+      title: "Contenus et services tiers",
+      blocks: [
+        p("Les images sont servies par Sanity et les vidéos de témoignages par Mux, sans cookie. Lorsque vous cliquez vers un service extérieur (réservation d'un appel sur Calendly, LinkedIn, Instagram, sites de nos clients), vous quittez notre site : ce service applique alors sa propre politique de cookies, que nous vous invitons à consulter."),
+      ],
+    },
+    {
+      title: "Vos choix",
+      blocks: [
+        p("Vous pouvez à tout moment bloquer ou supprimer les cookies depuis les réglages de votre navigateur (Chrome, Safari, Firefox, Edge). Cela n'affecte pas l'utilisation de notre site."),
+      ],
+    },
+    {
+      title: "Évolutions",
+      blocks: [
+        p(`Si nous ajoutons un jour un outil de mesure d'audience ou un service qui dépose des cookies non essentiels, nous mettrons à jour cette page et vous demanderons votre accord avant tout dépôt, avec la possibilité de refuser aussi simplement que d'accepter. Questions : ${EMAIL}.`),
       ],
     },
   ],
 };
 
 const cookiesEn: LegalDoc = {
-  meta: { title: "Cookie Policy | TechFlow Agency", description: "Which cookies TechFlow Agency uses, what each one does, how long it lasts, and how you can change your consent at any time." },
+  meta: { title: "Cookie Policy | TechFlow Agency", description: "The cookies and trackers used on techflow-agency.com: none today. What happens when you click through to a third-party service, and your choices." },
   badge: "Legal information",
   title: "Cookie *policy.*",
-  intro: "The cookies set when browsing techflow-agency.com and your rights.",
+  intro: `Cookies and other trackers on techflow-agency.com. Last updated: ${UPDATED_EN}.`,
   toc: "Contents",
   sections: [
     {
-      title: "About this website",
+      title: "In short",
       blocks: [
-        p("Pursuant to Article 6 of French Law No. 2004-575 of June 21, 2004, regarding confidence in the digital economy, users of techflow-agency.com, owned by Techflow Agency PTE LTD, are informed of the identity of the various parties involved in its creation and monitoring:"),
-        p("Owner: Techflow Agency PTE LTD"),
-        p("Registered office: 229 160 ROBINSON ROAD, #14-04, SINGAPORE BUSINESS FEDERATION CENTER, SINGAPORE 068914"),
-        p("Registration number: 929698140"),
-        p("CEO and Publication Director: Maximilien Grolier – maximilien@techflow-agency.com"),
-        p("Website Hosting: Webflow, Inc. 398 11th Street, 2nd Floor San Francisco, CA 94103"),
+        p("techflow-agency.com sets no cookies and uses no trackers: no analytics, no advertising, no social media pixels. That is why no consent banner is shown."),
       ],
     },
     {
-      title: "Terms and Conditions of Use",
+      title: "What is a cookie?",
       blocks: [
-        p("The use of techflow-agency.com implies full acceptance of the terms and conditions of use described below. These terms of use may be modified or supplemented at any time; therefore, users of techflow-agency.com are invited to consult them regularly."),
-        p("The site is normally accessible to users at all times. However, techflow-agency.com may decide to interrupt access for technical maintenance and will endeavor to inform users in advance of maintenance dates and times."),
-        p("Similarly, the legal notice may be modified at any time: users are encouraged to refer to it as often as possible."),
+        p("A cookie is a small file your browser stores when you visit a website. It can be needed for the website to work (strictly necessary cookies) or used to follow your browsing, measure traffic or show ads. The latter can only be set with your prior consent."),
       ],
     },
     {
-      title: "Description of Services",
+      title: "Third-party content and services",
       blocks: [
-        p("The purpose of techflow-agency.com is to provide information about all activities of the company. Avia Creative Solutions strives to provide accurate information on techflow-agency.com. However, it cannot be held responsible for omissions, inaccuracies, or outdated information, whether caused by itself or third-party partners who provide this information."),
+        p("Images are served by Sanity and the testimonial videos by Mux, without cookies. When you click through to an outside service (booking a call on Calendly, LinkedIn, Instagram, our clients' websites), you leave our website: that service then applies its own cookie policy, which we invite you to read."),
       ],
     },
     {
-      title: "Technical Limitations",
+      title: "Your choices",
       blocks: [
-        p("The website uses Webflow technology. The website cannot be held liable for any material damage related to the use of the site. Furthermore, users commit to accessing the site using recent equipment, free from viruses, and with an up-to-date browser."),
+        p("You can block or delete cookies at any time in your browser settings (Chrome, Safari, Firefox, Edge). This does not affect your use of our website."),
       ],
     },
     {
-      title: "Intellectual Property",
+      title: "Changes",
       blocks: [
-        p("Avia Creative Solutions owns the intellectual property rights or holds usage rights for all elements accessible on the site, including texts, images, graphics, logos, icons, sounds, and software. Any reproduction, representation, modification, publication, or adaptation of all or part of the site elements, regardless of the means or process used, is prohibited without prior written authorization from Avia Creative Solutions."),
-      ],
-    },
-    {
-      title: "Liability Limitations",
-      blocks: [
-        p("Avia Creative Solutions cannot be held liable for direct or indirect damage to users' equipment while accessing techflow-agency.com."),
-        p("Avia Creative Solutions reserves the right to remove, without prior notice, any content posted in interactive spaces that would violate applicable French legislation."),
-      ],
-    },
-    {
-      title: "Personal Data Management",
-      blocks: [
-        p("Personal data protection in France is governed by the General Data Protection Regulation (GDPR), Law No. 78-87 of January 6, 1978, Law No. 2004-801 of August 6, 2004, and Article L. 226-13 of the Criminal Code."),
-        p("In accordance with the GDPR, users have the right to access, rectify, and oppose their personal data."),
-      ],
-    },
-    {
-      title: "Hyperlinks and Cookies",
-      blocks: [
-        p("The techflow-agency.com website contains hyperlinks to other websites and disclaims any responsibility regarding these external links or links created by other sites to techflow-agency.com."),
-        p("Browsing techflow-agency.com may result in the installation of cookie(s) on the user's computer."),
-      ],
-    },
-    {
-      title: "Applicable Law and Jurisdiction",
-      blocks: [
-        p("Any dispute relating to the use of techflow-agency.com is subject to French law. Exclusive jurisdiction is given to the competent courts of Paris."),
-      ],
-    },
-    {
-      title: "Key Applicable Laws",
-      blocks: [
-        ul("French Law No. 78-17 of January 6, 1978, on Information Technology, Data Files, and Civil Liberties", "French Law No. 2004-575 of June 21, 2004, on Confidence in the Digital Economy", "General Data Protection Regulation (GDPR) (EU) 2016/679"),
-      ],
-    },
-    {
-      title: "Glossary",
-      blocks: [
-        ul("User: Any internet user connecting to and using the aforementioned website", "Personal Information: \"Information that allows, in any form whatsoever, directly or indirectly, the identification of the natural persons to whom it applies\""),
+        p(`If we ever add an analytics tool or a service that sets non-essential cookies, we will update this page and ask for your consent before anything is stored, with refusing as easy as accepting. Questions: ${EMAIL}.`),
       ],
     },
   ],
-};
-
-/**
- * Copied from the old site's /politique-de-confidentialite and /en/privacy-policy (2026-10-02): the same
- * placeholder text as the cookie policy (taken from the legal notices), with its own title and meta.
- * Replace with the real privacy policy (the contact forms collect personal data).
- */
-const privacyFr: LegalDoc = {
-  ...cookiesFr,
-  meta: { title: "Politique de confidentialité | TechFlow Agency", description: "Comment TechFlow Agency collecte, utilise et protège vos données personnelles, vos droits au titre du RGPD et la façon de nous contacter à ce sujet." },
-  title: "Politique de *confidentialité.*",
-  intro: "Les données personnelles collectées sur techflow-agency.com et vos droits.",
-};
-
-const privacyEn: LegalDoc = {
-  ...cookiesEn,
-  meta: { title: "Privacy Policy | TechFlow Agency", description: "How TechFlow Agency collects, uses and protects your personal data, your rights under GDPR, and how to contact us about them." },
-  title: "Privacy *policy.*",
-  intro: "The personal data collected on techflow-agency.com and your rights.",
 };
 
 export type LegalKey = "legal" | "terms" | "cookies" | "privacy";
