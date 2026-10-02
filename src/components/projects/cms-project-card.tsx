@@ -7,7 +7,12 @@ import { sanityLoader, urlFor } from "@/sanity/image";
 import { useLocale } from "../site/locale";
 import { ProjectCardView } from "../site/project-card";
 
-export type CmsProject = PROJECTS_INDEX_QUERY_RESULT[number];
+type IndexItem = PROJECTS_INDEX_QUERY_RESULT[number];
+/** A website project or a growth case study, as listed on cards (`_type` is absent in older list queries). */
+export type CmsProject = Omit<IndexItem, "_type" | "previews"> & {
+  _type?: IndexItem["_type"];
+  previews: Extract<IndexItem, { _type: "project" }>["previews"];
+};
 
 const hostname = (url: string | null) => {
   if (!url) return undefined;
@@ -18,7 +23,10 @@ const hostname = (url: string | null) => {
   }
 };
 
-/** Project card for case studies stored in the CMS; hovering stacks the case study's hero screens. */
+/**
+ * Card for a case study stored in the CMS. Website projects stack their hero screens on hover;
+ * growth case studies have no screens, and without a card image they get the designed growth cover.
+ */
 export function CmsProjectCard({ project }: { project: CmsProject }) {
   const { lang } = useLocale();
   const cover = project.coverImage?.asset?.url ? project.coverImage : null;
@@ -47,6 +55,7 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
           .url(),
       )}
       domain={hostname(project.websiteUrl)}
+      growth={project._type === "growthCaseStudy" && !cover}
       loader={sanityLoader}
       cursor={false}
       glow={false}

@@ -601,7 +601,7 @@ export type MuxVideoItem = {
 };
 
 /** Fired when a testimonial starts playing with sound, so the others go back to their silent loop. */
-const SOUND_EVENT = "techflow:video-sound";
+export const SOUND_EVENT = "techflow:video-sound";
 
 /**
  * Video testimonial. Plays as a silent loop while on screen (the source only loads near the

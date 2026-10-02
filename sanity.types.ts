@@ -192,6 +192,13 @@ export type ProjectReference = {
   [internalGroqTypeReferenceTo]?: "project";
 };
 
+export type GrowthCaseStudyReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "growthCaseStudy";
+};
+
 export type ToolReference = {
   _ref: string;
   _type: "reference";
@@ -224,6 +231,7 @@ export type InternationalizedArrayReferenceValue = {
   _type: "internationalizedArrayReferenceValue";
   value?:
     | ProjectReference
+    | GrowthCaseStudyReference
     | ToolReference
     | InsightReference
     | SectorReference
@@ -334,6 +342,268 @@ export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type SanityFileAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
+
+export type GrowthCaseStudy = {
+  _id: string;
+  _type: "growthCaseStudy";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  title?: string;
+  slug?: Slug;
+  accentColor?: string;
+  handle?: string;
+  summary?: string;
+  hero?: {
+    tagline?: string;
+    headline?: string;
+    intro?: string;
+    status?: string;
+    ctaLabel?: string;
+    stats?: Array<
+      {
+        _key: string;
+      } & Metric
+    >;
+  };
+  challenge?: {
+    heading?: string;
+    text?: string;
+    points?: Array<
+      {
+        _key: string;
+      } & Benefit
+    >;
+  };
+  client?: {
+    meta?: Array<{
+      label?: string;
+      value?: string;
+      _type: "labelValue";
+      _key: string;
+    }>;
+    facts?: Array<
+      {
+        _key: string;
+      } & Metric
+    >;
+    sourceLabel?: string;
+    sourceUrl?: string;
+  };
+  sectors?: Array<
+    {
+      _key: string;
+    } & SectorReference
+  >;
+  services?: Array<string>;
+  channels?: Array<string>;
+  tools?: Array<
+    {
+      _key: string;
+    } & ToolReference
+  >;
+  team?: Array<
+    {
+      _key: string;
+    } & TeamMemberReference
+  >;
+  websiteUrl?: string;
+  order?: number;
+  coverImage?: ImageWithAlt;
+  heroImage?: ImageWithAlt;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  logoFill?: boolean;
+  gallery?: {
+    heading?: string;
+    intro?: string;
+    images?: Array<
+      {
+        _key: string;
+      } & ImageWithAlt
+    >;
+  };
+  funnel?: {
+    heading?: string;
+    intro?: string;
+    stages?: Array<{
+      name?: string;
+      icon?:
+        | "strategy"
+        | "production"
+        | "launch"
+        | "optimize"
+        | "score"
+        | "sales"
+        | "community";
+      title?: string;
+      text?: string;
+      tasks?: Array<string>;
+      kpi?: string;
+      section?:
+        | "creative"
+        | "gallery"
+        | "ads"
+        | "abTest"
+        | "leads"
+        | "community"
+        | "results";
+      _type: "funnelStage";
+      _key: string;
+    }>;
+  };
+  creative?: {
+    heading?: string;
+    intro?: string;
+  };
+  adsSection?: {
+    heading?: string;
+    intro?: string;
+  };
+  ads?: Array<{
+    angle?: string;
+    hook?: string;
+    caption?: string;
+    cta?: string;
+    platform?: "instagram" | "facebook" | "tiktok";
+    variant?: string;
+    note?: string;
+    duration?: string;
+    video?: {
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      _type: "file";
+    };
+    poster?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    captions?: {
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      _type: "file";
+    };
+    script?: Array<{
+      time?: string;
+      beat?: string;
+      line?: string;
+      _type: "scriptBeat";
+      _key: string;
+    }>;
+    _type: "adVideo";
+    _key: string;
+  }>;
+  abTest?: {
+    heading?: string;
+    intro?: string;
+    illustrative?: boolean;
+    variants?: Array<{
+      label?: string;
+      hook?: string;
+      angle?: string;
+      _type: "abVariant";
+      _key: string;
+    }>;
+    weeks?: Array<{
+      label?: string;
+      budget?: Array<number>;
+      cpl?: Array<number>;
+      note?: string;
+      _type: "abWeek";
+      _key: string;
+    }>;
+  };
+  leads?: {
+    heading?: string;
+    intro?: string;
+    flow?: Array<
+      {
+        _key: string;
+      } & Benefit
+    >;
+    criteria?: Array<{
+      label?: string;
+      points?: number;
+      _type: "scoreCriterion";
+      _key: string;
+    }>;
+    sampleLeads?: Array<{
+      name?: string;
+      source?: string;
+      interest?: string;
+      score?: number;
+      _type: "sampleLead";
+      _key: string;
+    }>;
+    tiers?: {
+      hot?: string;
+      warm?: string;
+      cold?: string;
+    };
+    note?: string;
+  };
+  community?: {
+    heading?: string;
+    intro?: string;
+    perWeek?: number;
+    calendar?: Array<{
+      day?: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+      format?: string;
+      title?: string;
+      _type: "calendarPost";
+      _key: string;
+    }>;
+    posts?: Array<{
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
+    }>;
+    thread?: Array<{
+      author?: string;
+      text?: string;
+      reply?: string;
+      _type: "commentReply";
+      _key: string;
+    }>;
+  };
+  results?: {
+    heading?: string;
+    metrics?: Array<
+      {
+        _key: string;
+      } & Metric
+    >;
+    tracked?: Array<string>;
+    testimonial?: Testimonial;
+  };
+  cta?: {
+    eyebrow?: string;
+    heading?: string;
+    text?: string;
+    deliverables?: Array<string>;
+  };
+  next?: ProjectReference | GrowthCaseStudyReference;
+  seo?: Seo;
 };
 
 export type Project = {
@@ -521,6 +791,7 @@ export type AllSanitySchemaTypes =
   | TranslationMetadata
   | InternationalizedArrayReference
   | ProjectReference
+  | GrowthCaseStudyReference
   | ToolReference
   | InsightReference
   | SectorReference
@@ -533,6 +804,8 @@ export type AllSanitySchemaTypes =
   | TeamMember
   | Tool
   | Slug
+  | SanityFileAssetReference
+  | GrowthCaseStudy
   | Project
   | Table
   | TableRow
@@ -547,55 +820,87 @@ export type AllSanitySchemaTypes =
 
 // Source: ../../src/sanity/queries.ts
 // Variable: PROJECTS_INDEX_QUERY
-// Query: *[_type == "project" && language == $lang && defined(slug.current)]    | order(coalesce(order, 999) asc, title asc) {   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }
-export type PROJECTS_INDEX_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: string | null;
-  sectors: Array<string> | null;
-  sector: string | null;
-  accentColor: string | null;
-  summary: string | null;
-  services: Array<string> | null;
-  websiteUrl: string | null;
-  coverImage: {
-    alt: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-    asset: {
+// Query: *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current)]    | order(coalesce(order, 999) asc, title asc) { _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, []) }
+export type PROJECTS_INDEX_QUERY_RESULT = Array<
+  | {
+      _type: "growthCaseStudy";
       _id: string;
-      url: string | null;
-      metadata: {
-        lqip: string | null;
-        dimensions: {
-          width: number | null;
-          height: number | null;
+      title: string | null;
+      slug: string | null;
+      sectors: Array<string> | null;
+      sector: string | null;
+      accentColor: string | null;
+      summary: string | null;
+      services: Array<string> | null;
+      websiteUrl: string | null;
+      coverImage: {
+        alt: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number | null;
+              height: number | null;
+            } | null;
+          } | null;
         } | null;
       } | null;
-    } | null;
-  } | null;
-  previews: Array<{
-    _key: string | null;
-    alt: string | null;
-    hotspot: SanityImageHotspot | null;
-    crop: SanityImageCrop | null;
-    asset: {
+      previews: Array<never>;
+    }
+  | {
+      _type: "project";
       _id: string;
-      url: string | null;
-      metadata: {
-        lqip: string | null;
-        dimensions: {
-          width: number | null;
-          height: number | null;
+      title: string | null;
+      slug: string | null;
+      sectors: Array<string> | null;
+      sector: string | null;
+      accentColor: string | null;
+      summary: string | null;
+      services: Array<string> | null;
+      websiteUrl: string | null;
+      coverImage: {
+        alt: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number | null;
+              height: number | null;
+            } | null;
+          } | null;
         } | null;
       } | null;
-    } | null;
-  } | null>;
-}>;
+      previews: Array<{
+        _key: string | null;
+        alt: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number | null;
+              height: number | null;
+            } | null;
+          } | null;
+        } | null;
+      } | null>;
+    }
+>;
 
 // Source: ../../src/sanity/queries.ts
 // Variable: PROJECT_DETAIL_QUERY
-// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] {   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }  }
+// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, []),    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] { _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, []) }  }
 export type PROJECT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -837,50 +1142,82 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
     language: string | null;
     slug: string | null;
   }> | null;
-  related: Array<{
-    _id: string;
-    title: string | null;
-    slug: string | null;
-    sectors: Array<string> | null;
-    sector: string | null;
-    accentColor: string | null;
-    summary: string | null;
-    services: Array<string> | null;
-    websiteUrl: string | null;
-    coverImage: {
-      alt: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-      asset: {
+  related: Array<
+    | {
+        _type: "growthCaseStudy";
         _id: string;
-        url: string | null;
-        metadata: {
-          lqip: string | null;
-          dimensions: {
-            width: number | null;
-            height: number | null;
+        title: string | null;
+        slug: string | null;
+        sectors: Array<string> | null;
+        sector: string | null;
+        accentColor: string | null;
+        summary: string | null;
+        services: Array<string> | null;
+        websiteUrl: string | null;
+        coverImage: {
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
           } | null;
         } | null;
-      } | null;
-    } | null;
-    previews: Array<{
-      _key: string | null;
-      alt: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-      asset: {
+        previews: Array<never>;
+      }
+    | {
+        _type: "project";
         _id: string;
-        url: string | null;
-        metadata: {
-          lqip: string | null;
-          dimensions: {
-            width: number | null;
-            height: number | null;
+        title: string | null;
+        slug: string | null;
+        sectors: Array<string> | null;
+        sector: string | null;
+        accentColor: string | null;
+        summary: string | null;
+        services: Array<string> | null;
+        websiteUrl: string | null;
+        coverImage: {
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
           } | null;
         } | null;
-      } | null;
-    } | null>;
-  }>;
+        previews: Array<{
+          _key: string | null;
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
+          } | null;
+        } | null>;
+      }
+  >;
 } | null;
 
 // Source: ../../src/sanity/queries.ts
@@ -921,6 +1258,456 @@ export type FAQ_QUERY_RESULT = {
 export type PROJECT_SLUGS_QUERY_RESULT = Array<string | null>;
 
 // Source: ../../src/sanity/queries.ts
+// Variable: GROWTH_CASE_STUDY_QUERY
+// Query: *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{    _id,    _updatedAt,    title,    "slug": slug.current,    accentColor,    handle,    summary,    "sectors": array::compact(sectors[]->title),    services,    channels,    websiteUrl,    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    gallery { heading, intro, images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },    hero { tagline, headline, intro, status, ctaLabel, stats[]{ _key, value, label } },    challenge { heading, text, points[]{ _key, title, text } },    client { meta[]{ _key, label, value }, facts[]{ _key, value, label }, sourceLabel, sourceUrl },    funnel { heading, intro, stages[]{ _key, name, icon, title, text, tasks, kpi, section } },    creative { heading, intro },    adsSection { heading, intro },    ads[]{      _key, angle, hook, caption, cta, platform, variant, note, duration,      "video": video.asset->url,      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      "captions": captions.asset->url,      script[]{ _key, time, beat, line }    },    abTest { heading, intro, "illustrative": coalesce(illustrative, true), variants[]{ _key, label, hook, angle }, weeks[]{ _key, label, budget, cpl, note } },    leads { heading, intro, flow[]{ _key, title, text }, criteria[]{ _key, label, points }, sampleLeads[]{ _key, name, source, interest, score }, tiers, note },    community { heading, intro, perWeek, calendar[]{ _key, day, format, title }, posts[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, thread[]{ _key, author, text, reply } },    results { heading, metrics[]{ _key, value, label }, tracked, testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },    cta { eyebrow, heading, text, deliverables },    // The chosen next case study first, then the others in list order (deduplicated in the page).    "related": [      ...select(defined(next) => [next->{ _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, []) }], []),      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]        | order(coalesce(order, 999) asc)[0...4]{ _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, []) }    ],    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current}  }
+export type GROWTH_CASE_STUDY_QUERY_RESULT = {
+  _id: string;
+  _updatedAt: string;
+  title: string | null;
+  slug: string | null;
+  accentColor: string | null;
+  handle: string | null;
+  summary: string | null;
+  sectors: Array<string> | null;
+  services: Array<string> | null;
+  channels: Array<string> | null;
+  websiteUrl: string | null;
+  tools: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    logo: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  }> | null;
+  team: Array<{
+    _id: string;
+    name: string | null;
+    role: string | null;
+    photo: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  }> | null;
+  logo: {
+    alt: null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  logoFill: boolean | false;
+  heroImage: {
+    alt: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  gallery: {
+    heading: string | null;
+    intro: string | null;
+    images: Array<{
+      _key: string;
+      alt: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    }> | null;
+  } | null;
+  hero: {
+    tagline: string | null;
+    headline: string | null;
+    intro: string | null;
+    status: string | null;
+    ctaLabel: string | null;
+    stats: Array<{
+      _key: string;
+      value: string | null;
+      label: string | null;
+    }> | null;
+  } | null;
+  challenge: {
+    heading: string | null;
+    text: string | null;
+    points: Array<{
+      _key: string;
+      title: string | null;
+      text: string | null;
+    }> | null;
+  } | null;
+  client: {
+    meta: Array<{
+      _key: string;
+      label: string | null;
+      value: string | null;
+    }> | null;
+    facts: Array<{
+      _key: string;
+      value: string | null;
+      label: string | null;
+    }> | null;
+    sourceLabel: string | null;
+    sourceUrl: string | null;
+  } | null;
+  funnel: {
+    heading: string | null;
+    intro: string | null;
+    stages: Array<{
+      _key: string;
+      name: string | null;
+      icon:
+        | "community"
+        | "launch"
+        | "optimize"
+        | "production"
+        | "sales"
+        | "score"
+        | "strategy"
+        | null;
+      title: string | null;
+      text: string | null;
+      tasks: Array<string> | null;
+      kpi: string | null;
+      section:
+        | "abTest"
+        | "ads"
+        | "community"
+        | "creative"
+        | "gallery"
+        | "leads"
+        | "results"
+        | null;
+    }> | null;
+  } | null;
+  creative: {
+    heading: string | null;
+    intro: string | null;
+  } | null;
+  adsSection: {
+    heading: string | null;
+    intro: string | null;
+  } | null;
+  ads: Array<{
+    _key: string;
+    angle: string | null;
+    hook: string | null;
+    caption: string | null;
+    cta: string | null;
+    platform: "facebook" | "instagram" | "tiktok" | null;
+    variant: string | null;
+    note: string | null;
+    duration: string | null;
+    video: string | null;
+    poster: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    captions: string | null;
+    script: Array<{
+      _key: string;
+      time: string | null;
+      beat: string | null;
+      line: string | null;
+    }> | null;
+  }> | null;
+  abTest: {
+    heading: string | null;
+    intro: string | null;
+    illustrative: boolean | true;
+    variants: Array<{
+      _key: string;
+      label: string | null;
+      hook: string | null;
+      angle: string | null;
+    }> | null;
+    weeks: Array<{
+      _key: string;
+      label: string | null;
+      budget: Array<number> | null;
+      cpl: Array<number> | null;
+      note: string | null;
+    }> | null;
+  } | null;
+  leads: {
+    heading: string | null;
+    intro: string | null;
+    flow: Array<{
+      _key: string;
+      title: string | null;
+      text: string | null;
+    }> | null;
+    criteria: Array<{
+      _key: string;
+      label: string | null;
+      points: number | null;
+    }> | null;
+    sampleLeads: Array<{
+      _key: string;
+      name: string | null;
+      source: string | null;
+      interest: string | null;
+      score: number | null;
+    }> | null;
+    tiers: {
+      hot?: string;
+      warm?: string;
+      cold?: string;
+    } | null;
+    note: string | null;
+  } | null;
+  community: {
+    heading: string | null;
+    intro: string | null;
+    perWeek: number | null;
+    calendar: Array<{
+      _key: string;
+      day: "fri" | "mon" | "sat" | "sun" | "thu" | "tue" | "wed" | null;
+      format: string | null;
+      title: string | null;
+    }> | null;
+    posts: Array<{
+      _key: string;
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    }> | null;
+    thread: Array<{
+      _key: string;
+      author: string | null;
+      text: string | null;
+      reply: string | null;
+    }> | null;
+  } | null;
+  results: {
+    heading: string | null;
+    metrics: Array<{
+      _key: string;
+      value: string | null;
+      label: string | null;
+    }> | null;
+    tracked: Array<string> | null;
+    testimonial: {
+      quote: string | null;
+      name: string | null;
+      role: string | null;
+      photo: {
+        alt: null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number | null;
+              height: number | null;
+            } | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  cta: {
+    eyebrow: string | null;
+    heading: string | null;
+    text: string | null;
+    deliverables: Array<string> | null;
+  } | null;
+  related: Array<
+    | {
+        _type: "growthCaseStudy";
+        _id: string;
+        title: string | null;
+        slug: string | null;
+        sectors: Array<string> | null;
+        sector: string | null;
+        accentColor: string | null;
+        summary: string | null;
+        services: Array<string> | null;
+        websiteUrl: string | null;
+        coverImage: {
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        previews: Array<never>;
+      }
+    | {
+        _type: "project";
+        _id: string;
+        title: string | null;
+        slug: string | null;
+        sectors: Array<string> | null;
+        sector: string | null;
+        accentColor: string | null;
+        summary: string | null;
+        services: Array<string> | null;
+        websiteUrl: string | null;
+        coverImage: {
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
+          } | null;
+        } | null;
+        previews: Array<{
+          _key: string | null;
+          alt: string | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
+          } | null;
+        } | null>;
+      }
+  >;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  translations: Array<{
+    language: string | null;
+    slug: string | null;
+  }> | null;
+} | null;
+
+// Source: ../../src/sanity/queries.ts
+// Variable: GROWTH_SLUGS_QUERY
+// Query: *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)].slug.current
+export type GROWTH_SLUGS_QUERY_RESULT = Array<string | null>;
+
+// Source: ../../src/sanity/queries.ts
+// Variable: GROWTH_INDEX_QUERY
+// Query: *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)] | order(coalesce(order, 999) asc){    "slug": slug.current, title, accentColor  }
+export type GROWTH_INDEX_QUERY_RESULT = Array<{
+  slug: string | null;
+  title: string | null;
+  accentColor: string | null;
+}>;
+
+// Source: ../../src/sanity/queries.ts
 // Variable: TOOLS_INDEX_QUERY
 // Query: *[_type == "tool" && language == $lang && defined(slug.current)]    | order(coalesce(order, 999) asc, title asc) {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }
 export type TOOLS_INDEX_QUERY_RESULT = Array<{
@@ -948,7 +1735,7 @@ export type TOOLS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: TOOL_DETAIL_QUERY
-// Query: *[_type == "tool" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    benefitsTitle,    benefitsIntro,    benefits[]{ _key, title, text },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "projects": *[_type == "project" && language == $lang && references(^._id)]      | order(coalesce(order, 999) asc) {   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...8] {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  }
+// Query: *[_type == "tool" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    benefitsTitle,    benefitsIntro,    benefits[]{ _key, title, text },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "projects": *[_type == "project" && language == $lang && references(^._id)]      | order(coalesce(order, 999) asc) {   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, []) },    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...8] {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  }
 export type TOOL_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1353,8 +2140,14 @@ export type SLUG_LOOKUP_QUERY_RESULT =
 
 // Source: ../../src/sanity/queries.ts
 // Variable: SITEMAP_QUERY
-// Query: *[_type in ["project", "tool", "insight"] && defined(slug.current) && defined(language)]{    _type,    language,    "slug": slug.current,    _updatedAt  }
+// Query: *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)]{    _type,    language,    "slug": slug.current,    _updatedAt  }
 export type SITEMAP_QUERY_RESULT = Array<
+  | {
+      _type: "growthCaseStudy";
+      language: string | null;
+      slug: string | null;
+      _updatedAt: string;
+    }
   | {
       _type: "insight";
       language: string | null;
@@ -1378,15 +2171,18 @@ export type SITEMAP_QUERY_RESULT = Array<
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '\n  *[_type == "project" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n': PROJECTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
+    '\n  *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.\n  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, [])\n }\n': PROJECTS_INDEX_QUERY_RESULT;
+    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.\n  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, [])\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.\n  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, [])\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "sector" && language == $lang && defined(title)] | order(title asc).title\n': SECTORS_QUERY_RESULT;
     '\n  *[_type == "category" && language == $lang && defined(title)] | order(title asc).title\n': CATEGORIES_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && defined(slug.current)]{\n    "slug": slug.current,\n    "sectors": array::compact(sectors[]->title),\n    accentColor\n  }\n': PROJECT_SECTORS_QUERY_RESULT;
     '\n  *[_type == "faq" && page == $page && language == $lang][0]{\n    heading,\n    intro,\n    "items": items[defined(question) && defined(answer)]{ _key, "q": question, "a": answer }\n  }\n': FAQ_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && defined(slug.current)].slug.current\n': PROJECT_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    accentColor,\n    handle,\n    summary,\n    "sectors": array::compact(sectors[]->title),\n    services,\n    channels,\n    websiteUrl,\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    gallery { heading, intro, images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },\n    hero { tagline, headline, intro, status, ctaLabel, stats[]{ _key, value, label } },\n    challenge { heading, text, points[]{ _key, title, text } },\n    client { meta[]{ _key, label, value }, facts[]{ _key, value, label }, sourceLabel, sourceUrl },\n    funnel { heading, intro, stages[]{ _key, name, icon, title, text, tasks, kpi, section } },\n    creative { heading, intro },\n    adsSection { heading, intro },\n    ads[]{\n      _key, angle, hook, caption, cta, platform, variant, note, duration,\n      "video": video.asset->url,\n      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      "captions": captions.asset->url,\n      script[]{ _key, time, beat, line }\n    },\n    abTest { heading, intro, "illustrative": coalesce(illustrative, true), variants[]{ _key, label, hook, angle }, weeks[]{ _key, label, budget, cpl, note } },\n    leads { heading, intro, flow[]{ _key, title, text }, criteria[]{ _key, label, points }, sampleLeads[]{ _key, name, source, interest, score }, tiers, note },\n    community { heading, intro, perWeek, calendar[]{ _key, day, format, title }, posts[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, thread[]{ _key, author, text, reply } },\n    results { heading, metrics[]{ _key, value, label }, tracked, testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } },\n    cta { eyebrow, heading, text, deliverables },\n    // The chosen next case study first, then the others in list order (deduplicated in the page).\n    "related": [\n      ...select(defined(next) => [next->{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.\n  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, [])\n }], []),\n      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n        | order(coalesce(order, 999) asc)[0...4]{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.\n  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, [])\n }\n    ],\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': GROWTH_CASE_STUDY_QUERY_RESULT;
+    '\n  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)].slug.current\n': GROWTH_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)] | order(coalesce(order, 999) asc){\n    "slug": slug.current, title, accentColor\n  }\n': GROWTH_INDEX_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TOOLS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.\n  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }, [])\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)].slug.current\n': TOOL_SLUGS_QUERY_RESULT;
     '\n  *[_type == "teamMember" && defined(photo.asset)]\n    | order(coalesce(order, 999) asc, name asc) { \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TEAM_QUERY_RESULT;
     '\n  *[_type == "review" && defined(quote)] | order(coalesce(order, 999) asc, name asc) {\n    _id,\n    quote,\n    name,\n    role,\n    photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n  }\n': REVIEWS_QUERY_RESULT;
@@ -1394,7 +2190,7 @@ declare global {
     '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "insight" && language == $lang && defined(slug.current)].slug.current\n': INSIGHT_SLUGS_QUERY_RESULT;
     '\n  *[_type == $type && slug.current == $slug][0]{\n    language,\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': SLUG_LOOKUP_QUERY_RESULT;
-    '\n  *[_type in ["project", "tool", "insight"] && defined(slug.current) && defined(language)]{\n    _type,\n    language,\n    "slug": slug.current,\n    _updatedAt\n  }\n': SITEMAP_QUERY_RESULT;
+    '\n  *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)]{\n    _type,\n    language,\n    "slug": slug.current,\n    _updatedAt\n  }\n': SITEMAP_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

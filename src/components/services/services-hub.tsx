@@ -151,7 +151,7 @@ function ToolTile({ tool, className = "" }: { tool: Tool | undefined; className?
       {tool.fullBleed ? (
         <Image src={tool.src} alt="" fill sizes="56px" className="object-cover" />
       ) : (
-        <Image src={tool.src} alt="" width={32} height={32} className="size-1/2 object-contain" />
+        <Image src={tool.src} alt="" width={32} height={32} className={`${tool.wide ? "w-4/5" : "size-1/2"} object-contain`} />
       )}
     </span>
   );

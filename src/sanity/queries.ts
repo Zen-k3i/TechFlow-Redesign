@@ -25,13 +25,16 @@ const projectCard = /* groq */ `
   summary,
   services,
   websiteUrl,
-  coverImage ${image},
-  "previews": [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} }
+  // Growth case studies without a card image use their key visual.
+  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) ${image},
+  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.
+  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} }, [])
 `;
 
+/** Website projects and growth case studies together: same cards, same sector filters. */
 export const PROJECTS_INDEX_QUERY = defineQuery(`
-  *[_type == "project" && language == $lang && defined(slug.current)]
-    | order(coalesce(order, 999) asc, title asc) { ${projectCard} }
+  *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current)]
+    | order(coalesce(order, 999) asc, title asc) { _type, ${projectCard} }
 `);
 
 export const PROJECT_DETAIL_QUERY = defineQuery(`
@@ -52,8 +55,8 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
     team[]->{ _id, name, role, photo ${image} },
     seo { title, description, image ${image} },
     ${translations},
-    "related": *[_type == "project" && language == $lang && defined(slug.current) && slug.current != $slug]
-      | order(coalesce(order, 999) asc)[0...3] { ${projectCard} }
+    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]
+      | order(coalesce(order, 999) asc)[0...3] { _type, ${projectCard} }
   }
 `);
 
@@ -91,6 +94,68 @@ export const FAQ_QUERY = defineQuery(`
 
 export const PROJECT_SLUGS_QUERY = defineQuery(`
   *[_type == "project" && language == $lang && defined(slug.current)].slug.current
+`);
+
+// ---------------------------------------------------------------- growth case studies
+
+/** Growth marketing case study (video ads → qualified leads), its own template at /projets/<slug>. */
+export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
+  *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{
+    _id,
+    _updatedAt,
+    title,
+    "slug": slug.current,
+    accentColor,
+    handle,
+    summary,
+    "sectors": array::compact(sectors[]->title),
+    services,
+    channels,
+    websiteUrl,
+    tools[]->{ _id, title, "slug": slug.current, logo ${image} },
+    team[]->{ _id, name, role, photo ${image} },
+    logo ${image},
+    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),
+    heroImage ${image},
+    gallery { heading, intro, images[]{ _key, ...${image} } },
+    hero { tagline, headline, intro, status, ctaLabel, stats[]{ _key, value, label } },
+    challenge { heading, text, points[]{ _key, title, text } },
+    client { meta[]{ _key, label, value }, facts[]{ _key, value, label }, sourceLabel, sourceUrl },
+    funnel { heading, intro, stages[]{ _key, name, icon, title, text, tasks, kpi, section } },
+    creative { heading, intro },
+    adsSection { heading, intro },
+    ads[]{
+      _key, angle, hook, caption, cta, platform, variant, note, duration,
+      "video": video.asset->url,
+      poster ${image},
+      "captions": captions.asset->url,
+      script[]{ _key, time, beat, line }
+    },
+    abTest { heading, intro, "illustrative": coalesce(illustrative, true), variants[]{ _key, label, hook, angle }, weeks[]{ _key, label, budget, cpl, note } },
+    leads { heading, intro, flow[]{ _key, title, text }, criteria[]{ _key, label, points }, sampleLeads[]{ _key, name, source, interest, score }, tiers, note },
+    community { heading, intro, perWeek, calendar[]{ _key, day, format, title }, posts[]{ _key, ...${image} }, thread[]{ _key, author, text, reply } },
+    results { heading, metrics[]{ _key, value, label }, tracked, testimonial { quote, name, role, photo ${image} } },
+    cta { eyebrow, heading, text, deliverables },
+    // The chosen next case study first, then the others in list order (deduplicated in the page).
+    "related": [
+      ...select(defined(next) => [next->{ _type, ${projectCard} }], []),
+      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]
+        | order(coalesce(order, 999) asc)[0...4]{ _type, ${projectCard} }
+    ],
+    seo { title, description, image ${image} },
+    ${translations}
+  }
+`);
+
+export const GROWTH_SLUGS_QUERY = defineQuery(`
+  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)].slug.current
+`);
+
+/** Growth case studies for the project listings (cards are coded locally, so only what links to them). */
+export const GROWTH_INDEX_QUERY = defineQuery(`
+  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)] | order(coalesce(order, 999) asc){
+    "slug": slug.current, title, accentColor
+  }
 `);
 
 // ---------------------------------------------------------------- tools
@@ -202,7 +267,7 @@ export const SLUG_LOOKUP_QUERY = defineQuery(`
 // ---------------------------------------------------------------- sitemap
 
 export const SITEMAP_QUERY = defineQuery(`
-  *[_type in ["project", "tool", "insight"] && defined(slug.current) && defined(language)]{
+  *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)]{
     _type,
     language,
     "slug": slug.current,

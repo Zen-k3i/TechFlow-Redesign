@@ -5,9 +5,8 @@ import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import { href } from "@/i18n/routes";
 import { urlFor } from "@/sanity/image";
-import { ease, projects } from "../site/content";
+import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
-import { ProjectCard } from "../site/project-card";
 import { FilterChip } from "../site/work";
 import { ServiceCards } from "../page/service-cards";
 import { ClientMarquee, SectionHeader } from "../page/ui";
@@ -16,26 +15,19 @@ import { filterOptions } from "../page/filters";
 import { archive, projectsContent } from "./data";
 import { CASES_ANCHOR, ProjectsHero, type WallProject } from "./projects-hero";
 
-/** Growth case studies are still coded locally; everything else comes from the CMS. */
-const growthProjects = projects.filter((p) => p.kind === "growth");
-
-type Entry = { key: string; sectors: string[] } & ({ cms: CmsProject } | { local: (typeof growthProjects)[number] });
+type Entry = { key: string; sectors: string[]; cms: CmsProject };
 
 export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProject[]; sectorList: string[] }) {
   const { lang, t } = useLocale();
   const c = projectsContent[lang];
-  const entries = useMemo<Entry[]>(
-    () => [
-      ...cmsProjects.map((p) => ({ key: p._id, sectors: p.sectors ?? [], cms: p })),
-      ...(lang === "fr" ? growthProjects.map((p) => ({ key: p.slug, sectors: [t.work.sectors[p.sector] ?? p.sector], local: p })) : []),
-    ],
-    [cmsProjects, lang, t],
-  );
+  // Website projects and growth case studies, all from Sanity, filtered by the same sector tags.
+  const entries = useMemo<Entry[]>(() => cmsProjects.map((p) => ({ key: p._id, sectors: p.sectors ?? [], cms: p })), [cmsProjects]);
   // Filter buttons: the Sector list from Sanity, as used by these projects.
   const sectors = useMemo(() => filterOptions(sectorList, entries.map((e) => e.sectors)), [sectorList, entries]);
   const wall = useMemo<WallProject[]>(
     () =>
-      cmsProjects.map((p) => ({
+      // The wall shows website screens: growth case studies have none.
+      cmsProjects.filter((p) => p.previews.length > 0).map((p) => ({
         key: p._id,
         href: href(lang, "projects", p.slug ?? ""),
         name: p.title ?? "",
@@ -96,11 +88,7 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
                       transition={{ duration: 0.9, delay: (i % 3) * 0.12, ease }}
                       style={{ transformPerspective: 1200 }}
                     >
-                      {"cms" in entry ? (
-                        <CmsProjectCard project={entry.cms} />
-                      ) : (
-                        <ProjectCard project={entry.local} cursor={false} glow={false} />
-                      )}
+                      <CmsProjectCard project={entry.cms} />
                     </motion.div>
                   </motion.li>
                 ))}

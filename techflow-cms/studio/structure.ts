@@ -5,6 +5,7 @@ import {CaseIcon} from '@sanity/icons/Case'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {UserIcon} from '@sanity/icons/User'
 import {WrenchIcon} from '@sanity/icons/Wrench'
+import {RocketIcon} from '@sanity/icons/Rocket'
 import {PinIcon} from '@sanity/icons/Pin'
 import {TagIcon} from '@sanity/icons/Tag'
 import {HelpCircleIcon} from '@sanity/icons/HelpCircle'
@@ -13,6 +14,7 @@ import {FAQ_PAGES} from './schemaTypes/documents/faq'
 
 const LOCALIZED: Record<LocalizedType, {title: string; icon: typeof CaseIcon; ordering: SortOrderingItem[]}> = {
   project: {title: 'Projects', icon: CaseIcon, ordering: [{field: 'order', direction: 'asc'}]},
+  growthCaseStudy: {title: 'Growth case studies', icon: RocketIcon, ordering: [{field: 'order', direction: 'asc'}]},
   tool: {title: 'Tools', icon: WrenchIcon, ordering: [{field: 'order', direction: 'asc'}]},
   insight: {title: 'Articles', icon: DocumentTextIcon, ordering: [{field: 'publishedAt', direction: 'desc'}]},
   sector: {title: 'Sectors', icon: PinIcon, ordering: [{field: 'title', direction: 'asc'}]},

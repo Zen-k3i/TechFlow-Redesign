@@ -109,9 +109,6 @@ export function Brief() {
               <div className="relative">
                 <div className="flex items-center justify-between">
                   <p className="eyebrow text-white/50">{b.card}</p>
-                  {/* <span className="flex items-center gap-2 text-xs text-white/60">
-                    <span className="size-2 rounded-full bg-emerald-400" /> {b.live}
-                  </span> */}
                 </div>
 
                 <p className="mt-8 eyebrow text-white/40">{b.estimate}</p>

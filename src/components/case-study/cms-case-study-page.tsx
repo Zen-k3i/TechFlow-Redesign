@@ -227,7 +227,7 @@ function Hero({ study }: { study: CmsCaseStudy }) {
 }
 
 /** Two blurred pools of the project's colour drifting slowly behind the hero. */
-function Aurora({ still }: { still: boolean }) {
+export function Aurora({ still }: { still: boolean }) {
   const drift = (x: string[], y: string[], duration: number) =>
     still ? {} : { animate: { x, y }, transition: { duration, repeat: Infinity, repeatType: "mirror" as const, ease: "easeInOut" as const } };
   return (
@@ -348,7 +348,7 @@ function ScreenDeck({ screens, domain, title, still }: { screens: CmsImage[]; do
  * Client logo, large: logos with their own background fill their tile edge to edge,
  * transparent ones sit on a white card sized to the logo.
  */
-function ClientLogo({ image, name, fill }: { image: CmsImage | undefined; name: string; fill: boolean }) {
+export function ClientLogo({ image, name, fill }: { image: CmsImage | undefined; name: string; fill: boolean }) {
   if (!image?.asset) return null;
   const dims = image.asset.metadata?.dimensions;
   const ratio = dims?.width && dims?.height ? dims.width / dims.height : 3;

@@ -11,7 +11,7 @@ import {FAQ_PAGES} from './schemaTypes/documents/faq'
 /** The plain type template and our per-language ones (`project-fr`, `project-en`, …). */
 const isLocalizedTemplate = (id: string) => LOCALIZED_TYPES.some((type) => id === type || id.startsWith(`${type}-`))
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
-const TEMPLATE_NAMES: Record<string, string> = {insight: 'Article', category: 'Article category'}
+const TEMPLATE_NAMES: Record<string, string> = {insight: 'Article', category: 'Article category', growthCaseStudy: 'Growth case study'}
 
 export default defineConfig({
   name: 'default',

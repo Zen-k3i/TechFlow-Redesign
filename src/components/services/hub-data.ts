@@ -23,7 +23,7 @@ const fr = {
       { tool: "figma", title: "Maquettes Figma", text: "Chaque écran, desktop et mobile, validé avant la première ligne de code." },
       { tool: "notion", title: "Design system", text: "Couleurs, typographies, composants : une base réutilisable pour chaque page à venir." },
       { tool: "webflow", title: "Intégration", text: "Webflow au pixel près, ou développement sur mesure quand le projet l'exige." },
-      { tool: "n8n", title: "Recette & SEO", text: "Navigateurs, vitesse, formulaires, redirections et balisage SEO/GEO vérifiés." },
+      { tool: "seo", title: "Recette & SEO", text: "Navigateurs, vitesse, formulaires, redirections et balisage SEO/GEO vérifiés." },
       { tool: "hubspot", title: "CMS & croissance", text: "Vos équipes publient en autonomie, et le site se branche à votre CRM." },
     ],
   },
@@ -58,7 +58,7 @@ const en: typeof fr = {
       { tool: "figma", title: "Figma mockups", text: "Every screen, desktop and mobile, approved before the first line of code." },
       { tool: "notion", title: "Design system", text: "Colors, type, components: a reusable foundation for every future page." },
       { tool: "webflow", title: "Build", text: "Pixel-perfect Webflow, or custom development when the project calls for it." },
-      { tool: "n8n", title: "QA & SEO", text: "Browsers, speed, forms, redirects and SEO/GEO markup all checked." },
+      { tool: "seo", title: "QA & SEO", text: "Browsers, speed, forms, redirects and SEO/GEO markup all checked." },
       { tool: "hubspot", title: "CMS & growth", text: "Your team publishes on its own, and the site plugs into your CRM." },
     ],
   },
@@ -72,8 +72,10 @@ const en: typeof fr = {
 
 export const servicesHub: Record<Locale, typeof fr> = { fr, en };
 
+export type Tool = { id: string; name: string; src: string; bg: string; fullBleed?: boolean; wide?: boolean };
+
 /** Logos sit on their brand colour: several are white and would vanish on a white tile. `fullBleed` logos are already a full tile. */
-export const tools = [
+export const tools: Tool[] = [
   { id: "figma", name: "Figma", src: "/images/tools/figma.svg", bg: "#1E1E1E" },
   { id: "webflow", name: "Webflow", src: "/images/tools/webflow.svg", bg: "#146EF5" },
   { id: "n8n", name: "n8n", src: "/images/tools/n8n.svg", bg: "#EA4B71" },
@@ -84,5 +86,7 @@ export const tools = [
   { id: "granola", name: "Granola", src: "/images/tools/granola.png", bg: "#A8C43A", fullBleed: true },
 ];
 
-export type Tool = (typeof tools)[number];
-export const toolById = (id: string) => tools.find((tool) => tool.id === id);
+/** Pipeline-only badges, not tools, so they stay out of the toolbox grid. `wide` logos use most of the tile width. */
+const badges: Tool[] = [{ id: "seo", name: "SEO", src: "/images/tools/seo.png", bg: "#FFFFFF", wide: true }];
+
+export const toolById = (id: string) => [...tools, ...badges].find((tool) => tool.id === id);

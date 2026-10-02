@@ -1,3 +1,4 @@
+import {growthCaseStudy} from './documents/growth-case-study'
 import {insight} from './documents/insight'
 import {project} from './documents/project'
 import {review} from './documents/review'
@@ -10,6 +11,7 @@ import {benefit, imageWithAlt, metric, seo, testimonial} from './objects/shared'
 
 export const schemaTypes = [
   project,
+  growthCaseStudy,
   tool,
   insight,
   teamMember,

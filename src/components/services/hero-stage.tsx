@@ -286,15 +286,13 @@ function DesignStage({ content }: { content: ServiceContent }) {
         </div>
       </Layer>
 
-      {shots[1] && (
-        <Layer depth={1.2} delay={0.6} className="bottom-[7%] right-[8%] w-[26%] md:bottom-[8%] md:right-[20%] md:w-[10%]">
-          <div className="rounded-[1.4rem] bg-[#1b1d27] p-1.5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.9)] ring-1 ring-white/10">
-            <div className="relative aspect-[9/18] overflow-hidden rounded-[1.1rem] bg-white">
-              <Image src={shots[1]} alt="" fill sizes="10rem" className="object-cover object-left-top" />
-            </div>
+      <Layer depth={1.2} delay={0.6} className="bottom-[7%] right-[8%] w-[26%] md:bottom-[8%] md:right-[20%] md:w-[10%]">
+        <div className="rounded-[1.4rem] bg-[#1b1d27] p-1.5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.9)] ring-1 ring-white/10">
+          <div className="relative aspect-[9/18] overflow-hidden rounded-[1.1rem] bg-white">
+            <Image src="/images/service/little-green-spark-mobile.png" alt="" fill sizes="10rem" className="object-cover object-top" />
           </div>
-        </Layer>
-      )}
+        </div>
+      </Layer>
 
       <Layer depth={1.6} delay={0.9} className="bottom-[9%] left-[5%] max-w-[62%] md:bottom-[10%] md:left-[19%] md:max-w-[17rem]">
         <div className="flex gap-2.5 rounded-2xl rounded-bl-sm bg-white p-3 text-ink shadow-2xl">

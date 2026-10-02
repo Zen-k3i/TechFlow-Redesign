@@ -5,8 +5,9 @@ import { useStill } from "./use-still";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
+import { href } from "@/i18n/routes";
 import { GrowthCover } from "../case-study/growth-cover";
-import { caseStudyUrl, projectImage, type Project } from "./content";
+import { projectImage, type Project } from "./content";
 import { useLocale } from "./locale";
 import { projectDomain, projectPreviews } from "./previews";
 import { projectTheme, themeFromHex } from "./project-highlight";
@@ -37,11 +38,11 @@ export function ProjectCard({
   accent,
   ...options
 }: { project: Project; /** Overrides the local sector label. */ sector?: string; /** Sanity colour, overrides the coded theme. */ accent?: string | null } & CardOptions) {
-  const { t } = useLocale();
+  const { t, lang } = useLocale();
   return (
     <ProjectCardView
       {...options}
-      href={caseStudyUrl(project.slug)}
+      href={href(lang, "projects", project.slug)}
       slug={project.slug}
       accent={accent}
       name={project.name}
