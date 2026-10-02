@@ -66,7 +66,7 @@ export const seo = defineType({
       name: 'title',
       title: 'Meta title',
       description:
-        'Title shown in Google and the browser tab. " | TechFlow" is added automatically when it fits in 60 characters and the title doesn't already contain "TechFlow". Empty = the page title.',
+        'Title shown in Google and the browser tab. " | TechFlow" is added automatically when it fits in 60 characters and the title does not already contain "TechFlow". Empty = the page title.',
       type: 'string',
       components: {input: counterInput(0, 60)},
       validation: (r) => r.max(60).warning('Google cuts titles after about 60 characters.'),
