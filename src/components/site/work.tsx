@@ -4,36 +4,24 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { filterOptions } from "../page/filters";
-import { projects } from "./content";
-import { useLocale } from "./locale";
 import { CmsProjectCard, type CmsProject } from "../projects/cms-project-card";
-import { ProjectCard } from "./project-card";
+import { useLocale } from "./locale";
 import { FadeIn, RevealHeading } from "./reveal";
 
+/** Cards shown under "All"; a sector filter shows every match, as on the old site. */
+const HOME_LIMIT = 12;
+
 /**
- * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
- * project's Sanity document (CMS slugs can be longer: `district-6` → `district-6-publishing`) and the
- * filter buttons from the Sanity Sectors list; projects not in Sanity keep their local label.
- * Growth case studies (Gato) use their Sanity card, the same as on /projets.
+ * Selected work: every case study from Sanity (websites and growth), in the Studio order, the same
+ * cards as /projets. "All" shows the first `HOME_LIMIT`; the sector filters (buttons from the
+ * Sanity Sectors list, counted over every project) show all matching projects.
  */
 export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsProjects: CmsProject[] }) {
   const { t, links } = useLocale();
-  const items = useMemo(
-    () =>
-      projects.map((project) => {
-        const cms = cmsProjects.find((p) => p.slug === project.slug || p.slug?.startsWith(`${project.slug}-`));
-        return {
-          project,
-          sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector],
-          accent: cms?.accentColor,
-          cms: project.kind === "growth" ? cms : undefined,
-        };
-      }),
-    [cmsProjects, t],
-  );
-  const sectors = useMemo(() => filterOptions(sectorList, items.map((i) => i.sectors)), [sectorList, items]);
+  const items = useMemo(() => cmsProjects.filter((p) => p.slug), [cmsProjects]);
+  const sectors = useMemo(() => filterOptions(sectorList, items.map((p) => p.sectors ?? [])), [sectorList, items]);
   const [filter, setFilter] = useState<string | null>(null);
-  const visible = items.filter((i) => !filter || i.sectors.includes(filter));
+  const visible = filter ? items.filter((p) => p.sectors?.includes(filter)) : items.slice(0, HOME_LIMIT);
 
   return (
     <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
@@ -56,7 +44,7 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
 
         <LayoutGroup>
           <div role="group" aria-label={t.work.filterLabel} className="mt-12 flex flex-wrap gap-2">
-            <FilterChip active={filter === null} onClick={() => setFilter(null)} label={t.work.all} count={projects.length} />
+            <FilterChip active={filter === null} onClick={() => setFilter(null)} label={t.work.all} count={items.length} />
             {sectors.map(([sector, count]) => (
               <FilterChip
                 key={sector}
@@ -70,16 +58,16 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
 
           <motion.ul layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map(({ project, sectors: names, accent, cms }) => (
+              {visible.map((project) => (
                 <motion.li
-                  key={project.slug}
+                  key={project._id}
                   layout
                   initial={{ opacity: 0, scale: 0.94 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {cms ? <CmsProjectCard project={cms} /> : <ProjectCard project={project} sector={names.join(" · ")} accent={accent} cursor={false} glow={false} />}
+                  <CmsProjectCard project={project} />
                 </motion.li>
               ))}
             </AnimatePresence>
