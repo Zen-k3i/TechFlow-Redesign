@@ -56,14 +56,14 @@ export function Brief() {
   return (
     <section
       id="brief"
-      className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36"
+      className="relative rounded-[2.5rem] bg-paper px-5 py-24 text-ink md:rounded-[4rem] md:px-10 md:py-32"
     >
       <div className="mx-auto max-w-7xl">
         <p className="eyebrow text-brand-deep">{b.eyebrow}</p>
         <RevealHeading
           text={b.heading}
           accentClassName="italic text-brand-deep"
-          className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl"
+          className="mt-4 max-w-4xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]"
         />
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">

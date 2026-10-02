@@ -17,9 +17,11 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
   const { t, links } = useLocale();
   // Website projects and growth case studies published in Sanity.
   const total = cmsProjects.filter((p) => p.slug).length;
+  // Growth case studies (G.A.T.O Tower) are listed on /projets only, not in the home selection.
+  const homeProjects = cmsProjects.filter((p) => p._type !== "growthCaseStudy");
 
   return (
-    <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-24 text-ink md:rounded-[4rem] md:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>
@@ -27,7 +29,7 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
             <RevealHeading
               text={t.work.heading}
               accentClassName="italic text-brand-deep"
-              className="mt-4 font-serif text-5xl leading-[0.95] md:text-8xl"
+              className="mt-4 font-serif text-[2.75rem] leading-[0.95] md:text-[5.5rem]"
             />
           </div>
           <FadeIn>
@@ -37,7 +39,7 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
           </FadeIn>
         </div>
 
-        <CaseStudyGrid cmsProjects={cmsProjects} sectorList={sectorList} limit={HOME_LIMIT} />
+        <CaseStudyGrid cmsProjects={homeProjects} sectorList={sectorList} limit={HOME_LIMIT} />
 
         <div className="mt-14 flex justify-center">
           <Link

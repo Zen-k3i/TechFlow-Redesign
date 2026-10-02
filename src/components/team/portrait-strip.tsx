@@ -28,10 +28,10 @@ export function PortraitStrip({ members, className = "pt-8" }: { members: TeamMe
   const list = [...members, ...members];
 
   return (
-    <section className={`overflow-hidden bg-night pb-28 text-white md:pb-36 ${className}`}>
+    <section className={`overflow-hidden bg-night pb-24 text-white md:pb-32 ${className}`}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <p className="eyebrow text-brand-sky">{c.eyebrow}</p>
-        <RevealHeading text={c.heading} accentClassName="italic text-brand-sky" className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl" />
+        <RevealHeading text={c.heading} accentClassName="italic text-brand-sky" className="mt-4 max-w-4xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]" />
       </div>
       <div className="mt-16 flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none">
         {list.map((m, i) => (

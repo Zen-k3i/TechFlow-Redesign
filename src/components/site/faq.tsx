@@ -17,13 +17,13 @@ export function Faq({ faq }: { faq: FaqContent }) {
   if (!faq?.heading || items.length === 0) return null;
 
   return (
-    <section id="faq" className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section id="faq" className="bg-night px-5 py-24 text-white md:px-10 md:py-32">
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="eyebrow text-brand-sky">{t.faq.eyebrow}</p>
           <RevealHeading
             text={faq.heading}
-            className="mt-4 font-serif text-5xl leading-[0.95] md:text-6xl"
+            className="mt-4 font-serif text-[2.75rem] leading-[0.95] md:text-[3.5rem]"
           />
           {faq.intro && <p className="mt-6 max-w-sm text-white/55">{faq.intro}</p>}
         </div>

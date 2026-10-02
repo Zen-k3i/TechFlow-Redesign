@@ -18,12 +18,12 @@ export function Industries() {
   const [active, setActive] = useState(0);
 
   return (
-    <section id="secteurs" className="relative bg-night px-5 pb-28 pt-12 text-white md:px-10 md:pb-36 md:pt-16">
+    <section id="secteurs" className="relative bg-night px-5 pb-24 pt-12 text-white md:px-10 md:pb-32 md:pt-16">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="eyebrow text-brand-sky">{s.eyebrow}</p>
-            <RevealHeading text={s.heading} className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl" />
+            <RevealHeading text={s.heading} className="mt-4 max-w-4xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]" />
           </div>
           <FadeIn>
             <p className="max-w-sm text-white/55">{s.intro}</p>

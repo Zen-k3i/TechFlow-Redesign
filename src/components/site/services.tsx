@@ -15,14 +15,14 @@ export function Services() {
   const service = services[active];
 
   return (
-    <section id="services" className="relative bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section id="services" className="relative bg-night px-5 pb-24 pt-16 text-white md:px-10 md:pb-32 md:pt-20">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="eyebrow text-brand-sky">{t.services.eyebrow}</p>
             <RevealHeading
               text={t.services.heading}
-              className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] md:text-7xl"
+              className="mt-4 max-w-3xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]"
             />
           </div>
           <FadeIn>
