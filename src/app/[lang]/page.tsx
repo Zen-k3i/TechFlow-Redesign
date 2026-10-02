@@ -17,7 +17,7 @@ import { Work } from "@/components/site/work";
 import { PortraitStrip } from "@/components/team/portrait-strip";
 import { hasLocale, localePath } from "@/i18n/config";
 import { sanityFetch } from "@/sanity/client";
-import { FAQ_QUERY, PROJECT_SECTORS_QUERY, SECTORS_QUERY, TEAM_QUERY } from "@/sanity/queries";
+import { FAQ_QUERY, PROJECTS_INDEX_QUERY, SECTORS_QUERY, TEAM_QUERY } from "@/sanity/queries";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
@@ -33,11 +33,11 @@ export async function generateMetadata({ params }: PageProps<"/[lang]">): Promis
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const [members, faq, sectorList, projectSectors] = await Promise.all([
+  const [members, faq, sectorList, cmsProjects] = await Promise.all([
     sanityFetch(TEAM_QUERY),
     sanityFetch(FAQ_QUERY, { page: "home", lang }),
     sanityFetch(SECTORS_QUERY, { lang }),
-    sanityFetch(PROJECT_SECTORS_QUERY, { lang }),
+    sanityFetch(PROJECTS_INDEX_QUERY, { lang }),
   ]);
 
   return (
@@ -51,7 +51,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         {/* Why we work this way (Manifesto), who does the work, then what we do (Services). */}
         <PortraitStrip members={members} className="pt-28 md:pt-36" />
         <Services />
-        <Work sectorList={sectorList.flatMap((name) => (name ? [name] : []))} projectSectors={projectSectors} />
+        <Work sectorList={sectorList.flatMap((name) => (name ? [name] : []))} cmsProjects={cmsProjects} />
         <Convictions />
         <Process />
         <Testimonials />

@@ -32,6 +32,7 @@ const hostname = (url: string | null) => {
 export function CmsProjectCard({ project }: { project: CmsProject }) {
   const { lang } = useLocale();
   const cover = project.coverImage?.asset?.url ? project.coverImage : null;
+  const growth = project._type === "growthCaseStudy";
 
   return (
     <ProjectCardView
@@ -40,7 +41,8 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
       accent={project.accentColor}
       name={project.title ?? ""}
       sector={project.sectors?.join(" · ") || undefined}
-      tags={project.services ?? []}
+      // Growth case studies carry one tag, their first sector ("Growth Marketing"); websites list their services.
+      tags={growth ? (project.sector ? [project.sector] : []) : (project.services ?? [])}
       cover={
         cover
           ? {
@@ -57,8 +59,8 @@ export function CmsProjectCard({ project }: { project: CmsProject }) {
           .url(),
       )}
       domain={hostname(project.websiteUrl)}
-      growth={project._type === "growthCaseStudy" && !cover}
-      posters={project._type === "growthCaseStudy"}
+      growth={growth && !cover}
+      posters={growth}
       phones={project.phones ?? []}
       loader={sanityLoader}
       cursor={false}

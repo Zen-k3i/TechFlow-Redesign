@@ -77,18 +77,6 @@ export const CATEGORIES_QUERY = defineQuery(`
   *[_type == "category" && language == $lang && defined(title)] | order(title asc).title
 `);
 
-/** Every project's sectors in one language, for listings coded locally (home page Work section). */
-export const PROJECT_SECTORS_QUERY = defineQuery(`
-  *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current)]{
-    "slug": slug.current,
-    "sectors": array::compact(sectors[]->title),
-    accentColor,
-    // Growth case studies: their "Card hover" images, else their first ads as phones, on home card hover.
-    "previews": select(_type == "growthCaseStudy" => [hoverImage1, hoverImage2, hoverImage3][defined(asset)].asset->url, []),
-    "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])
-  }
-`);
-
 // ---------------------------------------------------------------- FAQ
 
 /** A page's FAQ (home, services, design, development, aiAgents, salesFunnel) in one language. */

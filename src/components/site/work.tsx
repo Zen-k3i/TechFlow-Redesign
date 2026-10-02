@@ -6,32 +6,30 @@ import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { filterOptions } from "../page/filters";
 import { projects } from "./content";
 import { useLocale } from "./locale";
-import { ProjectCard, type CardPhone } from "./project-card";
+import { CmsProjectCard, type CmsProject } from "../projects/cms-project-card";
+import { ProjectCard } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
-
-type ProjectSectors = { slug: string | null; sectors: string[] | null; accentColor: string | null; previews: (string | null)[] | null; phones: CardPhone[] | null };
 
 /**
  * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
  * project's Sanity document (CMS slugs can be longer: `district-6` → `district-6-publishing`) and the
  * filter buttons from the Sanity Sectors list; projects not in Sanity keep their local label.
- * Growth case studies (Gato) get their Sanity "Card hover" images, else their first ads as phones, on hover.
+ * Growth case studies (Gato) use their Sanity card, the same as on /projets.
  */
-export function Work({ sectorList, projectSectors }: { sectorList: string[]; projectSectors: ProjectSectors[] }) {
+export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsProjects: CmsProject[] }) {
   const { t, links } = useLocale();
   const items = useMemo(
     () =>
       projects.map((project) => {
-        const cms = projectSectors.find((p) => p.slug === project.slug || p.slug?.startsWith(`${project.slug}-`));
+        const cms = cmsProjects.find((p) => p.slug === project.slug || p.slug?.startsWith(`${project.slug}-`));
         return {
           project,
           sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector],
           accent: cms?.accentColor,
-          previews: cms?.previews?.filter((src) => src !== null) ?? [],
-          phones: cms?.phones ?? [],
+          cms: project.kind === "growth" ? cms : undefined,
         };
       }),
-    [projectSectors, t],
+    [cmsProjects, t],
   );
   const sectors = useMemo(() => filterOptions(sectorList, items.map((i) => i.sectors)), [sectorList, items]);
   const [filter, setFilter] = useState<string | null>(null);
@@ -72,7 +70,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
 
           <motion.ul layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map(({ project, sectors: names, accent, previews, phones }) => (
+              {visible.map(({ project, sectors: names, accent, cms }) => (
                 <motion.li
                   key={project.slug}
                   layout
@@ -81,7 +79,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ProjectCard project={project} sector={names.join(" · ")} accent={accent} previews={previews} phones={phones} cursor={false} glow={false} />
+                  {cms ? <CmsProjectCard project={cms} /> : <ProjectCard project={project} sector={names.join(" · ")} accent={accent} cursor={false} glow={false} />}
                 </motion.li>
               ))}
             </AnimatePresence>

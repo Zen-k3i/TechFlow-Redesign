@@ -52,15 +52,11 @@ export function ProjectCard({
   project,
   sector,
   accent,
-  phones,
-  previews,
   ...options
 }: {
   project: Project;
   /** Overrides the local sector label. */ sector?: string;
   /** Sanity colour, overrides the coded theme. */ accent?: string | null;
-  /** Growth case studies: their Sanity ads, stacked as phones on hover. */ phones?: CardPhone[];
-  /** Growth case studies: their Sanity "Card hover" images (URLs), shown as posters on hover. */ previews?: string[];
 } & CardOptions) {
   const { t, lang } = useLocale();
   return (
@@ -73,11 +69,10 @@ export function ProjectCard({
       sector={sector ?? t.work.sectors[project.sector] ?? project.sector}
       tags={project.disciplines.map((d) => t.work.disciplines[d] ?? d)}
       cover={{ src: projectImage(project.slug) }}
-      previews={previews?.length ? previews.map((src) => `${src}?w=1200&auto=format`) : projectPreviews(project.slug)}
+      previews={projectPreviews(project.slug)}
       domain={projectDomain(project.slug)}
       growth={project.kind === "growth"}
       posters={project.kind === "growth"}
-      phones={phones}
     />
   );
 }
