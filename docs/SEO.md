@@ -65,7 +65,7 @@ All other old URLs (home, services, 23 + 23 case studies, 24 + 24 tools, 20 arti
 
 ## Manual steps
 
-1. **Deploy the Studio** (`pnpm deploy` in `techflow-cms/studio`) so editors get the SEO tabs, Page SEO, Site settings and Redirects.
+1. **Studio**: deployed automatically to cms.techflow-agency.com by the "Deploy Studio" action when this is pushed to `main` (not `pnpm deploy`), which gives editors the SEO tabs, Page SEO, Site settings and Redirects.
 2. **Redirects go live on publish**: in Vercel → Project → Settings → Git → Deploy Hooks, create a hook for `main`. In sanity.io/manage → project `ce31dig5` → API → Webhooks, add a webhook: URL = the deploy hook, dataset `production`, trigger on create / update / delete, filter `_type == "redirect"`, HTTP method POST, no projection.
 3. **Domain**: keep `www.techflow-agency.com` as the primary domain and the apex `techflow-agency.com` redirecting to it (today Cloudflare does a 301). Check that `*.vercel.app` production URLs aren't linked anywhere (they are canonicalised to www anyway).
 4. **Search Console**: the live Webflow site carries a Search Console HTML-tag code; it is stored in Site settings and the new site outputs the same tag, so if the property was verified that way it stays verified after the switch. Safer: also verify a **Domain** property by DNS (TXT record at Cloudflare), which doesn't depend on the site. After launch: Sitemaps → submit `https://www.techflow-agency.com/sitemap.xml`; URL Inspection → request indexing for the home, /projets and the service pages; watch Pages → "Not found (404)" and "Page with redirect" for a few weeks.
