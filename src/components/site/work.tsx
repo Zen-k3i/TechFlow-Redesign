@@ -6,15 +6,16 @@ import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { filterOptions } from "../page/filters";
 import { projects } from "./content";
 import { useLocale } from "./locale";
-import { ProjectCard } from "./project-card";
+import { ProjectCard, type CardPhone } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
 
-type ProjectSectors = { slug: string | null; sectors: string[] | null; accentColor: string | null };
+type ProjectSectors = { slug: string | null; sectors: string[] | null; accentColor: string | null; phones: CardPhone[] | null };
 
 /**
  * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
  * project's Sanity document (CMS slugs can be longer: `district-6` → `district-6-publishing`) and the
  * filter buttons from the Sanity Sectors list; projects not in Sanity keep their local label.
+ * Growth case studies (Gato) get their first Sanity ads as the phone stack shown on hover.
  */
 export function Work({ sectorList, projectSectors }: { sectorList: string[]; projectSectors: ProjectSectors[] }) {
   const { t, links } = useLocale();
@@ -26,6 +27,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
           project,
           sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector],
           accent: cms?.accentColor,
+          phones: cms?.phones ?? [],
         };
       }),
     [projectSectors, t],
@@ -69,7 +71,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
 
           <motion.ul layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map(({ project, sectors: names, accent }) => (
+              {visible.map(({ project, sectors: names, accent, phones }) => (
                 <motion.li
                   key={project.slug}
                   layout
@@ -78,7 +80,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ProjectCard project={project} sector={names.join(" · ")} accent={accent} cursor={false} glow={false} />
+                  <ProjectCard project={project} sector={names.join(" · ")} accent={accent} phones={phones} cursor={false} glow={false} />
                 </motion.li>
               ))}
             </AnimatePresence>

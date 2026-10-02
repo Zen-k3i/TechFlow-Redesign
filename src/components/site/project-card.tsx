@@ -45,8 +45,14 @@ export function ProjectCard({
   project,
   sector,
   accent,
+  phones,
   ...options
-}: { project: Project; /** Overrides the local sector label. */ sector?: string; /** Sanity colour, overrides the coded theme. */ accent?: string | null } & CardOptions) {
+}: {
+  project: Project;
+  /** Overrides the local sector label. */ sector?: string;
+  /** Sanity colour, overrides the coded theme. */ accent?: string | null;
+  /** Growth case studies: their Sanity ads, stacked as phones on hover. */ phones?: CardPhone[];
+} & CardOptions) {
   const { t, lang } = useLocale();
   return (
     <ProjectCardView
@@ -61,6 +67,7 @@ export function ProjectCard({
       previews={projectPreviews(project.slug)}
       domain={projectDomain(project.slug)}
       growth={project.kind === "growth"}
+      phones={phones}
     />
   );
 }

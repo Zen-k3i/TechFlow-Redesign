@@ -76,10 +76,12 @@ export const CATEGORIES_QUERY = defineQuery(`
 
 /** Every project's sectors in one language, for listings coded locally (home page Work section). */
 export const PROJECT_SECTORS_QUERY = defineQuery(`
-  *[_type == "project" && language == $lang && defined(slug.current)]{
+  *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current)]{
     "slug": slug.current,
     "sectors": array::compact(sectors[]->title),
-    accentColor
+    accentColor,
+    // Growth case studies: their first ads, stacked as phones when the home card is hovered.
+    "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])
   }
 `);
 

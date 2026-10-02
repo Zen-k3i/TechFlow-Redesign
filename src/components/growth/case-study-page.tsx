@@ -166,7 +166,7 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
             )}
           </div>
 
-          {ads.length > 0 && <PhoneFan ads={ads} slots={slots} brand={brand} still={still} label={c.seeAds} cursor={c.watch} />}
+          {ads.length > 0 && <PhoneFan ads={ads} slots={slots} brand={brand} still={still} label={c.seeAds} />}
         </div>
       </div>
     </section>
@@ -174,7 +174,7 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
 }
 
 /** The hero's three ads as phones dealt into a fan; the front one plays muted, the stage leans with the cursor. */
-function PhoneFan({ ads, slots, brand, still, label, cursor }: { ads: Ad[]; slots: number[]; brand: Brand; still: boolean; label: string; cursor: string }) {
+function PhoneFan({ ads, slots, brand, still, label }: { ads: Ad[]; slots: number[]; brand: Brand; still: boolean; label: string }) {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-6, 6]), { stiffness: 120, damping: 18 });
@@ -194,7 +194,6 @@ function PhoneFan({ ads, slots, brand, still, label, cursor }: { ads: Ad[]; slot
     <a
       href={`#${SECTION_IDS.ads}`}
       aria-label={label}
-      data-cursor={cursor}
       onPointerMove={onMove}
       onPointerLeave={reset}
       className="relative mx-auto block aspect-square w-full max-w-[34rem] [perspective:1400px]"
