@@ -112,7 +112,6 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
             >
               <button
                 type="button"
-                data-cursor={c.watch}
                 aria-label={c.watchVideo(i + 1, ad.angle ?? "")}
                 aria-haspopup="dialog"
                 onClick={() => setOpen(i)}

@@ -6,6 +6,9 @@ import { growthCopy } from "./copy";
 import { posterUrl } from "./media";
 import type { Ad, Brand, Platform } from "./types";
 
+/** Seconds into the video for the still shown before it plays, past the black opening frames. */
+const STILL_AT = 1.5;
+
 type SocialAdProps = {
   ad: Ad;
   brand: Brand;
@@ -33,9 +36,10 @@ export function SocialAd({ ad, brand, platform, playing, muted = true, compact, 
 }
 
 /**
- * The video loads nothing until it comes near the viewport (`preload="none"`, no source), then
- * plays only while `playing` and visible. Without a file it shows the poster, or a designed
- * poster with the hook.
+ * The video loads nothing until it comes near the viewport (`preload="none"`, no source); then it
+ * fetches its start (`preload="metadata"`) and shows the frame at `STILL_AT` seconds, so the phone
+ * shows the ad even without a poster (several ads open on black frames). It plays from 0 only while
+ * `playing` and visible. Without a file it shows the poster, or a designed poster with the hook.
  */
 function AdMedia({ ad, brand, playing, muted, mediaRef }: { ad: Ad; brand: Brand; playing: boolean; muted: boolean; mediaRef?: SocialAdProps["mediaRef"] }) {
   const { lang } = useLocale();
@@ -55,6 +59,8 @@ function AdMedia({ ad, brand, playing, muted, mediaRef }: { ad: Ad; brand: Brand
     [mediaRef],
   );
   const src = ad.video && !failed ? ad.video : null;
+  // Until the first play, the video rests on its still frame; playback then starts from the top.
+  const started = useRef(false);
 
   useEffect(() => {
     const el = box.current;
@@ -73,8 +79,13 @@ function AdMedia({ ad, brand, playing, muted, mediaRef }: { ad: Ad; brand: Brand
   useEffect(() => {
     const v = video.current;
     if (!v) return;
-    if (shouldPlay) v.play().catch(() => {});
-    else v.pause();
+    if (shouldPlay) {
+      if (!started.current) {
+        started.current = true;
+        v.currentTime = 0;
+      }
+      v.play().catch(() => {});
+    } else v.pause();
   }, [shouldPlay, near, src]);
 
   useEffect(() => {
@@ -91,10 +102,13 @@ function AdMedia({ ad, brand, playing, muted, mediaRef }: { ad: Ad; brand: Brand
           muted={muted}
           loop={muted}
           playsInline
-          preload="none"
+          preload={near ? "metadata" : "none"}
           crossOrigin={ad.captions ? "anonymous" : undefined}
           aria-label={ad.angle ?? undefined}
           onError={() => setFailed(true)}
+          onLoadedMetadata={(e) => {
+            if (!started.current && !poster) e.currentTarget.currentTime = Math.min(STILL_AT, e.currentTarget.duration / 2);
+          }}
           onTimeUpdate={(e) => setProgress(e.currentTarget.currentTime / (e.currentTarget.duration || 1))}
           className="absolute inset-0 h-full w-full object-cover"
         >
