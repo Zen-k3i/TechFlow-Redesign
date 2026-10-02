@@ -55,7 +55,10 @@ const content: Record<Lang, Record<string, unknown>> = {
   fr: {
     summary:
       'Cinq publicités vidéo, des A/B tests en continu et un lead scoring branché sur les commerciaux, pour vendre sur plan une tour de luxe de 67 étages à Phnom Penh.',
-    sectors: [{_key: 'real-estate', _type: 'reference', _ref: 'sector-fr-real-estate'}],
+    sectors: [
+      {_key: 'growth-marketing', _type: 'reference', _ref: 'sector-fr-growth-marketing'},
+      {_key: 'real-estate', _type: 'reference', _ref: 'sector-fr-real-estate'},
+    ],
     services: ['Publicités vidéo', 'Scripts & copywriting', 'A/B testing', 'Lead scoring', 'Community management'],
     hero: {
       tagline: 'Growth marketing · Immobilier de luxe · Phnom Penh',
@@ -129,7 +132,10 @@ const content: Record<Lang, Record<string, unknown>> = {
 
   en: {
     summary: 'Five video ads, ongoing A/B tests and lead scoring wired to the sales team, to sell a 67-storey off-plan luxury tower in Phnom Penh.',
-    sectors: [{_key: 'real-estate', _type: 'reference', _ref: 'sector-en-real-estate'}],
+    sectors: [
+      {_key: 'growth-marketing', _type: 'reference', _ref: 'sector-en-growth-marketing'},
+      {_key: 'real-estate', _type: 'reference', _ref: 'sector-en-real-estate'},
+    ],
     services: ['Video ads', 'Scripts & copywriting', 'A/B testing', 'Lead scoring', 'Community management'],
     hero: {
       tagline: 'Growth marketing · Luxury real estate · Phnom Penh',
