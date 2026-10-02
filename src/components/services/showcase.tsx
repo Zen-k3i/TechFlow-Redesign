@@ -107,7 +107,7 @@ function DesignShowcase() {
                     src={s.src}
                     alt={`${c.project} · ${s.label}`}
                     fill
-                    sizes="(min-width: 1024px) 50vw, 88vw"
+                    sizes={s.contain ? "(min-width: 1024px) 30vw, 50vw" : "(min-width: 1024px) 50vw, 88vw"}
                     className={`transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${s.contain ? "object-contain p-6" : "object-cover object-top"} ${
                       i === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
                     }`}
