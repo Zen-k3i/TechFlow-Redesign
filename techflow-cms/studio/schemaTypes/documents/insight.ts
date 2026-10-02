@@ -42,6 +42,13 @@ export const insight = defineType({
       to: [{type: 'teamMember'}],
       description: 'Leave empty to sign as “TechFlow Agency”.',
     }),
+    defineField({
+      name: 'authorName',
+      title: 'Guest author',
+      type: 'string',
+      description: 'Byline for a writer who has no team member yet (no photo, no team page). Ignored when Author is set.',
+      hidden: ({document}) => Boolean(document?.author),
+    }),
     defineField({name: 'coverImage', title: 'Cover image', type: 'imageWithAlt'}),
     defineField({name: 'body', title: 'Body', type: 'blockContent'}),
     {...seoField, group: 'seo'},
