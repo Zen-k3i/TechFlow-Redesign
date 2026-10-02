@@ -7,7 +7,7 @@ import { href } from "@/i18n/routes";
 import { urlFor } from "@/sanity/image";
 import { SanityImage } from "../cms/sanity-image";
 import { safeHref } from "../cms/portable-body";
-import { Aurora, ClientLogo, ClientQuote, Story } from "../case-study/cms-case-study-page";
+import { Aurora, ClientLogo, Story } from "../case-study/cms-case-study-page";
 import { ButtonLink } from "../page/ui";
 import { CmsProjectCard } from "../projects/cms-project-card";
 import { GlowButton } from "../page/project-cta";
@@ -22,14 +22,14 @@ import { GrowthBrief } from "./brief";
 import { growthCopy } from "./copy";
 import { PhoneMockup } from "./phone-mockup";
 import { SocialAd } from "./social-ad";
-import { asPlatform, isReal, SECTION_IDS, type Brand, type Ad, type GrowthStudy } from "./types";
+import { asPlatform, SECTION_IDS, type Brand, type Ad, type GrowthStudy } from "./types";
 
 /** The ads section shows the first three ads (Sanity order), large enough to read the feed UI. */
 const SHOWCASE_PHONES = 3;
 
 /**
  * Growth marketing case study, built from a Sanity `growthCaseStudy`. Same frame and order as a
- * website case study so both read alike (hero → brief → story → quote → related, then the footer's
+ * website case study so both read alike (hero → brief → story → related, then the footer's
  * call to action), with its own twists: the ads as a fan of phones in the hero, a single row of
  * figures, the story as numbered steps on a rail, and the ads section. Sections without
  * content are left out.
@@ -43,7 +43,6 @@ export function GrowthCaseStudyPage({ study }: { study: GrowthStudy }) {
     logo: study.logo?.asset?.url ? urlFor(study.logo as SanityImageSource).width(120).height(120).fit("crop").url() : null,
     accent: theme.accent,
   };
-  const testimonial = study.results?.testimonial;
 
   return (
     <div style={{ "--accent": theme.accent, "--glow": theme.glow } as React.CSSProperties} className="bg-night">
@@ -51,7 +50,6 @@ export function GrowthCaseStudyPage({ study }: { study: GrowthStudy }) {
       <GrowthBrief study={study} />
       <Story body={study.body} variant="steps" />
       {ads.length > 0 && <AdsShowcase ads={ads.slice(0, SHOWCASE_PHONES)} brand={brand} heading={study.adsSection?.heading ?? null} intro={study.adsSection?.intro ?? null} />}
-      <ClientQuote testimonial={testimonial && isReal(testimonial.quote) ? testimonial : null} />
       <Related study={study} />
     </div>
   );

@@ -2,7 +2,7 @@
  * Seed (2026-10-02, rewritten for the simpler template): the G.A.T.O Tower growth case study in
  * French and English, as linked `growthCaseStudy` documents. The story is a `body` in chapters,
  * like a website case study. Building facts come from the developer's site
- * (gato-tower-cambodia.com). Results and testimonial are "[TBD]" placeholders, never shown on the
+ * (gato-tower-cambodia.com). Results are "[TBD]" placeholders, never shown on the
  * site. No images or video files: upload them in the Studio.
  *
  *   npx sanity exec scripts/seed-growth-gato.ts --with-user-token -- --dry-run
@@ -107,7 +107,6 @@ const content: Record<Lang, Record<string, unknown>> = {
         [TBD, 'de leads qualifiés'],
         [TBD, 'personnes touchées'],
       ]),
-      testimonial: {_type: 'testimonial', quote: TBD, name: TBD, role: TBD},
     },
     adsSection: {
       heading: 'Les publicités, *telles qu’elles passent.*',
@@ -184,7 +183,6 @@ const content: Record<Lang, Record<string, unknown>> = {
         [TBD, 'qualified lead rate'],
         [TBD, 'people reached'],
       ]),
-      testimonial: {_type: 'testimonial', quote: TBD, name: TBD, role: TBD},
     },
     adsSection: {
       heading: 'The ads, *as they run.*',

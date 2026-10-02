@@ -9,13 +9,13 @@ import { useLocale } from "./locale";
 import { ProjectCard, type CardPhone } from "./project-card";
 import { FadeIn, RevealHeading } from "./reveal";
 
-type ProjectSectors = { slug: string | null; sectors: string[] | null; accentColor: string | null; phones: CardPhone[] | null };
+type ProjectSectors = { slug: string | null; sectors: string[] | null; accentColor: string | null; previews: (string | null)[] | null; phones: CardPhone[] | null };
 
 /**
  * Selected projects (coded in `content.ts`) filterable by sector. Sector names come from each
  * project's Sanity document (CMS slugs can be longer: `district-6` → `district-6-publishing`) and the
  * filter buttons from the Sanity Sectors list; projects not in Sanity keep their local label.
- * Growth case studies (Gato) get their first Sanity ads as the phone stack shown on hover.
+ * Growth case studies (Gato) get their Sanity "Card hover" images, else their first ads as phones, on hover.
  */
 export function Work({ sectorList, projectSectors }: { sectorList: string[]; projectSectors: ProjectSectors[] }) {
   const { t, links } = useLocale();
@@ -27,6 +27,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
           project,
           sectors: cms?.sectors?.length ? cms.sectors : [t.work.sectors[project.sector] ?? project.sector],
           accent: cms?.accentColor,
+          previews: cms?.previews?.filter((src) => src !== null) ?? [],
           phones: cms?.phones ?? [],
         };
       }),
@@ -71,7 +72,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
 
           <motion.ul layout className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map(({ project, sectors: names, accent, phones }) => (
+              {visible.map(({ project, sectors: names, accent, previews, phones }) => (
                 <motion.li
                   key={project.slug}
                   layout
@@ -80,7 +81,7 @@ export function Work({ sectorList, projectSectors }: { sectorList: string[]; pro
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ProjectCard project={project} sector={names.join(" · ")} accent={accent} phones={phones} cursor={false} glow={false} />
+                  <ProjectCard project={project} sector={names.join(" · ")} accent={accent} previews={previews} phones={phones} cursor={false} glow={false} />
                 </motion.li>
               ))}
             </AnimatePresence>

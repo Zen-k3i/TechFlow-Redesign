@@ -27,9 +27,12 @@ const projectCard = /* groq */ `
   websiteUrl,
   // Growth case studies without a card image use their key visual.
   "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) ${image},
-  // Website screens, for the card hover stack and the /projets wall; growth case studies have none.
-  "previews": select(_type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} }, []),
-  // Growth case studies stack their first ads as phones on card hover instead.
+  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.
+  "previews": select(
+    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...${image} },
+    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...${image} }
+  ),
+  // Growth case studies without hover images stack their first ads as phones instead.
   "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])
 `;
 
@@ -80,7 +83,8 @@ export const PROJECT_SECTORS_QUERY = defineQuery(`
     "slug": slug.current,
     "sectors": array::compact(sectors[]->title),
     accentColor,
-    // Growth case studies: their first ads, stacked as phones when the home card is hovered.
+    // Growth case studies: their "Card hover" images, else their first ads as phones, on home card hover.
+    "previews": select(_type == "growthCaseStudy" => [hoverImage1, hoverImage2, hoverImage3][defined(asset)].asset->url, []),
     "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])
   }
 `);
@@ -119,7 +123,7 @@ export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
       _type == "imageGroup" => { images[]{ _key, ...${image} } }
     },
     "minutes": round(length(string::split(pt::text(body), " ")) / 220),
-    results { metrics[]{ _key, value, label }, testimonial { quote, name, role, photo ${image} } },
+    results { metrics[]{ _key, value, label } },
     handle,
     adsSection { heading, intro },
     ads[]{

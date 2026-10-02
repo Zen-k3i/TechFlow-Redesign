@@ -6,9 +6,9 @@ import {sameLanguage} from './taxonomy'
 
 /**
  * Growth marketing case study (social video ads → qualified leads). Built like a website case
- * study (hero, "10 seconds" brief, story in chapters with images, client quote, related cards)
- * plus one marketing block: the ads, shown in phones as they run in the feed.
- * Results and testimonial values containing "TBD" are never shown on the site.
+ * study (hero, "10 seconds" brief, story in chapters with images, related cards) plus one
+ * marketing block: the ads, shown in phones as they run in the feed. No client quote (removed
+ * 2026-10-02). Results values containing "TBD" are never shown on the site.
  */
 
 const PLATFORMS = [
@@ -22,6 +22,7 @@ export const growthCaseStudy = defineType({
   title: 'Growth case study',
   type: 'document',
   icon: RocketIcon,
+  fieldsets: [{name: 'hover', title: 'Card hover', description: 'Images that rise and cycle when a project card is hovered (home page and Projects page), like the screens of a website project. Without them, the first 3 video ads are shown as phones.', options: {columns: 3}}],
   groups: [
     {name: 'content', title: 'Content', default: true},
     {name: 'ads', title: 'Ads'},
@@ -95,7 +96,6 @@ export const growthCaseStudy = defineType({
           of: [defineArrayMember({type: 'metric'})],
           validation: (r) => r.max(4),
         }),
-        defineField({name: 'testimonial', title: 'Client testimonial', description: 'Hidden while the quote is empty or contains "TBD".', type: 'testimonial'}),
       ],
     }),
 
@@ -223,6 +223,16 @@ export const growthCaseStudy = defineType({
       type: 'imageWithAlt',
       group: 'media',
     }),
+    ...([1, 2, 3] as const).map((n) =>
+      defineField({
+        name: `hoverImage${n}`,
+        title: `Hover image ${n}`,
+        description: n === 1 ? 'In front first; shown when hovering project cards.' : 'Also shown when hovering project cards.',
+        type: 'imageWithAlt',
+        group: 'media',
+        fieldset: 'hover',
+      }),
+    ),
     defineField({name: 'logo', title: 'Client logo', description: 'Shown in the hero, and as the account avatar on the ad mockups.', type: 'image', group: 'media'}),
     defineField({
       name: 'logoFill',

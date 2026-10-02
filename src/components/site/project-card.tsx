@@ -46,12 +46,14 @@ export function ProjectCard({
   sector,
   accent,
   phones,
+  previews,
   ...options
 }: {
   project: Project;
   /** Overrides the local sector label. */ sector?: string;
   /** Sanity colour, overrides the coded theme. */ accent?: string | null;
   /** Growth case studies: their Sanity ads, stacked as phones on hover. */ phones?: CardPhone[];
+  /** Growth case studies: their Sanity "Card hover" images (URLs), in place of the local screens. */ previews?: string[];
 } & CardOptions) {
   const { t, lang } = useLocale();
   return (
@@ -64,7 +66,7 @@ export function ProjectCard({
       sector={sector ?? t.work.sectors[project.sector] ?? project.sector}
       tags={project.disciplines.map((d) => t.work.disciplines[d] ?? d)}
       cover={{ src: projectImage(project.slug) }}
-      previews={projectPreviews(project.slug)}
+      previews={previews?.length ? previews.map((src) => `${src}?w=1200&auto=format`) : projectPreviews(project.slug)}
       domain={projectDomain(project.slug)}
       growth={project.kind === "growth"}
       phones={phones}
@@ -124,8 +126,9 @@ export function ProjectCardView({
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.22), transparent 55%)`;
 
   const theme = themeFromHex(accent) ?? projectTheme(slug);
-  const phoneStack = phones.length > 0;
-  const stacked = !growth && !phoneStack && previews.length > 0;
+  // Images (website screens, or a growth case study's hover images) win over the ad phones.
+  const stacked = previews.length > 0;
+  const phoneStack = !stacked && phones.length > 0;
   // Either stack cycles the same way: browser screens for websites, phones for campaigns.
   const count = phoneStack ? phones.length : stacked ? previews.length : 0;
   const [hovered, setHovered] = useState(false);
@@ -163,7 +166,7 @@ export function ProjectCardView({
         <div className="relative aspect-[4/5] [transform-style:preserve-3d]" style={{ "--accent": theme.accent } as CSSProperties}>
           <div className="absolute inset-0 overflow-hidden rounded-3xl bg-[color-mix(in_oklab,var(--accent)_28%,#0c0e16)] shadow-[0_0_0_rgba(0,0,0,0)] transition-shadow duration-700 group-hover:shadow-[0_50px_80px_-30px_rgba(0,0,0,0.55)]">
             {growth ? (
-              <div className={`absolute inset-0 transition-[opacity,filter] duration-700 ${phoneStack ? "group-hover:opacity-30 group-hover:blur-[6px]" : ""}`}>
+              <div className={`absolute inset-0 transition-[opacity,filter] duration-700 ${stacked || phoneStack ? "group-hover:opacity-30 group-hover:blur-[6px]" : ""}`}>
                 <GrowthCover videos={t.work.growthCover.videos} title={t.work.growthCover.title} labels={tags.length === 0} />
               </div>
             ) : (

@@ -26,8 +26,8 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
   const sectors = useMemo(() => filterOptions(sectorList, entries.map((e) => e.sectors)), [sectorList, entries]);
   const wall = useMemo<WallProject[]>(
     () =>
-      // The wall shows website screens: growth case studies have none.
-      cmsProjects.filter((p) => p.previews.length > 0).map((p) => ({
+      // The wall shows website screens only, not growth case studies' hover images.
+      cmsProjects.filter((p) => p._type !== "growthCaseStudy" && p.previews.length > 0).map((p) => ({
         key: p._id,
         href: href(lang, "projects", p.slug ?? ""),
         name: p.title ?? "",
