@@ -47,6 +47,7 @@ export const growthCaseStudy = defineType({
       name: 'hero',
       title: 'Hero',
       type: 'object',
+      description: 'The phones next to the headline are the first 3 video ads: upload and order them in the Ads tab.',
       group: 'content',
       options: {collapsible: true},
       fields: [
@@ -119,7 +120,7 @@ export const growthCaseStudy = defineType({
     defineField({
       name: 'ads',
       title: 'Video ads',
-      description: 'The first 3 are shown on the page and on the project card.',
+      description: 'Upload each video here. The first 3 are the phones in the hero (the 1st one plays in front), in the ads section and on the project card. Drag to reorder.',
       type: 'array',
       group: 'ads',
       of: [
@@ -138,7 +139,7 @@ export const growthCaseStudy = defineType({
             defineField({
               name: 'video',
               title: 'Video file',
-              description: 'Vertical 9:16 MP4 (H.264), ideally under 20 MB. Without it, a designed poster with the hook is shown.',
+              description: 'Vertical 9:16 MP4 (H.264), ideally under 20 MB. Plays muted in the hero and with sound when opened. Without it, a designed poster with the hook is shown.',
               type: 'file',
               fieldset: 'media',
               options: {accept: 'video/mp4,video/webm'},

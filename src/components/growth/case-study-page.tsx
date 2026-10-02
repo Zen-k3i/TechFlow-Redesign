@@ -78,8 +78,8 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
   const website = safeHref(study.websiteUrl);
   const reveal = (delay: number) => ({ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, delay, ease } });
   const tags = [...(study.sectors ?? []).map((label) => ({ label, sector: true })), ...(study.services ?? []).map((label) => ({ label, sector: false }))];
-  // With fewer than 3 ads, the middle slot is filled first.
-  const slots = ads.length === 3 ? [0, 1, 2] : ads.length === 2 ? [1, 2] : [1];
+  // The first ad (Sanity order) is the front phone that plays, the next two go behind it.
+  const slots = [1, 0, 2].slice(0, ads.length);
 
   return (
     <section id="top" className="grain relative flex min-h-svh flex-col overflow-hidden bg-night px-5 pb-16 pt-32 text-white md:px-10 md:pb-20">
