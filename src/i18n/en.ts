@@ -158,7 +158,7 @@ export const en: Dictionary = {
     intro: "Every project had a number to hit. Open a case to see which one, and what became of it.",
     filterLabel: "Filter by industry",
     all: "All",
-    seeAll: "See all 21 projects",
+    seeAll: (n: number) => `See all ${n} projects`,
     growthCover: { videos: "5 videos", title: ["From ad", "to booked meeting."] },
     sectors: {
       "Finance & Juridique": "Finance & Legal",

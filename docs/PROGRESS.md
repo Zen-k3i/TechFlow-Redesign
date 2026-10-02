@@ -16,6 +16,7 @@ Update at the end of every work session (see CLAUDE.md). Newest first. Link GitH
 - Decide whether to move the remaining local content (Gato Tower case study, Mux video testimonials, contact/services team members) into Sanity.
 
 ## Done
+- 2026-10-02 — Home "Selected work" and /projets case studies share one component (`CaseStudyGrid`); "Voir les N projets" and every filter count come from Sanity; insights article count matches the "All" chip. Restored the sectors and colours three projects lost when old drafts were published (see the Gotchas in CLAUDE.md).
 - 2026-10-02 — Checked every project's sectors and card tags against techflow-agency.com/projets: all match, except Kretz Club, which was missing its second sector (Immobilier & Archi); added in Sanity (FR).
 - 2026-10-02 — Growth case study hero moved to the site's split hero frame (pitch left, fan of 3 ad phones right, grid overlay) and the brief got the shared "L'essentiel en 10 secondes" heading, so it blends with the website case studies while keeping its own figures row, steps rail and ads section.
 - 2026-10-02 — Growth case study simplified to read like a website case study (hero, brief, story in chapters with images, 3 ad phones, quote, related); funnel / A/B / kanban / community widgets removed. Agents IA hero redrawn as an n8n workflow with real logos; development hero capture; Prello quote photo.

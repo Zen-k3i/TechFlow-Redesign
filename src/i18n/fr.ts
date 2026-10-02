@@ -159,7 +159,7 @@ export const fr = {
     intro: "Chaque projet avait un objectif chiffré. Ouvrez une étude de cas pour voir lequel, et ce qu'il est devenu.",
     filterLabel: "Filtrer par secteur",
     all: "Tous",
-    seeAll: "Voir les 21 projets",
+    seeAll: (n: number) => `Voir les ${n} projets`,
     growthCover: { videos: "5 vidéos", title: ["De la publicité", "au rendez-vous."] },
     sectors: {} as Record<string, string>,
     disciplines: {} as Record<string, string>,

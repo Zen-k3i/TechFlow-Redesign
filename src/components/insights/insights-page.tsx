@@ -9,7 +9,7 @@ import { ServiceCards } from "../page/service-cards";
 import { PageHero } from "../page/ui";
 import { useLocale } from "../site/locale";
 import { FadeIn } from "../site/reveal";
-import { FilterChip } from "../site/work";
+import { FilterChip } from "../page/filter-chip";
 import { filterOptions } from "../page/filters";
 import { insightsContent, type InsightCard } from "./data";
 
@@ -180,7 +180,8 @@ function ArticleIndex({
               <div>
                 <p className="eyebrow text-brand-deep">{insightsContent[lang].all}</p>
                 <p aria-live="polite" className="mt-2 text-sm text-ink/50">
-                  {f.count(shown.length)}
+                  {/* All articles on the page (the featured one included), like the "All" chip; the matches while filtering. */}
+                  {f.count(filtering ? shown.length : articles.length)}
                 </p>
               </div>
               <label className="relative w-full md:w-[28rem] lg:w-[36rem]">

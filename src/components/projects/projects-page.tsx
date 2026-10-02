@@ -1,29 +1,22 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { useMemo } from "react";
+import { motion } from "motion/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import { href } from "@/i18n/routes";
 import { urlFor } from "@/sanity/image";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
-import { FilterChip } from "../site/work";
 import { ServiceCards } from "../page/service-cards";
 import { ClientMarquee, SectionHeader } from "../page/ui";
-import { CmsProjectCard, type CmsProject } from "./cms-project-card";
-import { filterOptions } from "../page/filters";
+import { CaseStudyGrid } from "./case-study-grid";
+import type { CmsProject } from "./cms-project-card";
 import { archive, projectsContent } from "./data";
 import { CASES_ANCHOR, ProjectsHero, type WallProject } from "./projects-hero";
-
-type Entry = { key: string; sectors: string[]; cms: CmsProject };
 
 export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProject[]; sectorList: string[] }) {
   const { lang, t } = useLocale();
   const c = projectsContent[lang];
-  // Website projects and growth case studies, all from Sanity, filtered by the same sector tags.
-  const entries = useMemo<Entry[]>(() => cmsProjects.map((p) => ({ key: p._id, sectors: p.sectors ?? [], cms: p })), [cmsProjects]);
-  // Filter buttons: the Sector list from Sanity, as used by these projects.
-  const sectors = useMemo(() => filterOptions(sectorList, entries.map((e) => e.sectors)), [sectorList, entries]);
   const wall = useMemo<WallProject[]>(
     () =>
       // The wall shows website screens only, not growth case studies' hover images.
@@ -40,8 +33,6 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
       })),
     [cmsProjects, lang],
   );
-  const [filter, setFilter] = useState<string | null>(null);
-  const visible = entries.filter((e) => !filter || e.sectors.includes(filter));
 
   return (
     <>
@@ -55,46 +46,7 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.grid.eyebrow} title={c.grid.heading} intro={c.grid.intro} tone="light" />
 
-          <LayoutGroup>
-            <div role="group" aria-label={t.work.filterLabel} className="mt-12 flex flex-wrap gap-2">
-              <FilterChip active={filter === null} onClick={() => setFilter(null)} label={t.work.all} count={entries.length} />
-              {sectors.map(([sector, count]) => (
-                <FilterChip
-                  key={sector}
-                  active={filter === sector}
-                  onClick={() => setFilter(sector)}
-                  label={sector}
-                  count={count}
-                />
-              ))}
-            </div>
-
-            <motion.ul layout className="mt-10 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-              <AnimatePresence mode="popLayout" initial={false}>
-                {visible.map((entry, i) => (
-                  <motion.li
-                    key={entry.key}
-                    layout
-                    initial={{ opacity: 0, scale: 0.94 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.94 }}
-                    transition={{ duration: 0.4, ease }}
-                  >
-                    {/* Cards rise in row by row the first time they scroll into view. */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 70, rotateX: 8 }}
-                      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                      viewport={{ once: true, margin: "-8% 0px" }}
-                      transition={{ duration: 0.9, delay: (i % 3) * 0.12, ease }}
-                      style={{ transformPerspective: 1200 }}
-                    >
-                      <CmsProjectCard project={entry.cms} />
-                    </motion.div>
-                  </motion.li>
-                ))}
-              </AnimatePresence>
-            </motion.ul>
-          </LayoutGroup>
+          <CaseStudyGrid cmsProjects={cmsProjects} sectorList={sectorList} />
 
           <div className="mt-32">
             <SectionHeader eyebrow={c.archive.eyebrow} title={c.archive.heading} intro={c.archive.intro} tone="light" />
