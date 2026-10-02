@@ -52,7 +52,14 @@ export const growthCaseStudy = defineType({
       group: 'content',
       options: {collapsible: true},
       fields: [
-        defineField({name: 'tagline', title: 'Service tag', description: 'e.g. "Growth marketing · Luxury real estate · Phnom Penh"', type: 'string'}),
+        defineField({
+          name: 'tags',
+          title: 'Service tag',
+          description: 'Pick from the Sectors list, e.g. Growth Marketing, Real Estate. Shown joined with " · " in the pill above the title.',
+          type: 'array',
+          of: [defineArrayMember({type: 'reference', to: [{type: 'sector'}], options: {filter: sameLanguage, disableNew: true}})],
+          validation: (r) => r.unique(),
+        }),
         defineField({name: 'headline', title: 'Headline', description: 'One bold, outcome-driven line.', type: 'string'}),
         defineField({name: 'status', title: 'Live status', description: 'e.g. "Campaign live on Facebook, Instagram and TikTok". Leave empty to hide.', type: 'string'}),
         defineField({name: 'ctaLabel', title: 'Primary button', description: 'Goes to the contact page.', type: 'string'}),
@@ -246,7 +253,7 @@ export const growthCaseStudy = defineType({
     {...seoField, group: 'seo'},
   ],
   preview: {
-    select: {title: 'title', subtitle: 'hero.tagline', language: 'language', media: 'coverImage'},
+    select: {title: 'title', subtitle: 'hero.tags.0.title', language: 'language', media: 'coverImage'},
     prepare: ({title, subtitle, language, media}) => ({
       title,
       subtitle: [language?.toUpperCase(), subtitle].filter(Boolean).join(' · '),

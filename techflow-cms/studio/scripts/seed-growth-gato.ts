@@ -61,7 +61,10 @@ const content: Record<Lang, Record<string, unknown>> = {
     ],
     services: ['Publicités vidéo', 'Scripts & copywriting', 'A/B testing', 'Lead scoring', 'Community management'],
     hero: {
-      tagline: 'Growth marketing · Immobilier de luxe · Phnom Penh',
+      tags: [
+        {_key: 'growth-marketing', _type: 'reference', _ref: 'sector-fr-growth-marketing'},
+        {_key: 'real-estate', _type: 'reference', _ref: 'sector-fr-real-estate'},
+      ],
       headline: 'Vendre du luxe sur plan, une vidéo à la fois.',
       status: 'Campagne en cours sur Facebook, Instagram et TikTok',
       ctaLabel: 'Lancer ma campagne',
@@ -137,7 +140,10 @@ const content: Record<Lang, Record<string, unknown>> = {
     ],
     services: ['Video ads', 'Scripts & copywriting', 'A/B testing', 'Lead scoring', 'Community management'],
     hero: {
-      tagline: 'Growth marketing · Luxury real estate · Phnom Penh',
+      tags: [
+        {_key: 'growth-marketing', _type: 'reference', _ref: 'sector-en-growth-marketing'},
+        {_key: 'real-estate', _type: 'reference', _ref: 'sector-en-real-estate'},
+      ],
       headline: 'Selling off-plan luxury, one video at a time.',
       status: 'Campaign live on Facebook, Instagram and TikTok',
       ctaLabel: 'Launch my campaign',

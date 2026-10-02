@@ -103,7 +103,8 @@ export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
     "slug": slug.current,
     accentColor,
     summary,
-    hero { tagline, headline, status, ctaLabel, stats[]{ _key, value, label } },
+    // "Service tag": sectors picked in the Studio, shown joined in the hero pill.
+    hero { "tags": array::compact(tags[]->title), headline, status, ctaLabel, stats[]{ _key, value, label } },
     // Same story as a website case study: chapters at each h2, image groups between paragraphs.
     body[]{
       ...,

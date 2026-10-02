@@ -75,7 +75,9 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
   const hero = study.hero;
   const website = safeHref(study.websiteUrl);
   const reveal = (delay: number) => ({ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, delay, ease } });
-  const tags = [...(study.sectors ?? []).map((label) => ({ label, sector: true })), ...(study.services ?? []).map((label) => ({ label, sector: false }))];
+  const serviceTag = hero?.tags ?? [];
+  // Sectors already in the service tag pill aren't repeated in the tags below.
+  const tags = [...(study.sectors ?? []).filter((s) => !serviceTag.includes(s)).map((label) => ({ label, sector: true })), ...(study.services ?? []).map((label) => ({ label, sector: false }))];
   // The first ad (Sanity order) is the front phone that plays, the next two go behind it.
   const slots = [1, 0, 2].slice(0, ads.length);
 
@@ -112,7 +114,7 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
           <div>
             <motion.div {...reveal(0.1)} className="flex flex-wrap items-center gap-4">
               <ClientLogo image={study.logo} name={study.title ?? ""} fill={study.logoFill} />
-              {hero?.tagline && <span className="rounded-full border border-(--accent)/40 bg-(--accent)/10 px-3.5 py-1.5 text-sm text-(--accent)">{hero.tagline}</span>}
+              {serviceTag.length > 0 && <span className="rounded-full border border-(--accent)/40 bg-(--accent)/10 px-3.5 py-1.5 text-sm text-(--accent)">{serviceTag.join(" · ")}</span>}
             </motion.div>
 
             <RevealHeading as="h1" text={study.title ?? ""} className="mt-8 font-serif text-[clamp(3.25rem,7.5vw,7.5rem)] leading-[0.9] tracking-[-0.03em]" />
