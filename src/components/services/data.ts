@@ -256,6 +256,7 @@ const fr: Record<ServiceKey, ServiceContent> = {
         "Techflow a livré un projet web exceptionnel. Tout était parfaitement exempt de bugs, bien documenté et au-delà de toutes nos attentes. Leur communication proactive a rendu la collaboration très fluide.",
       name: "Ludovic de Jouvancourt",
       role: "CEO @Prello",
+      photo: "/images/people/ludovic-de-jouvancourt.jpg",
     },
     highlight: {
       eyebrow: "Méthode agile",
@@ -669,6 +670,7 @@ const en: Record<ServiceKey, ServiceContent> = {
       quote: "Techflow delivered an exceptional web project. Everything was completely bug-free, well-documented, and exceeded all expectations. Their proactive communication made our collaboration a breeze.",
       name: "Ludovic de Jouvancourt",
       role: "CEO @Prello",
+      photo: "/images/people/ludovic-de-jouvancourt.jpg",
     },
     highlight: {
       eyebrow: "Agile method",

@@ -23,16 +23,22 @@ const copy = {
     },
     dev: { deploy: "Déployé en production", deployTime: "il y a 38 s", scores: ["Performance", "Accessibilité", "Bonnes pratiques", "SEO"] },
     ai: {
-      trigger: ["Gmail", "Nouvel e-mail reçu"],
-      email: ["Sophie Martin", "Demande de devis · refonte du site", "Bonjour, nous cherchons une agence pour refondre…"],
-      agent: ["Agent IA", "Qualifie et rédige"],
-      result: ["Lead chaud · score 92/100", "Réponse personnalisée rédigée en 4 s"],
+      workflow: "Qualification des leads",
+      active: "Actif",
+      trigger: ["Gmail Trigger", "Nouvel e-mail reçu"],
+      agent: ["AI Agent", "Tools Agent"],
+      ports: ["Chat Model", "Memory", "Tool"],
+      memory: "Simple Memory",
+      tool: ["HubSpot", "Crée le deal · 18 k€"],
       outputs: [
-        ["HubSpot", "Deal créé · 18 k€"],
+        ["Gmail", "Réponse envoyée"],
         ["Slack", "#ventes · @Maximilien"],
-        ["Sheets", "Ligne ajoutée au reporting"],
+        ["Google Sheets", "Ligne ajoutée au reporting"],
       ],
-      model: "Modèle",
+      sticky: ["Sophie Martin", "Demande de devis · refonte du site", "Bonjour, nous cherchons une agence pour refondre…"],
+      item: "1 item",
+      execute: "Exécuter le workflow",
+      result: ["Lead chaud · score 92/100", "Réponse personnalisée rédigée en 4 s"],
       run: "Exécution",
     },
     funnel: {
@@ -55,16 +61,22 @@ const copy = {
     },
     dev: { deploy: "Deployed to production", deployTime: "38 s ago", scores: ["Performance", "Accessibility", "Best practices", "SEO"] },
     ai: {
-      trigger: ["Gmail", "New email received"],
-      email: ["Sophie Martin", "Quote request · website redesign", "Hi, we're looking for an agency to redesign…"],
-      agent: ["AI agent", "Qualifies and drafts"],
-      result: ["Hot lead · score 92/100", "Personalised reply drafted in 4 s"],
+      workflow: "Lead qualification",
+      active: "Active",
+      trigger: ["Gmail Trigger", "New email received"],
+      agent: ["AI Agent", "Tools Agent"],
+      ports: ["Chat Model", "Memory", "Tool"],
+      memory: "Simple Memory",
+      tool: ["HubSpot", "Creates the deal · €18k"],
       outputs: [
-        ["HubSpot", "Deal created · €18k"],
+        ["Gmail", "Reply sent"],
         ["Slack", "#sales · @Maximilien"],
-        ["Sheets", "Row added to report"],
+        ["Google Sheets", "Row added to report"],
       ],
-      model: "Model",
+      sticky: ["Sophie Martin", "Quote request · website redesign", "Hi, we're looking for an agency to redesign…"],
+      item: "1 item",
+      execute: "Execute workflow",
+      result: ["Hot lead · score 92/100", "Personalised reply drafted in 4 s"],
       run: "Run",
     },
     funnel: {
@@ -356,9 +368,8 @@ function Ring({ value, label, delay, className = "" }: { value: number; label: s
 function DevStage({ content }: { content: ServiceContent }) {
   const { lang } = useLocale();
   const c = copy[lang].dev;
-  const slug = content.hero.project;
-  const shots = projectPreviews(slug);
-  const shot = shots[2] ?? shots[0] ?? projectImage(slug);
+  // A real capture of the OPCO EP hero (the hero project), rather than a cropped preview.
+  const shot = "/images/service/opco-hero_section.jpg";
 
   return (
     <>
@@ -421,119 +432,254 @@ function DevStage({ content }: { content: ServiceContent }) {
 
 /* -------------------------------------------------------------- AI agents */
 
-function Node({ icon, bg, title, sub, className = "" }: { icon: string; bg: string; title: string; sub: string; className?: string }) {
-  return (
-    <div className={`flex items-center gap-3 rounded-2xl border border-white/10 bg-[#141724]/95 p-3 pr-5 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.9)] ${className}`}>
-      <span className="grid size-9 shrink-0 place-items-center rounded-xl text-base text-white" style={{ background: bg }}>
-        {icon}
-      </span>
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-medium text-white">{title}</span>
-        <span className="block truncate text-[11px] text-white/45">{sub}</span>
-      </span>
-      <span className="ml-auto size-2 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
-    </div>
-  );
-}
-
-const models = ["Claude", "GPT", "Mistral", "Llama"];
-const outputStyle = [
-  { icon: "◎", bg: "#ff7a59" },
-  { icon: "#", bg: "#611f69" },
-  { icon: "▦", bg: "#0f9d58" },
+/** Real app logos (brand colours) for the n8n-style workflow. */
+const LOGO = {
+  gmail: "/images/tools/gmail.svg",
+  slack: "/images/tools/slack.svg",
+  sheets: "/images/tools/google-sheets.svg",
+  hubspot: "/images/tools/hubspot-color.svg",
+};
+const MODELS = [
+  { name: "Anthropic", logo: "/images/tools/anthropic.svg" },
+  { name: "OpenAI", logo: "/images/tools/openai.svg" },
+  { name: "Mistral", logo: "/images/tools/mistral.svg" },
+  { name: "Meta Llama", logo: "/images/tools/meta.svg" },
 ];
 
-function AgentCard({ tick }: { tick: number }) {
-  const { lang } = useLocale();
-  const c = copy[lang].ai;
+/** Where each workflow step is in the run: waiting, running, or done (n8n's green check). */
+type RunState = "idle" | "running" | "done";
+
+function NodeBox({ state, shape = "node", className = "", children }: { state: RunState; shape?: "node" | "trigger" | "sub"; className?: string; children: React.ReactNode }) {
+  const radius = shape === "trigger" ? "rounded-l-[42%] rounded-r-xl" : shape === "sub" ? "rounded-full" : "rounded-xl";
+  const ring = state === "running" ? "border-[#ff6d5a] shadow-[0_0_0_4px_rgba(255,109,90,0.25)]" : state === "done" ? "border-emerald-400" : "border-[#d4d7de]";
   return (
-    <div className="relative rounded-3xl border border-brand/60 bg-linear-to-b from-brand/25 to-[#141724] p-5 shadow-[0_0_80px_-10px_rgba(71,102,255,0.6)]">
-      <div className="flex items-center gap-3">
-        <span className="grid size-11 place-items-center rounded-2xl bg-brand text-lg text-white">✦</span>
-        <span>
-          <span className="block font-medium text-white">{c.agent[0]}</span>
-          <span className="block text-xs text-white/50">{c.agent[1]}</span>
-        </span>
-      </div>
-      <p className="eyebrow mt-5 text-white/40">{c.model}</p>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        {models.map((m, i) => (
-          <span key={m} className={`rounded-full px-2.5 py-1 text-[11px] transition-colors duration-500 ${i === tick % models.length ? "bg-white text-night" : "bg-white/5 text-white/45"}`}>
-            {m}
-          </span>
-        ))}
-      </div>
+    <div className={`relative grid place-items-center border-2 bg-white transition-[border-color,box-shadow] duration-300 ${radius} ${ring} ${className}`}>
+      {children}
+      {state === "done" && (
+        <span className="absolute -right-1.5 -top-1.5 grid size-4 place-items-center rounded-full bg-emerald-400 text-[9px] font-bold text-night">✓</span>
+      )}
+      {state === "running" && <span className="absolute -right-1.5 -top-1.5 size-4 animate-spin rounded-full border-2 border-[#ff6d5a] border-t-transparent bg-white" />}
     </div>
   );
 }
 
+function Logo({ src, className = "size-[46%]" }: { src: string; className?: string }) {
+  return <Image src={src} alt="" width={40} height={40} className={`object-contain ${className}`} />;
+}
+
+function Robot({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="4" y="8" width="16" height="11" rx="3" />
+      <path d="M12 4v4M9 13h.01M15 13h.01M9.5 16h5M2 12v3M22 12v3" />
+    </svg>
+  );
+}
+
+/** Label under a node, as on the n8n canvas. */
+function Caption({ title, sub, narrow = false }: { title: string; sub?: string; narrow?: boolean }) {
+  return (
+    // Wider than its node, as on the n8n canvas; sub-nodes sit close together, so theirs stay narrower.
+    <span className={`${narrow ? "-mx-[18%]" : "-mx-[60%]"} mt-1.5 block text-center leading-tight`}>
+      <span className="block truncate text-[11px] font-medium text-white">{title}</span>
+      {sub && <span className="block truncate text-[10px] text-white/45">{sub}</span>}
+    </span>
+  );
+}
+
+/**
+ * An n8n workflow: Gmail Trigger → AI Agent (chat model, memory and a HubSpot tool hanging below
+ * it) → reply, Slack and Google Sheets. The run plays on a loop: each node spins, then gets its
+ * green check, and "1 item" appears on the connections it has passed. Real logos, brand colours.
+ */
 function AgentStage() {
   const { lang } = useLocale();
   const c = copy[lang].ai;
-  const tick = useTicker(1800);
-  const edges = ["M24 47 C31 47 31 47 37 47", "M63 47 C70 47 69 22 75 22", "M63 47 C70 47 70 50 75 50", "M63 47 C70 47 69 78 75 78"];
+  const tick = useTicker(1300);
+  const step = tick % 7; // 0 trigger · 1 agent · 2 outputs · 3–6 done
+  const model = MODELS[Math.floor(tick / 7) % MODELS.length];
+  const state = (at: number): RunState => (step < at ? "idle" : step === at ? "running" : "done");
+  const passed = (at: number) => step > at;
+
+  // Connections, in the 0–100 viewBox of the canvas (stretched to its size). Node sizes are a share
+  // of the canvas width, which is twice its height on desktop, so these line up with the nodes.
+  const main = [{ d: "M17.5 40 C25 40 25 40 32.5 40", after: 0 }];
+  const outs = [16, 40, 64].map((y) => ({ d: `M58.5 40 C67 40 66 ${y} 75.5 ${y}`, after: 1 }));
+  const subs = [36.8, 45.5, 54.2].map((x, i) => ({ d: `M${x} 50 C${x} 58 ${[38, 46, 54][i]} 60 ${[38, 46, 54][i]} 66`, after: 0 }));
 
   return (
     <>
-      <svg aria-hidden viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 hidden size-full md:block">
-        {edges.map((d) => (
-          <g key={d}>
-            <path d={d} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-            <path d={d} fill="none" stroke="#4791ff" strokeWidth="2" strokeDasharray="4 10" vectorEffect="non-scaling-stroke" className="animate-dash" />
-          </g>
-        ))}
-      </svg>
-
+      {/* Desktop: the canvas */}
       <div className="absolute inset-0 hidden md:block">
-        <Layer depth={0.8} delay={0.2} className="left-[4%] top-[47%] w-[20%] -translate-y-1/2">
-          <Node icon="✉" bg="#ea4335" title={c.trigger[0]} sub={c.trigger[1]} />
-        </Layer>
-        <Layer depth={0.8} delay={0.35} className="left-[4%] top-[57%] w-[20%]">
-          <div className="rounded-2xl border border-white/10 bg-[#141724]/80 p-3.5 text-[11px] leading-snug">
-            <p className="font-medium text-white/80">{c.email[0]}</p>
-            <p className="mt-1 truncate text-white/60">{c.email[1]}</p>
-            <p className="mt-1 line-clamp-2 text-white/35">{c.email[2]}</p>
-          </div>
-        </Layer>
-        <Layer depth={0.5} delay={0.4} className="left-[37%] top-[47%] w-[26%] -translate-y-1/2">
-          <AgentCard tick={tick} />
-        </Layer>
-        <Layer depth={0.7} delay={1.1} className="left-[37%] top-[68%] w-[26%]">
-          <div className="flex items-start gap-2.5 rounded-2xl bg-white p-3.5 text-ink shadow-2xl">
-            <span className="grid size-6 shrink-0 place-items-center rounded-full bg-emerald-400 text-[11px] text-night">✓</span>
-            <span className="min-w-0 text-[11px] leading-snug">
-              <span className="block font-medium">{c.result[0]}</span>
-              <span className="block text-ink/55">{c.result[1]}</span>
+        <div className="absolute left-4 top-4 z-10 flex items-center gap-3 rounded-lg border border-white/10 bg-[#1e2030] px-3 py-1.5 text-xs text-white/80">
+          <Image src="/images/tools/n8n.svg" alt="n8n" width={36} height={14} className="h-3.5 w-auto" />
+          <span className="h-3.5 w-px bg-white/15" />
+          {c.workflow}
+          <span className="flex items-center gap-1.5 text-[11px] text-emerald-300">
+            <span className="relative h-3.5 w-6 rounded-full bg-emerald-500">
+              <span className="absolute right-0.5 top-0.5 size-2.5 rounded-full bg-white" />
             </span>
+            {c.active}
+          </span>
+        </div>
+
+        <svg aria-hidden viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 size-full">
+          {[...main, ...outs].map(({ d, after }) => (
+            <g key={d}>
+              <path d={d} fill="none" stroke={passed(after) ? "#34d399" : "rgba(255,255,255,0.28)"} strokeWidth="2" vectorEffect="non-scaling-stroke" className="transition-colors duration-300" />
+              {step === after + 1 && <path d={d} fill="none" stroke="#ff6d5a" strokeWidth="2" strokeDasharray="4 10" vectorEffect="non-scaling-stroke" className="animate-dash" />}
+            </g>
+          ))}
+          {subs.map(({ d }) => (
+            <path key={d} d={d} fill="none" stroke={step === 1 ? "#ff6d5a" : "rgba(255,255,255,0.28)"} strokeWidth="1.5" strokeDasharray="5 4" vectorEffect="non-scaling-stroke" />
+          ))}
+        </svg>
+
+        {/* "1 item" on connections already passed */}
+        {passed(0) && <span className="absolute left-[25%] top-[35%] -translate-x-1/2 text-[10px] text-emerald-300">{c.item}</span>}
+        {passed(2) && [16, 40, 64].map((y) => (
+          <span key={y} className="absolute left-[69%] -translate-x-1/2 text-[10px] text-emerald-300" style={{ top: `${y - 5.5}%` }}>
+            {c.item}
+          </span>
+        ))}
+
+        {/* Gmail Trigger */}
+        <Layer depth={0.7} delay={0.2} className="left-[8.5%] top-[31%] w-[9%]">
+          <div className="relative">
+            <span aria-hidden className="absolute -left-4 top-1/2 -translate-y-1/2 text-sm text-[#ff6d5a]">⚡</span>
+            <NodeBox state={state(0)} shape="trigger" className="aspect-square w-full">
+              <Logo src={LOGO.gmail} />
+            </NodeBox>
+            <Caption title={c.trigger[0]} sub={c.trigger[1]} />
           </div>
         </Layer>
-        {c.outputs.map(([title, sub], i) => (
-          <Layer key={title} depth={1 + i * 0.3} delay={0.6 + i * 0.12} className={`right-[4%] w-[21%] -translate-y-1/2 ${["top-[22%]", "top-[50%]", "top-[78%]"][i]}`}>
-            <Node icon={outputStyle[i].icon} bg={outputStyle[i].bg} title={title} sub={sub} />
+
+        {/* AI Agent with its sub-node ports */}
+        <Layer depth={0.5} delay={0.35} className="left-[32.5%] top-[30%] w-[26%]">
+          <NodeBox state={state(1)} className="aspect-[2.6/1] w-full !place-items-stretch">
+            <div className="flex items-center gap-3 px-4">
+              <Robot className="size-8 shrink-0 text-[#7d7f8a]" />
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-ink">{c.agent[0]}</span>
+                <span className="block truncate text-[11px] text-ink/50">{c.agent[1]}</span>
+              </span>
+            </div>
+            <div className="grid grid-cols-3 self-end pb-1.5 text-center text-[9px] text-ink/45">
+              {c.ports.map((p) => (
+                <span key={p}>
+                  {p}
+                  {p === c.ports[0] && <span className="text-[#ff6d5a]">*</span>}
+                  <span className="mx-auto mt-0.5 block size-1.5 rotate-45 bg-[#a2a5b0]" />
+                </span>
+              ))}
+            </div>
+          </NodeBox>
+        </Layer>
+
+        {/* Sub-nodes: chat model (cycles through providers), memory, HubSpot tool */}
+        {[
+          { x: "left-[34.5%]", logo: model.logo, title: model.name, sub: c.ports[0] },
+          { x: "left-[42.5%]", icon: true, title: c.memory.split(" ")[0], sub: c.ports[1] },
+          { x: "left-[50.5%]", logo: LOGO.hubspot, title: c.tool[0], sub: c.ports[2] },
+        ].map((n, i) => (
+          <Layer key={i} depth={0.9} delay={0.5 + i * 0.1} className={`${n.x} top-[66%] w-[7%]`}>
+            <NodeBox state={step === 1 ? "running" : step > 1 ? "done" : "idle"} shape="sub" className="aspect-square w-full">
+              <AnimatePresence mode="wait">
+                {n.icon ? (
+                  <svg viewBox="0 0 24 24" className="size-[46%] text-[#7d7f8a]" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+                    <ellipse cx="12" cy="6" rx="7" ry="3" />
+                    <path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" />
+                  </svg>
+                ) : (
+                  <motion.span key={n.logo} initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }} className="grid size-full place-items-center">
+                    <Logo src={n.logo!} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </NodeBox>
+            <Caption title={n.title} sub={n.sub} narrow />
           </Layer>
         ))}
+
+        {/* Outputs */}
+        {c.outputs.map(([title, sub], i) => (
+          <Layer key={title} depth={1 + i * 0.25} delay={0.6 + i * 0.12} className={`left-[75.5%] w-[8%] ${["top-[8%]", "top-[32%]", "top-[56%]"][i]}`}>
+            <NodeBox state={state(2)} className="aspect-square w-full">
+              <Logo src={[LOGO.gmail, LOGO.slack, LOGO.sheets][i]} />
+            </NodeBox>
+            <Caption title={title} sub={sub} />
+          </Layer>
+        ))}
+
+        {/* Sticky note with the incoming email */}
+        <Layer depth={1.3} delay={0.8} className="bottom-[8%] left-[3%] w-[22%]">
+          <div className="-rotate-2 rounded-md bg-[#fff5c2] p-3 text-[11px] leading-snug text-ink shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
+            <p className="font-semibold">✉ {c.sticky[0]}</p>
+            <p className="mt-1 truncate text-ink/70">{c.sticky[1]}</p>
+            <p className="mt-1 line-clamp-2 text-ink/50">{c.sticky[2]}</p>
+          </div>
+        </Layer>
+
+        {/* Run result */}
+        <AnimatePresence>
+          {step >= 3 && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="absolute left-[3%] top-[14%] z-10 flex max-w-[24%] items-start gap-2.5 rounded-xl bg-white p-3 text-ink shadow-2xl"
+            >
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-emerald-400 text-[11px] text-night">✓</span>
+              <span className="min-w-0 text-[11px] leading-snug">
+                <span className="block font-medium">{c.result[0]}</span>
+                <span className="block text-ink/55">{c.result[1]}</span>
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div className="absolute inset-x-0 bottom-12 top-0 flex flex-col justify-center gap-2 px-5 md:hidden">
-        <Node icon="✉" bg="#ea4335" title={c.trigger[0]} sub={c.email[1]} />
-        <span className="mx-auto h-4 w-px bg-brand-sky/60" />
-        <AgentCard tick={tick} />
-        <span className="mx-auto h-4 w-px bg-brand-sky/60" />
-        <div className="grid grid-cols-3 gap-2">
+      {/* Phones: the same flow, top to bottom */}
+      <div className="absolute inset-x-0 bottom-14 top-0 flex flex-col items-center justify-center gap-2 px-5 md:hidden">
+        <div className="w-20">
+          <NodeBox state={state(0)} shape="trigger" className="aspect-square w-full">
+            <Logo src={LOGO.gmail} />
+          </NodeBox>
+          <Caption title={c.trigger[0]} />
+        </div>
+        <span className={`h-5 w-0.5 ${passed(0) ? "bg-emerald-400" : "bg-white/25"}`} />
+        <NodeBox state={state(1)} className="w-full max-w-xs py-3">
+          <div className="flex items-center gap-3">
+            <Robot className="size-7 text-[#7d7f8a]" />
+            <span className="text-sm font-semibold text-ink">{c.agent[0]}</span>
+            <span className="flex size-7 items-center justify-center rounded-full border border-[#d4d7de]">
+              <Logo src={model.logo} className="size-4" />
+            </span>
+          </div>
+        </NodeBox>
+        <span className={`h-5 w-0.5 ${passed(1) ? "bg-emerald-400" : "bg-white/25"}`} />
+        <div className="grid w-full max-w-xs grid-cols-3 gap-3">
           {c.outputs.map(([title], i) => (
-            <div key={title} className="flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-[#141724]/95 p-3">
-              <span className="grid size-8 place-items-center rounded-xl text-sm text-white" style={{ background: outputStyle[i].bg }}>
-                {outputStyle[i].icon}
-              </span>
-              <span className="text-xs font-medium text-white">{title}</span>
+            <div key={title}>
+              <NodeBox state={state(2)} className="aspect-square w-full">
+                <Logo src={[LOGO.gmail, LOGO.slack, LOGO.sheets][i]} />
+              </NodeBox>
+              <Caption title={title} />
             </div>
           ))}
         </div>
       </div>
 
-      <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-full border border-white/10 bg-[#141724] px-3 py-1.5 font-mono text-[11px] text-white/60">
-        <span className="size-1.5 animate-pulse rounded-full bg-emerald-400" />
-        {c.run} #{1284 + tick} · {(1.8 + ((tick * 7) % 10) / 10).toFixed(1)} s · ✓
+      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+        <span className="flex items-center gap-1.5 rounded-lg bg-[#ff6d5a] px-3 py-1.5 text-[11px] font-medium text-white shadow-[0_10px_30px_-10px_rgba(255,109,90,0.8)]">
+          <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3" />
+          </svg>
+          {c.execute}
+        </span>
+        <span className="hidden rounded-lg border border-white/10 bg-[#1e2030] px-2.5 py-1.5 font-mono text-[11px] text-white/60 sm:inline">
+          {c.run} #{1284 + Math.floor(tick / 7)} · {step >= 3 ? "✓ 4.1 s" : "…"}
+        </span>
       </div>
     </>
   );
