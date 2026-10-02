@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useStill } from "./use-still";
-import { animate, motion, useInView, useMotionValue, useTransform } from "motion/react";
+import { animate, m as motion, useInView, useMotionValue, useTransform } from "motion/react";
 import { ease } from "./content";
 
 export function parseAccents(text: string) {

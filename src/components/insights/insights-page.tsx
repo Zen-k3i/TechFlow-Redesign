@@ -27,7 +27,7 @@ function Meta({ article, light = false }: { article: InsightCard; light?: boolea
   const c = insightsContent[lang];
   const category = article.categories?.[0];
   return (
-    <p className={`flex flex-wrap items-center gap-x-3 gap-y-2 text-sm ${light ? "text-ink/50" : "text-white/50"}`}>
+    <p className={`flex flex-wrap items-center gap-x-3 gap-y-2 text-sm ${light ? "text-ink/60" : "text-white/50"}`}>
       {category && (
         <span className={`rounded-full px-3 py-1 ${light ? "bg-brand-deep/10 text-brand-deep" : "bg-brand-sky/15 text-brand-sky"}`}>{category}</span>
       )}
@@ -179,7 +179,7 @@ function ArticleIndex({
             <div className="mt-20 flex flex-wrap items-end justify-between gap-6 border-t border-ink/10 pt-16 md:mt-28 md:pt-20">
               <div>
                 <p className="eyebrow text-brand-deep">{insightsContent[lang].all}</p>
-                <p aria-live="polite" className="mt-2 text-sm text-ink/50">
+                <p aria-live="polite" className="mt-2 text-sm text-ink/60">
                   {/* All articles on the page (the featured one included), like the "All" chip; the matches while filtering. */}
                   {f.count(filtering ? shown.length : articles.length)}
                 </p>

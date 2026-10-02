@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { m as motion, useMotionValue, useSpring } from "motion/react";
 import { href } from "@/i18n/routes";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";

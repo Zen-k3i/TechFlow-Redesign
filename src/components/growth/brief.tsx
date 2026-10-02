@@ -60,16 +60,16 @@ export function GrowthBrief({ study }: { study: GrowthStudy }) {
           <FadeIn className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
             {facts.map((f) => (
               <p key={f.label}>
-                <span className="eyebrow mr-2 text-white/40">{f.label}</span>
+                <span className="eyebrow mr-2 text-white/55">{f.label}</span>
                 <span className="text-white/80">{f.value}</span>
               </p>
             ))}
             {tools.length > 0 && (
               <p>
-                <span className="eyebrow mr-2 text-white/40">{c.tools}</span>
+                <span className="eyebrow mr-2 text-white/55">{c.tools}</span>
                 {tools.map((tool, i) => (
                   <span key={tool._id}>
-                    {i > 0 && <span className="text-white/30">, </span>}
+                    {i > 0 && <span className="text-white/55">, </span>}
                     <Link href={href(lang, "tools", tool.slug ?? "")} className="text-white/80 underline-offset-4 hover:text-(--accent) hover:underline">
                       {tool.title}
                     </Link>

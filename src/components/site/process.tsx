@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useInView, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, m as motion, useInView, useScroll, useTransform } from "motion/react";
 import type { Dictionary } from "@/i18n/fr";
 import { ease } from "./content";
 import { useLocale } from "./locale";
@@ -133,7 +133,7 @@ function StepScreen({ steps, current }: { steps: Dictionary["process"]["steps"];
               </motion.span>
             </AnimatePresence>
           </span>
-          <span className="eyebrow flex items-center gap-1 text-white/40">
+          <span className="eyebrow flex items-center gap-1 text-white/55">
             {t.process.week}
             <span className="relative inline-block h-[1.2em] w-[1ch] overflow-hidden text-brand-sky">
               <AnimatePresence mode="popLayout" initial={false}>

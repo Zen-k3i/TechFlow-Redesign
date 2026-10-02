@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { ease, projectImage } from "./content";
 import { useLocale } from "./locale";
 import { FadeIn, RevealHeading } from "./reveal";
@@ -45,12 +45,12 @@ export function Services() {
                     aria-expanded={isActive}
                     className="group flex w-full items-center gap-5 py-6 text-left md:py-7"
                   >
-                    <span className={`eyebrow transition-colors ${isActive ? "text-brand-sky" : "text-white/35"}`}>
+                    <span className={`eyebrow transition-colors ${isActive ? "text-brand-sky" : "text-white/55"}`}>
                       0{i + 1}
                     </span>
                     <span
                       className={`font-serif text-4xl leading-none transition-[color,transform] duration-500 md:text-6xl ${
-                        isActive ? "translate-x-2 text-white" : "text-white/35 group-hover:text-white/70"
+                        isActive ? "translate-x-2 text-white" : "text-white/55 group-hover:text-white/70"
                       }`}
                     >
                       {s.title}

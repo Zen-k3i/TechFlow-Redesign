@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useStill } from "./use-still";
-import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { m as motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { FadeIn, RevealHeading, parseAccents } from "./reveal";
@@ -83,7 +83,9 @@ function Word({
   accent: boolean;
 }) {
   const still = useStill();
-  const opacity = useTransform(progress, range, [0.14, 1]);
+  // Dimmed words still meet the 3:1 contrast for large text (0.14 failed the accessibility audit):
+  // ink needs 0.5 on paper, the blue accent 0.75.
+  const opacity = useTransform(progress, range, [accent ? 0.75 : 0.5, 1]);
 
   return (
     <>

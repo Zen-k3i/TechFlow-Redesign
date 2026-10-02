@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { FAQ_QUERY_RESULT } from "@/sanity.types";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";

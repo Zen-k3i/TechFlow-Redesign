@@ -23,7 +23,7 @@ export function ToolLink({ tool, tone = "light" }: { tool: ToolCard; tone?: "lig
       <span className={`flex size-14 items-center justify-center rounded-2xl ${light ? "bg-paper" : "bg-white"}`}>
         <SanityImage image={tool.logo} alt="" width={160} sizes="56px" className="h-8 w-8 object-contain" />
       </span>
-      <h3 className="mt-6 font-serif text-3xl leading-none">{tool.title}</h3>
+      <h2 className="mt-6 font-serif text-3xl leading-none">{tool.title}</h2>
       {tool.intro && <p className={`mt-3 line-clamp-3 text-sm leading-relaxed ${light ? "text-ink/60" : "text-white/55"}`}>{tool.intro}</p>}
       <span className={`mt-auto inline-flex items-center gap-2 pt-6 text-sm font-medium ${light ? "text-brand-deep" : "text-brand-sky"}`}>
         {c.discover}

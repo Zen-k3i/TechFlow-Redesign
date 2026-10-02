@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 
 /** Filter button with a count; the active one gets a sliding ink pill (`layoutId`, wrap the row in a `LayoutGroup`). */
 export function FilterChip({

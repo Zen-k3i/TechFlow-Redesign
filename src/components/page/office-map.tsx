@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { useStill } from "../site/use-still";
 
 /** Coordinate space of `/images/world-dots.svg`, a dotted version of the studio's world map. */

@@ -100,7 +100,7 @@ export function Footer({ cta = true }: { cta?: boolean }) {
           </div>
           {columns.map((col) => (
             <div key={col.title}>
-              <p className="eyebrow text-white/40">{col.title}</p>
+              <p className="eyebrow text-white/55">{col.title}</p>
               <ul className="mt-4 space-y-2.5">
                 {col.items.map((item) => (
                   <li key={item.label}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, animate, motion } from "motion/react";
+import { AnimatePresence, animate, m as motion } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 

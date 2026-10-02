@@ -202,10 +202,10 @@ function Statement({ statement }: { statement: NonNullable<ServiceContent["state
   return (
     <section className="rounded-[2.5rem] bg-brand-deep px-5 py-28 text-white md:rounded-[4rem] md:px-10 md:py-40">
       <div className="mx-auto max-w-6xl">
-        <p className="eyebrow text-white/60">{statement.eyebrow}</p>
-        <RevealHeading text={statement.heading} accentClassName="italic text-white/60" className="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.02em] md:text-8xl" />
+        <p className="eyebrow text-white/90">{statement.eyebrow}</p>
+        <RevealHeading text={statement.heading} accentClassName="italic text-white/75" className="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.02em] md:text-8xl" />
         <FadeIn>
-          <p className="mt-10 max-w-2xl text-lg text-white/75">{statement.text}</p>
+          <p className="mt-10 max-w-2xl text-lg text-white/90">{statement.text}</p>
         </FadeIn>
       </div>
     </section>

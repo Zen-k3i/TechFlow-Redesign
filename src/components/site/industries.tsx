@@ -124,7 +124,7 @@ function Panel({
             </ul>
             <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-white/10 pt-5">
               <div>
-                <p className="eyebrow text-white/40">{s.references}</p>
+                <p className="eyebrow text-white/55">{s.references}</p>
                 <p className="mt-1.5 text-sm text-white/80">{item.clients.join(" · ")}</p>
               </div>
               <span className="text-sm text-brand-sky">{s.seeCase} →</span>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { href, serviceKeys } from "@/i18n/routes";
 import { useLocale } from "../site/locale";
 import { Process } from "../site/process";
@@ -95,7 +95,7 @@ export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNo
             {c.pipeline.steps.map((step, i) => (
               <FadeIn as="li" key={step.title} delay={i * 0.08} className="relative h-full rounded-3xl border border-white/10 bg-night-soft p-6">
                 <ToolTile tool={toolById(step.tool)} className="size-10 rounded-xl" />
-                <p className="eyebrow mt-6 text-white/40">0{i + 1}</p>
+                <p className="eyebrow mt-6 text-white/55">0{i + 1}</p>
                 <h3 className="mt-2 font-serif text-2xl leading-tight">{step.title}</h3>
                 <p className="mt-3 text-sm text-white/55">{step.text}</p>
               </FadeIn>

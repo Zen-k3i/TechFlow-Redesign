@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import { useStill } from "./use-still";
 import type { MotionValue } from "motion/react";
-import { motion, useTransform } from "motion/react";
+import { m as motion, useTransform } from "motion/react";
 
 type Motif =
   | "speed"

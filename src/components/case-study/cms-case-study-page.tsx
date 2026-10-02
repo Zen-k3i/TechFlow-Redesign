@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useStill } from "../site/use-still";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { AnimatePresence, motion, useInView, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import { AnimatePresence, m as motion, useInView, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 import type { Locale } from "@/i18n/config";
 import { href } from "@/i18n/routes";
 import type { PROJECT_DETAIL_QUERY_RESULT } from "@/sanity.types";
@@ -538,7 +538,7 @@ function StepBlock({ chapter, index, label, lang }: { chapter: Chapter; index: n
       </span>
       <FadeIn className="grid gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
         <div>
-          <p className="eyebrow text-ink/45">
+          <p className="eyebrow text-ink/60">
             {label} {number}
           </p>
           <h2 id={`${chapter.id}-title`} className="mt-3 font-serif text-4xl leading-[1.02] md:text-5xl">
@@ -560,7 +560,7 @@ function ChapterBlock({ chapter, index, label, lang }: { chapter: Chapter; index
     <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className="grid scroll-mt-28 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
       <div className="lg:sticky lg:top-28 lg:self-start">
         <FadeIn>
-          <p className="eyebrow text-ink/45">
+          <p className="eyebrow text-ink/60">
             {label} {number}
           </p>
           <div className="mt-4 flex items-start gap-5">
@@ -612,13 +612,13 @@ function ChapterNav({ chapters, target }: { chapters: Chapter[]; target: React.R
                       aria-current={on ? "step" : undefined}
                       className={`flex items-center gap-2 rounded-full px-3.5 py-2 text-sm transition-colors ${on ? "bg-white text-night" : "text-white/60 hover:text-white"}`}
                     >
-                      <span className={`font-mono text-xs ${on ? "text-night/50" : "text-white/35"}`}>{String(i + 1).padStart(2, "0")}</span>
+                      <span className={`font-mono text-xs ${on ? "text-night/50" : "text-white/55"}`}>{String(i + 1).padStart(2, "0")}</span>
                       <span className="max-w-[16ch] truncate">{ch.title}</span>
                     </a>
                   </li>
                 );
               })}
-              <li aria-hidden className="px-2 font-mono text-xs text-white/40 sm:hidden">
+              <li aria-hidden className="px-2 font-mono text-xs text-white/55 sm:hidden">
                 / {String(chapters.length).padStart(2, "0")}
               </li>
             </ol>

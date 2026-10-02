@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react";
+import { AnimatePresence, m as motion, useMotionValue, useSpring } from "motion/react";
 
 /** Label bubble that replaces the pointer over any element with a `data-cursor` attribute. */
 export function Cursor() {

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
+import { AnimatePresence, m as motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
 import { locales, type Locale } from "@/i18n/config";
 import { href, isServiceKey, serviceKeys, type RouteKey } from "@/i18n/routes";
 import { ease, serviceIllustration } from "./content";

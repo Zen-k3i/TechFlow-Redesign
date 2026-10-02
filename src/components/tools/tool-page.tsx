@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { href } from "@/i18n/routes";
 import { SanityImage } from "../cms/sanity-image";
 import { CmsProjectCard } from "../projects/cms-project-card";
@@ -29,7 +29,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease }}
-              className="eyebrow flex flex-wrap items-center gap-2 text-white/40"
+              className="eyebrow flex flex-wrap items-center gap-2 text-white/55"
             >
               <Link href={href(lang, "home")} className="hover:text-white">
                 {t.common.breadcrumbHome}

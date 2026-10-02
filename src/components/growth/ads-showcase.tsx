@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
+import { AnimatePresence, m as motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
 import { SOUND_EVENT } from "../page/ui";
 import { ease } from "../site/content";
@@ -133,10 +133,10 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
                 </TiltPhone>
                 <div className="mt-5 px-1">
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="eyebrow text-white/40">
+                    <span className="eyebrow text-white/55">
                       {c.video} 0{i + 1}
                     </span>
-                    {ad.duration && <span className="eyebrow text-white/40">{ad.duration}</span>}
+                    {ad.duration && <span className="eyebrow text-white/55">{ad.duration}</span>}
                   </div>
                   <span className="mt-1 block text-xl font-medium">{ad.angle}</span>
                 </div>

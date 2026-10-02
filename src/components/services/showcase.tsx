@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { animate, motion, useInView, useMotionValueEvent, useScroll } from "motion/react";
+import { animate, m as motion, useInView, useMotionValueEvent, useScroll } from "motion/react";
 import type { ServiceKey } from "@/i18n/routes";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
@@ -320,7 +320,7 @@ function AgentLive() {
               {c.steps.map((s, i) => {
                 const state = i < phase ? "done" : i === phase ? "run" : "idle";
                 return (
-                  <li key={s} className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-colors duration-300 ${state === "idle" ? "border-white/5 text-white/30" : "border-white/15 text-white"}`}>
+                  <li key={s} className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-colors duration-300 ${state === "idle" ? "border-white/5 text-white/55" : "border-white/15 text-white"}`}>
                     <span className={`flex size-5 items-center justify-center rounded-full text-[10px] ${state === "done" ? "bg-emerald-400 text-night" : state === "run" ? "border-2 border-brand-sky border-t-transparent animate-spin" : "border border-white/20"}`}>
                       {state === "done" ? "✓" : ""}
                     </span>
@@ -334,7 +334,7 @@ function AgentLive() {
 
           <Panel title={c.crm} index={3}>
             <ul className="space-y-2">
-              {log.length === 0 && <li className="rounded-xl border border-dashed border-white/10 px-4 py-6 text-center text-sm text-white/30">…</li>}
+              {log.length === 0 && <li className="rounded-xl border border-dashed border-white/10 px-4 py-6 text-center text-sm text-white/55">…</li>}
               {log.map((m, i) => (
                 <motion.li key={`${round}-${i}`} initial={i === 0 ? { opacity: 0, y: -10 } : false} animate={{ opacity: 1 - i * 0.2, y: 0 }} className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.04] px-4 py-3 text-sm">
                   <span className="truncate">{m.from.split(" · ")[1]}</span>
@@ -358,7 +358,7 @@ function Panel({ title, index, glow = false, children }: { title: string; index:
     <div className={`relative overflow-hidden rounded-[1.75rem] border p-6 ${glow ? "border-brand/50 bg-linear-to-b from-brand/15 to-night-soft" : "border-white/10 bg-night-soft"}`}>
       <p className="mb-5 flex items-center justify-between">
         <span className="eyebrow text-white/50">{title}</span>
-        <span className="font-mono text-xs text-white/30">{pad(index)}</span>
+        <span className="font-mono text-xs text-white/55">{pad(index)}</span>
       </p>
       {children}
     </div>
@@ -441,7 +441,7 @@ function FunnelLive({ card }: { card: Card }) {
             </li>
           ))}
         </ol>
-        <p className="mt-8 flex items-center gap-2 text-sm text-ink/50">
+        <p className="mt-8 flex items-center gap-2 text-sm text-ink/60">
           <span className="size-1.5 rounded-full bg-brand-deep" /> {c.note}
         </p>
       </div>

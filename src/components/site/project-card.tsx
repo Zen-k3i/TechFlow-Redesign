@@ -4,7 +4,7 @@ import Image, { type ImageLoader } from "next/image";
 import { useStill } from "./use-still";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
-import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
+import { m as motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
 import { href } from "@/i18n/routes";
 import { GrowthCover } from "../case-study/growth-cover";
 import { projectImage, type Project } from "./content";

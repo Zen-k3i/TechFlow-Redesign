@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useStill } from "../site/use-still";
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import { m as motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 import { href } from "@/i18n/routes";
 import { sanityLoader } from "@/sanity/image";
 import { ease } from "../site/content";
@@ -128,7 +128,7 @@ export function ProjectsHero({ projects }: { projects: WallProject[] }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease }}
-            className="eyebrow mb-8 flex flex-wrap items-center gap-2 text-white/40"
+            className="eyebrow mb-8 flex flex-wrap items-center gap-2 text-white/55"
           >
             {trail.map((crumb, i) => (
               <span key={crumb.href} className="flex items-center gap-2">

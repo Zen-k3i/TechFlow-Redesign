@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { AnimatePresence, LayoutGroup, m as motion } from "motion/react";
 import { filterOptions } from "../page/filters";
 import { FilterChip } from "../page/filter-chip";
 import { ease } from "../site/content";

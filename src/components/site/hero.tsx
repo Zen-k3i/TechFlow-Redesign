@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useStill } from "./use-still";
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { m as motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { GlowButton, HumanButton } from "../page/project-cta";
 import { caseStudyUrl, ease, featured, projectImage } from "./content";
 import { BuildWord, DesignWord, GrowWord } from "./hero-words";
@@ -134,7 +134,7 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 1.2 }}
-          className="mt-4 text-xs tracking-wide text-white/40"
+          className="mt-4 text-xs tracking-wide text-white/55"
         >
           {t.hero.reassurance}
         </motion.p>

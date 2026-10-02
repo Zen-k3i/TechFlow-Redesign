@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useSyncExternalStore } from "react";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { href } from "@/i18n/routes";
 import { ease } from "../site/content";
 import { useLocale } from "../site/locale";
@@ -157,7 +157,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
                   {offices.map((o) => (
                     <div key={o.city} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="whitespace-nowrap font-serif text-2xl">{o.city}</p>
-                      <p className="eyebrow mt-3 text-white/40">{c.cambodia.localTime}</p>
+                      <p className="eyebrow mt-3 text-white/55">{c.cambodia.localTime}</p>
                       <LocalTime timeZone={o.timeZone} lang={lang} />
                     </div>
                   ))}

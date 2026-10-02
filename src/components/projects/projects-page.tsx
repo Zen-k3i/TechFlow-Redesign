@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import { href } from "@/i18n/routes";
 import { urlFor } from "@/sanity/image";

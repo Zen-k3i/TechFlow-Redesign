@@ -9,6 +9,8 @@ import { siteUrl } from "@/i18n/routes";
 import { getSiteSettings } from "@/sanity/seo";
 import "../globals.css";
 
+// Satoshi files are subset to Latin, Latin-1/Extended-A, punctuation, arrows and € (French + English);
+// ~20 KB each instead of 25 KB. Re-subset with fonttools' pyftsubset if a new character is needed.
 const satoshi = localFont({
   variable: "--font-satoshi",
   src: [

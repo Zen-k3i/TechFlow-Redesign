@@ -110,7 +110,7 @@ export function PortableBody({ value, scale = "story" }: { value: BodyValue | nu
       image: ({ value: img }) => (
         <figure className={s.figure}>
           <SanityImage image={img} sizes="(min-width: 768px) 720px, 100vw" className="h-auto w-full rounded-2xl border border-ink/10" />
-          {img.caption && <figcaption className="mt-3 text-center text-sm text-ink/50">{img.caption}</figcaption>}
+          {img.caption && <figcaption className="mt-3 text-center text-sm text-ink/60">{img.caption}</figcaption>}
         </figure>
       ),
       // As on the old site: with an odd count the first image spans the width, the rest go two by two.

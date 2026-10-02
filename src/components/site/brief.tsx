@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { Magnetic } from "./magnetic";
@@ -111,7 +111,7 @@ export function Brief() {
                   <p className="eyebrow text-white/50">{b.card}</p>
                 </div>
 
-                <p className="mt-8 eyebrow text-white/40">{b.estimate}</p>
+                <p className="mt-8 eyebrow text-white/55">{b.estimate}</p>
                 <AnimatePresence mode="wait">
                   <motion.p
                     key={result?.value ?? "none"}
@@ -148,7 +148,7 @@ export function Brief() {
                         ))}
                       </AnimatePresence>
                       {picked.length === 0 && (
-                        <span className="text-white/35">{b.tbd}</span>
+                        <span className="text-white/55">{b.tbd}</span>
                       )}
                     </dd>
                   </div>
@@ -175,7 +175,7 @@ export function Brief() {
                     {copied ? b.copied : b.copy}
                   </button>
                 </div>
-                <p className="mt-4 text-xs text-white/40">{b.note}</p>
+                <p className="mt-4 text-xs text-white/55">{b.note}</p>
               </div>
             </div>
           </div>
@@ -202,7 +202,7 @@ function Question({
         <span className="eyebrow text-brand-deep">0{index}</span>
         <span className="text-2xl font-medium md:text-3xl">{title}</span>
       </legend>
-      {hint && <p className="mt-1 pl-9 text-sm text-ink/50">{hint}</p>}
+      {hint && <p className="mt-1 pl-9 text-sm text-ink/60">{hint}</p>}
       <div className="mt-5 flex flex-wrap gap-2.5">{children}</div>
     </fieldset>
   );

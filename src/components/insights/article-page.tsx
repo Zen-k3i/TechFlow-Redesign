@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { motion, useScroll, useSpring } from "motion/react";
+import { m as motion, useScroll, useSpring } from "motion/react";
 import { href } from "@/i18n/routes";
 import { headingsOf, PortableBody } from "../cms/portable-body";
 import { SanityImage } from "../cms/sanity-image";
@@ -80,14 +80,14 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
             <dl className="flex gap-8">
               {article.publishedAt && (
                 <div>
-                  <dt className="text-white/40">{c.published}</dt>
+                  <dt className="text-white/55">{c.published}</dt>
                   <dd className="mt-0.5 text-white/85">
                     <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, lang)}</time>
                   </dd>
                 </div>
               )}
               <div>
-                <dt className="text-white/40">{c.reading}</dt>
+                <dt className="text-white/55">{c.reading}</dt>
                 <dd className="mt-0.5 text-white/85">
                   {Math.max(1, article.minutes)} min
                 </dd>
@@ -192,7 +192,7 @@ function Author({ author, label }: { author: InsightDetail["author"]; label: str
     <span className="flex items-center gap-3">
       <Avatar author={author} size="size-10 text-xs" />
       <span>
-        <span className="block text-white/40">{label}</span>
+        <span className="block text-white/55">{label}</span>
         <span className="mt-0.5 block text-white/85">
           {author?.name ?? "TechFlow Agency"}
           {author?.role && <span className="text-white/45"> · {author.role}</span>}
@@ -209,7 +209,7 @@ function AuthorCard({ author, label }: { author: InsightDetail["author"]; label:
     <FadeIn className="mt-16 flex items-center gap-5 rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-7">
       <Avatar author={author} size="size-16 text-base" />
       <div className="min-w-0">
-        <p className="text-sm text-ink/45">{label}</p>
+        <p className="text-sm text-ink/60">{label}</p>
         <p className="mt-0.5 text-lg font-semibold">{author.name}</p>
         {author.role && <p className="text-ink/60">{author.role}</p>}
       </div>
@@ -248,7 +248,7 @@ function Contents({ label, items, target }: { label: string; items: Heading[]; t
                 <a
                   href={`#${item.id}`}
                   aria-current={on ? "location" : undefined}
-                  className={`flex gap-3 py-1.5 pl-4 text-sm leading-snug transition-colors ${on ? "text-ink" : "text-ink/45 hover:text-ink"}`}
+                  className={`flex gap-3 py-1.5 pl-4 text-sm leading-snug transition-colors ${on ? "text-ink" : "text-ink/60 hover:text-ink"}`}
                 >
                   <span className={`font-mono text-xs leading-5 ${on ? "text-brand-deep" : "text-ink/30"}`}>{String(i + 1).padStart(2, "0")}</span>
                   <span className={on ? "font-medium" : ""}>{item.title}</span>
@@ -334,7 +334,7 @@ function BookCall() {
         <QuoteButton tone="light" block />
         <TalkToHumanButton tone="light" block />
       </div>
-      <p className="mt-4 text-xs text-ink/50">{t.common.reassurance}</p>
+      <p className="mt-4 text-xs text-ink/60">{t.common.reassurance}</p>
     </div>
   );
 }

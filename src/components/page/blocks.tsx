@@ -139,7 +139,7 @@ export function Toc({ label, items }: { label: string; items: { id: string; titl
             <a
               href={`#${item.id}`}
               className={`-ml-px block border-l-2 py-1.5 pl-4 text-sm leading-snug transition-colors ${
-                active === item.id ? "border-brand-deep text-ink" : "border-transparent text-ink/45 hover:text-ink"
+                active === item.id ? "border-brand-deep text-ink" : "border-transparent text-ink/60 hover:text-ink"
               }`}
             >
               {item.title}

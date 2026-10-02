@@ -2,16 +2,7 @@
 
 import Image from "next/image";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import {
-  AnimatePresence,
-  animate,
-  motion,
-  useMotionValue,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "motion/react";
+import { AnimatePresence, animate, m as motion, useMotionValue, useScroll, useSpring, useTransform, type MotionValue,  } from "motion/react";
 import type { ServiceKey } from "@/i18n/routes";
 import { members } from "../team/data";
 import { ease, projectImage, projects } from "../site/content";
@@ -207,7 +198,7 @@ export function HeroStage({
           {service === "salesFunnel" && <FunnelStage content={content} />}
         </Pointer.Provider>
       </motion.div>
-      <p className="mt-4 text-center text-xs text-white/35">
+      <p className="mt-4 text-center text-xs text-white/55">
         {copy[lang].caption}
       </p>
     </div>
@@ -275,7 +266,7 @@ function Window({
         <Dots />
         {title && (
           <span
-            className={`ml-2 truncate font-mono text-[10px] ${dark ? "text-white/40" : "text-black/40"}`}
+            className={`ml-2 truncate font-mono text-[10px] ${dark ? "text-white/55" : "text-black/40"}`}
           >
             {title}
           </span>
@@ -408,7 +399,7 @@ function DesignStage({ content }: { content: ServiceContent }) {
             <span className="size-1.5 rounded-full bg-[#1abcfe]" />
           </span>
           <span className="truncate">
-            {name} <span className="text-white/30">/</span> {c.page}
+            {name} <span className="text-white/55">/</span> {c.page}
           </span>
         </span>
         <span className="flex items-center gap-3">
@@ -424,7 +415,7 @@ function DesignStage({ content }: { content: ServiceContent }) {
       </div>
 
       <div className="absolute bottom-0 left-0 top-11 hidden w-[16%] border-r border-white/10 bg-[#11131c]/80 p-4 md:block">
-        <p className="eyebrow text-white/40">{c.layers}</p>
+        <p className="eyebrow text-white/55">{c.layers}</p>
         <ul className="mt-4 space-y-1 text-xs">
           {c.layerItems.map((l, i) => (
             <li
@@ -439,7 +430,7 @@ function DesignStage({ content }: { content: ServiceContent }) {
       </div>
 
       <div className="absolute bottom-0 right-0 top-11 hidden w-[18%] border-l border-white/10 bg-[#11131c]/80 p-4 md:block">
-        <p className="eyebrow text-white/40">{content.hero.card.title}</p>
+        <p className="eyebrow text-white/55">{content.hero.card.title}</p>
         <ul className="mt-4 space-y-2.5">
           {content.hero.card.rows.map((r) => (
             <li key={r.label} className="flex items-center gap-2 text-xs">
@@ -448,19 +439,19 @@ function DesignStage({ content }: { content: ServiceContent }) {
                 style={{ background: r.value }}
               />
               <span className="truncate text-white/70">{r.label}</span>
-              <span className="ml-auto font-mono text-[10px] text-white/40">
+              <span className="ml-auto font-mono text-[10px] text-white/55">
                 {r.value}
               </span>
             </li>
           ))}
         </ul>
-        <p className="eyebrow mt-8 text-white/40">{c.type}</p>
+        <p className="eyebrow mt-8 text-white/55">{c.type}</p>
         <p className="mt-3 font-serif text-5xl leading-none text-white">Aa</p>
-        <p className="mt-1.5 font-mono text-[10px] text-white/40">
+        <p className="mt-1.5 font-mono text-[10px] text-white/55">
           Serif · 96 / 90
         </p>
         <p className="mt-4 text-3xl font-medium leading-none text-white">Aa</p>
-        <p className="mt-1.5 font-mono text-[10px] text-white/40">
+        <p className="mt-1.5 font-mono text-[10px] text-white/55">
           Satoshi · 18 / 28
         </p>
       </div>
@@ -588,7 +579,7 @@ const code: [string, string][][] = [
   [["  );", "text-white/60"]],
   [["}", "text-white/60"]],
   [["", ""]],
-  [["// SEO + GEO, LCP < 2.5 s", "text-white/30"]],
+  [["// SEO + GEO, LCP < 2.5 s", "text-white/55"]],
 ];
 
 function Ring({
@@ -1008,12 +999,12 @@ function AgentStage() {
                 <span className="block truncate text-sm font-semibold text-ink">
                   {c.agent[0]}
                 </span>
-                <span className="block truncate text-[11px] text-ink/50">
+                <span className="block truncate text-[11px] text-ink/60">
                   {c.agent[1]}
                 </span>
               </span>
             </div>
-            <div className="grid grid-cols-3 self-end pb-1.5 text-center text-[9px] text-ink/45">
+            <div className="grid grid-cols-3 self-end pb-1.5 text-center text-[9px] text-ink/60">
               {c.ports.map((p) => (
                 <span key={p}>
                   {p}
@@ -1113,7 +1104,7 @@ function AgentStage() {
           <div className="-rotate-2 rounded-md bg-[#fff5c2] p-3 text-[11px] leading-snug text-ink shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
             <p className="font-semibold">✉ {c.sticky[0]}</p>
             <p className="mt-1 truncate text-ink/70">{c.sticky[1]}</p>
-            <p className="mt-1 line-clamp-2 text-ink/50">{c.sticky[2]}</p>
+            <p className="mt-1 line-clamp-2 text-ink/60">{c.sticky[2]}</p>
           </div>
         </Layer>
 
@@ -1253,7 +1244,7 @@ function FunnelStage({ content }: { content: ServiceContent }) {
         <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#141724]/95 p-5">
           <p className="flex items-center justify-between text-xs text-white/55">
             {c.chart}
-            <span className="font-mono text-[10px] text-white/30">
+            <span className="font-mono text-[10px] text-white/55">
               S1 → S12
             </span>
           </p>
@@ -1314,7 +1305,7 @@ function FunnelStage({ content }: { content: ServiceContent }) {
               <span className="block truncate text-[11px] font-medium">
                 {client}
               </span>
-              <span className="block text-[10px] text-ink/45">
+              <span className="block text-[10px] text-ink/60">
                 {c.sponsored}
               </span>
             </span>
@@ -1329,7 +1320,7 @@ function FunnelStage({ content }: { content: ServiceContent }) {
             />
           </div>
           <div className="flex items-center justify-between gap-2 p-3">
-            <span className="truncate font-mono text-[10px] text-ink/45">
+            <span className="truncate font-mono text-[10px] text-ink/60">
               {projectDomain(content.hero.project) ?? content.hero.url}
             </span>
             <span className="shrink-0 rounded-md bg-brand px-2.5 py-1.5 text-[11px] font-medium text-white">

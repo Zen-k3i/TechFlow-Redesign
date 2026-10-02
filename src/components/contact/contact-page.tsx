@@ -49,7 +49,7 @@ export function ContactPage() {
                       {o.city}
                     </p>
                     <div className="shrink-0 text-right">
-                      <p className="eyebrow whitespace-nowrap text-white/40">
+                      <p className="eyebrow whitespace-nowrap text-white/55">
                         {c.offices.localTime}
                       </p>
                       <LocalTime timeZone={o.timeZone} lang={lang} />
@@ -307,7 +307,7 @@ function BriefForm() {
                   →
                 </span>
               </button>
-              <p className="text-sm text-ink/50" aria-live="polite">
+              <p className="text-sm text-ink/60" aria-live="polite">
                 {sent ? f.sent : f.note}
               </p>
             </div>

@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useStill } from "./use-still";
 import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { ease } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";
@@ -74,7 +74,7 @@ export function Convictions() {
                     className="group flex w-full items-start gap-5 py-7 text-left"
                   >
                     <span
-                      className={`eyebrow pt-2 transition-colors ${on ? "text-brand-sky" : "text-white/35"}`}
+                      className={`eyebrow pt-2 transition-colors ${on ? "text-brand-sky" : "text-white/55"}`}
                     >
                       0{i + 1}.
                     </span>
@@ -82,7 +82,7 @@ export function Convictions() {
                       className={`font-serif text-3xl leading-[1.05] transition-colors duration-500 md:text-4xl ${
                         on
                           ? "text-white"
-                          : "text-white/40 group-hover:text-white/75"
+                          : "text-white/55 group-hover:text-white/75"
                       }`}
                     >
                       {item.title}
@@ -141,7 +141,7 @@ export function Convictions() {
               <span className="size-2.5 rounded-full bg-white/15" />
               <span className="size-2.5 rounded-full bg-white/15" />
             </div>
-            <span className="eyebrow absolute right-7 top-7 text-white/35">
+            <span className="eyebrow absolute right-7 top-7 text-white/55">
               0{active + 1} / 03
             </span>
             <AnimatePresence mode="wait">
@@ -430,7 +430,7 @@ function BuildVisual({ still }: { still: boolean }) {
             <li
               key={layer}
               className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12px] transition-all duration-500 ${
-                ticked ? "border-brand/50 bg-brand/15 text-white" : "border-white/10 text-white/35"
+                ticked ? "border-brand/50 bg-brand/15 text-white" : "border-white/10 text-white/55"
               }`}
             >
               <span
@@ -716,7 +716,7 @@ function UnderstandVisual({ still }: { still: boolean }) {
       <p className="eyebrow absolute left-0 top-2 w-44 text-[10px] leading-relaxed text-brand-sky">{u.good.label}</p>
       <p className="absolute left-0 top-12 font-serif text-[72px] leading-none">
         0{placed}
-        <span className="text-white/30">/04</span>
+        <span className="text-white/55">/04</span>
       </p>
 
       <motion.div

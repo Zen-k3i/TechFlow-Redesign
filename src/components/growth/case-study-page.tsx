@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { m as motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import { href } from "@/i18n/routes";
 import { urlFor } from "@/sanity/image";
@@ -74,7 +74,12 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
   const ads = (study.ads ?? []).slice(0, 3);
   const hero = study.hero;
   const website = safeHref(study.websiteUrl);
-  const reveal = (delay: number) => ({ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, delay, ease } });
+  // `fade: false` only slides: for the summary, the page's largest text, visible from the server HTML (LCP).
+  const reveal = (delay: number, fade = true) => ({
+    initial: fade ? { opacity: 0, y: 20 } : { y: 20 },
+    animate: fade ? { opacity: 1, y: 0 } : { y: 0 },
+    transition: { duration: 0.9, delay, ease },
+  });
   const serviceTag = hero?.tags ?? [];
   // Sectors already in the service tag pill aren't repeated in the tags below.
   const tags = [...(study.sectors ?? []).filter((s) => !serviceTag.includes(s)).map((label) => ({ label, sector: true })), ...(study.services ?? []).map((label) => ({ label, sector: false }))];
@@ -124,7 +129,7 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
               </motion.p>
             )}
             {study.summary && (
-              <motion.p {...reveal(0.45)} className="mt-6 max-w-xl text-lg text-white/70 md:text-xl">
+              <motion.p {...reveal(0.45, false)} className="mt-6 max-w-xl text-lg text-white/70 md:text-xl">
                 {study.summary}
               </motion.p>
             )}
@@ -193,11 +198,12 @@ function PhoneFan({ ads, slots, brand, still, label }: { ads: Ad[]; slots: numbe
   return (
     <a
       href={`#${SECTION_IDS.ads}`}
-      aria-label={label}
       onPointerMove={onMove}
       onPointerLeave={reset}
       className="relative mx-auto block aspect-square w-full max-w-[34rem] [perspective:1400px]"
     >
+      {/* Named by text, not aria-label: the phones' visible ad copy is decorative (aria-hidden). */}
+      <span className="sr-only">{label}</span>
       <span aria-hidden className="absolute inset-[18%] rounded-full bg-(--glow) blur-3xl" />
       <motion.div style={{ rotateX, rotateY }} className="absolute inset-0">
         {ads.map((ad, i) => {

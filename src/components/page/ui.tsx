@@ -3,7 +3,7 @@
 import Image, { type ImageLoader } from "next/image";
 import { useStill } from "../site/use-still";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { href } from "@/i18n/routes";
 import { clients, ease } from "../site/content";
 import { useLocale } from "../site/locale";
@@ -330,7 +330,7 @@ export function ComparisonTable({
     >
       <table className="w-full min-w-[640px] border-collapse text-left">
         <thead>
-          <tr className={light ? "text-ink/50" : "text-white/50"}>
+          <tr className={light ? "text-ink/60" : "text-white/50"}>
             <th scope="col" className="eyebrow p-5 font-normal md:p-6">
               {c.criterion}
             </th>
@@ -421,7 +421,7 @@ function MarkIcon({
   return (
     <span
       aria-hidden
-      className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/35" : "bg-white/5 text-white/30"}`}
+      className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/35" : "bg-white/5 text-white/55"}`}
     >
       ✕
     </span>
