@@ -883,8 +883,30 @@ const cookiesEn: LegalDoc = {
   ],
 };
 
-export const legalDocs: Record<"legal" | "terms" | "cookies", Record<Locale, LegalDoc>> = {
+/**
+ * Copied from the old site's /politique-de-confidentialite and /en/privacy-policy (2026-10-02): the same
+ * placeholder text as the cookie policy (taken from the legal notices), with its own title and meta.
+ * Replace with the real privacy policy (the contact forms collect personal data).
+ */
+const privacyFr: LegalDoc = {
+  ...cookiesFr,
+  meta: { title: "Politique de confidentialité | TechFlow Agency", description: "Comment TechFlow Agency collecte, utilise et protège vos données personnelles, vos droits au titre du RGPD et la façon de nous contacter à ce sujet." },
+  title: "Politique de *confidentialité.*",
+  intro: "Les données personnelles collectées sur techflow-agency.com et vos droits.",
+};
+
+const privacyEn: LegalDoc = {
+  ...cookiesEn,
+  meta: { title: "Privacy Policy | TechFlow Agency", description: "How TechFlow Agency collects, uses and protects your personal data, your rights under GDPR, and how to contact us about them." },
+  title: "Privacy *policy.*",
+  intro: "The personal data collected on techflow-agency.com and your rights.",
+};
+
+export type LegalKey = "legal" | "terms" | "cookies" | "privacy";
+
+export const legalDocs: Record<LegalKey, Record<Locale, LegalDoc>> = {
   legal: { fr: legalFr, en: legalEn },
   terms: { fr: termsFr, en: termsEn },
   cookies: { fr: cookiesFr, en: cookiesEn },
+  privacy: { fr: privacyFr, en: privacyEn },
 };

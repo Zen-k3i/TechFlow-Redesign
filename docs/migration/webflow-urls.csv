@@ -1,0 +1,251 @@
+lang,webflow_path,type,status,title,live_http,live_redirect_to
+en,/en,static,published,"TechFlow Agency | Design, Development & AI Agents",200,
+en,/en/ai-agents,static,published,AI Agents & Workflow Automation | TechFlow,200,
+en,/en/contact,static,published,Contact TechFlow Agency | Start a Project,200,
+en,/en/cookie-policy,static,published,Cookie Policy | TechFlow Agency,200,
+en,/en/design,static,published,Web & Brand Design Services | TechFlow Agency,200,
+en,/en/development,static,published,Web Development Services | TechFlow Agency,200,
+en,/en/legal-notices,static,published,Legal Notices | TechFlow Agency,200,
+en,/en/our-insights,static,published,"Insights on Design, Webflow & AI | TechFlow",200,
+en,/en/our-team,static,published,Meet the Team Behind TechFlow Agency,200,
+en,/en/privacy-policy,static,published,Privacy Policy | TechFlow Agency,200,
+en,/en/projects,static,published,Our Projects & Case Studies | TechFlow Agency,200,
+en,/en/sales-funnel,static,published,Sales Funnel Design & Build | TechFlow Agency,200,
+en,/en/terms-of-service,static,published,Terms of Service | TechFlow Agency,200,
+en,/en/tools,static,published,The Tools We Build With | TechFlow Agency,200,
+en,/en-categories/ai-automation,cms:en-categories,published,AI & Automation,404,
+en,/en-categories/content-strategy,cms:en-categories,published,Content Strategy,404,
+en,/en-categories/data-analytics,cms:en-categories,published,Data & Analytics,404,
+en,/en-categories/design-ux,cms:en-categories,published,Design & UX,404,
+en,/en-categories/digital-marketing,cms:en-categories,published,Digital Marketing,404,
+en,/en-categories/e-commerce,cms:en-categories,published,E-commerce,404,
+en,/en-categories/seo,cms:en-categories,published,SEO,404,
+en,/en-categories/web-development,cms:en-categories,published,Web Development,404,
+en,/en-categories/website-performance,cms:en-categories,published,Website Performance,404,
+en,/en/our-insights/ai-agency-phnom-penh,cms:our-insights,published,AI Agency in Phnom Penh: The 4 Deliverables to Expect,200,
+en,/en/our-insights/ai-agents-for-small-business,cms:our-insights,published,AI agents for small business: uses and real running costs,200,
+en,/en/our-insights/ai-chatbot-telegram,cms:our-insights,draft,AI chatbot on Telegram vs Messenger: Cambodia comparison,404,
+en,/en/our-insights/ai-consulting-cambodia,cms:our-insights,published,AI Consulting Cambodia: the 4-criteria audit before a build,200,
+en,/en/our-insights/ai-development-cambodia,cms:our-insights,published,"AI Development in Cambodia: Costs, Khmer, Talent, Law",200,
+en,/en/our-insights/ai-development-phnom-penh,cms:our-insights,published,"AI development in Phnom Penh: a 4-week build, week by week",200,
+en,/en/our-insights/ai-for-hotels,cms:our-insights,draft,AI for Hotels in Cambodia: What to Build First (2026),404,
+en,/en/our-insights/bakong-cambodia,cms:our-insights,draft,"Bakong Cambodia Explained: What It Is, and Its 2025 Numbers",404,
+en,/en/our-insights/branding-agency-phnom-penh,cms:our-insights,draft,Branding Agency in Phnom Penh: Process and Budget,404,
+en,/en/our-insights/cambodia-digital-invoicing-public-services,cms:our-insights,draft,Digital Invoicing in Cambodia: What Changed in 2026,404,
+en,/en/our-insights/cambodia-tourism-ai-digital-push,cms:our-insights,draft,Cambodia Tourism Digital Transformation: 2026 AI Push,404,
+en,/en/our-insights/creative-agency-phnom-penh,cms:our-insights,draft,"Creative Agency in Phnom Penh: Brand, Content and Web",404,
+en,/en/our-insights/digital-agency-phnom-penh,cms:our-insights,published,Digital Agency in Phnom Penh: One Partner or Specialists?,200,
+en,/en/our-insights/digital-marketing-agency-cambodia,cms:our-insights,published,Digital Marketing Agency Cambodia: Fees and Contracts 2026,200,
+en,/en/our-insights/digital-marketing-cambodia,cms:our-insights,published,"Digital Marketing Cambodia 2026: Reach, Inbox, Budget",200,
+en,/en/our-insights/ecommerce-cambodia,cms:our-insights,draft,E-commerce in Cambodia (2026): Market Size and Players,404,
+en,/en/our-insights/hotel-website-design-cambodia,cms:our-insights,draft,Hotel Website Design in Cambodia: What Actually Converts,404,
+en,/en/our-insights/khmer-fonts-for-website,cms:our-insights,draft,Khmer Fonts for a Website in Cambodia (2026 Guide),404,
+en,/en/our-insights/khmer-text-to-speech,cms:our-insights,draft,Khmer Text to Speech: What Actually Works in 2026,404,
+en,/en/our-insights/khqr-payment-website,cms:our-insights,draft,KHQR Payment Website: What It Really Costs to Build (2026),404,
+en,/en/our-insights/logo-design-cost-cambodia,cms:our-insights,draft,Logo Design Cost in Cambodia (2026): Full Price Guide,404,
+en,/en/our-insights/marketing-agency-cambodia,cms:our-insights,published,Marketing agency in Cambodia: which of the 3 types to hire,200,
+en,/en/our-insights/marketing-agency-phnom-penh,cms:our-insights,published,Marketing agency in Phnom Penh: your first 90 days,200,
+en,/en/our-insights/n8n-vs-zapier-vs-make,cms:our-insights,draft,n8n vs Zapier vs Make: Which Fits an SME in Cambodia,404,
+en,/en/our-insights/ngo-website-design-cambodia,cms:our-insights,draft,NGO Website Design in Cambodia: Cost and Donation Setup,404,
+en,/en/our-insights/no-code-development-cambodia,cms:our-insights,draft,No-Code Development in Cambodia: Bubble vs Webflow vs Xano,404,
+en,/en/our-insights/real-estate-website-cambodia,cms:our-insights,published,Real Estate Website Development in Cambodia (2026),200,
+en,/en/our-insights/software-development-company-cambodia,cms:our-insights,draft,Software Development Company in Cambodia (2026 Cost Guide),404,
+en,/en/our-insights/startup-cambodia,cms:our-insights,published,"Startup Cambodia: incubators, funding, grants in 2026",200,
+en,/en/our-insights/tiktok-marketing-cambodia,cms:our-insights,published,TikTok Marketing in Cambodia: 2026 Guide for Brands,200,
+en,/en/our-insights/web-design-cambodia,cms:our-insights,published,"Web Design in Cambodia: Costs, Timelines and Agencies",200,
+en,/en/our-insights/web-design-siem-reap,cms:our-insights,draft,"Web Design in Siem Reap: Hotels, Tours, Restaurants",404,
+en,/en/our-insights/web-development-cambodia,cms:our-insights,published,"Web Development in Cambodia: Webflow, No-Code or Custom",200,
+en,/en/our-insights/web-development-company-phnom-penh,cms:our-insights,draft,Web Development Company Phnom Penh: What to Ask,404,
+en,/en/our-insights/webflow-agency-sme,cms:our-insights,published,Choosing a Webflow Agency for an SME,200,
+en,/en/our-insights/webflow-agency-southeast-asia,cms:our-insights,draft,Webflow Agency Southeast Asia: Phnom Penh Costs Less,404,
+en,/en/our-insights/webflow-vs-wordpress,cms:our-insights,draft,"Webflow vs WordPress in 2026: Cost, Speed, Security",404,
+en,/en/our-insights/website-redesign-cambodia,cms:our-insights,draft,Website Redesign in Cambodia: What to Audit First,404,
+en,/en/projects/ama-campus,cms:projects,published,AMA Campus: Training Provider Redesign | TechFlow,200,
+en,/en/projects/canetta,cms:projects,published,Canetta: Shopify E-commerce Redesign | TechFlow,200,
+en,/en/projects/concorde,cms:projects,published,Concorde: Brand & Website Redesign | TechFlow Agency,200,
+en,/en/projects/convergences-asia,cms:projects,published,Convergences.asia: Website & Job Board | TechFlow,200,
+en,/en/projects/district-6-publishing,cms:projects,published,District 6 Publishing: Digital Redesign | TechFlow,200,
+en,/en/projects/emme-studio,cms:projects,published,Emme Studio: Brutalist Brand Redesign | TechFlow,200,
+en,/en/projects/epargne-plurielle-avenir,cms:projects,published,Épargne Plurielle Avenir: Wealth Advisor Site | TechFlow,200,
+en,/en/projects/eureka-cambodia,cms:projects,published,Eureka Cambodia: Tutoring Brand & Website | TechFlow,200,
+en,/en/projects/exelmans,cms:projects,published,Exelmans: Audit Firm Brand & Website | TechFlow,200,
+en,/en/projects/gaiama,cms:projects,draft,Gaïama: Animation-Rich Webflow Website | TechFlow,404,
+en,/en/projects/groupe-revive,cms:projects,published,Groupe Revive: Digital Redesign | TechFlow Agency,200,
+en,/en/projects/je-trouve-mon-avocat-fr,cms:projects,published,Je Trouve Mon Avocat: Solocal Platform | TechFlow,200,
+en,/en/projects/je-trouve-mon-demenageur,cms:projects,published,Je Trouve Mon Déménageur: Solocal Platform | TechFlow,200,
+en,/en/projects/koulier,cms:projects,published,Koulier: Mail Forwarding Brand & Website | TechFlow,200,
+en,/en/projects/kretz-club,cms:projects,published,"Kretz Club: CRM, Automation & AI Agents | TechFlow",200,
+en,/en/projects/leapmotor,cms:projects,published,Leapmotor Cambodia: Bilingual Digital Launch | TechFlow,200,
+en,/en/projects/little-green-spark,cms:projects,published,Little Green Spark: Zero-Waste Brand & Site | TechFlow,200,
+en,/en/projects/ma-carriere-immo,cms:projects,published,Ma Carrière Immo: Real Estate Job Platform | TechFlow,200,
+en,/en/projects/mandil-avocats,cms:projects,published,Mandil Avocats: Law Firm Website Redesign | TechFlow,200,
+en,/en/projects/ooinvestir,cms:projects,published,Ooinvestir: Property Investment Fintech | TechFlow,200,
+en,/en/projects/opco-ep,cms:projects,published,OPCO EP: 2026 Annual Results Website | TechFlow,200,
+en,/en/projects/place-des-aines,cms:projects,published,Place des Aînés: Senior Care Platform | TechFlow,200,
+en,/en/projects/tandem-partners,cms:projects,published,Tandem Partners: Investment Group Website | TechFlow,200,
+en,/tool-categories/ai,cms:tool-categories,published,AI,404,
+en,/tool-categories/automation,cms:tool-categories,published,Automation,404,
+en,/tool-categories/crm-marketing,cms:tool-categories,published,CRM & Marketing,404,
+en,/tool-categories/graphic-design,cms:tool-categories,published,Graphic design,404,
+en,/tool-categories/no-code,cms:tool-categories,published,No Code,404,
+en,/tool-categories/productivity-finance,cms:tool-categories,published,Productivity & Finance,404,
+en,/tool-categories/web-design,cms:tool-categories,published,Web design,404,
+en,/en/tools/brevo,cms:tools,published,Brevo,200,
+en,/en/tools/bubble,cms:tools,published,Bubble,200,
+en,/en/tools/calendly,cms:tools,published,Calendly,200,
+en,/en/tools/claude,cms:tools,published,Claude,200,
+en,/en/tools/client-first,cms:tools,published,Client-First,200,
+en,/en/tools/drupal,cms:tools,published,Drupal,200,
+en,/en/tools/figma,cms:tools,published,Figma,200,
+en,/en/tools/fillout,cms:tools,published,Fillout,200,
+en,/en/tools/google-workspace,cms:tools,published,Google Workspace,200,
+en,/en/tools/granola,cms:tools,published,Granola,200,
+en,/en/tools/hubspot,cms:tools,published,HubSpot,200,
+en,/en/tools/lemlist,cms:tools,published,Lemlist,200,
+en,/en/tools/loom,cms:tools,published,Loom,200,
+en,/en/tools/n8n,cms:tools,published,n8n,200,
+en,/en/tools/notion,cms:tools,published,Notion,200,
+en,/en/tools/odoo,cms:tools,published,Odoo,200,
+en,/en/tools/openrouter,cms:tools,published,OpenRouter,200,
+en,/en/tools/shopify,cms:tools,published,Shopify,200,
+en,/en/tools/tally,cms:tools,published,Tally,200,
+en,/en/tools/twenty-crm,cms:tools,published,Twenty CRM,200,
+en,/en/tools/webflow,cms:tools,published,Webflow,200,
+en,/en/tools/wise,cms:tools,published,Wise,200,
+en,/en/tools/zapier,cms:tools,published,Zapier,200,
+en,/en/our-approach,legacy-301,redirect,,301,/en
+en,/en/portfolio,legacy-301,redirect,,301,/en/projects
+en,/en/pricing,legacy-301,redirect,,301,/en/contact
+en,/en/project/ama-campus,legacy-301,redirect,,301,/en/projects/ama-campus
+en,/en/project/canetta,legacy-301,redirect,,301,/en/projects/canetta
+en,/en/project/concorde,legacy-301,redirect,,301,/en/projects/concorde
+en,/en/project/convergences-asia,legacy-301,redirect,,301,/en/projects/convergences-asia
+en,/en/project/district-6-publishing,legacy-301,redirect,,301,/en/projects/district-6-publishing
+en,/en/project/emme-studio,legacy-301,redirect,,301,/en/projects/emme-studio
+en,/en/project/epargne-plurielle-avenir,legacy-301,redirect,,301,/en/projects/epargne-plurielle-avenir
+en,/en/project/eureka-cambodia,legacy-301,redirect,,301,/en/projects/eureka-cambodia
+en,/en/project/exelmans,legacy-301,redirect,,301,/en/projects/exelmans
+en,/en/project/groupe-revive,legacy-301,redirect,,301,/en/projects/groupe-revive
+en,/en/project/je-trouve-mon-avocat,legacy-301,redirect,,301,/en/projects/je-trouve-mon-avocat-fr
+en,/en/project/je-trouve-mon-demenageur,legacy-301,redirect,,301,/en/projects/je-trouve-mon-demenageur
+en,/en/project/koulier,legacy-301,redirect,,301,/en/projects/koulier
+en,/en/project/leapmotor,legacy-301,redirect,,301,/en/projects/leapmotor
+en,/en/project/ma-carriere-immo,legacy-301,redirect,,301,/en/projects/ma-carriere-immo
+en,/en/project/mandil-avocats,legacy-301,redirect,,301,/en/projects/mandil-avocats
+en,/en/project/ooinvestir,legacy-301,redirect,,301,/en/projects/ooinvestir
+en,/en/project/opco-ep-en,legacy-301,redirect,,301,/en/projects/opco-ep
+en,/en/project/tandem-partners,legacy-301,redirect,,301,/en/projects/tandem-partners
+en,/en/team,legacy-301,redirect,,301,/en/our-team
+fr,/,static,published,"TechFlow Agency | Design, développement et agents IA",200,
+fr,/401,static,utility,Protected page,200,
+fr,/404,static,utility,Page Not Found | TechFlow Agency,200,
+fr,/agents-ia,static,published,Agents IA et automatisation | TechFlow Agency,200,
+fr,/conditions-generales,static,published,Conditions générales | TechFlow Agency,200,
+fr,/contact,static,published,Contacter TechFlow Agency | Démarrer un projet,200,
+fr,/design,static,published,Services de design web et de marque | TechFlow Agency,200,
+fr,/developpement,static,published,Services de développement web | TechFlow Agency,200,
+fr,/mentions-legales,static,published,Mentions légales | TechFlow Agency,200,
+fr,/nos-insights,static,published,"Insights sur le design, Webflow et l'IA | TechFlow",200,
+fr,/notre-equipe,static,published,L'équipe derrière TechFlow Agency,200,
+fr,/outils,static,published,Les outils que nous utilisons | TechFlow Agency,200,
+fr,/politique-de-confidentialite,static,published,Politique de confidentialité | TechFlow Agency,200,
+fr,/politique-de-cookies,static,published,Politique de cookies | TechFlow Agency,200,
+fr,/projets,static,published,Nos projets et études de cas | TechFlow Agency,200,
+fr,/search,static,published,Search Results | TechFlow Agency,200,
+fr,/static-template-slug-1781461784835,static,draft,New Page,404,
+fr,/style-guide,static,draft,Style Guide,404,
+fr,/tunnel-de-vente,static,published,Conception de tunnels de vente | TechFlow Agency,200,
+fr,/nos-insights/agence-webflow-pme,cms:nos-insights,published,Agence Webflow : comment nous utilisons Webflow pour les projets de PME,200,
+fr,/nos-insights/creation-site-internet-design-agence,cms:nos-insights,published,Création site internet design : ce que change un vrai travail de design,200,
+fr,/outils/brevo,cms:outils,published,Brevo,200,
+fr,/outils/bubble,cms:outils,published,Bubble,200,
+fr,/outils/calendly,cms:outils,published,Calendly,200,
+fr,/outils/claude,cms:outils,published,Claude,200,
+fr,/outils/client-first,cms:outils,published,Client-First,200,
+fr,/outils/drupal,cms:outils,published,Drupal,200,
+fr,/outils/figma,cms:outils,published,Figma,200,
+fr,/outils/fillout,cms:outils,published,Fillout,200,
+fr,/outils/google-workspace,cms:outils,published,Google Workspace,200,
+fr,/outils/granola,cms:outils,published,Granola,200,
+fr,/outils/hubspot,cms:outils,published,HubSpot,200,
+fr,/outils/lemlist,cms:outils,published,Lemlist,200,
+fr,/outils/loom,cms:outils,published,Loom,200,
+fr,/outils/n8n,cms:outils,published,n8n,200,
+fr,/outils/notion,cms:outils,published,Notion,200,
+fr,/outils/odoo,cms:outils,published,Odoo,200,
+fr,/outils/openrouter,cms:outils,published,OpenRouter,200,
+fr,/outils/shopify,cms:outils,published,Shopify,200,
+fr,/outils/tally,cms:outils,published,Tally,200,
+fr,/outils/twenty-crm,cms:outils,published,Twenty CRM,200,
+fr,/outils/webflow,cms:outils,published,Webflow,200,
+fr,/outils/wise,cms:outils,published,Wise,200,
+fr,/outils/zapier,cms:outils,published,Zapier,200,
+fr,/projets/ama-campus,cms:projets,published,AMA Campus : refonte d'un organisme Qualiopi | TechFlow,200,
+fr,/projets/canetta,cms:projets,published,Canetta : refonte e-commerce Shopify | TechFlow,200,
+fr,/projets/concorde,cms:projets,published,Concorde : refonte de marque et site web | TechFlow,200,
+fr,/projets/convergences-asia,cms:projets,published,Convergences.asia : site et job board | TechFlow,200,
+fr,/projets/district-6-publishing,cms:projets,published,District 6 Publishing : refonte digitale | TechFlow,200,
+fr,/projets/emme-studio,cms:projets,published,Emme Studio : refonte de marque brutaliste | TechFlow,200,
+fr,/projets/epargne-plurielle-avenir,cms:projets,published,Épargne Plurielle Avenir : site d'un CGP | TechFlow,200,
+fr,/projets/eureka-cambodia,cms:projets,published,Eureka Cambodia : marque et site d'un centre | TechFlow,200,
+fr,/projets/exelmans,cms:projets,published,Exelmans : marque et site d'un cabinet d'audit | TechFlow,200,
+fr,/projets/gaiama,cms:projets,draft,Gaïama : site Webflow riche en animations | TechFlow,404,
+fr,/projets/groupe-revive,cms:projets,published,Groupe Revive : refonte digitale | TechFlow Agency,200,
+fr,/projets/je-trouve-mon-avocat-fr,cms:projets,published,Je Trouve Mon Avocat : plateforme Solocal | TechFlow,200,
+fr,/projets/je-trouve-mon-demenageur,cms:projets,published,Je Trouve Mon Déménageur : plateforme Solocal | TechFlow,200,
+fr,/projets/koulier,cms:projets,published,Koulier : marque et site de domiciliation | TechFlow,200,
+fr,/projets/kretz-club,cms:projets,published,"Kretz Club : CRM, automatisation et agents IA | TechFlow",200,
+fr,/projets/leapmotor,cms:projets,published,Leapmotor Cambodge : lancement digital bilingue | TechFlow,200,
+fr,/projets/little-green-spark,cms:projets,published,Little Green Spark : marque et site zéro déchet | TechFlow,200,
+fr,/projets/ma-carriere-immo,cms:projets,published,Ma Carrière Immo : plateforme de recrutement | TechFlow,200,
+fr,/projets/mandil-avocats,cms:projets,published,Mandil Avocats : refonte d'un cabinet d'avocats | TechFlow,200,
+fr,/projets/ooinvestir,cms:projets,published,Ooinvestir : plateforme fintech immobilière | TechFlow,200,
+fr,/projets/opco-ep,cms:projets,published,OPCO EP : site du rapport d'activité 2026 | TechFlow,200,
+fr,/projets/place-des-aines,cms:projets,published,Place des Aînés : plateforme seniors et familles | TechFlow,200,
+fr,/projets/tandem-partners,cms:projets,published,Tandem Partners : identité digitale d'un fonds | TechFlow,200,
+fr,/blog,legacy-301,redirect,,301,/nos-insights
+fr,/category/basic,legacy-301,redirect,,301,/
+fr,/category/business,legacy-301,redirect,,301,/
+fr,/category/enterprise,legacy-301,redirect,,301,/
+fr,/cgu,legacy-301,redirect,,301,/conditions-generales
+fr,/checkout,legacy-301,redirect,,301,/
+fr,/contact-fr,legacy-301,redirect,,301,/contact
+fr,/equipe,legacy-301,redirect,,301,/notre-equipe
+fr,/fr,legacy-301,redirect,,301,/
+fr,/fr/equipe,legacy-301,redirect,,301,/notre-equipe
+fr,/fr/portfolio-fr,legacy-301,redirect,,301,/projets
+fr,/fr/projets/ama-campus,legacy-301,redirect,,301,/projets/ama-campus
+fr,/fr/projets/canetta,legacy-301,redirect,,301,/projets/canetta
+fr,/fr/projets/concorde,legacy-301,redirect,,301,/projets/concorde
+fr,/fr/projets/convergences-asia,legacy-301,redirect,,301,/projets/convergences-asia
+fr,/fr/projets/district-6-publishing,legacy-301,redirect,,301,/projets/district-6-publishing
+fr,/fr/projets/emme-studio,legacy-301,redirect,,301,/projets/emme-studio
+fr,/fr/projets/epargne-plurielle-avenir,legacy-301,redirect,,301,/projets/epargne-plurielle-avenir
+fr,/fr/projets/eureka-cambodia,legacy-301,redirect,,301,/projets/eureka-cambodia
+fr,/fr/projets/exelmans,legacy-301,redirect,,301,/projets/exelmans
+fr,/fr/projets/groupe-revive,legacy-301,redirect,,301,/projets/groupe-revive
+fr,/fr/projets/je-trouve-mon-avocat-fr,legacy-301,redirect,,301,/projets/je-trouve-mon-avocat-fr
+fr,/fr/projets/je-trouve-mon-demenageur,legacy-301,redirect,,301,/projets/je-trouve-mon-demenageur
+fr,/fr/projets/koulier,legacy-301,redirect,,301,/projets/koulier
+fr,/fr/projets/leapmotor,legacy-301,redirect,,301,/projets/leapmotor
+fr,/fr/projets/ma-carriere-immo,legacy-301,redirect,,301,/projets/ma-carriere-immo
+fr,/fr/projets/mandil-avocats,legacy-301,redirect,,301,/projets/mandil-avocats
+fr,/fr/projets/ooinvestir,legacy-301,redirect,,301,/projets/ooinvestir
+fr,/fr/projets/opco-ep,legacy-301,redirect,,301,/projets/opco-ep
+fr,/fr/projets/tandem-partners,legacy-301,redirect,,301,/projets/tandem-partners
+fr,/home---new,legacy-301,redirect,,301,/
+fr,/landing,legacy-301,redirect,,301,/
+fr,/landing-page,legacy-301,redirect,,301,/
+fr,/legal-notices,legacy-301,redirect,,301,/en/legal-notices
+fr,/merci,legacy-301,redirect,,301,/
+fr,/order-confirmation,legacy-301,redirect,,301,/
+fr,/paypal-checkout,legacy-301,redirect,,301,/
+fr,/photography,legacy-301,redirect,,301,/projets
+fr,/portfolio,legacy-301,redirect,,301,/en/projects
+fr,/portfolio-fr,legacy-301,redirect,,301,/projets
+fr,/product/basic,legacy-301,redirect,,301,/
+fr,/product/business,legacy-301,redirect,,301,/
+fr,/product/enterprise,legacy-301,redirect,,301,/
+fr,/style,legacy-301,redirect,,301,/
+fr,/tarifs,legacy-301,redirect,,301,/contact
+fr,/templates/style-guide,legacy-301,redirect,,301,/
