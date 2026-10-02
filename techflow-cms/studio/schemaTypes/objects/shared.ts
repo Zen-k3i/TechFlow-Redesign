@@ -3,6 +3,7 @@ import {ChartUpwardIcon} from '@sanity/icons/ChartUpward'
 import {CommentIcon} from '@sanity/icons/Comment'
 import {SearchIcon} from '@sanity/icons/Search'
 import {StarIcon} from '@sanity/icons/Star'
+import {counterInput, NoIndexInput, SeoInput} from '../../components/seo-inputs'
 
 /** Image with the alt text the frontend needs. */
 export const imageWithAlt = defineType({
@@ -51,21 +52,84 @@ export const benefit = defineType({
   preview: {select: {title: 'title', subtitle: 'text'}},
 })
 
+type SeoParent = {ogSameAsMeta?: boolean} | undefined
+
 export const seo = defineType({
   name: 'seo',
   title: 'SEO',
   type: 'object',
   icon: SearchIcon,
-  options: {collapsible: true, collapsed: true},
+  description: 'Everything is optional: empty fields fall back to the page content, then to Site settings.',
+  components: {input: SeoInput},
   fields: [
-    defineField({name: 'title', title: 'SEO title', type: 'string'}),
+    defineField({
+      name: 'title',
+      title: 'Meta title',
+      description:
+        'Title shown in Google and the browser tab. " | TechFlow" is added automatically when it fits in 60 characters and the title doesn't already contain "TechFlow". Empty = the page title.',
+      type: 'string',
+      components: {input: counterInput(0, 60)},
+      validation: (r) => r.max(60).warning('Google cuts titles after about 60 characters.'),
+    }),
     defineField({
       name: 'description',
-      title: 'SEO description',
+      title: 'Meta description',
+      description: 'Text under the title in Google. Empty = the summary / excerpt, then the site default.',
       type: 'text',
       rows: 3,
-      validation: (r) => r.max(170).warning('Keep it under 170 characters.'),
+      components: {input: counterInput(120, 160)},
+      validation: (r) =>
+        r
+          .custom((text?: string) => !text || (text.length >= 120 && text.length <= 160) || 'Aim for 120–160 characters.')
+          .warning(),
     }),
-    defineField({name: 'image', title: 'Social share image', type: 'image'}),
+    defineField({
+      name: 'ogSameAsMeta',
+      title: 'Social sharing: same as meta title / meta description',
+      description: 'Turn off to write a different title and text for LinkedIn, Facebook, WhatsApp…',
+      type: 'boolean',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'ogTitle',
+      title: 'Social title',
+      type: 'string',
+      hidden: ({parent}) => (parent as SeoParent)?.ogSameAsMeta !== false,
+    }),
+    defineField({
+      name: 'ogDescription',
+      title: 'Social description',
+      type: 'text',
+      rows: 2,
+      hidden: ({parent}) => (parent as SeoParent)?.ogSameAsMeta !== false,
+    }),
+    defineField({
+      name: 'image',
+      title: 'Social share image',
+      description: '1200 × 630 px recommended; it is cropped to that size around the hotspot. Empty = the page\'s main image, then the site default.',
+      type: 'image',
+      options: {hotspot: true},
+    }),
+    defineField({
+      name: 'canonicalUrl',
+      title: 'Canonical URL',
+      description: 'Only when this content is the copy of another page. Empty = the page\'s own URL (the normal case).',
+      type: 'url',
+      validation: (r) => r.uri({scheme: ['https']}),
+    }),
+    defineField({
+      name: 'noIndex',
+      title: 'Hide from Google (noindex)',
+      type: 'boolean',
+      initialValue: false,
+      components: {input: NoIndexInput},
+    }),
+    defineField({
+      name: 'noFollow',
+      title: 'Don\'t follow links on this page (nofollow)',
+      description: 'Rarely needed.',
+      type: 'boolean',
+      initialValue: false,
+    }),
   ],
 })

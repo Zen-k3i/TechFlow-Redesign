@@ -4,12 +4,12 @@ import { legalDocs } from "@/components/legal/data";
 import { LegalPage } from "@/components/legal/legal-page";
 import { PageShell } from "@/components/page/shell";
 import { hasLocale } from "@/i18n/config";
-import { pageMetadata } from "@/i18n/routes";
+import { staticPageMetadata } from "@/sanity/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/mentions-legales">): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return pageMetadata(lang, "legal", legalDocs.legal[lang].meta);
+  return staticPageMetadata(lang, "legal", legalDocs.legal[lang].meta);
 }
 
 export default async function Legal({ params }: PageProps<"/[lang]/mentions-legales">) {

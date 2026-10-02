@@ -5,7 +5,9 @@ import { ToolPage } from "@/components/tools/tool-page";
 import { hasLocale } from "@/i18n/config";
 import { client } from "@/sanity/client";
 import { getTool, isSlug, redirectToTranslation } from "@/sanity/fetch";
-import { cmsAlternates, translationLinks } from "@/sanity/metadata";
+import { href } from "@/i18n/routes";
+import { translationLinks } from "@/sanity/metadata";
+import { buildMetadata } from "@/sanity/seo";
 import { TOOL_SLUGS_QUERY } from "@/sanity/queries";
 
 export async function generateStaticParams({ params }: { params: { lang: string } }) {
@@ -18,11 +20,14 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/outils/[sl
   if (!hasLocale(lang) || !isSlug(slug)) return {};
   const tool = await getTool(lang, slug);
   if (!tool) return {};
-  return {
-    title: tool.seo?.title ?? `${tool.title} | TechFlow Agency`,
-    description: tool.seo?.description ?? tool.intro ?? undefined,
-    alternates: cmsAlternates("tools", lang, slug, tool.translations),
-  };
+  return buildMetadata({
+    lang,
+    path: href(lang, "tools", slug),
+    languages: translationLinks("tools", lang, slug, tool.translations),
+    seo: tool.seo,
+    title: lang === "fr" ? `Pourquoi nous utilisons ${tool.title}` : `Why we use ${tool.title}`,
+    description: tool.intro,
+  });
 }
 
 export default async function Tool({ params }: PageProps<"/[lang]/outils/[slug]">) {
@@ -35,7 +40,7 @@ export default async function Tool({ params }: PageProps<"/[lang]/outils/[slug]"
   }
 
   return (
-    <PageShell lang={lang} current="tools" alternates={translationLinks("tools", lang, slug, tool.translations)}>
+    <PageShell lang={lang} current="tools" alternates={translationLinks("tools", lang, slug, tool.translations)} breadcrumb={{ name: tool.title ?? slug, slug }}>
       <ToolPage tool={tool} />
     </PageShell>
   );

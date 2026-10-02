@@ -10,6 +10,8 @@
  *   npx sanity exec scripts/import-live.ts --with-user-token -- --only=project --slug=kretz-club --lang=fr \
  *     --from=https://techflow-agency-staging.webflow.io
  *
+ * One article: `-- --only=insight --slug=startup-cambodia --lang=en` (pairing with its translation is then done by hand).
+ *
  * Re-running is safe: documents are matched on `sourceUrl` (team members and reviews on `name`) and updated in place.
  */
 import {randomUUID} from 'node:crypto'
@@ -17,7 +19,7 @@ import {createSchema} from 'sanity'
 import {getCliClient} from 'sanity/cli'
 import {htmlToBlocks} from '@portabletext/block-tools'
 import {JSDOM} from 'jsdom'
-import {schemaTypes} from '../schemaTypes'
+import {blockContent} from '../schemaTypes/objects/block-content'
 
 const SITE = 'https://www.techflow-agency.com'
 const DRY_RUN = process.argv.includes('--dry-run')
@@ -89,10 +91,12 @@ async function image(url: string | undefined, alt?: string, type = 'image') {
 // ---------------------------------------------------------------- rich text
 
 // createSchema adds Sanity's built-in types (image hotspot, crop, …) that the block converter resolves.
+// Only the rich text and the types it uses: the full schema imports Studio React inputs (.tsx) that `sanity exec` can't load.
 const compiled = createSchema({
   name: 'import',
   types: [
-    ...schemaTypes,
+    blockContent,
+    {name: 'imageWithAlt', type: 'image', options: {hotspot: true}, fields: [{name: 'alt', type: 'string'}]},
     // Stand-in for the @sanity/table plugin type, which is only registered inside the Studio.
     {
       name: 'table',
@@ -575,9 +579,9 @@ async function run() {
 
   if (!ONLY || ONLY === 'insight') {
     const byCover: Record<Lang, Map<string, string>> = {fr: new Map(), en: new Map()}
-    for (const lang of ['fr', 'en'] as Lang[]) {
+    for (const lang of (ONLY_LANG ? [ONLY_LANG] : ['fr', 'en']) as Lang[]) {
       const cards = await listing(PATHS.insight[lang], PATHS.insight[lang])
-      const slugs = [...new Set([...cards.keys(), ...slugsFor(PATHS.insight[lang])])]
+      const slugs = SLUG ? [SLUG] : [...new Set([...cards.keys(), ...slugsFor(PATHS.insight[lang])])]
       for (const slug of slugs) {
         const {draft, coverSrc} = await extractInsight(`${PATHS.insight[lang]}/${slug}`, lang)
         // A named team member becomes a reference; the agency byline is the empty default.

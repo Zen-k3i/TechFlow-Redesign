@@ -15,7 +15,8 @@ export function proxy(request: NextRequest) {
 
   if (pathname === "/fr" || pathname.startsWith("/fr/")) {
     url.pathname = pathname.slice(3) || "/";
-    return NextResponse.redirect(url);
+    // French has no prefix: /fr/... moved for good.
+    return NextResponse.redirect(url, 308);
   }
 
   url.pathname = `/fr${pathname === "/" ? "" : pathname}`;

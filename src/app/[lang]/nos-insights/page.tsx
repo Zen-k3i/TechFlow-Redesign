@@ -4,14 +4,14 @@ import { insightsContent } from "@/components/insights/data";
 import { InsightsPage } from "@/components/insights/insights-page";
 import { PageShell } from "@/components/page/shell";
 import { hasLocale } from "@/i18n/config";
-import { pageMetadata } from "@/i18n/routes";
+import { staticPageMetadata } from "@/sanity/seo";
 import { sanityFetch } from "@/sanity/client";
 import { CATEGORIES_QUERY, INSIGHTS_INDEX_QUERY } from "@/sanity/queries";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/nos-insights">): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return pageMetadata(lang, "insights", insightsContent[lang].meta);
+  return staticPageMetadata(lang, "insights", insightsContent[lang].meta);
 }
 
 export default async function Insights({ params }: PageProps<"/[lang]/nos-insights">) {

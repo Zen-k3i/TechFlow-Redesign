@@ -5,14 +5,14 @@ import { servicesHub } from "@/components/services/hub-data";
 import { ServicesHub } from "@/components/services/services-hub";
 import { Testimonials } from "@/components/site/testimonials";
 import { hasLocale } from "@/i18n/config";
-import { pageMetadata } from "@/i18n/routes";
+import { staticPageMetadata } from "@/sanity/seo";
 import { sanityFetch } from "@/sanity/client";
 import { FAQ_QUERY } from "@/sanity/queries";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/services">): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return pageMetadata(lang, "services", servicesHub[lang].meta);
+  return staticPageMetadata(lang, "services", servicesHub[lang].meta);
 }
 
 export default async function Services({ params }: PageProps<"/[lang]/services">) {

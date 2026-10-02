@@ -1,4 +1,20 @@
 import type { NextConfig } from "next";
+import { createClient } from "@sanity/client";
+
+const isProduction = process.env.VERCEL_ENV === "production" || process.env.SITE_ENV === "production";
+
+/**
+ * Redirects edited in the Studio ("Redirects"), read once per build: a Sanity webhook on
+ * redirect publish triggers a Vercel deploy hook. A failed fetch fails the build rather than
+ * shipping without the redirects.
+ */
+async function sanityRedirects() {
+  const client = createClient({ projectId: "ce31dig5", dataset: "production", apiVersion: "2026-09-29", useCdn: false });
+  const rows = await client.fetch<{ source: string; destination: string; permanent: boolean | null }[]>(
+    `*[_type == "redirect" && defined(source) && defined(destination)]{ source, destination, permanent }`,
+  );
+  return rows.map(({ source, destination, permanent }) => ({ source, destination, permanent: permanent !== false }));
+}
 
 const nextConfig: NextConfig = {
   images: {
@@ -6,13 +22,10 @@ const nextConfig: NextConfig = {
     // image-url builder's query string (?w=…&auto=format) is allowed.
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io", pathname: "/images/ce31dig5/**" }],
   },
-  async redirects() {
-    // Case study slugs that changed when the projects moved to the CMS.
-    const renamed = { "epargne-plurielle": "epargne-plurielle-avenir", "district-6": "district-6-publishing" };
-    return Object.entries(renamed).flatMap(([from, to]) => [
-      { source: `/projets/${from}`, destination: `/projets/${to}`, permanent: true },
-      { source: `/en/projects/${from}`, destination: `/en/projects/${to}`, permanent: true },
-    ]);
+  redirects: sanityRedirects,
+  async headers() {
+    // Previews and branch deployments must never be indexed (robots.txt disallows them too).
+    return isProduction ? [] : [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
   },
 };
 

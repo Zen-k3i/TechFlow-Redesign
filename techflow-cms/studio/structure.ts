@@ -9,6 +9,11 @@ import {RocketIcon} from '@sanity/icons/Rocket'
 import {PinIcon} from '@sanity/icons/Pin'
 import {TagIcon} from '@sanity/icons/Tag'
 import {HelpCircleIcon} from '@sanity/icons/HelpCircle'
+import {CogIcon} from '@sanity/icons/Cog'
+import {SearchIcon} from '@sanity/icons/Search'
+import {LinkIcon} from '@sanity/icons/Link'
+import {STATIC_PAGES} from './site-routes'
+import {SITE_SETTINGS_ID} from './schemaTypes/documents/site'
 import {LANGUAGES, LOCALIZED_TYPES, type LocalizedType} from './languages'
 import {FAQ_PAGES} from './schemaTypes/documents/faq'
 
@@ -81,13 +86,51 @@ function faqFolder(S: StructureBuilder) {
     )
 }
 
+/** "Page SEO" folder: one entry per coded page, holding its French and English SEO. */
+function pageSeoFolder(S: StructureBuilder) {
+  return S.listItem()
+    .id('pageSeo')
+    .title('Page SEO')
+    .icon(SearchIcon)
+    .child(
+      S.list()
+        .id('pageSeo')
+        .title('SEO of the fixed pages')
+        .items(
+          STATIC_PAGES.map((page) =>
+            S.listItem()
+              .id(`pageSeo-${page.id}`)
+              .title(page.title)
+              .icon(SearchIcon)
+              .child(
+                S.documentTypeList('pageSeo')
+                  .id(`pageSeo-${page.id}`)
+                  .title(`SEO · ${page.title}`)
+                  .filter('_type == "pageSeo" && page == $page')
+                  .params({page: page.id})
+                  .initialValueTemplates(LANGUAGES.map((lang) => S.initialValueTemplateItem(`pageSeo-${page.id}-${lang.id}`))),
+              ),
+          ),
+        ),
+    )
+}
+
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
+      S.listItem()
+        .id(SITE_SETTINGS_ID)
+        .title('Site settings')
+        .icon(CogIcon)
+        .child(S.document().schemaType('siteSettings').documentId(SITE_SETTINGS_ID).title('Site settings')),
+      S.divider(),
       ...LOCALIZED_TYPES.map((type) => localizedFolder(S, type)),
       faqFolder(S),
       S.divider(),
       S.documentTypeListItem('teamMember').title('Team members').icon(UserIcon),
       S.documentTypeListItem('review').title('Client reviews').icon(BlockquoteIcon),
+      S.divider(),
+      pageSeoFolder(S),
+      S.documentTypeListItem('redirect').title('Redirects').icon(LinkIcon),
     ])

@@ -67,7 +67,6 @@ function Panel({
       <Link
         href={caseStudyUrl(item.project)}
         onFocus={onActivate}
-        data-cursor={t.hero.caseCursor}
         className="flex h-full flex-col"
       >
         <div className="relative aspect-[16/11] overflow-hidden lg:absolute lg:inset-0 lg:aspect-auto">

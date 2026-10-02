@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { cache } from "react";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { href, type RouteKey } from "@/i18n/routes";
@@ -26,6 +26,7 @@ export async function redirectToTranslation(type: keyof typeof routeKey, lang: L
   // Same locale means the detail query just missed it (e.g. CDN lag); redirecting would loop.
   if (!doc?.language || !hasLocale(doc.language) || doc.language === lang) return;
   const translated = doc.translations?.find((t) => t.language === lang)?.slug;
-  if (translated) redirect(href(lang, routeKey[type], translated));
+  if (translated) permanentRedirect(href(lang, routeKey[type], translated));
+  // Temporary: this locale may get its own translation later.
   redirect(href(doc.language, routeKey[type], slug));
 }

@@ -6,6 +6,7 @@ import { hasLocale, locales } from "@/i18n/config";
 import { en } from "@/i18n/en";
 import { fr } from "@/i18n/fr";
 import { siteUrl } from "@/i18n/routes";
+import { getSiteSettings } from "@/sanity/seo";
 import "../globals.css";
 
 const satoshi = localFont({
@@ -38,7 +39,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   const { meta } = lang === "en" ? en : fr;
-  return { metadataBase: new URL(siteUrl), title: meta.title, description: meta.description };
+  const settings = await getSiteSettings();
+  return {
+    metadataBase: new URL(siteUrl),
+    title: meta.title,
+    description: meta.description,
+    applicationName: settings?.siteName || "TechFlow",
+    // Search Console "HTML tag" verification, from Site settings in the Studio.
+    verification: settings?.googleVerification ? { google: settings.googleVerification } : undefined,
+  };
 }
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {

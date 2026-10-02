@@ -1,13 +1,17 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {WrenchIcon} from '@sanity/icons/Wrench'
-import {languageField, orderField, seoField, slugField} from './shared'
+import {languageField, orderField, grouped, seoField, slugField} from './shared'
 
 export const tool = defineType({
   name: 'tool',
   title: 'Tool',
   type: 'document',
   icon: WrenchIcon,
-  fields: [
+  groups: [
+    {name: 'content', title: 'Content', default: true},
+    {name: 'seo', title: 'SEO'},
+  ],
+  fields: grouped([
     languageField,
     defineField({name: 'title', title: 'Tool name', type: 'string', validation: (r) => r.required()}),
     slugField,
@@ -22,9 +26,9 @@ export const tool = defineType({
       of: [defineArrayMember({type: 'benefit'})],
     }),
     orderField,
-    seoField,
+    {...seoField, group: 'seo'},
     defineField({name: 'sourceUrl', title: 'Source URL', type: 'url', readOnly: true}),
-  ],
+  ]),
   orderings: [{title: 'Order', name: 'order', by: [{field: 'order', direction: 'asc'}]}],
   preview: {
     select: {title: 'title', language: 'language', media: 'logo'},

@@ -26,6 +26,9 @@ export type Seo = {
   _type: "seo";
   title?: string;
   description?: string;
+  ogSameAsMeta?: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
   image?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -33,6 +36,9 @@ export type Seo = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  canonicalUrl?: string;
+  noIndex?: boolean;
+  noFollow?: boolean;
 };
 
 export type Benefit = {
@@ -114,6 +120,105 @@ export type BlockContent = Array<
     } & Table)
 >;
 
+export type Redirect = {
+  _id: string;
+  _type: "redirect";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  source?: string;
+  destination?: string;
+  permanent?: boolean;
+  note?: string;
+};
+
+export type PageSeo = {
+  _id: string;
+  _type: "pageSeo";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  page?:
+    | "home"
+    | "services"
+    | "design"
+    | "development"
+    | "aiAgents"
+    | "salesFunnel"
+    | "projects"
+    | "tools"
+    | "team"
+    | "insights"
+    | "contact"
+    | "legal"
+    | "terms"
+    | "cookies";
+  seo?: Seo;
+};
+
+export type SiteSettings = {
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  siteName?: string;
+  titleTemplate?: string;
+  defaultDescriptionFr?: string;
+  defaultDescriptionEn?: string;
+  defaultOgImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  organization?: {
+    name?: string;
+    legalName?: string;
+    description?: string;
+    logo?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    email?: string;
+    locations?: Array<{
+      name?: string;
+      street?: string;
+      postalCode?: string;
+      city?: string;
+      country?: string;
+      phone?: string;
+      _type: "office";
+      _key: string;
+    }>;
+    sameAs?: Array<string>;
+  };
+  googleVerification?: string;
+  ga4Id?: string;
+  gtmId?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type Faq = {
   _id: string;
   _type: "faq";
@@ -151,22 +256,6 @@ export type Review = {
   };
   rating?: number;
   order?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type TranslationMetadata = {
@@ -309,6 +398,12 @@ export type TeamMember = {
   order?: number;
 };
 
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
+
 export type Tool = {
   _id: string;
   _type: "tool";
@@ -336,12 +431,6 @@ export type Tool = {
   order?: number;
   seo?: Seo;
   sourceUrl?: string;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
 };
 
 export type SanityFileAssetReference = {
@@ -632,10 +721,13 @@ export type AllSanitySchemaTypes =
   | Metric
   | ImageWithAlt
   | BlockContent
-  | Faq
-  | Review
+  | Redirect
+  | PageSeo
+  | SiteSettings
   | SanityImageCrop
   | SanityImageHotspot
+  | Faq
+  | Review
   | TranslationMetadata
   | InternationalizedArrayReference
   | ProjectReference
@@ -650,8 +742,8 @@ export type AllSanitySchemaTypes =
   | TeamMemberReference
   | Insight
   | TeamMember
-  | Tool
   | Slug
+  | Tool
   | SanityFileAssetReference
   | GrowthCaseStudy
   | Project
@@ -771,7 +863,7 @@ export type PROJECTS_INDEX_QUERY_RESULT = Array<
 
 // Source: ../../src/sanity/queries.ts
 // Variable: PROJECT_DETAIL_QUERY
-// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []),    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] { _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) }  }
+// Query: *[_type == "project" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []),    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    metrics[]{ _key, value, label },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...3] { _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) }  }
 export type PROJECT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -990,9 +1082,13 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
       } | null;
     } | null;
   }> | null;
+  _updatedAt: string;
   seo: {
     title: string | null;
     description: string | null;
+    ogSameAsMeta: boolean | null;
+    ogTitle: string | null;
+    ogDescription: string | null;
     image: {
       alt: null;
       hotspot: SanityImageHotspot | null;
@@ -1009,6 +1105,9 @@ export type PROJECT_DETAIL_QUERY_RESULT = {
         } | null;
       } | null;
     } | null;
+    canonicalUrl: string | null;
+    noIndex: boolean | null;
+    noFollow: boolean | null;
   } | null;
   translations: Array<{
     language: string | null;
@@ -1145,10 +1244,9 @@ export type PROJECT_SLUGS_QUERY_RESULT = Array<string | null>;
 
 // Source: ../../src/sanity/queries.ts
 // Variable: GROWTH_CASE_STUDY_QUERY
-// Query: *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{    _id,    _updatedAt,    title,    "slug": slug.current,    accentColor,    summary,    // "Service tag": sectors picked in the Studio, shown joined in the hero pill.    hero { "tags": array::compact(tags[]->title), headline, status, ctaLabel, stats[]{ _key, value, label } },    // Same story as a website case study: chapters at each h2, image groups between paragraphs.    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    results { metrics[]{ _key, value, label } },    handle,    adsSection { heading, intro },    ads[]{      _key, angle, hook, caption, cta, platform, note, duration,      "video": video.asset->url,      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      "captions": captions.asset->url    },    "sectors": array::compact(sectors[]->title),    services,    channels,    websiteUrl,    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    // The chosen next case study first, then the others in list order (deduplicated in the page).    "related": [      ...select(defined(next) => [next->{ _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) }], []),      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]        | order(coalesce(order, 999) asc)[0...4]{ _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) }    ],    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current}  }
+// Query: *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    accentColor,    summary,    // "Service tag": sectors picked in the Studio, shown joined in the hero pill.    hero { "tags": array::compact(tags[]->title), headline, status, ctaLabel, stats[]{ _key, value, label } },    // Same story as a website case study: chapters at each h2, image groups between paragraphs.    body[]{      ...,      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }    },    "minutes": round(length(string::split(pt::text(body), " ")) / 220),    results { metrics[]{ _key, value, label } },    handle,    adsSection { heading, intro },    ads[]{      _key, angle, hook, caption, cta, platform, note, duration,      "video": video.asset->url,      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },      "captions": captions.asset->url    },    "sectors": array::compact(sectors[]->title),    services,    channels,    websiteUrl,    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    // The chosen next case study first, then the others in list order (deduplicated in the page).    "related": [      ...select(defined(next) => [next->{ _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) }], []),      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]        | order(coalesce(order, 999) asc)[0...4]{ _type,   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) }    ],    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current}  }
 export type GROWTH_CASE_STUDY_QUERY_RESULT = {
   _id: string;
-  _updatedAt: string;
   title: string | null;
   slug: string | null;
   accentColor: string | null;
@@ -1454,9 +1552,13 @@ export type GROWTH_CASE_STUDY_QUERY_RESULT = {
         phones: Array<never>;
       }
   >;
+  _updatedAt: string;
   seo: {
     title: string | null;
     description: string | null;
+    ogSameAsMeta: boolean | null;
+    ogTitle: string | null;
+    ogDescription: string | null;
     image: {
       alt: null;
       hotspot: SanityImageHotspot | null;
@@ -1473,6 +1575,9 @@ export type GROWTH_CASE_STUDY_QUERY_RESULT = {
         } | null;
       } | null;
     } | null;
+    canonicalUrl: string | null;
+    noIndex: boolean | null;
+    noFollow: boolean | null;
   } | null;
   translations: Array<{
     language: string | null;
@@ -1522,7 +1627,7 @@ export type TOOLS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: TOOL_DETAIL_QUERY
-// Query: *[_type == "tool" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    benefitsTitle,    benefitsIntro,    benefits[]{ _key, title, text },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "projects": *[_type == "project" && language == $lang && references(^._id)]      | order(coalesce(order, 999) asc) {   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) },    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...8] {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  }
+// Query: *[_type == "tool" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    benefitsTitle,    benefitsIntro,    benefits[]{ _key, title, text },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "projects": *[_type == "project" && language == $lang && references(^._id)]      | order(coalesce(order, 999) asc) {   _id,  title,  "slug": slug.current,  // Picked in the Studio from the Sectors list (one or more).  "sectors": array::compact(sectors[]->title),  "sector": sectors[0]->title,  // "Template colour" in the Studio: the project's accent on its card and case study.  accentColor,  summary,  services,  websiteUrl,  // Growth case studies without a card image use their key visual.  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  // Card hover stack: website screens (also the /projets wall), or a growth case study's "Card hover" images.  "previews": select(    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  ),  // Growth case studies without hover images stack their first ads as phones instead.  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, []) },    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(coalesce(order, 999) asc)[0...8] {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }  }
 export type TOOL_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1551,9 +1656,32 @@ export type TOOL_DETAIL_QUERY_RESULT = {
     title: string | null;
     text: string | null;
   }> | null;
+  _updatedAt: string;
   seo: {
     title: string | null;
     description: string | null;
+    ogSameAsMeta: boolean | null;
+    ogTitle: string | null;
+    ogDescription: string | null;
+    image: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    canonicalUrl: string | null;
+    noIndex: boolean | null;
+    noFollow: boolean | null;
   } | null;
   translations: Array<{
     language: string | null;
@@ -1738,7 +1866,7 @@ export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHT_DETAIL_QUERY
-// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    seo { title, description },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
+// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
 export type INSIGHT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1844,9 +1972,32 @@ export type INSIGHT_DETAIL_QUERY_RESULT = {
         >;
       }
   > | null;
+  _updatedAt: string;
   seo: {
     title: string | null;
     description: string | null;
+    ogSameAsMeta: boolean | null;
+    ogTitle: string | null;
+    ogDescription: string | null;
+    image: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    canonicalUrl: string | null;
+    noIndex: boolean | null;
+    noFollow: boolean | null;
   } | null;
   translations: Array<{
     language: string | null;
@@ -1927,57 +2078,198 @@ export type SLUG_LOOKUP_QUERY_RESULT =
   | null;
 
 // Source: ../../src/sanity/queries.ts
+// Variable: SITE_SETTINGS_QUERY
+// Query: *[_id == "siteSettings"][0]{    siteName,    titleTemplate,    defaultDescriptionFr,    defaultDescriptionEn,    defaultOgImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },    organization { name, legalName, description, "logo": logo.asset->url, email, locations[]{ name, street, postalCode, city, country, phone }, sameAs },    googleVerification  }
+export type SITE_SETTINGS_QUERY_RESULT =
+  | {
+      siteName: null;
+      titleTemplate: null;
+      defaultDescriptionFr: null;
+      defaultDescriptionEn: null;
+      defaultOgImage: null;
+      organization: null;
+      googleVerification: null;
+    }
+  | {
+      siteName: string | null;
+      titleTemplate: string | null;
+      defaultDescriptionFr: string | null;
+      defaultDescriptionEn: string | null;
+      defaultOgImage: {
+        alt: null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number | null;
+              height: number | null;
+            } | null;
+          } | null;
+        } | null;
+      } | null;
+      organization: {
+        name: string | null;
+        legalName: string | null;
+        description: string | null;
+        logo: string | null;
+        email: string | null;
+        locations: Array<{
+          name: string | null;
+          street: string | null;
+          postalCode: string | null;
+          city: string | null;
+          country: string | null;
+          phone: string | null;
+        }> | null;
+        sameAs: Array<string> | null;
+      } | null;
+      googleVerification: string | null;
+    }
+  | null;
+
+// Source: ../../src/sanity/queries.ts
+// Variable: PAGE_SEO_QUERY
+// Query: *[_type == "pageSeo" && page == $page && language == $lang][0]{ _updatedAt, seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow } }
+export type PAGE_SEO_QUERY_RESULT = {
+  _updatedAt: string;
+  seo: {
+    title: string | null;
+    description: string | null;
+    ogSameAsMeta: boolean | null;
+    ogTitle: string | null;
+    ogDescription: string | null;
+    image: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+    canonicalUrl: string | null;
+    noIndex: boolean | null;
+    noFollow: boolean | null;
+  } | null;
+} | null;
+
+// Source: ../../src/sanity/queries.ts
+// Variable: REDIRECTS_QUERY
+// Query: *[_type == "redirect" && defined(source) && defined(destination)]{ source, destination, permanent }
+export type REDIRECTS_QUERY_RESULT = Array<{
+  source: string;
+  destination: string;
+  permanent: boolean | null;
+}>;
+
+// Source: ../../src/sanity/queries.ts
 // Variable: SITEMAP_QUERY
-// Query: *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)]{    _type,    language,    "slug": slug.current,    _updatedAt  }
+// Query: *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)    && seo.noIndex != true && !defined(seo.canonicalUrl)]{    _type,    language,    "slug": slug.current,    _updatedAt,    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current}  }
 export type SITEMAP_QUERY_RESULT = Array<
   | {
       _type: "growthCaseStudy";
       language: string | null;
       slug: string | null;
       _updatedAt: string;
+      translations: Array<{
+        language: string | null;
+        slug: string | null;
+      }> | null;
     }
   | {
       _type: "insight";
       language: string | null;
       slug: string | null;
       _updatedAt: string;
+      translations: Array<{
+        language: string | null;
+        slug: string | null;
+      }> | null;
     }
   | {
       _type: "project";
       language: string | null;
       slug: string | null;
       _updatedAt: string;
+      translations: Array<{
+        language: string | null;
+        slug: string | null;
+      }> | null;
     }
   | {
       _type: "tool";
       language: string | null;
       slug: string | null;
       _updatedAt: string;
+      translations: Array<{
+        language: string | null;
+        slug: string | null;
+      }> | null;
     }
 >;
+
+// Source: ../../src/sanity/queries.ts
+// Variable: SITEMAP_PAGES_QUERY
+// Query: *[_type == "pageSeo"]{ page, language, _updatedAt, "hidden": seo.noIndex == true || defined(seo.canonicalUrl) }
+export type SITEMAP_PAGES_QUERY_RESULT = Array<{
+  page:
+    | "aiAgents"
+    | "contact"
+    | "cookies"
+    | "design"
+    | "development"
+    | "home"
+    | "insights"
+    | "legal"
+    | "projects"
+    | "salesFunnel"
+    | "services"
+    | "team"
+    | "terms"
+    | "tools"
+    | null;
+  language: string | null;
+  _updatedAt: string;
+  hidden: boolean | false | true;
+}>;
 
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '\n  *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }\n': PROJECTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "project" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n,\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    metrics[]{ _key, value, label },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    "gallery": [heroSide1, heroSide2, heroSide3, heroSide4, heroImage, heroSide5, heroSide6, heroSide7, heroSide8][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    testimonial { quote, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...3] { _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }\n  }\n': PROJECT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "sector" && language == $lang && defined(title)] | order(title asc).title\n': SECTORS_QUERY_RESULT;
     '\n  *[_type == "category" && language == $lang && defined(title)] | order(title asc).title\n': CATEGORIES_QUERY_RESULT;
     '\n  *[_type == "faq" && page == $page && language == $lang][0]{\n    heading,\n    intro,\n    "items": items[defined(question) && defined(answer)]{ _key, "q": question, "a": answer }\n  }\n': FAQ_QUERY_RESULT;
     '\n  *[_type == "project" && language == $lang && defined(slug.current)].slug.current\n': PROJECT_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    accentColor,\n    summary,\n    // "Service tag": sectors picked in the Studio, shown joined in the hero pill.\n    hero { "tags": array::compact(tags[]->title), headline, status, ctaLabel, stats[]{ _key, value, label } },\n    // Same story as a website case study: chapters at each h2, image groups between paragraphs.\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    results { metrics[]{ _key, value, label } },\n    handle,\n    adsSection { heading, intro },\n    ads[]{\n      _key, angle, hook, caption, cta, platform, note, duration,\n      "video": video.asset->url,\n      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      "captions": captions.asset->url\n    },\n    "sectors": array::compact(sectors[]->title),\n    services,\n    channels,\n    websiteUrl,\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    // The chosen next case study first, then the others in list order (deduplicated in the page).\n    "related": [\n      ...select(defined(next) => [next->{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }], []),\n      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n        | order(coalesce(order, 999) asc)[0...4]{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }\n    ],\n    seo { title, description, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': GROWTH_CASE_STUDY_QUERY_RESULT;
+    '\n  *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    accentColor,\n    summary,\n    // "Service tag": sectors picked in the Studio, shown joined in the hero pill.\n    hero { "tags": array::compact(tags[]->title), headline, status, ctaLabel, stats[]{ _key, value, label } },\n    // Same story as a website case study: chapters at each h2, image groups between paragraphs.\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    results { metrics[]{ _key, value, label } },\n    handle,\n    adsSection { heading, intro },\n    ads[]{\n      _key, angle, hook, caption, cta, platform, note, duration,\n      "video": video.asset->url,\n      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      "captions": captions.asset->url\n    },\n    "sectors": array::compact(sectors[]->title),\n    services,\n    channels,\n    websiteUrl,\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    // The chosen next case study first, then the others in list order (deduplicated in the page).\n    "related": [\n      ...select(defined(next) => [next->{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }], []),\n      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n        | order(coalesce(order, 999) asc)[0...4]{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }\n    ],\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': GROWTH_CASE_STUDY_QUERY_RESULT;
     '\n  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)].slug.current\n': GROWTH_SLUGS_QUERY_RESULT;
     '\n  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)] | order(coalesce(order, 999) asc){\n    "slug": slug.current, title, accentColor\n  }\n': GROWTH_INDEX_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TOOLS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)].slug.current\n': TOOL_SLUGS_QUERY_RESULT;
     '\n  *[_type == "teamMember" && defined(photo.asset)]\n    | order(coalesce(order, 999) asc, name asc) { \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TEAM_QUERY_RESULT;
     '\n  *[_type == "review" && defined(quote)] | order(coalesce(order, 999) asc, name asc) {\n    _id,\n    quote,\n    name,\n    role,\n    photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n  }\n': REVIEWS_QUERY_RESULT;
     '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    seo { title, description },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "insight" && language == $lang && defined(slug.current)].slug.current\n': INSIGHT_SLUGS_QUERY_RESULT;
     '\n  *[_type == $type && slug.current == $slug][0]{\n    language,\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': SLUG_LOOKUP_QUERY_RESULT;
-    '\n  *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)]{\n    _type,\n    language,\n    "slug": slug.current,\n    _updatedAt\n  }\n': SITEMAP_QUERY_RESULT;
+    '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    titleTemplate,\n    defaultDescriptionFr,\n    defaultDescriptionEn,\n    defaultOgImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    organization { name, legalName, description, "logo": logo.asset->url, email, locations[]{ name, street, postalCode, city, country, phone }, sameAs },\n    googleVerification\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_type == "pageSeo" && page == $page && language == $lang][0]{ _updatedAt, seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow } }\n': PAGE_SEO_QUERY_RESULT;
+    '\n  *[_type == "redirect" && defined(source) && defined(destination)]{ source, destination, permanent }\n': REDIRECTS_QUERY_RESULT;
+    '\n  *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)\n    && seo.noIndex != true && !defined(seo.canonicalUrl)]{\n    _type,\n    language,\n    "slug": slug.current,\n    _updatedAt,\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': SITEMAP_QUERY_RESULT;
+    '\n  *[_type == "pageSeo"]{ page, language, _updatedAt, "hidden": seo.noIndex == true || defined(seo.canonicalUrl) }\n': SITEMAP_PAGES_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

@@ -15,33 +15,34 @@ import { Testimonials } from "@/components/site/testimonials";
 import { Trust } from "@/components/site/trust";
 import { Work } from "@/components/site/work";
 import { PortraitStrip } from "@/components/team/portrait-strip";
-import { hasLocale, localePath } from "@/i18n/config";
+import { hasLocale } from "@/i18n/config";
+import { en } from "@/i18n/en";
+import { fr } from "@/i18n/fr";
 import { sanityFetch } from "@/sanity/client";
 import { FAQ_QUERY, PROJECTS_INDEX_QUERY, SECTORS_QUERY, TEAM_QUERY } from "@/sanity/queries";
+import { getSiteSettings, staticPageMetadata } from "@/sanity/seo";
+import { JsonLd, organizationJsonLd } from "@/components/seo/json-ld";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return {
-    alternates: {
-      canonical: localePath(lang),
-      languages: { fr: localePath("fr"), en: localePath("en"), "x-default": localePath("fr") },
-    },
-  };
+  return staticPageMetadata(lang, "home", (lang === "en" ? en : fr).meta);
 }
 
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const [members, faq, sectorList, cmsProjects] = await Promise.all([
+  const [members, faq, sectorList, cmsProjects, settings] = await Promise.all([
     sanityFetch(TEAM_QUERY),
     sanityFetch(FAQ_QUERY, { page: "home", lang }),
     sanityFetch(SECTORS_QUERY, { lang }),
     sanityFetch(PROJECTS_INDEX_QUERY, { lang }),
+    getSiteSettings(),
   ]);
 
   return (
     <Providers lang={lang}>
+      <JsonLd data={organizationJsonLd(settings, lang)} />
       <Navbar />
       <main>
         <Hero />

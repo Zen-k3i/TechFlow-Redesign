@@ -1,6 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
-import {languageField, seoField, slugField} from './shared'
+import {languageField, grouped, seoField, slugField} from './shared'
 import {sameLanguage} from './taxonomy'
 
 export const insight = defineType({
@@ -8,7 +8,11 @@ export const insight = defineType({
   title: 'Body',
   type: 'document',
   icon: DocumentTextIcon,
-  fields: [
+  groups: [
+    {name: 'content', title: 'Content', default: true},
+    {name: 'seo', title: 'SEO'},
+  ],
+  fields: grouped([
     languageField,
     defineField({name: 'title', title: 'Title', type: 'string', validation: (r) => r.required()}),
     slugField,
@@ -40,9 +44,9 @@ export const insight = defineType({
     }),
     defineField({name: 'coverImage', title: 'Cover image', type: 'imageWithAlt'}),
     defineField({name: 'body', title: 'Body', type: 'blockContent'}),
-    seoField,
+    {...seoField, group: 'seo'},
     defineField({name: 'sourceUrl', title: 'Source URL', type: 'url', readOnly: true}),
-  ],
+  ]),
   orderings: [
     {title: 'Newest first', name: 'publishedAtDesc', by: [{field: 'publishedAt', direction: 'desc'}]},
   ],

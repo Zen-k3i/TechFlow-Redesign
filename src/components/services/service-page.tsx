@@ -8,6 +8,7 @@ import { projects, serviceIllustration } from "../site/content";
 import { Faq, type FaqContent } from "../site/faq";
 import { useLocale } from "../site/locale";
 import { ProjectCard } from "../site/project-card";
+import { CmsProjectCard, type CmsProject } from "../projects/cms-project-card";
 import { projectPreviews } from "../site/previews";
 import { ServiceShowcase } from "./showcase";
 import { HeroStage } from "./hero-stage";
@@ -20,7 +21,7 @@ const copy = {
   en: { next: "Next service", project: "Project", book: "Book a call" },
 };
 
-export function ServicePage({ service, faq }: { service: ServiceKey; faq: FaqContent }) {
+export function ServicePage({ service, faq, cmsProjects }: { service: ServiceKey; faq: FaqContent; cmsProjects: CmsProject[] }) {
   const { lang, t } = useLocale();
   const c = serviceContent[lang][service];
   const index = serviceKeys.indexOf(service);
@@ -74,7 +75,7 @@ export function ServicePage({ service, faq }: { service: ServiceKey; faq: FaqCon
         </div>
       </section>
 
-      <ComparisonAndWork content={c} work={work} />
+      <ComparisonAndWork content={c} work={work} cmsProjects={cmsProjects} />
       <Faq faq={faq} />
       {next && <NextLink label={copy[lang].next} title={next.title} to={next.href} image={serviceIllustration(serviceKeys.indexOf(nextKey))} />}
     </>
@@ -265,7 +266,7 @@ function Cases({ cases }: { cases: NonNullable<ServiceContent["cases"]> }) {
   );
 }
 
-function ComparisonAndWork({ content, work }: { content: ServiceContent; work: typeof projects }) {
+function ComparisonAndWork({ content, work, cmsProjects }: { content: ServiceContent; work: typeof projects; cmsProjects: CmsProject[] }) {
   const { t, lang } = useLocale();
   const c = t.common.comparison;
 
@@ -281,13 +282,15 @@ function ComparisonAndWork({ content, work }: { content: ServiceContent; work: t
         </div>
         <p className="mt-4 max-w-xl text-ink/60">{content.work.intro}</p>
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {work.map((p, i) => (
-            <FadeIn key={p.slug} delay={i * 0.08}>
-              <li>
-                <ProjectCard project={p} />
-              </li>
-            </FadeIn>
-          ))}
+          {work.map((p, i) => {
+            // The same Sanity card as the home page and /projets; the coded card only if the slug isn't in the CMS.
+            const cms = cmsProjects.find((cp) => cp.slug === p.slug || cp.slug?.startsWith(`${p.slug}-`));
+            return (
+              <FadeIn key={p.slug} delay={i * 0.08}>
+                <li>{cms ? <CmsProjectCard project={cms} /> : <ProjectCard project={p} />}</li>
+              </FadeIn>
+            );
+          })}
         </ul>
 
         <div className="mt-36">

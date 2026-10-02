@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { localePath, type Locale } from "./config";
 
 export const siteUrl = "https://www.techflow-agency.com";
@@ -38,19 +37,3 @@ export const englishAliases = Object.fromEntries(
     .filter((r) => r.en !== r.fr)
     .map((r) => [r.en.slice(1), r.fr.slice(1)]),
 );
-
-export function pageMetadata(
-  lang: Locale,
-  key: RouteKey,
-  meta: { title: string; description: string },
-  child?: string,
-): Metadata {
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: {
-      canonical: href(lang, key, child),
-      languages: { fr: href("fr", key, child), en: href("en", key, child), "x-default": href("fr", key, child) },
-    },
-  };
-}

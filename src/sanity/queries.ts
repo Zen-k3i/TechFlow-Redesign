@@ -2,6 +2,9 @@ import { defineQuery } from "next-sanity";
 
 const image = /* groq */ `{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }`;
 
+/** The SEO tab of a document; the website fills empty fields from the page content (`src/sanity/seo.ts`). */
+const seo = /* groq */ `seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image ${image}, canonicalUrl, noIndex, noFollow }`;
+
 /** Every localized document can point to its other-language versions for hreflang. */
 const translations = /* groq */ `"translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{
   "language": language,
@@ -58,7 +61,8 @@ export const PROJECT_DETAIL_QUERY = defineQuery(`
     testimonial { quote, name, role, photo ${image} },
     tools[]->{ _id, title, "slug": slug.current, logo ${image} },
     team[]->{ _id, name, role, photo ${image} },
-    seo { title, description, image ${image} },
+    _updatedAt,
+    ${seo},
     ${translations},
     "related": *[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]
       | order(coalesce(order, 999) asc)[0...3] { _type, ${projectCard} }
@@ -98,7 +102,6 @@ export const PROJECT_SLUGS_QUERY = defineQuery(`
 export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
   *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{
     _id,
-    _updatedAt,
     title,
     "slug": slug.current,
     accentColor,
@@ -136,7 +139,8 @@ export const GROWTH_CASE_STUDY_QUERY = defineQuery(`
       ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]
         | order(coalesce(order, 999) asc)[0...4]{ _type, ${projectCard} }
     ],
-    seo { title, description, image ${image} },
+    _updatedAt,
+    ${seo},
     ${translations}
   }
 `);
@@ -173,7 +177,8 @@ export const TOOL_DETAIL_QUERY = defineQuery(`
     benefitsTitle,
     benefitsIntro,
     benefits[]{ _key, title, text },
-    seo { title, description },
+    _updatedAt,
+    ${seo},
     ${translations},
     "projects": *[_type == "project" && language == $lang && references(^._id)]
       | order(coalesce(order, 999) asc) { ${projectCard} },
@@ -237,7 +242,8 @@ export const INSIGHT_DETAIL_QUERY = defineQuery(`
   *[_type == "insight" && language == $lang && slug.current == $slug][0]{
     ${insightCard},
     body[]{ ..., _type == "image" => ${image} },
-    seo { title, description },
+    _updatedAt,
+    ${seo},
     ${translations},
     "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]
       | order(publishedAt desc)[0...2] { ${insightCard} }
@@ -258,13 +264,46 @@ export const SLUG_LOOKUP_QUERY = defineQuery(`
   }
 `);
 
+// ---------------------------------------------------------------- SEO
+
+/** Site-wide SEO defaults and organization info, edited in the Studio's "Site settings". */
+export const SITE_SETTINGS_QUERY = defineQuery(`
+  *[_id == "siteSettings"][0]{
+    siteName,
+    titleTemplate,
+    defaultDescriptionFr,
+    defaultDescriptionEn,
+    defaultOgImage ${image},
+    organization { name, legalName, description, "logo": logo.asset->url, email, locations[]{ name, street, postalCode, city, country, phone }, sameAs },
+    googleVerification
+  }
+`);
+
+/** SEO of a coded page (home, services, listings, legal) in one language. */
+export const PAGE_SEO_QUERY = defineQuery(`
+  *[_type == "pageSeo" && page == $page && language == $lang][0]{ _updatedAt, ${seo} }
+`);
+
+/** Redirects managed in the Studio, read by next.config at build time. */
+export const REDIRECTS_QUERY = defineQuery(`
+  *[_type == "redirect" && defined(source) && defined(destination)]{ source, destination, permanent }
+`);
+
 // ---------------------------------------------------------------- sitemap
 
+/** Indexable CMS pages: hidden pages and pages pointing their canonical elsewhere are left out. */
 export const SITEMAP_QUERY = defineQuery(`
-  *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)]{
+  *[_type in ["project", "growthCaseStudy", "tool", "insight"] && defined(slug.current) && defined(language)
+    && seo.noIndex != true && !defined(seo.canonicalUrl)]{
     _type,
     language,
     "slug": slug.current,
-    _updatedAt
+    _updatedAt,
+    ${translations}
   }
+`);
+
+/** Coded pages hidden from Google in the Studio ("Page SEO"), and when their SEO last changed. */
+export const SITEMAP_PAGES_QUERY = defineQuery(`
+  *[_type == "pageSeo"]{ page, language, _updatedAt, "hidden": seo.noIndex == true || defined(seo.canonicalUrl) }
 `);

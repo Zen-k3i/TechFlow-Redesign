@@ -6,6 +6,7 @@ import {category, sector} from './documents/taxonomy'
 import {faq} from './documents/faq'
 import {teamMember} from './documents/team-member'
 import {tool} from './documents/tool'
+import {pageSeo, redirect, siteSettings} from './documents/site'
 import {blockContent} from './objects/block-content'
 import {benefit, imageWithAlt, metric, seo, testimonial} from './objects/shared'
 
@@ -19,6 +20,9 @@ export const schemaTypes = [
   sector,
   category,
   faq,
+  siteSettings,
+  pageSeo,
+  redirect,
   blockContent,
   imageWithAlt,
   metric,

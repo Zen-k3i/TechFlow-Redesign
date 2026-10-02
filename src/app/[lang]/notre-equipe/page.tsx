@@ -5,14 +5,14 @@ import { teamContent } from "@/components/team/data";
 import { TeamPage } from "@/components/team/team-page";
 import { Testimonials } from "@/components/site/testimonials";
 import { hasLocale } from "@/i18n/config";
-import { pageMetadata } from "@/i18n/routes";
+import { staticPageMetadata } from "@/sanity/seo";
 import { sanityFetch } from "@/sanity/client";
 import { TEAM_QUERY } from "@/sanity/queries";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/notre-equipe">): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return pageMetadata(lang, "team", teamContent[lang].meta);
+  return staticPageMetadata(lang, "team", teamContent[lang].meta);
 }
 
 export default async function Team({ params }: PageProps<"/[lang]/notre-equipe">) {
