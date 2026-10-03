@@ -31,7 +31,7 @@ export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNo
         />
       </section>
 
-      <section className="bg-night px-5 pb-28 pt-16 text-white md:px-10 md:pb-36">
+      <section className="bg-night px-5 pb-20 pt-16 text-white md:px-10 md:pb-28">
         <HoverPreview images={services.map((_, i) => serviceIllustration(i))} contain className="mx-auto max-w-7xl">
           {(bind) => (
             <ol className="border-t border-white/15">
@@ -77,11 +77,11 @@ export function ServicesHub({ testimonials, faq }: { testimonials: React.ReactNo
         </HoverPreview>
       </section>
 
-      <section className="bg-night pb-28 text-white">
+      <section className="bg-night pb-20 text-white">
         <WordMarquee words={services.flatMap((s) => s.deliverables)} />
       </section>
 
-      <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+      <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.pipeline.eyebrow} title={c.pipeline.heading} intro={c.pipeline.intro} />
           <ol className="relative mt-16 grid gap-4 md:grid-cols-5">

@@ -132,7 +132,7 @@ export function Story({ body, variant = "chapters" }: { body: BodyValue | null |
 
   return (
     <>
-      <section id={STORY_ANCHOR} ref={storyRef} className="scroll-mt-20 bg-paper px-5 py-24 text-ink md:px-10 md:py-32">
+      <section id={STORY_ANCHOR} ref={storyRef} className="scroll-mt-20 bg-paper px-5 py-20 text-ink md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <p className="eyebrow text-brand-deep">{c.story}</p>
           {intro.length > 0 && (
@@ -421,7 +421,7 @@ function Brief({ study }: { study: CmsCaseStudy }) {
   const label = "eyebrow text-white/55";
 
   return (
-    <section id={BRIEF_ANCHOR} className="scroll-mt-20 bg-night px-5 pb-24 pt-8 text-white md:px-10 md:pb-32">
+    <section id={BRIEF_ANCHOR} className="scroll-mt-20 bg-night px-5 pb-20 pt-8 text-white md:px-10 md:pb-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -502,13 +502,13 @@ function Brief({ study }: { study: CmsCaseStudy }) {
           {team.length > 0 && (
             <FadeIn delay={0.2} className={`${cell} sm:col-span-2`}>
               <dt className={label}>{c.team}</dt>
-              <dd className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
+              <dd className="mt-4 flex flex-wrap gap-x-8 gap-y-5">
                 {team.map((member) => (
-                  <div key={member._id} className="flex items-center gap-3">
-                    <Avatar image={member.photo} name={member.name ?? ""} size="sm" />
+                  <div key={member._id} className="flex items-center gap-4">
+                    <Avatar image={member.photo} name={member.name ?? ""} size="lg" />
                     <span className="leading-tight">
-                      <span className="block text-sm font-medium">{member.name}</span>
-                      <span className="block text-xs text-white/55">{member.role}</span>
+                      <span className="block text-lg font-medium">{member.name}</span>
+                      <span className="mt-0.5 block text-sm text-white/60">{member.role}</span>
                     </span>
                   </div>
                 ))}
@@ -557,24 +557,23 @@ function StepBlock({ chapter, index, label, lang }: { chapter: Chapter; index: n
 function ChapterBlock({ chapter, index, label, lang }: { chapter: Chapter; index: number; label: string; lang: Locale }) {
   const number = String(index + 1).padStart(2, "0");
   return (
-    <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className="grid scroll-mt-28 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+    <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className="grid scroll-mt-28 gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,9fr)] lg:gap-14">
+      {/* Narrow pinned column, label, number and title stacked, so the text and images get the width. */}
       <div className="lg:sticky lg:top-28 lg:self-start">
         <FadeIn>
           <p className="eyebrow text-ink/60">
             {label} {number}
           </p>
-          <div className="mt-4 flex items-start gap-5">
-            <span aria-hidden className="font-serif text-[clamp(4rem,8vw,7rem)] leading-[0.8] text-ink/10">
-              {number}
-            </span>
-            <h2 id={`${chapter.id}-title`} className="pt-1 font-serif text-4xl leading-[1.02] md:text-5xl">
-              {chapter.title}
-            </h2>
-          </div>
+          <span aria-hidden className="mt-3 block font-serif text-[clamp(3.5rem,5vw,5rem)] leading-[0.85] text-ink/10">
+            {number}
+          </span>
+          <h2 id={`${chapter.id}-title`} className="mt-2 font-serif text-4xl leading-[1.02] md:text-[2.5rem]">
+            {chapter.title}
+          </h2>
         </FadeIn>
       </div>
       <FadeIn delay={0.1}>
-        <article lang={lang} className="max-w-2xl [&>*:first-child]:mt-0">
+        <article lang={lang} className="max-w-4xl [&>*:first-child]:mt-0">
           <PortableBody value={chapter.blocks} />
         </article>
       </FadeIn>
@@ -642,7 +641,7 @@ export function ClientQuote({ testimonial: t }: { testimonial: Testimonial }) {
   const words = t.quote.trim().split(/\s+/);
 
   return (
-    <section className="bg-paper px-5 pb-24 text-ink md:px-10 md:pb-32">
+    <section className="bg-paper px-5 pb-20 text-ink md:px-10 md:pb-28">
       <figure className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[var(--accent)] px-6 py-14 text-night md:px-16 md:py-20">
         <span aria-hidden className="pointer-events-none absolute -right-4 -top-16 font-serif text-[20rem] leading-none text-night/10 md:text-[28rem]">
           &rdquo;
@@ -686,7 +685,7 @@ function Related({ study }: { study: CmsCaseStudy }) {
   if (study.related.length === 0) return null;
 
   return (
-    <section className="grain relative overflow-hidden bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="grain relative overflow-hidden bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="relative mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>
@@ -706,14 +705,14 @@ function Related({ study }: { study: CmsCaseStudy }) {
   );
 }
 
-function Avatar({ image, name, size = "md" }: { image: CmsImage | undefined; name: string; size?: "sm" | "md" }) {
-  const box = size === "sm" ? "size-9" : "size-12";
+function Avatar({ image, name, size = "md" }: { image: CmsImage | undefined; name: string; size?: "sm" | "md" | "lg" }) {
+  const box = { sm: "size-9", md: "size-12", lg: "size-16" }[size];
   if (!image?.asset) {
     return <span className={`flex ${box} shrink-0 items-center justify-center rounded-full bg-brand-deep font-serif text-white`}>{name[0]}</span>;
   }
   return (
     <span className={`relative ${box} shrink-0 overflow-hidden rounded-full bg-ink/5`}>
-      <SanityImage image={image} alt="" fill width={144} sizes="48px" className="object-cover object-top" />
+      <SanityImage image={image} alt="" fill width={192} sizes="64px" className="object-cover object-top" />
     </span>
   );
 }

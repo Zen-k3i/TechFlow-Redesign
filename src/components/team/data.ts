@@ -103,9 +103,9 @@ const fr = {
     intro:
       "Les freelances apportent du talent mais pas de système. Les autres agences apportent du process mais pas de vision. TechFlow apporte les deux, avec une équipe dédiée et une responsabilité complète, du brief à la mise en ligne.",
     rows: [
-      { label: "Équipe dédiée", values: ["yes", "partial", "no"] },
+      { label: "Équipe dédiée", values: ["yes", "yes", "no"] },
       { label: "Accompagnement stratégique", values: ["yes", "yes", "no"] },
-      { label: "Design et ingénierie", values: ["yes", "partial", "partial"] },
+      { label: "Design et ingénierie", values: ["yes", "yes", "yes"] },
       { label: "Engagement sur les résultats", values: ["yes", "no", "no"] },
     ] as Comparison,
   },
@@ -202,9 +202,9 @@ const en: typeof fr = {
     intro:
       "Freelancers bring talent but no system. Other agencies bring process but no vision. TechFlow brings both, with a dedicated team and full accountability, from brief to launch.",
     rows: [
-      { label: "Dedicated team", values: ["yes", "partial", "no"] },
+      { label: "Dedicated team", values: ["yes", "yes", "no"] },
       { label: "Strategic guidance", values: ["yes", "yes", "no"] },
-      { label: "Design and engineering", values: ["yes", "partial", "partial"] },
+      { label: "Design and engineering", values: ["yes", "yes", "yes"] },
       { label: "Commitment to results", values: ["yes", "no", "no"] },
     ],
   },

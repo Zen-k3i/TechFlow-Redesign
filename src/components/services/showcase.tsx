@@ -160,7 +160,7 @@ function BeforeAfter({ card }: { card: Card }) {
   const project = redesigns[current];
 
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
@@ -287,7 +287,7 @@ function AgentLive() {
   const log = Array.from({ length: Math.min(round, 4) }, (_, i) => c.mails[(round - 1 - i) % c.mails.length]);
 
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div ref={ref} className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -401,7 +401,7 @@ function FunnelLive({ card }: { card: Card }) {
   const rows = card.rows.map((r) => ({ label: r.label, value: Number(r.value) }));
 
   return (
-    <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
       <div ref={ref} className="mx-auto max-w-7xl">
         <p className="eyebrow text-brand-deep">{c.eyebrow}</p>
         <RevealHeading text={c.heading} accentClassName="italic text-brand-deep" className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl" />

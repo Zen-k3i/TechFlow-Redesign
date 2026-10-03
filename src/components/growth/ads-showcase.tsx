@@ -79,7 +79,7 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
   const playing = still || open !== null ? null : (hovered ?? centred);
 
   return (
-    <section id={SECTION_IDS.ads} className="relative overflow-hidden bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section id={SECTION_IDS.ads} className="relative overflow-hidden bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[60%] bg-[radial-gradient(50%_60%_at_50%_0%,color-mix(in_oklab,var(--accent)_22%,transparent),transparent_70%)]" />
       <div className="relative mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
@@ -119,7 +119,7 @@ export function AdsShowcase({ ads, brand, heading, intro }: { ads: Ad[]; brand: 
                 onPointerLeave={() => setHovered(null)}
                 onFocus={() => setHovered(i)}
                 onBlur={() => setHovered(null)}
-                className="group block w-full rounded-[2.6rem] text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
+                className="group block w-full cursor-pointer rounded-[2.6rem] text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
               >
                 <TiltPhone still={still}>
                   <SocialAd ad={ad} brand={brand} platform={pick(platform, ad)} playing={playing === i} compact />

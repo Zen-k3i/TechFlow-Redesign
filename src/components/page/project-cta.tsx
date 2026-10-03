@@ -25,11 +25,11 @@ export function GlowButton({
   block = false,
   className = "",
 }: ButtonProps & { href: string; external?: boolean; children: React.ReactNode }) {
-  const fill = tone === "dark" ? "bg-white text-night" : "bg-ink text-paper";
+  const fill = tone === "dark" ? "bg-white text-night group-hover:bg-[#e6ebff]" : "bg-ink text-paper group-hover:bg-brand-deep";
   const inner = (
     <>
       <span className="absolute inset-[-100%] -z-10 animate-shine bg-[conic-gradient(from_0deg,rgba(71,102,255,0.9)_0deg,transparent_60deg,transparent_300deg,rgba(71,102,255,0.9)_360deg)]" />
-      <span className={`${base} pl-6 pr-1.5 font-medium ${fill} ${block ? "justify-between" : ""}`}>
+      <span className={`${base} pl-6 pr-1.5 font-medium transition-colors duration-300 ${fill} ${block ? "justify-between" : ""}`}>
         {children}
         <span className="flex size-10 items-center justify-center rounded-full bg-brand text-white transition-transform duration-300 group-hover:-rotate-45">
           →

@@ -543,7 +543,7 @@ export function NextSteps({
   const steps = n.steps.map((s, i) => (i === 1 && second ? second : s));
 
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <SectionHeader eyebrow={n.eyebrow} title={n.heading} intro={n.intro} />
         <ol className="relative mt-16 grid gap-4 md:grid-cols-5">

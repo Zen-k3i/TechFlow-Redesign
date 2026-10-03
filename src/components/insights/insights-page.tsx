@@ -172,7 +172,7 @@ function ArticleIndex({
   });
 
   return (
-    <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <FeaturedArticle article={latest} />
 

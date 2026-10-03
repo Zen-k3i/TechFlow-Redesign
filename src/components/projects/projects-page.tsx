@@ -38,11 +38,11 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
     <>
       <ProjectsHero projects={wall} />
 
-      <section className="bg-night px-5 pb-24 pt-8 text-white md:px-10">
+      <section className="bg-night px-5 pb-20 pt-8 text-white md:px-10">
         <ClientMarquee label={t.trust.eyebrow} />
       </section>
 
-      <section id={CASES_ANCHOR} className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+      <section id={CASES_ANCHOR} className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.grid.eyebrow} title={c.grid.heading} intro={c.grid.intro} tone="light" />
 

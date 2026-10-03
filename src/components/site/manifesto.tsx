@@ -12,7 +12,7 @@ export function Manifesto() {
   const m = t.manifesto;
 
   return (
-    <section className="relative rounded-[2.5rem] bg-paper px-5 py-24 text-ink md:rounded-[4rem] md:px-10 md:py-32">
+    <section className="relative rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-center gap-4">
           <p className="eyebrow text-brand-deep">{m.eyebrow}</p>
@@ -106,7 +106,7 @@ function Removed({ text, tag, index }: { text: string; tag: string; index: numbe
       viewport={{ once: true, margin: "-15% 0px" }}
       className="flex items-center justify-between gap-6 border-b border-ink/10 py-5 md:py-7"
     >
-      <span className="relative font-serif text-[1.75rem] leading-tight md:text-[2.625rem]">
+      <span className="relative font-serif text-2xl leading-tight md:text-[2.125rem]">
         <motion.span
           variants={{ hidden: { opacity: 0.85 }, visible: { opacity: 0.35 } }}
           transition={{ duration: 0.6, delay: delay + 0.4 }}

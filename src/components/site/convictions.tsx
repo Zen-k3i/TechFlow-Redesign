@@ -42,7 +42,7 @@ export function Convictions() {
   const Visual = [BuildVisual, ToolsVisual, UnderstandVisual][active];
 
   return (
-    <section className="relative overflow-hidden bg-night pt-24 text-white md:pt-32">
+    <section className="relative overflow-hidden bg-night pt-20 text-white md:pt-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_40%_at_100%_30%,rgba(54,71,245,0.16),transparent_70%)]"

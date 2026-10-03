@@ -18,7 +18,7 @@ export function Industries() {
   const [active, setActive] = useState(0);
 
   return (
-    <section id="secteurs" className="relative bg-night px-5 pb-24 pt-12 text-white md:px-10 md:pb-32 md:pt-16">
+    <section id="secteurs" className="relative bg-night px-5 pb-20 pt-12 text-white md:px-10 md:pb-28 md:pt-16">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>

@@ -240,7 +240,7 @@ function Related({ study }: { study: GrowthStudy }) {
   if (items.length === 0) return null;
 
   return (
-    <section className="grain relative overflow-hidden bg-night px-5 pb-28 pt-20 text-white md:px-10 md:pb-36">
+    <section className="grain relative overflow-hidden bg-night px-5 pb-20 pt-20 text-white md:px-10 md:pb-28">
       <div className="relative mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>

@@ -24,7 +24,7 @@ export function NotFoundContent() {
   const pages = ["services", "projects", "team", "insights", "contact"] as const;
 
   return (
-    <section className="grain relative flex min-h-svh items-center overflow-hidden bg-night px-5 py-32 text-white md:px-10">
+    <section className="grain relative flex min-h-svh items-center overflow-hidden bg-night px-5 py-24 text-white md:px-10">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_50%_at_50%_40%,rgba(71,102,255,0.25),transparent_70%)]" />
       <div className="relative mx-auto max-w-3xl text-center">
         <p className="font-serif text-[clamp(8rem,28vw,18rem)] italic leading-none text-brand-sky">404</p>

@@ -56,7 +56,7 @@ export function Brief() {
   return (
     <section
       id="brief"
-      className="relative rounded-[2.5rem] bg-paper px-5 py-24 text-ink md:rounded-[4rem] md:px-10 md:py-32"
+      className="relative rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <p className="eyebrow text-brand-deep">{b.eyebrow}</p>

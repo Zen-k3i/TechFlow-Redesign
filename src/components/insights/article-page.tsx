@@ -117,7 +117,7 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
         </motion.div>
       )}
 
-      <section className="bg-paper px-5 pb-24 pt-14 text-ink md:px-10 md:pb-32 md:pt-20">
+      <section className="bg-paper px-5 pb-20 pt-14 text-ink md:px-10 md:pb-28 md:pt-20">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:gap-16 xl:gap-24">
           <aside className="max-lg:hidden">
             <div className="sticky top-28 space-y-10">
@@ -154,7 +154,7 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
       </section>
 
       {article.related.length > 0 && (
-        <section className="bg-night px-5 py-24 text-white md:px-10 md:py-28">
+        <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <h2 className="font-serif text-5xl md:text-6xl">{c.related}</h2>

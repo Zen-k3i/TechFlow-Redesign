@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { SanityImage } from "../cms/sanity-image";
 import { useMounted } from "../site/use-mounted";
@@ -7,14 +8,16 @@ import { useLocale } from "../site/locale";
 import { RevealHeading } from "../site/reveal";
 import type { TeamMember } from "./data";
 
-const copy: Record<Locale, { eyebrow: string; heading: string }> = {
+const copy: Record<Locale, { eyebrow: string; heading: string; cta: string }> = {
   fr: {
     eyebrow: "Les visages derrière vos projets",
     heading: "Des humains derrière chaque projet, *entre la France et le Cambodge.*",
+    cta: "Découvrir toute l'équipe",
   },
   en: {
     eyebrow: "The faces behind your projects",
     heading: "Real people behind every project, *between France and Cambodia.*",
+    cta: "Meet the whole team",
   },
 };
 
@@ -22,8 +25,8 @@ const copy: Record<Locale, { eyebrow: string; heading: string }> = {
  * Scrolling strip of team portraits (team members from Sanity, in their `order`).
  * Used on the team page, right under its hero, and on the home page.
  */
-export function PortraitStrip({ members, className = "pt-8" }: { members: TeamMember[]; className?: string }) {
-  const { lang } = useLocale();
+export function PortraitStrip({ members, className = "pt-8", cta = false }: { members: TeamMember[]; className?: string; cta?: boolean }) {
+  const { lang, links } = useLocale();
   const c = copy[lang];
   const mounted = useMounted();
   if (members.length === 0) return null;
@@ -31,7 +34,7 @@ export function PortraitStrip({ members, className = "pt-8" }: { members: TeamMe
   const list = mounted ? [...members, ...members] : members;
 
   return (
-    <section className={`overflow-hidden bg-night pb-24 text-white md:pb-32 ${className}`}>
+    <section className={`overflow-hidden bg-night pb-20 text-white md:pb-28 ${className}`}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <p className="eyebrow text-brand-sky">{c.eyebrow}</p>
         <RevealHeading text={c.heading} accentClassName="italic text-brand-sky" className="mt-4 max-w-4xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]" />
@@ -54,6 +57,20 @@ export function PortraitStrip({ members, className = "pt-8" }: { members: TeamMe
           </figure>
         ))}
       </div>
+      {/* On the home page: an invitation to the full team page (the team page itself has none). */}
+      {cta && (
+        <div className="mt-12 flex justify-center px-5">
+          <Link
+            href={links.team}
+            className="group flex h-14 items-center gap-3 rounded-full bg-white pl-7 pr-2 font-medium text-ink transition-colors hover:bg-brand-sky"
+          >
+            {c.cta}
+            <span className="flex size-10 items-center justify-center rounded-full bg-ink text-white transition-transform group-hover:-rotate-45">
+              →
+            </span>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }

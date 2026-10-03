@@ -10,7 +10,7 @@ import { SectionHeader } from "./ui";
 export function ServiceCards({ eyebrow, heading }: { eyebrow: string; heading: string }) {
   const { t } = useLocale();
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <SectionHeader eyebrow={eyebrow} title={heading} />
         <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

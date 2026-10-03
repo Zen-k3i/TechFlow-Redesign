@@ -8,7 +8,7 @@ import { useLocale } from "./locale";
 export function Trust() {
   const { t } = useLocale();
   return (
-    <section className="relative bg-night pb-24 pt-10 text-white">
+    <section className="relative bg-night pb-20 pt-10 text-white">
       <ClientMarquee label={t.trust.eyebrow} />
 
       <dl className="mx-auto mt-20 grid max-w-6xl grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 px-0 md:grid-cols-4">

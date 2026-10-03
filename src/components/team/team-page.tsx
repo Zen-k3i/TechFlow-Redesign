@@ -28,7 +28,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
         aside={<VisioCall members={members} />}
       />
 
-      <section className="bg-night px-5 pb-24 text-white md:px-10">
+      <section className="bg-night px-5 pb-20 text-white md:px-10">
         <dl className="mx-auto grid max-w-7xl grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-4">
           {c.stats.map((s, i) => (
             <FadeIn key={s.label} delay={i * 0.06} className="bg-night p-6 md:p-8">
@@ -44,7 +44,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
 
       <PortraitStrip members={members} />
 
-      <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+      <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.pillars.eyebrow} title={c.pillars.heading} intro={c.pillars.intro} tone="light" />
           <ul className="mt-16 grid gap-4 md:grid-cols-3">
@@ -59,7 +59,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
         </div>
       </section>
 
-      <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+      <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.howWeWork.eyebrow} title={c.howWeWork.heading} />
           <ol className="mt-20 space-y-24 md:space-y-32">
@@ -91,7 +91,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
         </div>
       </section>
 
-      <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+      <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.team.eyebrow} title={c.team.heading} intro={c.team.intro} tone="light" />
           <ul className="mt-16 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
@@ -127,7 +127,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
         </div>
       </section>
 
-      <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+      <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={t.common.comparison.eyebrow} title={c.comparison.heading} intro={c.comparison.intro} />
           <FadeIn className="mt-14">

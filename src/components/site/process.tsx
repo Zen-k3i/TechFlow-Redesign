@@ -20,7 +20,7 @@ export function Process() {
   const [current, setCurrent] = useState(0);
 
   return (
-    <section id="methode" className="relative overflow-clip bg-night px-5 py-24 text-white md:px-10 md:py-32">
+    <section id="methode" className="relative overflow-clip bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_100%_40%,rgba(54,71,245,0.18),transparent_70%)]"

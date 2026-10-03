@@ -160,12 +160,6 @@ export const video3: MuxVideoItem = {
 
 export const clients = [
   {
-    name: "Koulier",
-    src: "/images/clients/koulier.svg",
-    width: 173,
-    height: 22,
-  },
-  {
     name: "Royal Enfield",
     src: "/images/clients/royal-enfield.webp",
     width: 368,
@@ -215,7 +209,19 @@ export const clients = [
     src: "/images/clients/canetta.svg",
     width: 657,
     height: 156,
-  },
+  },  { name: "Kretz Club", src: "/images/clients/kretz-club.svg", width: 424, height: 437 },
+  { name: "DNA", src: "/images/clients/dna.png", width: 600, height: 199 },
+  { name: "Confluences", src: "/images/clients/confluences.webp", width: 438, height: 102 },
+  { name: "District 6", src: "/images/clients/district-6.webp", width: 422, height: 144 },
+  { name: "Sakam Security", src: "/images/clients/sakam-security.svg", width: 279, height: 108 },
+  { name: "Atalante", src: "/images/clients/atalante.svg", width: 375, height: 134 },
+  { name: "Weloy", src: "/images/clients/weloy.svg", width: 480, height: 111 },
+  { name: "PN", src: "/images/clients/pn.webp", width: 364, height: 120 },
+  { name: "Prello", src: "/images/clients/prello.svg", width: 411, height: 122 },
+  { name: "Emme", src: "/images/clients/emme.svg", width: 92, height: 92 },
+  { name: "Little Green Spark", src: "/images/clients/little-green-spark.svg", width: 314, height: 297 },
+  { name: "Treize Février", src: "/images/clients/treize-fevrier.svg", width: 378, height: 178 },
+  { name: "MG", src: "/images/clients/mg.svg", width: 213, height: 213 },
 ];
 
 export const ease = [0.22, 1, 0.36, 1] as const;

@@ -60,7 +60,7 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
     <section
       id="top"
       ref={ref}
-      className="relative isolate overflow-hidden bg-night pt-28 text-white md:pt-32"
+      className="relative isolate overflow-hidden bg-night pt-20 text-white md:pt-28"
     >
       <Backdrop />
 

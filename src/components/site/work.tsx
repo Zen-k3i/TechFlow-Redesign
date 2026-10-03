@@ -21,7 +21,7 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
   const homeProjects = cmsProjects.filter((p) => p._type !== "growthCaseStudy");
 
   return (
-    <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-24 text-ink md:rounded-[4rem] md:px-10 md:py-32">
+    <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>

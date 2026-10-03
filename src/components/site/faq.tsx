@@ -17,7 +17,7 @@ export function Faq({ faq }: { faq: FaqContent }) {
   if (!faq?.heading || items.length === 0) return null;
 
   return (
-    <section id="faq" className="bg-night px-5 py-24 text-white md:px-10 md:py-32">
+    <section id="faq" className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="eyebrow text-brand-sky">{t.faq.eyebrow}</p>

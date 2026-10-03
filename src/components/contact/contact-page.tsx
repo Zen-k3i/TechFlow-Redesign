@@ -29,7 +29,7 @@ export function ContactPage() {
       />
       <BriefForm />
 
-      <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+      <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow={c.offices.eyebrow}

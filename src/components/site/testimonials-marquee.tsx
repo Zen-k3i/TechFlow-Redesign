@@ -59,7 +59,7 @@ export function TestimonialsMarquee({ reviews }: { reviews: Review[] }) {
   const mounted = useMounted();
 
   return (
-    <section id="avis" className="relative overflow-hidden bg-night py-24 text-white md:py-32">
+    <section id="avis" className="relative overflow-hidden bg-night py-20 text-white md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>

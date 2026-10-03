@@ -51,7 +51,7 @@ export function ServicePage({ service, faq, cmsProjects }: { service: ServiceKey
         <HeroStage service={service} content={c} />
       </section>
 
-      <section className="bg-night pb-10 pt-24 text-white">
+      <section className="bg-night pb-10 pt-20 text-white">
         <WordMarquee words={c.offer.items.map((i) => i.title)} />
         <div className="mt-20">
           <ClientMarquee label={t.trust.eyebrow} />
@@ -66,7 +66,7 @@ export function ServicePage({ service, faq, cmsProjects }: { service: ServiceKey
       {c.highlight && <Highlight highlight={c.highlight} />}
       {c.cases && <Cases cases={c.cases} />}
 
-      <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+      <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow={c.process.eyebrow} title={c.process.heading} intro={c.process.intro} />
           <div className="mt-16">
@@ -86,7 +86,7 @@ function Audience({ content }: { content: ServiceContent }) {
   const { lang, links } = useLocale();
   const a = content.audience;
   return (
-    <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <dl className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
           {content.stats.map((s, i) => (
@@ -134,7 +134,7 @@ function Offer({ content, previews }: { content: ServiceContent; previews: strin
   const o = content.offer;
   const images = o.items.map((_, i) => previews[i % previews.length]);
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-40">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <SectionHeader eyebrow={o.eyebrow} title={o.heading} intro={o.intro} />
         <HoverPreview images={images} className="mt-16">
@@ -174,7 +174,7 @@ function Offer({ content, previews }: { content: ServiceContent; previews: strin
 
 function Quote({ quote }: { quote: ServiceContent["quote"] }) {
   return (
-    <section className="bg-night px-5 pb-28 text-white md:px-10 md:pb-40">
+    <section className="bg-night px-5 pb-20 text-white md:px-10 md:pb-40">
       <FadeIn className="mx-auto max-w-5xl">
         <figure>
           <span aria-hidden className="block font-serif text-[8rem] leading-[0.6] text-brand-sky">
@@ -200,7 +200,7 @@ function Quote({ quote }: { quote: ServiceContent["quote"] }) {
 
 function Statement({ statement }: { statement: NonNullable<ServiceContent["statement"]> }) {
   return (
-    <section className="rounded-[2.5rem] bg-brand-deep px-5 py-28 text-white md:rounded-[4rem] md:px-10 md:py-40">
+    <section className="rounded-[2.5rem] bg-brand-deep px-5 py-20 text-white md:rounded-[4rem] md:px-10 md:py-32">
       <div className="mx-auto max-w-6xl">
         <p className="eyebrow text-white/90">{statement.eyebrow}</p>
         <RevealHeading text={statement.heading} accentClassName="italic text-white/75" className="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.02em] md:text-8xl" />
@@ -214,7 +214,7 @@ function Statement({ statement }: { statement: NonNullable<ServiceContent["state
 
 function Highlight({ highlight }: { highlight: NonNullable<ServiceContent["highlight"]> }) {
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <SectionHeader eyebrow={highlight.eyebrow} title={highlight.heading} intro={highlight.intro} />
         <ul className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
@@ -233,7 +233,7 @@ function Highlight({ highlight }: { highlight: NonNullable<ServiceContent["highl
 
 function Cases({ cases }: { cases: NonNullable<ServiceContent["cases"]> }) {
   return (
-    <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <SectionHeader eyebrow={cases.eyebrow} title={cases.heading} />
         <ol className="mt-16 border-t border-white/10">
@@ -265,7 +265,7 @@ function ComparisonAndWork({ content, work, cmsProjects }: { content: ServiceCon
   const c = t.common.comparison;
 
   return (
-    <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHeader eyebrow={content.work.eyebrow} title={content.work.heading} tone="light" />

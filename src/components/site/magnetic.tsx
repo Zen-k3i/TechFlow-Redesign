@@ -1,37 +1,15 @@
-"use client";
-
-import { m as motion, useMotionValue, useSpring } from "motion/react";
-
+/**
+ * Wrapper kept for the call-to-action buttons. It used to pull its button towards the cursor; that
+ * movement was dropped (2026-10-03) for a calmer hover: the buttons themselves change colour and turn
+ * their arrow. `strength` is accepted and ignored so existing call sites keep working.
+ */
 export function Magnetic({
   children,
-  strength = 0.35,
   className = "",
 }: {
   children: React.ReactNode;
   strength?: number;
   className?: string;
 }) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 200, damping: 15, mass: 0.3 });
-  const sy = useSpring(y, { stiffness: 200, damping: 15, mass: 0.3 });
-
-  return (
-    <motion.div
-      style={{ x: sx, y: sy }}
-      onPointerMove={(e) => {
-        if (e.pointerType !== "mouse") return;
-        const r = e.currentTarget.getBoundingClientRect();
-        x.set((e.clientX - (r.left + r.width / 2)) * strength);
-        y.set((e.clientY - (r.top + r.height / 2)) * strength);
-      }}
-      onPointerLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-      className={`inline-block ${className}`}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={`inline-block ${className}`}>{children}</div>;
 }

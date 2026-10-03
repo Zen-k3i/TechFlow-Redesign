@@ -20,7 +20,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
 
   return (
     <>
-      <section id="top" className="grain relative overflow-hidden bg-night px-5 pb-24 pt-32 text-white md:px-10 md:pt-44">
+      <section id="top" className="grain relative overflow-hidden bg-night px-5 pb-20 pt-32 text-white md:px-10 md:pt-44">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_55%_at_80%_20%,rgba(71,102,255,0.28),transparent_70%)]" />
         <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div>
@@ -73,7 +73,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
       </section>
 
       {tool.benefits && tool.benefits.length > 0 && (
-        <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+        <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionHeader title={tool.benefitsTitle ?? tool.title ?? ""} intro={tool.benefitsIntro ?? undefined} tone="light" />
             <ul className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -97,7 +97,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
       )}
 
       {tool.projects.length > 0 && (
-        <section className="bg-night px-5 py-28 text-white md:px-10 md:py-36">
+        <section className="bg-night px-5 py-20 text-white md:px-10 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionHeader eyebrow={c.projects.eyebrow} title={c.projects.heading.replace("{tool}", tool.title ?? "")} />
             <ul className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -111,7 +111,7 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
         </section>
       )}
 
-      <section className="rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-32">
+      <section className="rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeader eyebrow={c.toolbox.eyebrow} title={c.toolbox.heading} tone="light" />
