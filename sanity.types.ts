@@ -372,6 +372,7 @@ export type Insight = {
   >;
   categories?: Array<string>;
   publishedAt?: string;
+  readyToPublish?: boolean;
   author?: TeamMemberReference;
   coverImage?: ImageWithAlt;
   body?: BlockContent;

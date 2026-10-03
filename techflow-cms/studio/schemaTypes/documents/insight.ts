@@ -36,6 +36,14 @@ export const insight = defineType({
     }),
     defineField({name: 'publishedAt', title: 'Publish date', type: 'date'}),
     defineField({
+      name: 'readyToPublish',
+      title: 'Ready to publish',
+      type: 'boolean',
+      initialValue: false,
+      description:
+        'Tick once the draft has been reviewed: the SEO harness then publishes it on its schedule (1–2 articles a day). Leave unticked to keep it as a draft.',
+    }),
+    defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
