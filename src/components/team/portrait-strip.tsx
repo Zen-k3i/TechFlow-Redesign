@@ -2,6 +2,7 @@
 
 import type { Locale } from "@/i18n/config";
 import { SanityImage } from "../cms/sanity-image";
+import { useMounted } from "../site/use-mounted";
 import { useLocale } from "../site/locale";
 import { RevealHeading } from "../site/reveal";
 import type { TeamMember } from "./data";
@@ -24,8 +25,10 @@ const copy: Record<Locale, { eyebrow: string; heading: string }> = {
 export function PortraitStrip({ members, className = "pt-8" }: { members: TeamMember[]; className?: string }) {
   const { lang } = useLocale();
   const c = copy[lang];
+  const mounted = useMounted();
   if (members.length === 0) return null;
-  const list = [...members, ...members];
+  // The looping copy is added in the browser only: the server HTML carries each portrait once.
+  const list = mounted ? [...members, ...members] : members;
 
   return (
     <section className={`overflow-hidden bg-night pb-28 text-white md:pb-36 ${className}`}>

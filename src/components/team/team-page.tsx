@@ -117,7 +117,7 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
                 <div className="mt-4 flex items-start justify-between gap-3">
                   <div>
                     <p className="font-medium">{m.name}</p>
-                    <p className="text-sm text-ink/55">{m.role}</p>
+                    <p className="text-sm text-ink/60">{m.role}</p>
                   </div>
                   {m.linkedin && <LinkedInLink href={m.linkedin} name={m.name ?? ""} />}
                 </div>
@@ -198,7 +198,7 @@ function LinkedInLink({ href, name }: { href: string; name: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${name} · LinkedIn`}
-      className="grid size-9 shrink-0 place-items-center rounded-full border border-ink/10 text-ink/55 transition-colors hover:border-[#0a66c2] hover:bg-[#0a66c2] hover:text-white"
+      className="grid size-9 shrink-0 place-items-center rounded-full border border-ink/10 text-ink/60 transition-colors hover:border-[#0a66c2] hover:bg-[#0a66c2] hover:text-white"
     >
       <svg viewBox="0 0 24 24" aria-hidden className="size-4 fill-current">
         <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
@@ -235,7 +235,7 @@ function VisioCall({ members }: { members: TeamMember[] }) {
             <span className="size-2 animate-pulse rounded-full bg-red-500" />
             {h.call}
           </span>
-          <span className="font-mono tabular-nums text-white/45">{clock}</span>
+          <span className="font-mono tabular-nums text-white/55">{clock}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           {picks.map((m, i) => (

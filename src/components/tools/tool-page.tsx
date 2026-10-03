@@ -46,8 +46,9 @@ export function ToolPage({ tool }: { tool: ToolDetail }) {
             <RevealHeading as="h1" text={tool.title ?? ""} className="mt-8 font-serif text-[clamp(3.5rem,9vw,8rem)] leading-[0.9] tracking-[-0.02em]" />
             {tool.intro && (
               <motion.p
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
+                // Slides only: the page's largest text, visible from the server HTML (LCP).
+                initial={{ y: 14 }}
+                animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3, ease }}
                 className="mt-6 max-w-2xl text-lg text-white/70 md:text-xl"
               >

@@ -6,6 +6,7 @@ import { MuxCard, type MuxVideoItem } from "../page/ui";
 import { video1, video2, video3 } from "./content";
 import { useLocale } from "./locale";
 import { RevealHeading } from "./reveal";
+import { useMounted } from "./use-mounted";
 
 export type Review = REVIEWS_QUERY_RESULT[number];
 type Item = { review: Review } | { video: MuxVideoItem };
@@ -16,38 +17,46 @@ const SECONDS_PER_ITEM = 7;
 
 /** Type metrics per breakpoint, used to size each row to the longest quote it holds. */
 const LAYOUTS = {
-  compact: { rows: 2, width: 340, narrowWidth: 300, text: "text-sm", lineHeight: 22.75, charWidth: 7.4 },
-  desktop: { rows: 3, width: 420, narrowWidth: 330, text: "text-[15px]", lineHeight: 24.4, charWidth: 7.4 },
+  compact: { width: 340, narrowWidth: 300, lineHeight: 22.75, charWidth: 7.4 },
+  desktop: { width: 420, narrowWidth: 330, lineHeight: 24.4, charWidth: 7.4 },
 };
 type Layout = (typeof LAYOUTS)[keyof typeof LAYOUTS];
-type Row = { items: Item[]; height: number; cardWidth: number };
+type Size = { height: number; cardWidth: number };
+type Row = { items: Item[]; compact: Size; desktop: Size };
+const ROWS = 3;
 
 // Card padding (2 × 28px), the gap above the byline and the byline itself.
 const CARD_CHROME = 56 + 24 + 44;
 
+/** Height and card width of a row on one breakpoint, from its longest quote. */
+function size(chunk: Review[], layout: Layout, narrow: boolean): Size {
+  const cardWidth = narrow ? layout.narrowWidth : layout.width;
+  const charsPerLine = Math.floor((cardWidth - 56) / layout.charWidth);
+  const longest = Math.max(0, ...chunk.map((review) => review.quote?.length ?? 0));
+  const lines = Math.ceil((longest + 2) / charsPerLine);
+  return { height: Math.max(200, Math.ceil(CARD_CHROME + lines * layout.lineHeight + 8)), cardWidth };
+}
+
 /**
  * Sorts reviews by length and cuts them into rows, so each row holds quotes of similar
  * size and can be only as tall as its longest one. The shortest row also gets narrower
- * cards. Each row gets one video.
+ * cards. Each row gets one video. One set of rows for every screen (sized per breakpoint
+ * with CSS variables), so the reviews are in the HTML once.
  */
-function rows(reviews: Review[], layout: Layout): Row[] {
+function rows(reviews: Review[]): Row[] {
   const sorted = [...reviews].sort((a, b) => (a.quote?.length ?? 0) - (b.quote?.length ?? 0));
-  const perRow = Math.ceil(sorted.length / layout.rows);
-  return Array.from({ length: layout.rows }, (_, r) => {
+  const perRow = Math.ceil(sorted.length / ROWS);
+  return Array.from({ length: ROWS }, (_, r) => {
     const chunk = sorted.slice(r * perRow, (r + 1) * perRow);
-    const cardWidth = r === 0 ? layout.narrowWidth : layout.width;
-    const charsPerLine = Math.floor((cardWidth - 56) / layout.charWidth);
-    const longest = Math.max(0, ...chunk.map((review) => review.quote?.length ?? 0));
-    const lines = Math.ceil((longest + 2) / charsPerLine);
-    const height = Math.max(200, Math.ceil(CARD_CHROME + lines * layout.lineHeight + 8));
     const items: Item[] = chunk.map((review) => ({ review }));
     items.splice(r % 2 ? items.length : 0, 0, { video: videos[r % videos.length] });
-    return { items, height, cardWidth };
+    return { items, compact: size(chunk, LAYOUTS.compact, r === 0), desktop: size(chunk, LAYOUTS.desktop, r === 0) };
   });
 }
 
 export function TestimonialsMarquee({ reviews }: { reviews: Review[] }) {
   const { t } = useLocale();
+  const mounted = useMounted();
 
   return (
     <section id="avis" className="relative overflow-hidden bg-night py-28 text-white md:py-36">
@@ -68,17 +77,9 @@ export function TestimonialsMarquee({ reviews }: { reviews: Review[] }) {
         </div>
       </div>
 
-      {/* Mobile / tablet: 2 rows */}
-      <div className="mt-16 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] lg:hidden">
-        {rows(reviews, LAYOUTS.compact).map((row, r) => (
-          <ReviewRow key={r} row={row} reverse={r === 1} textClass={LAYOUTS.compact.text} />
-        ))}
-      </div>
-
-      {/* Desktop: 3 rows */}
-      <div className="mt-16 hidden space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] lg:block">
-        {rows(reviews, LAYOUTS.desktop).map((row, r) => (
-          <ReviewRow key={r} row={row} reverse={r === 1} textClass={LAYOUTS.desktop.text} />
+      <div className="mt-16 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+        {rows(reviews).map((row, r) => (
+          <ReviewRow key={r} row={row} reverse={r === 1} loop={mounted} />
         ))}
       </div>
     </section>
@@ -86,25 +87,33 @@ export function TestimonialsMarquee({ reviews }: { reviews: Review[] }) {
 }
 
 /**
- * One scrolling row. The list is rendered twice and shifted by exactly one copy (-50%),
- * so the loop is seamless; the second copy is hidden from assistive tech.
+ * One scrolling row. In the browser the list is rendered twice and shifted by exactly one copy
+ * (-50%), so the loop is seamless; the second copy is hidden from assistive tech, and left out of
+ * the server HTML (it only doubled the page weight).
  */
-function ReviewRow({ row, reverse, textClass }: { row: Row; reverse: boolean; textClass: string }) {
+function ReviewRow({ row, reverse, loop }: { row: Row; reverse: boolean; loop: boolean }) {
   return (
     <div className="marquee-row group flex overflow-hidden">
       <ul
         className={`flex w-max items-center gap-5 pr-5 group-hover:[animation-play-state:paused] has-[[data-playing]]:[animation-play-state:paused] ${reverse ? "animate-marquee-reverse" : "animate-marquee"}`}
         style={{ animationDuration: `${row.items.length * SECONDS_PER_ITEM}s` }}
       >
-        {[0, 1].flatMap((copy) =>
+        {(loop ? [0, 1] : [0]).flatMap((copy) =>
           row.items.map((item, i) => (
             <li
               key={`${copy}-${i}`}
               aria-hidden={copy === 1 || undefined}
-              className="flex shrink-0"
-              style={{ height: row.height, width: "video" in item ? "auto" : row.cardWidth }}
+              className={`flex h-(--h-sm) shrink-0 lg:h-(--h-lg) ${"video" in item ? "" : "w-(--w-sm) lg:w-(--w-lg)"}`}
+              style={
+                {
+                  "--h-sm": `${row.compact.height}px`,
+                  "--h-lg": `${row.desktop.height}px`,
+                  "--w-sm": `${row.compact.cardWidth}px`,
+                  "--w-lg": `${row.desktop.cardWidth}px`,
+                } as React.CSSProperties
+              }
             >
-              {"video" in item ? <MuxCard item={item.video} decorative={copy === 1} /> : <Card review={item.review} textClass={textClass} />}
+              {"video" in item ? <MuxCard item={item.video} decorative={copy === 1} /> : <Card review={item.review} />}
             </li>
           )),
         )}
@@ -113,7 +122,7 @@ function ReviewRow({ row, reverse, textClass }: { row: Row; reverse: boolean; te
   );
 }
 
-function Card({ review, textClass }: { review: Review; textClass: string }) {
+function Card({ review }: { review: Review }) {
   const initials = (review.name ?? "")
     .split(" ")
     .map((n) => n[0])
@@ -121,7 +130,7 @@ function Card({ review, textClass }: { review: Review; textClass: string }) {
     .slice(0, 2);
   return (
     <figure className="flex h-full w-full flex-col justify-between rounded-3xl border border-white/10 bg-night-soft p-7 transition-colors hover:border-brand/50">
-      <blockquote className={`line-clamp-8 leading-relaxed text-white/80 ${textClass}`}>&ldquo;{review.quote}&rdquo;</blockquote>
+      <blockquote className="line-clamp-8 text-sm leading-relaxed text-white/80 lg:text-[15px]">&ldquo;{review.quote}&rdquo;</blockquote>
       <figcaption className="mt-6 flex items-center gap-3">
         {review.photo?.asset ? (
           <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
@@ -132,7 +141,7 @@ function Card({ review, textClass }: { review: Review; textClass: string }) {
         )}
         <span>
           <span className="block font-medium">{review.name}</span>
-          <span className="block text-sm text-white/50">{review.role}</span>
+          <span className="block text-sm text-white/55">{review.role}</span>
         </span>
       </figcaption>
     </figure>

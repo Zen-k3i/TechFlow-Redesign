@@ -378,7 +378,7 @@ function BuildVisual({ still }: { still: boolean }) {
           }}
           transition={{ duration: 0.35, ease }}
         >
-          <span className="flex size-12 items-center justify-center rounded-full border border-white/15 text-2xl text-white/50">
+          <span className="flex size-12 items-center justify-center rounded-full border border-white/15 text-2xl text-white/55">
             +
           </span>
         </motion.div>
@@ -761,7 +761,7 @@ function UnderstandVisual({ still }: { still: boolean }) {
               <Icon>{icons[i]}</Icon>
             </span>
             <span className="font-serif text-[21px] leading-none">{label}</span>
-            <span className="ml-auto font-mono text-[10px] text-ink/35">0{i + 1}</span>
+            <span className="ml-auto font-mono text-[10px] text-ink/60">0{i + 1}</span>
           </motion.div>
         );
       })}

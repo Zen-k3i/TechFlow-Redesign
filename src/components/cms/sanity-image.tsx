@@ -17,13 +17,17 @@ type Props = {
   priority?: boolean;
   /** Width requested from the Sanity CDN; next/image picks the rendered size from `sizes`. */
   width?: number;
+  /** Blur placeholder from the LQIP; off by default for small images (avatars, logos), where it only adds page weight. */
+  blur?: boolean;
+  /** CDN quality; defaults to the loader's 90 (sharp UI screenshots). Photos and covers look the same at 75. */
+  quality?: number;
 } & ({ fill: true } | { fill?: false });
 
 /** next/image for a Sanity image asset, filling its parent or at intrinsic size. */
-export function SanityImage({ image, alt, sizes, className, priority, width = 1600, fill }: Props) {
+export function SanityImage({ image, alt, sizes, className, priority, width = 1600, quality, blur = width > 300, fill }: Props) {
   if (!image?.asset?.url) return null;
   const dims = image.asset.metadata?.dimensions;
-  const lqip = image.asset.metadata?.lqip ?? undefined;
+  const lqip = blur ? (image.asset.metadata?.lqip ?? undefined) : undefined;
   const src = urlFor(image as SanityImageSource).width(width).url();
   const common = {
     src,
@@ -32,6 +36,7 @@ export function SanityImage({ image, alt, sizes, className, priority, width = 16
     sizes,
     className,
     preload: priority,
+    quality,
     placeholder: lqip ? ("blur" as const) : ("empty" as const),
     blurDataURL: lqip,
   };

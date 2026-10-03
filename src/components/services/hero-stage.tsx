@@ -420,7 +420,7 @@ function DesignStage({ content }: { content: ServiceContent }) {
           {c.layerItems.map((l, i) => (
             <li
               key={l}
-              className={`flex items-center gap-2 rounded-md px-2 py-1.5 ${i === 1 ? "bg-brand/30 text-white" : "text-white/45"}`}
+              className={`flex items-center gap-2 rounded-md px-2 py-1.5 ${i === 1 ? "bg-brand/30 text-white" : "text-white/55"}`}
             >
               <span className="size-2.5 rounded-[3px] border border-current" />
               {l}
@@ -624,7 +624,7 @@ function Ring({
           {value}
         </span>
       </span>
-      <span className="max-w-[4.5rem] text-center text-[10px] leading-tight text-ink/55">
+      <span className="max-w-[4.5rem] text-center text-[10px] leading-tight text-ink/60">
         {label}
       </span>
     </div>
@@ -646,7 +646,7 @@ function DevStage({ content }: { content: ServiceContent }) {
       >
         <Window title="app/hero.tsx" dark>
           <div className="flex text-[9px] leading-[1.7] sm:text-[11px] sm:leading-[1.9] md:text-xs">
-            <div className="select-none border-r border-white/5 px-3 py-3 text-right font-mono text-white/20">
+            <div className="select-none border-r border-white/5 px-3 py-3 text-right font-mono text-white/55">
               {code.map((_, i) => (
                 <div key={i}>{i + 1}</div>
               ))}
@@ -849,7 +849,7 @@ function Caption({
         {title}
       </span>
       {sub && (
-        <span className="block truncate text-[10px] text-white/45">{sub}</span>
+        <span className="block truncate text-[10px] text-white/55">{sub}</span>
       )}
     </span>
   );
@@ -1122,7 +1122,7 @@ function AgentStage() {
               </span>
               <span className="min-w-0 text-[11px] leading-snug">
                 <span className="block font-medium">{c.result[0]}</span>
-                <span className="block text-ink/55">{c.result[1]}</span>
+                <span className="block text-ink/60">{c.result[1]}</span>
               </span>
             </motion.div>
           )}
@@ -1222,7 +1222,7 @@ function FunnelStage({ content }: { content: ServiceContent }) {
               key={c.kpis[i]}
               className={`rounded-2xl border border-white/10 bg-[#141724]/95 p-4 ${i < 2 ? "hidden md:block" : ""}`}
             >
-              <p className="text-[11px] text-white/45">{c.kpis[i]}</p>
+              <p className="text-[11px] text-white/55">{c.kpis[i]}</p>
               <p className="mt-2 flex items-baseline justify-between gap-2">
                 <span className="font-serif text-3xl text-white md:text-4xl">
                   <CountUp to={k.to} decimals={k.decimals} suffix={k.suffix} />

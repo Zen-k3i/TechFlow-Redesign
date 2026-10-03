@@ -135,7 +135,7 @@ export function Footer({ cta = true }: { cta?: boolean }) {
           TechFlow
         </p>
 
-        <div className="eyebrow flex flex-col justify-between gap-4 border-t border-white/15 py-6 text-white/50 md:flex-row">
+        <div className="eyebrow flex flex-col justify-between gap-4 border-t border-white/15 py-6 text-white/55 md:flex-row">
           <span>© {new Date().getFullYear()} TechFlow Agency</span>
           <span className="flex gap-6">
             <Link href={links.legal} className="hover:text-white">

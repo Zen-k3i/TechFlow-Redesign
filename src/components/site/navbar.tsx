@@ -207,7 +207,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
                   onClick={() => setOpen(false)}
                   className="flex items-baseline gap-4 font-serif text-5xl leading-tight text-white"
                 >
-                  <span className="eyebrow text-white/50">01</span>
+                  <span className="eyebrow text-white/55">01</span>
                   {t.nav.pages.services}
                 </Link>
                 <ul className="mb-3 ml-10 mt-1 flex flex-wrap gap-2">
@@ -236,7 +236,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
                     onClick={() => setOpen(false)}
                     className="flex items-baseline gap-4 font-serif text-5xl leading-tight text-white"
                   >
-                    <span className="eyebrow text-white/50">0{i + 2}</span>
+                    <span className="eyebrow text-white/55">0{i + 2}</span>
                     {t.nav.pages[key]}
                   </Link>
                 </motion.li>

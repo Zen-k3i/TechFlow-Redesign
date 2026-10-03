@@ -196,7 +196,7 @@ export function ProjectsHero({ projects }: { projects: WallProject[] }) {
                 <dd className="font-serif text-4xl leading-none md:text-5xl">
                   <CountUp value={s.value} />
                 </dd>
-                <dt className="mt-2 text-sm text-white/50">{s.label}</dt>
+                <dt className="mt-2 text-sm text-white/55">{s.label}</dt>
               </motion.div>
             ))}
           </dl>

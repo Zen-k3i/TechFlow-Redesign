@@ -193,7 +193,7 @@ function Hero({ study }: { study: CmsCaseStudy }) {
       />
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12">
-        <motion.nav aria-label="Breadcrumb" {...reveal(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/45">
+        <motion.nav aria-label="Breadcrumb" {...reveal(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/55">
           <Link href={href(lang, "home")} className="hover:text-white">
             {t.common.breadcrumbHome}
           </Link>
@@ -418,7 +418,7 @@ function Brief({ study }: { study: CmsCaseStudy }) {
   const team = study.team ?? [];
   if (!hasBrief(study)) return null;
   const cell = "border-t border-white/15 pt-5";
-  const label = "eyebrow text-white/45";
+  const label = "eyebrow text-white/55";
 
   return (
     <section id={BRIEF_ANCHOR} className="scroll-mt-20 bg-night px-5 pb-24 pt-8 text-white md:px-10 md:pb-32">
@@ -508,7 +508,7 @@ function Brief({ study }: { study: CmsCaseStudy }) {
                     <Avatar image={member.photo} name={member.name ?? ""} size="sm" />
                     <span className="leading-tight">
                       <span className="block text-sm font-medium">{member.name}</span>
-                      <span className="block text-xs text-white/50">{member.role}</span>
+                      <span className="block text-xs text-white/55">{member.role}</span>
                     </span>
                   </div>
                 ))}

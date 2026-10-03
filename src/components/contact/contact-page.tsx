@@ -67,7 +67,7 @@ export function ContactPage() {
                     className="mt-auto inline-flex items-center justify-between gap-3 rounded-full border border-white/15 py-2 pl-5 pr-2 transition-colors hover:border-white"
                   >
                     <span>
-                      <span className="text-white/45">{c.offices.call} · </span>
+                      <span className="text-white/55">{c.offices.call} · </span>
                       {o.phone}
                     </span>
                     <span className="flex size-9 items-center justify-center rounded-full bg-white/10">
@@ -104,7 +104,7 @@ function FounderCard() {
       </div>
       <div className="p-5">
         <p className="font-serif text-3xl">{founder.name}</p>
-        <p className="text-sm text-white/50">{founder.role}</p>
+        <p className="text-sm text-white/55">{founder.role}</p>
         <div className="mt-6">
           <Magnetic>
             <ButtonLink
@@ -116,7 +116,7 @@ function FounderCard() {
             </ButtonLink>
           </Magnetic>
         </div>
-        <p className="mt-4 text-center text-sm text-white/45">
+        <p className="mt-4 text-center text-sm text-white/55">
           {c.person.or}{" "}
           <a
             href={`mailto:${links.email}`}

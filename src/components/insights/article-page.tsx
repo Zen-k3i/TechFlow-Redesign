@@ -195,7 +195,7 @@ function Author({ author, label }: { author: InsightDetail["author"]; label: str
         <span className="block text-white/55">{label}</span>
         <span className="mt-0.5 block text-white/85">
           {author?.name ?? "TechFlow Agency"}
-          {author?.role && <span className="text-white/45"> · {author.role}</span>}
+          {author?.role && <span className="text-white/55"> · {author.role}</span>}
         </span>
       </span>
     </span>
@@ -250,7 +250,7 @@ function Contents({ label, items, target }: { label: string; items: Heading[]; t
                   aria-current={on ? "location" : undefined}
                   className={`flex gap-3 py-1.5 pl-4 text-sm leading-snug transition-colors ${on ? "text-ink" : "text-ink/60 hover:text-ink"}`}
                 >
-                  <span className={`font-mono text-xs leading-5 ${on ? "text-brand-deep" : "text-ink/30"}`}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={`font-mono text-xs leading-5 ${on ? "text-brand-deep" : "text-ink/60"}`}>{String(i + 1).padStart(2, "0")}</span>
                   <span className={on ? "font-medium" : ""}>{item.title}</span>
                 </a>
               </li>
@@ -278,7 +278,7 @@ function MobileContents({ label, items }: { label: string; items: Heading[] }) {
         {items.map((item, i) => (
           <li key={item.id}>
             <a href={`#${item.id}`} className="flex gap-3 py-1.5 text-sm text-ink/70 hover:text-ink">
-              <span className="font-mono text-xs leading-5 text-ink/30">{String(i + 1).padStart(2, "0")}</span>
+              <span className="font-mono text-xs leading-5 text-ink/60">{String(i + 1).padStart(2, "0")}</span>
               {item.title}
             </a>
           </li>

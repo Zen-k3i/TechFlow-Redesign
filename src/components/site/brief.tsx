@@ -108,7 +108,7 @@ export function Brief() {
               />
               <div className="relative">
                 <div className="flex items-center justify-between">
-                  <p className="eyebrow text-white/50">{b.card}</p>
+                  <p className="eyebrow text-white/55">{b.card}</p>
                 </div>
 
                 <p className="mt-8 eyebrow text-white/55">{b.estimate}</p>
@@ -124,14 +124,14 @@ export function Brief() {
                     {result?.value ?? "—"}
                   </motion.p>
                 </AnimatePresence>
-                <p className="mt-2 text-sm text-white/50">
+                <p className="mt-2 text-sm text-white/55">
                   {result?.note ?? b.empty}
                 </p>
 
                 <dl className="mt-8 space-y-4 border-t border-white/10 pt-6 text-sm">
                   <Row label={b.goal.label} value={b.goals[goal]} />
                   <div className="flex items-start justify-between gap-4">
-                    <dt className="text-white/45">{b.services}</dt>
+                    <dt className="text-white/55">{b.services}</dt>
                     <dd className="flex flex-wrap justify-end gap-1.5">
                       <AnimatePresence mode="popLayout" initial={false}>
                         {pickedTitles.map((p) => (
@@ -248,7 +248,7 @@ function Chip({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4">
-      <dt className="text-white/45">{label}</dt>
+      <dt className="text-white/55">{label}</dt>
       <dd className="text-right">{value}</dd>
     </div>
   );

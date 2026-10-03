@@ -67,7 +67,7 @@ export function ProjectsPage({ cmsProjects, sectorList }: { cmsProjects: CmsProj
                     className="group grid gap-2 border-t border-ink/10 py-5 transition-colors hover:bg-white md:grid-cols-[1.2fr_1fr_1.4fr] md:gap-6 md:px-3"
                   >
                     <span className="flex items-center gap-3 font-serif text-2xl md:text-3xl">
-                      <span className="eyebrow w-6 text-ink/30">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="eyebrow w-6 text-ink/60">{String(i + 1).padStart(2, "0")}</span>
                       <span className="transition-transform duration-500 group-hover:translate-x-2">{item.name}</span>
                     </span>
                     <span className="self-center text-ink/60">{t.work.sectors[item.sector] ?? item.sector}</span>

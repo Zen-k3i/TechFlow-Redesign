@@ -230,7 +230,7 @@ function ServiceTicker() {
               setActive(i);
             }}
             className={`relative z-10 block rounded-full px-3.5 py-1.5 transition-colors duration-500 ${
-              i === active ? "text-white" : "text-white/45 hover:text-white/80"
+              i === active ? "text-white" : "text-white/55 hover:text-white/80"
             }`}
           >
             {service.title}

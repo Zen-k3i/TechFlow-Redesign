@@ -92,7 +92,7 @@ function Audience({ content }: { content: ServiceContent }) {
           {content.stats.map((s, i) => (
             <FadeIn key={s.label} delay={i * 0.06} className="border-t border-ink/15 pt-6">
               <dd className="font-serif text-6xl leading-none tracking-[-0.02em] md:text-7xl">{s.value}</dd>
-              <dt className="mt-4 max-w-[16rem] text-sm text-ink/55">{s.label}</dt>
+              <dt className="mt-4 max-w-[16rem] text-sm text-ink/60">{s.label}</dt>
             </FadeIn>
           ))}
         </dl>
@@ -189,7 +189,7 @@ function Quote({ quote }: { quote: ServiceContent["quote"] }) {
             )}
             <span>
               <span className="block font-medium">{quote.name}</span>
-              <span className="block text-sm text-white/50">{quote.role}</span>
+              <span className="block text-sm text-white/55">{quote.role}</span>
             </span>
           </figcaption>
         </figure>
@@ -248,7 +248,7 @@ function Cases({ cases }: { cases: NonNullable<ServiceContent["cases"]> }) {
                 {item.metrics.map((m) => (
                   <div key={m.label}>
                     <dd className="font-serif text-6xl leading-none text-brand-sky">{m.value}</dd>
-                    <dt className="mt-2 max-w-[10rem] text-sm text-white/50">{m.label}</dt>
+                    <dt className="mt-2 max-w-[10rem] text-sm text-white/55">{m.label}</dt>
                   </div>
                 ))}
               </dl>
@@ -291,7 +291,7 @@ function ComparisonAndWork({ content, work, cmsProjects }: { content: ServiceCon
           <SectionHeader eyebrow={c.eyebrow} title={c.heading} intro={content.comparison.intro} tone="light" />
           <FadeIn className="mt-14">
             <ComparisonTable rows={content.comparison.rows} columns={content.comparison.columns} />
-            <p className="mt-5 flex items-center gap-2 text-sm text-ink/55">
+            <p className="mt-5 flex items-center gap-2 text-sm text-ink/60">
               <span className="size-1.5 rounded-full bg-brand-deep" /> {c.note}
             </p>
           </FadeIn>

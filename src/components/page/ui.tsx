@@ -285,7 +285,7 @@ export function BrowserFrame({
         </span>
         <span
           className={`mx-auto flex max-w-[70%] items-center gap-1.5 truncate rounded-full px-4 py-1 font-mono text-[11px] ${
-            light ? "bg-ink/5 text-ink/55" : "bg-white/5 text-white/50"
+            light ? "bg-ink/5 text-ink/60" : "bg-white/5 text-white/55"
           }`}
         >
           <span aria-hidden>🔒</span> {url}
@@ -330,7 +330,7 @@ export function ComparisonTable({
     >
       <table className="w-full min-w-[640px] border-collapse text-left">
         <thead>
-          <tr className={light ? "text-ink/60" : "text-white/50"}>
+          <tr className={light ? "text-ink/60" : "text-white/55"}>
             <th scope="col" className="eyebrow p-5 font-normal md:p-6">
               {c.criterion}
             </th>
@@ -421,7 +421,7 @@ function MarkIcon({
   return (
     <span
       aria-hidden
-      className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/35" : "bg-white/5 text-white/55"}`}
+      className={`inline-flex size-8 items-center justify-center rounded-full text-sm ${light ? "bg-ink/5 text-ink/60" : "bg-white/5 text-white/55"}`}
     >
       ✕
     </span>
@@ -524,7 +524,7 @@ export function QuoteCard({
             )}
             <span>
               <span className="block font-medium">{name}</span>
-              <span className="block text-sm text-ink/55">{role}</span>
+              <span className="block text-sm text-ink/60">{role}</span>
             </span>
           </figcaption>
         </figure>

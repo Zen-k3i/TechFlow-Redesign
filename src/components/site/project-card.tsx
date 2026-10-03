@@ -10,6 +10,7 @@ import { GrowthCover } from "../case-study/growth-cover";
 import { projectImage, type Project } from "./content";
 import { useLocale } from "./locale";
 import { projectDomain, projectPreviews } from "./previews";
+import { useMounted } from "./use-mounted";
 import { projectTheme, themeFromHex } from "./project-highlight";
 
 const MotionLink = motion.create(Link);
@@ -140,6 +141,9 @@ export function ProjectCardView({
   const count = phoneStack ? phones.length : stacked || posterFan ? previews.length : 0;
   const [hovered, setHovered] = useState(false);
   const [slide, setSlide] = useState(0);
+  // Hover stacks exist only with a mouse: not in the server HTML, and phones never download their images.
+  const mounted = useMounted();
+  const armed = mounted && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   useEffect(() => {
     if (!hovered || count < 2) return;
@@ -211,7 +215,7 @@ export function ProjectCardView({
             )}
           </div>
 
-          {stacked && (
+          {stacked && armed && (
             <div aria-hidden className="pointer-events-none absolute inset-x-[12%] top-[62%] [transform-style:preserve-3d]">
               {previews.map((src, i) => {
                 const pos = (i - slide + previews.length) % previews.length;
@@ -244,7 +248,7 @@ export function ProjectCardView({
             </div>
           )}
 
-          {posterFan && (
+          {posterFan && armed && (
             <div aria-hidden className="pointer-events-none absolute left-[21%] top-[19%] aspect-[4/5] w-[58%] [transform-style:preserve-3d]">
               {previews.map((src, i) => {
                 const pos = (i - slide + previews.length) % previews.length;
@@ -271,7 +275,7 @@ export function ProjectCardView({
             </div>
           )}
 
-          {phoneStack && (
+          {phoneStack && armed && (
             <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-[8%] top-[14%] [transform-style:preserve-3d]">
               {phones.map((phone, i) => {
                 const pos = (i - slide + phones.length) % phones.length;

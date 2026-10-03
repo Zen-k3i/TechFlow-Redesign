@@ -101,7 +101,7 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
       />
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12">
-        <motion.nav aria-label="Breadcrumb" {...reveal(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/45">
+        <motion.nav aria-label="Breadcrumb" {...reveal(0)} className="eyebrow flex flex-wrap items-center gap-2 text-white/55">
           <Link href={href(lang, "home")} className="hover:text-white">
             {t.common.breadcrumbHome}
           </Link>
@@ -158,10 +158,10 @@ function Hero({ study, brand }: { study: GrowthStudy; brand: Brand }) {
               )}
             </motion.div>
             {(hero?.status || website) && (
-              <motion.p {...reveal(0.7)} className="mt-5 flex items-center gap-2 text-sm text-white/50">
+              <motion.p {...reveal(0.7)} className="mt-5 flex items-center gap-2 text-sm text-white/55">
                 {hero?.status && <span aria-hidden className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,0.2)]" />}
                 {hero?.status}
-                {hero?.status && website && <span className="text-white/25">·</span>}
+                {hero?.status && website && <span className="text-white/55">·</span>}
                 {website && (
                   <a href={website} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-white hover:underline">
                     {c.visit} ↗

@@ -27,7 +27,7 @@ function Meta({ article, light = false }: { article: InsightCard; light?: boolea
   const c = insightsContent[lang];
   const category = article.categories?.[0];
   return (
-    <p className={`flex flex-wrap items-center gap-x-3 gap-y-2 text-sm ${light ? "text-ink/60" : "text-white/50"}`}>
+    <p className={`flex flex-wrap items-center gap-x-3 gap-y-2 text-sm ${light ? "text-ink/60" : "text-white/55"}`}>
       {category && (
         <span className={`rounded-full px-3 py-1 ${light ? "bg-brand-deep/10 text-brand-deep" : "bg-brand-sky/15 text-brand-sky"}`}>{category}</span>
       )}
@@ -49,7 +49,8 @@ export function ArticleCard({ article, light = true, wide = false }: { article: 
           image={article.coverImage}
           alt=""
           fill
-          sizes="(min-width: 768px) 45vw, 100vw"
+          quality={75}
+          sizes="(min-width: 768px) 45vw, 92vw"
           className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
         />
       </div>
@@ -83,7 +84,8 @@ function FeaturedArticle({ article }: { article: InsightCard }) {
             alt=""
             fill
             priority
-            sizes="(min-width: 1024px) 55vw, 100vw"
+            quality={75}
+            sizes="(min-width: 1024px) 55vw, 92vw"
             className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           />
         </div>

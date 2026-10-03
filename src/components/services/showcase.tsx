@@ -74,7 +74,7 @@ function DesignShowcase() {
                 <li key={s.label}>
                   <button type="button" onClick={() => goTo(i)} className="group flex w-full items-baseline gap-4 py-2 text-left">
                     <span className={`font-mono text-xs transition-colors ${i === active ? "text-brand-deep" : "text-ink/60"}`}>{pad(i + 1)}</span>
-                    <span className={`font-serif text-3xl leading-tight transition-colors duration-500 md:text-4xl ${i === active ? "text-ink" : "text-ink/55 group-hover:text-ink/75"}`}>
+                    <span className={`font-serif text-3xl leading-tight transition-colors duration-500 md:text-4xl ${i === active ? "text-ink" : "text-ink/60 group-hover:text-ink/75"}`}>
                       {s.label}
                     </span>
                   </button>
@@ -344,7 +344,7 @@ function AgentLive() {
             </ul>
             <p className="mt-6 flex items-baseline gap-2 border-t border-white/10 pt-5">
               <span className="font-serif text-5xl text-brand-sky">{128 + round}</span>
-              <span className="text-sm text-white/50">{c.done}</span>
+              <span className="text-sm text-white/55">{c.done}</span>
             </p>
           </Panel>
         </div>
@@ -357,7 +357,7 @@ function Panel({ title, index, glow = false, children }: { title: string; index:
   return (
     <div className={`relative overflow-hidden rounded-[1.75rem] border p-6 ${glow ? "border-brand/50 bg-linear-to-b from-brand/15 to-night-soft" : "border-white/10 bg-night-soft"}`}>
       <p className="mb-5 flex items-center justify-between">
-        <span className="eyebrow text-white/50">{title}</span>
+        <span className="eyebrow text-white/55">{title}</span>
         <span className="font-mono text-xs text-white/55">{pad(index)}</span>
       </p>
       {children}
