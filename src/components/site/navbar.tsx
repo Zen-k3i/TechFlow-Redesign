@@ -8,6 +8,7 @@ import { locales, type Locale } from "@/i18n/config";
 import { href, isServiceKey, serviceKeys, type RouteKey } from "@/i18n/routes";
 import { ease, serviceIllustration } from "./content";
 import { useLocale } from "./locale";
+import { NavLogo } from "./logo-intro";
 
 const pageKeys = ["projects", "team", "insights", "contact"] as const;
 
@@ -63,7 +64,7 @@ export function Navbar({ current, alternates }: { current?: RouteKey; alternates
           }`}
         >
           <Link href={href(lang, "home")} aria-label={t.nav.home} className="relative z-10">
-            <Image src="/images/techflow-logo.svg" alt="TechFlow" width={179} height={36} preload className="h-7 w-auto" />
+            <NavLogo />
           </Link>
 
           <ul className="hidden items-center gap-1 text-base lg:flex">

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useStill } from "./use-still";
 import { useEffect, useRef, useState } from "react";
-import { m as motion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { m as motion, useMotionValue, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { GlowButton, HumanButton } from "../page/project-cta";
 import { caseStudyUrl, ease, featured, projectImage } from "./content";
 import { BuildWord, DesignWord, GrowWord } from "./hero-words";
@@ -413,14 +413,42 @@ const stars = Array.from({ length: 70 }, () => ({
   delay: random() * 4,
 }));
 
+/** The sky follows the mouse by a few pixels (stars more than the nebulas, for depth). */
+function useSkyParallax() {
+  const still = useStill();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 40, damping: 20, mass: 0.8 });
+  const sy = useSpring(y, { stiffness: 40, damping: 20, mass: 0.8 });
+  useEffect(() => {
+    if (still) return;
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      x.set((e.clientX / window.innerWidth - 0.5) * 2);
+      y.set((e.clientY / window.innerHeight - 0.5) * 2);
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => window.removeEventListener("pointermove", move);
+  }, [still, x, y]);
+  return { sx, sy };
+}
+
 function Backdrop() {
+  const { sx, sy } = useSkyParallax();
+  const starsX = useTransform(sx, (v) => v * -14);
+  const starsY = useTransform(sy, (v) => v * -10);
+  const nebulaX = useTransform(sx, (v) => v * 6);
+  const nebulaY = useTransform(sy, (v) => v * 4);
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-      <div className="absolute inset-0 animate-nebula bg-[radial-gradient(70%_55%_at_50%_0%,rgba(54,71,245,0.22),transparent_70%)] motion-reduce:animate-none" />
+      <motion.div style={{ x: nebulaX, y: nebulaY }} className="absolute -inset-8">
+        <div className="absolute inset-0 animate-nebula bg-[radial-gradient(70%_55%_at_50%_0%,rgba(54,71,245,0.22),transparent_70%)] motion-reduce:animate-none" />
+      </motion.div>
       {/* A second, fainter nebula drifting the other way gives the sky some depth. */}
       <div className="absolute inset-0 animate-nebula bg-[radial-gradient(40%_35%_at_80%_25%,rgba(124,92,255,0.10),transparent_70%)] [animation-delay:-8s] [animation-direction:alternate-reverse] motion-reduce:animate-none" />
       <div className="absolute inset-0 bg-[linear-gradient(60deg,rgba(9,20,71,0.9),transparent_45%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[72px_72px] [mask-image:radial-gradient(60%_50%_at_50%_35%,black,transparent)]" />
+      <motion.div style={{ x: starsX, y: starsY }} className="absolute -inset-6">
       <div className="absolute inset-0 animate-star-drift motion-reduce:animate-none">
         {stars.map((star, i) => (
           <motion.span
@@ -443,6 +471,7 @@ function Backdrop() {
           />
         ))}
       </div>
+      </motion.div>
       <span className="absolute right-[18%] top-[12%] h-px w-28 animate-shooting-star bg-linear-to-r from-transparent via-white/80 to-white opacity-0 motion-reduce:hidden" />
       <div className="absolute inset-0 opacity-[0.07] mix-blend-overlay [background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;)]" />
     </div>

@@ -333,7 +333,10 @@ function BriefForm() {
                   →
                 </span>
               </button>
-              <p className="text-sm text-ink/60" aria-live="polite">
+              <p
+                className={`text-sm ${status === "sent" ? "font-medium text-emerald-600" : status === "error" ? "font-medium text-red-600" : "text-ink/60"}`}
+                aria-live="polite"
+              >
                 {{ idle: f.note, sending: f.sending, sent: f.sent, error: f.error }[status]}
               </p>
             </div>

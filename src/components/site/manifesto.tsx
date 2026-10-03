@@ -28,7 +28,7 @@ export function Manifesto() {
         <div className="mt-20 grid gap-16 md:mt-28 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
           <div>
             <FadeIn>
-              <p className="text-lg text-ink/60 md:text-xl">{m.bridge}</p>
+              <p className="text-lg text-ink/60">{m.bridge}</p>
             </FadeIn>
             <ul className="mt-6 border-t border-ink/10">
               {m.removed.map((item, i) => (

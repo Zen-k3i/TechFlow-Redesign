@@ -13,6 +13,13 @@ import { Chip, ComparisonTable, HumanActions, PageHero, SectionHeader } from "..
 import { offices, teamContent, type TeamMember } from "./data";
 import { PortraitStrip } from "./portrait-strip";
 
+/** Intrinsic sizes of the "how we work" visuals (public/images/studio). */
+const VISUAL_SIZE: Record<string, [number, number]> = {
+  "/images/studio/frame.jpg": [690, 652],
+  "/images/studio/team.webp": [896, 1011],
+  "/images/studio/office.webp": [1200, 1200],
+};
+
 export function TeamPage({ members, testimonials }: { members: TeamMember[]; testimonials: React.ReactNode }) {
   const { lang, t } = useLocale();
   const c = teamContent[lang];
@@ -68,10 +75,15 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
                 <FadeIn className={i % 2 ? "lg:order-2" : ""}>
                   <div className="relative">
                     <div aria-hidden className="absolute -inset-4 rounded-[3rem] bg-brand/15 blur-3xl md:-inset-6" />
-                    <div className="relative aspect-square overflow-hidden rounded-[2.5rem] border border-white/10 bg-paper">
-                      {/* Shown whole: the visuals are mockups (a call, a board) that must not be cropped. */}
-                      <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-contain" />
-                    </div>
+                    {/* Each visual at its own ratio with rounded corners: they are mockups (a call, a board) that must not be cropped or padded. */}
+                    <Image
+                      src={item.image}
+                      alt={item.alt}
+                      width={VISUAL_SIZE[item.image]?.[0] ?? 1200}
+                      height={VISUAL_SIZE[item.image]?.[1] ?? 1200}
+                      sizes="(min-width: 1024px) 45vw, 100vw"
+                      className="relative h-auto w-full rounded-[2.5rem]"
+                    />
                   </div>
                 </FadeIn>
                 <FadeIn delay={0.1}>
