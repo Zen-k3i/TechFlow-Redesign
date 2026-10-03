@@ -81,7 +81,7 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
           </span>
         </motion.a>
 
-        <h1 className="mt-10 font-serif text-[15vw] leading-[1.02] tracking-[-0.02em] sm:text-[clamp(2.9rem,8.5vw,7rem)]">
+        <h1 className="mt-10 font-serif text-[18vw] leading-[1.02] tracking-[-0.02em] sm:text-[clamp(2.9rem,8.5vw,7rem)]">
           <span className="sr-only">We design. We build. You grow.</span>
           {stacked ? (
             <span

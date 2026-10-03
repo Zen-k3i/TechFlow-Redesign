@@ -17,16 +17,17 @@ const SECONDS_PER_ITEM = 7;
 
 /** Type metrics per breakpoint, used to size each row to the longest quote it holds. */
 const LAYOUTS = {
-  compact: { width: 340, narrowWidth: 300, lineHeight: 22.75, charWidth: 7.4 },
-  desktop: { width: 420, narrowWidth: 330, lineHeight: 24.4, charWidth: 7.4 },
+  // Phones: 15px quotes and a 52px avatar (desktop: 15px from lg, 44px avatar).
+  compact: { width: 340, narrowWidth: 300, lineHeight: 24.4, charWidth: 7.9, byline: 52 },
+  desktop: { width: 420, narrowWidth: 330, lineHeight: 24.4, charWidth: 7.4, byline: 44 },
 };
 type Layout = (typeof LAYOUTS)[keyof typeof LAYOUTS];
 type Size = { height: number; cardWidth: number };
 type Row = { items: Item[]; compact: Size; desktop: Size };
 const ROWS = 3;
 
-// Card padding (2 × 28px), the gap above the byline and the byline itself.
-const CARD_CHROME = 56 + 24 + 44;
+// Card padding (2 × 28px) and the gap above the byline; the byline height is per layout.
+const CARD_CHROME = 56 + 24;
 
 /** Height and card width of a row on one breakpoint, from its longest quote. */
 function size(chunk: Review[], layout: Layout, narrow: boolean): Size {
@@ -34,7 +35,7 @@ function size(chunk: Review[], layout: Layout, narrow: boolean): Size {
   const charsPerLine = Math.floor((cardWidth - 56) / layout.charWidth);
   const longest = Math.max(0, ...chunk.map((review) => review.quote?.length ?? 0));
   const lines = Math.ceil((longest + 2) / charsPerLine);
-  return { height: Math.max(200, Math.ceil(CARD_CHROME + lines * layout.lineHeight + 8)), cardWidth };
+  return { height: Math.max(200, Math.ceil(CARD_CHROME + layout.byline + lines * layout.lineHeight + 8)), cardWidth };
 }
 
 /**
@@ -130,17 +131,17 @@ function Card({ review }: { review: Review }) {
     .slice(0, 2);
   return (
     <figure className="flex h-full w-full flex-col justify-between rounded-3xl border border-white/10 bg-night-soft p-7 transition-colors hover:border-brand/50">
-      <blockquote className="line-clamp-8 text-sm leading-relaxed text-white/80 lg:text-[15px]">&ldquo;{review.quote}&rdquo;</blockquote>
+      <blockquote className="line-clamp-8 text-[15px] leading-relaxed text-white/80">&ldquo;{review.quote}&rdquo;</blockquote>
       <figcaption className="mt-6 flex items-center gap-3">
         {review.photo?.asset ? (
-          <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
-            <SanityImage image={review.photo} alt={review.name ?? ""} fill width={132} sizes="44px" className="object-cover" />
+          <span className="relative size-13 shrink-0 overflow-hidden rounded-full lg:size-11">
+            <SanityImage image={review.photo} alt={review.name ?? ""} fill width={156} sizes="52px" className="object-cover" />
           </span>
         ) : (
-          <span className="flex size-11 items-center justify-center rounded-full bg-brand/20 font-medium text-brand-sky">{initials}</span>
+          <span className="flex size-13 items-center justify-center rounded-full bg-brand/20 font-medium text-brand-sky lg:size-11">{initials}</span>
         )}
         <span>
-          <span className="block font-medium">{review.name}</span>
+          <span className="block text-[17px] font-medium lg:text-base">{review.name}</span>
           <span className="block text-sm text-white/55">{review.role}</span>
         </span>
       </figcaption>

@@ -69,7 +69,7 @@ function Panel({
         onFocus={onActivate}
         className="flex h-full flex-col"
       >
-        <div className="relative aspect-[16/11] overflow-hidden lg:absolute lg:inset-0 lg:aspect-auto">
+        <div className="relative aspect-[16/8] overflow-hidden sm:aspect-[16/11] lg:absolute lg:inset-0 lg:aspect-auto">
           <Image
             src={projectImage(item.project)}
             alt=""
@@ -87,7 +87,7 @@ function Panel({
           />
         </div>
 
-        <div className="relative flex flex-1 flex-col p-6 md:p-8 lg:justify-between">
+        <div className="relative flex flex-1 flex-col p-5 md:p-8 lg:justify-between">
           <div className="flex items-center justify-between">
             <span className="eyebrow text-brand-sky">0{index + 1}</span>
             <span
@@ -109,21 +109,22 @@ function Panel({
           </p>
 
           <div
-            className={`mt-6 transition-[opacity,translate] duration-500 lg:mt-0 lg:w-[30rem] ${
+            className={`mt-4 transition-[opacity,translate] duration-500 md:mt-6 lg:mt-0 lg:w-[30rem] ${
               active ? "delay-300" : "lg:pointer-events-none lg:translate-y-6 lg:opacity-0"
             }`}
           >
-            <h3 className="font-serif text-4xl leading-[0.95] md:text-5xl">{item.title}</h3>
-            <p className="mt-4 max-w-md text-white/65">{item.text}</p>
-            <ul className="mt-5 flex flex-wrap gap-2">
+            <h3 className="font-serif text-3xl leading-[0.95] md:text-5xl">{item.title}</h3>
+            <p className="mt-3 max-w-md text-white/65 md:mt-4">{item.text}</p>
+            {/* Phones: tags and references are left out to keep the cards short. */}
+            <ul className="mt-5 hidden flex-wrap gap-2 md:flex">
               {item.tags.map((tag) => (
                 <li key={tag} className="rounded-full border border-white/15 bg-night/40 px-3 py-1 text-sm text-white/80 backdrop-blur">
                   {tag}
                 </li>
               ))}
             </ul>
-            <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-white/10 pt-5">
-              <div>
+            <div className="mt-4 flex flex-wrap items-end justify-between gap-4 border-t border-white/10 pt-4 md:mt-6 md:pt-5">
+              <div className="hidden md:block">
                 <p className="eyebrow text-white/55">{s.references}</p>
                 <p className="mt-1.5 text-sm text-white/80">{item.clients.join(" · ")}</p>
               </div>
@@ -154,7 +155,7 @@ function CtaPanel({ index, active, onActivate }: { index: number; active: boolea
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-size-[48px_48px] [mask-image:radial-gradient(70%_70%_at_70%_30%,black,transparent)]"
       />
-      <a href="#brief" onFocus={onActivate} className="relative flex h-full min-h-[320px] flex-col justify-between p-6 md:p-8">
+      <a href="#brief" onFocus={onActivate} className="relative flex h-full min-h-[240px] flex-col justify-between p-5 md:min-h-[320px] md:p-8">
         <div className="flex items-center justify-between">
           <span className="eyebrow text-white/70">0{index + 1}</span>
           <span
@@ -180,7 +181,7 @@ function CtaPanel({ index, active, onActivate }: { index: number; active: boolea
             active ? "delay-300" : "lg:pointer-events-none lg:translate-y-6 lg:opacity-0"
           }`}
         >
-          <h3 className="font-serif text-4xl leading-[0.95] md:text-6xl">{cta.title}</h3>
+          <h3 className="font-serif text-3xl leading-[0.95] md:text-6xl">{cta.title}</h3>
           <p className="mt-4 max-w-sm text-white/75">{cta.text}</p>
           <span className="group mt-7 inline-flex h-13 items-center gap-3 rounded-full bg-white pl-6 pr-1.5 font-medium text-night">
             {cta.button}

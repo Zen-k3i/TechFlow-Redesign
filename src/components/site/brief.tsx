@@ -66,8 +66,8 @@ export function Brief() {
           className="mt-4 max-w-4xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]"
         />
 
-        <div className="mt-16 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
-          <div className="space-y-12">
+        <div className="mt-10 grid gap-8 md:mt-16 md:gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+          <div className="space-y-8 md:space-y-12">
             <Question index={1} title={b.needs.title} hint={b.needs.hint}>
               {services.map((s) => (
                 <Chip
@@ -101,7 +101,7 @@ export function Brief() {
           </div>
 
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <div className="relative overflow-hidden rounded-[2rem] bg-night p-8 text-white shadow-[0_40px_100px_-30px_rgba(54,71,245,0.6)] md:p-10">
+            <div className="relative overflow-hidden rounded-[2rem] bg-night p-6 text-white shadow-[0_40px_100px_-30px_rgba(54,71,245,0.6)] md:p-10">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-brand/30 blur-3xl"
@@ -200,10 +200,10 @@ function Question({
     <fieldset>
       <legend className="flex items-baseline gap-3">
         <span className="eyebrow text-brand-deep">0{index}</span>
-        <span className="text-2xl font-medium md:text-3xl">{title}</span>
+        <span className="text-xl font-medium md:text-3xl">{title}</span>
       </legend>
       {hint && <p className="mt-1 pl-9 text-sm text-ink/60">{hint}</p>}
-      <div className="mt-5 flex flex-wrap gap-2.5">{children}</div>
+      <div className="mt-3 flex flex-wrap gap-2 md:mt-5 md:gap-2.5">{children}</div>
     </fieldset>
   );
 }
@@ -225,7 +225,7 @@ function Chip({
       onClick={onClick}
       aria-pressed={active}
       whileTap={{ scale: 0.95 }}
-      className={`flex items-center gap-2 rounded-full border px-5 py-3 text-[15px] transition-colors ${
+      className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm transition-colors md:px-5 md:py-3 md:text-[15px] ${
         active
           ? "border-brand-deep bg-brand-deep text-white"
           : "border-ink/15 bg-white hover:border-ink/40"

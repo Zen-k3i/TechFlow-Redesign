@@ -19,7 +19,7 @@ export function FilterChip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`relative rounded-full border px-4 py-2 text-sm transition-colors ${
+      className={`relative rounded-full border px-3 py-1.5 text-[13px] transition-colors md:px-4 md:py-2 md:text-sm ${
         active ? "border-ink text-paper" : "border-ink/15 text-ink/70 hover:border-ink/40"
       }`}
     >
