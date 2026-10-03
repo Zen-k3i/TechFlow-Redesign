@@ -41,6 +41,9 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 - `Magnetic` no longer moves its children (kept as a wrapper). `ScrollToTopOnNavigate` (providers) resets Lenis on each new page.
 - Authors are always team members. A member without a photo (Khemra Bonamy, for now) stays off the team page (TEAM_QUERY needs a photo) and shows initials as avatar on articles.
 
+## llms.txt (2026-10-03)
+- `/llms.txt` and `/llms-full.txt` are route handlers (`src/app/llms.txt/route.ts`) built from Sanity by `src/sanity/llms.ts`: services, case studies and articles per language (full text in llms-full), revalidated hourly. Nobody uploads a file; the SEO harness's own `output/llms.txt` is only a report now.
+
 ## Projects page (/projets)
 - Custom hero (`src/components/projects/projects-hero.tsx`), not the shared `PageHero`, but styled like it for consistency (badge pill, grid overlay, same padding; no scroll cue), with a tilted wall of each CMS case study's website screens (`previews`) auto-scrolling behind the pitch; every screen links to its case study, hovering a column pauses it. Stats live in the hero and count up. "Explore" scrolls to `#etudes-de-cas` (Lenis handles the anchor).
 - Growth case studies (local, no screens) are not on the wall.
