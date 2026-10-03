@@ -435,10 +435,10 @@ function useSkyParallax() {
 
 function Backdrop() {
   const { sx, sy } = useSkyParallax();
-  const starsX = useTransform(sx, (v) => v * -14);
-  const starsY = useTransform(sy, (v) => v * -10);
-  const nebulaX = useTransform(sx, (v) => v * 6);
-  const nebulaY = useTransform(sy, (v) => v * 4);
+  const starsX = useTransform(sx, (v) => v * -22);
+  const starsY = useTransform(sy, (v) => v * -16);
+  const nebulaX = useTransform(sx, (v) => v * 10);
+  const nebulaY = useTransform(sy, (v) => v * 7);
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
       <motion.div style={{ x: nebulaX, y: nebulaY }} className="absolute -inset-8">
