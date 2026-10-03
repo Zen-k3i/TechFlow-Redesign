@@ -259,11 +259,8 @@ async function run() {
       excerpt: f.excerpt,
       topics: topicsOf(item.categories),
       ...(item.publishedDate ? {publishedAt: item.publishedDate.slice(0, 10)} : {}),
-      ...(author
-        ? {author: {_type: 'reference', _ref: author}}
-        : item.author && item.author !== 'TechFlow Agency'
-          ? {authorName: item.author}
-          : {}),
+      // Authors are team members (Khemra Bonamy was added without a photo, so he stays off the team page).
+      ...(author ? {author: {_type: 'reference', _ref: author}} : {}),
       ...(f.coverImage?.url ? {coverImage: await image(f.coverImage.url, f.coverImage.alt || undefined, 'imageWithAlt')} : {}),
       body,
       seo,

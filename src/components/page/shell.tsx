@@ -1,7 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import type { RouteKey } from "@/i18n/routes";
 import { breadcrumbJsonLd, JsonLd } from "../seo/json-ld";
-import { Footer } from "../site/footer";
+import { SiteFooter } from "../site/site-footer";
 import { Navbar, type Alternates } from "../site/navbar";
 import { Providers } from "../site/providers";
 
@@ -28,7 +28,7 @@ export function PageShell({
       <Navbar current={current} alternates={alternates} />
       {current && current !== "home" && <JsonLd data={breadcrumbJsonLd(lang, current, breadcrumb)} />}
       <main>{children}</main>
-      <Footer cta={footerCta} />
+      <SiteFooter lang={lang} cta={footerCta} />
     </Providers>
   );
 }

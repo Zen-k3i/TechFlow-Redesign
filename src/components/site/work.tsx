@@ -8,6 +8,7 @@ import { FadeIn, RevealHeading } from "./reveal";
 
 /** Cards shown under "All" on the home page; a sector filter shows every match, as on the old site. */
 const HOME_LIMIT = 12;
+const isGrowth = (p: CmsProject) => p._type === "growthCaseStudy";
 
 /**
  * Selected work: the same filters and cards as the /projets case-study grid (`CaseStudyGrid`),
@@ -17,8 +18,6 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
   const { t, links } = useLocale();
   // Website projects and growth case studies published in Sanity.
   const total = cmsProjects.filter((p) => p.slug).length;
-  // Growth case studies (G.A.T.O Tower) are listed on /projets only, not in the home selection.
-  const homeProjects = cmsProjects.filter((p) => p._type !== "growthCaseStudy");
 
   return (
     <section id="projets" className="relative rounded-[2.5rem] bg-paper px-5 py-20 text-ink md:rounded-[4rem] md:px-10 md:py-28">
@@ -39,7 +38,8 @@ export function Work({ sectorList, cmsProjects }: { sectorList: string[]; cmsPro
           </FadeIn>
         </div>
 
-        <CaseStudyGrid cmsProjects={homeProjects} sectorList={sectorList} limit={HOME_LIMIT} />
+        {/* Growth case studies (G.A.T.O Tower) count and show under their sector, but aren't among the 12 under "All". */}
+        <CaseStudyGrid cmsProjects={cmsProjects} sectorList={sectorList} limit={HOME_LIMIT} hideUnderAll={isGrowth} />
 
         <div className="mt-14 flex justify-center">
           <Link

@@ -16,6 +16,9 @@ const h = (text: string): Block => ({ type: "h3", text });
 const ul = (...items: string[]): Block => ({ type: "ul", items });
 
 const ADDRESS = "160 Robinson Road, #14-04, Singapore Business Federation Center, Singapore 068914";
+/** Singapore UEN from the ACRA register (the old site showed 929698140, not a valid UEN). */
+const SG_UEN = "202517351W";
+const PARIS_ADDRESS = "60 rue François Ier, 75008 Paris, France";
 const HOST = "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA";
 const EMAIL = "maximilien@techflow-agency.com";
 
@@ -32,14 +35,24 @@ const legalFr: LegalDoc = {
     {
       title: "Informations sur le site",
       blocks: [
-        p("Conformément à l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, les utilisateurs de techflow-agency.com, site détenu par Techflow Agency PTE LTD, sont informés de l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi :"),
+        p("Conformément à l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, les utilisateurs de techflow-agency.com sont informés de l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi. TechFlow opère depuis deux bureaux, à Singapour (et Phnom Penh) et à Paris, au travers de deux sociétés :"),
+        h("Techflow Agency PTE. LTD. (Singapour), éditeur du site"),
         ul(
-          "Propriétaire : Techflow Agency PTE LTD",
+          "Société de droit singapourien (private limited company)",
           `Siège social : ${ADDRESS}`,
-          "Numéro d'enregistrement : 929698140",
+          `UEN : ${SG_UEN}`,
           `Dirigeant et directeur de la publication : Maximilien Grolier (${EMAIL})`,
-          `Hébergement du site : ${HOST}`,
         ),
+        h("Techflow Connect (Paris)"),
+        ul(
+          "Société par actions simplifiée (SAS) au capital de 1 000 €",
+          `Siège social : ${PARIS_ADDRESS}`,
+          "SIREN : 994 381 416 · R.C.S. Paris 994 381 416",
+          "N° de TVA intracommunautaire : FR52994381416",
+          "Président : Arthur Goeury",
+        ),
+        h("Hébergement"),
+        ul(`Hébergement du site : ${HOST}`),
       ],
     },
     {
@@ -126,14 +139,24 @@ const legalEn: LegalDoc = {
     {
       title: "About this website",
       blocks: [
-        p("In accordance with Article 6 of French Law No. 2004-575 of 21 June 2004 on confidence in the digital economy, users of techflow-agency.com, a website owned by Techflow Agency PTE LTD, are informed of the identity of the parties involved in creating and maintaining it:"),
+        p("In accordance with Article 6 of French Law No. 2004-575 of 21 June 2004 on confidence in the digital economy, users of techflow-agency.com are informed of the identity of the parties involved in creating and maintaining it. TechFlow works from two offices, in Singapore (and Phnom Penh) and in Paris, through two companies:"),
+        h("Techflow Agency PTE. LTD. (Singapore), publisher of the website"),
         ul(
-          "Owner: Techflow Agency PTE LTD",
+          "Private limited company incorporated in Singapore",
           `Registered office: ${ADDRESS}`,
-          "Registration number: 929698140",
+          `UEN: ${SG_UEN}`,
           `Director and publication manager: Maximilien Grolier (${EMAIL})`,
-          `Hosting: ${HOST}`,
         ),
+        h("Techflow Connect (Paris)"),
+        ul(
+          "French simplified joint-stock company (SAS) with a share capital of €1,000",
+          `Registered office: ${PARIS_ADDRESS}`,
+          "SIREN: 994 381 416 · Paris Trade and Companies Register (RCS) 994 381 416",
+          "EU VAT number: FR52994381416",
+          "President: Arthur Goeury",
+        ),
+        h("Hosting"),
+        ul(`Hosting: ${HOST}`),
       ],
     },
     {
@@ -708,19 +731,19 @@ const termsEn: LegalDoc = {
 };
 
 /**
- * Privacy and cookie policies written for the new site (2026-10-02), replacing the old site's placeholders
- * (a copy of the legal notices). Describe what the site really does today: no analytics, no cookies, the
- * brief form opens the visitor's mail app. Update them when that changes (analytics, a stored contact form,
- * a newsletter): the cookie policy then needs a consent banner. To be validated by the company before go-live.
+ * Privacy policy written for the new site (2026-10-02), replacing the old site's placeholders (a copy of
+ * the legal notices). It also holds the cookie policy (the separate page was merged in on 2026-10-03):
+ * Google Analytics only after consent (site/consent.tsx). Update it when the site's data use changes.
+ * To be validated by the company before go-live.
  */
-const UPDATED_FR = "2 octobre 2026";
-const UPDATED_EN = "2 October 2026";
+const UPDATED_FR = "3 octobre 2026";
+const UPDATED_EN = "3 October 2026";
 
 const privacyFr: LegalDoc = {
   meta: { title: "Politique de confidentialité | TechFlow Agency", description: "Comment TechFlow Agency collecte, utilise et protège vos données personnelles, vos droits au titre du RGPD et la façon de nous contacter à ce sujet." },
   badge: "Informations légales",
   title: "Politique de *confidentialité.*",
-  intro: `Quelles données personnelles nous recevons quand vous utilisez techflow-agency.com ou nous contactez, ce que nous en faisons et vos droits. Dernière mise à jour : ${UPDATED_FR}.`,
+  intro: `Quelles données personnelles nous recevons quand vous utilisez techflow-agency.com ou nous contactez, ce que nous en faisons, les cookies et vos droits. Dernière mise à jour : ${UPDATED_FR}.`,
   toc: "Sommaire",
   sections: [
     {
@@ -738,7 +761,7 @@ const privacyFr: LegalDoc = {
         h("Quand vous réservez un appel"),
         p("La prise de rendez-vous se fait sur Calendly. Nous recevons votre nom, votre adresse e-mail, le créneau choisi et les réponses que vous donnez au moment de réserver."),
         h("Quand vous naviguez sur le site"),
-        p("Le site n'utilise aucun outil de mesure d'audience ni de publicité et ne dépose aucun cookie. Comme tout site web, nos prestataires techniques reçoivent votre adresse IP et les informations de votre navigateur pour afficher les pages, les images et les vidéos ; ces journaux techniques servent uniquement à la sécurité et au bon fonctionnement du service."),
+        p("Comme tout site web, nos prestataires techniques reçoivent votre adresse IP et les informations de votre navigateur pour afficher les pages, les images et les vidéos ; ces journaux techniques servent uniquement à la sécurité et au bon fonctionnement du service. Si vous l'acceptez, Google Analytics mesure aussi votre visite (voir « Cookies et mesure d'audience »)."),
       ],
     },
     {
@@ -761,7 +784,7 @@ const privacyFr: LegalDoc = {
           "Vercel Inc. (États-Unis) : hébergement du site.",
           "Sanity AS (Norvège) : gestion des contenus et diffusion des images du site.",
           "Mux, Inc. (États-Unis) : diffusion des vidéos de témoignages.",
-          "Google (Google Workspace) : messagerie et documents de travail.",
+          "Google (Google Workspace et Google Analytics) : messagerie, documents de travail et, avec votre accord, mesure d'audience.",
           "Calendly LLC (États-Unis) : prise de rendez-vous.",
           "Brevo (France) : envoi d'e-mails, uniquement si vous avez accepté de recevoir nos informations.",
         ),
@@ -775,6 +798,7 @@ const privacyFr: LegalDoc = {
           "Demandes sans suite : 3 ans après notre dernier échange.",
           "Clients : pendant la relation commerciale, puis le temps imposé par nos obligations comptables et fiscales.",
           "Journaux techniques d'hébergement : quelques semaines au plus, selon les durées de nos prestataires.",
+          "Mesure d'audience (Google Analytics) : 14 mois ; votre choix sur les cookies est conservé 6 mois.",
         ),
       ],
     },
@@ -786,12 +810,23 @@ const privacyFr: LegalDoc = {
       ],
     },
     {
+      title: "Cookies et mesure d'audience",
+      blocks: [
+        p("Un cookie est un petit fichier enregistré par votre navigateur. Le site n'en dépose qu'un type, et seulement avec votre accord : ceux de Google Analytics, qui mesurent la fréquentation (pages vues, provenance, durée de visite) pour améliorer le site. Ils ne servent pas à la publicité."),
+        ul(
+          "_ga et _ga_* (Google Analytics) : distinguent les visiteurs et les sessions, conservés 13 mois au plus.",
+        ),
+        p("À votre première visite, un bandeau vous permet d'accepter ou de refuser, aussi simplement l'un que l'autre. Sans réponse, rien n'est déposé. Vous pouvez changer d'avis à tout moment avec le lien « Paramètres des cookies » en bas de chaque page. Votre choix est enregistré dans votre navigateur (pas dans un cookie) pendant 6 mois."),
+        p("Lorsque vous cliquez vers un service extérieur (Calendly, LinkedIn, Instagram, sites de nos clients), ce service applique sa propre politique de cookies. Vous pouvez aussi bloquer ou supprimer les cookies depuis les réglages de votre navigateur."),
+      ],
+    },
+    {
       title: "Sécurité",
       blocks: [p("Le site est servi uniquement en HTTPS, les accès à nos outils sont nominatifs et protégés, et nous limitons les données collectées à ce qui est utile pour vous répondre.")],
     },
     {
       title: "Modifications",
-      blocks: [p("Nous mettrons cette politique à jour si nos pratiques changent, par exemple si nous ajoutons un outil de mesure d'audience. La date de dernière mise à jour figure en haut de la page.")],
+      blocks: [p("Nous mettrons cette politique à jour si nos pratiques changent. La date de dernière mise à jour figure en haut de la page.")],
     },
   ],
 };
@@ -800,7 +835,7 @@ const privacyEn: LegalDoc = {
   meta: { title: "Privacy Policy | TechFlow Agency", description: "How TechFlow Agency collects, uses and protects your personal data, your rights under GDPR, and how to contact us about them." },
   badge: "Legal information",
   title: "Privacy *policy.*",
-  intro: `What personal data we receive when you use techflow-agency.com or contact us, what we do with it, and your rights. Last updated: ${UPDATED_EN}.`,
+  intro: `What personal data we receive when you use techflow-agency.com or contact us, what we do with it, cookies, and your rights. Last updated: ${UPDATED_EN}.`,
   toc: "Contents",
   sections: [
     {
@@ -818,7 +853,7 @@ const privacyEn: LegalDoc = {
         h("When you book a call"),
         p("Bookings are made on Calendly. We receive your name, email address, the time slot you pick and the answers you give when booking."),
         h("When you browse the website"),
-        p("The website uses no analytics or advertising tools and sets no cookies. Like any website, our technical providers receive your IP address and browser information in order to serve pages, images and videos; these technical logs are used only for security and to keep the service running."),
+        p("Like any website, our technical providers receive your IP address and browser information in order to serve pages, images and videos; these technical logs are used only for security and to keep the service running. If you accept it, Google Analytics also measures your visit (see \"Cookies and analytics\")."),
       ],
     },
     {
@@ -841,7 +876,7 @@ const privacyEn: LegalDoc = {
           "Vercel Inc. (United States): website hosting.",
           "Sanity AS (Norway): content management and delivery of the website's images.",
           "Mux, Inc. (United States): streaming of the testimonial videos.",
-          "Google (Google Workspace): email and working documents.",
+          "Google (Google Workspace and Google Analytics): email, working documents and, with your consent, analytics.",
           "Calendly LLC (United States): meeting booking.",
           "Brevo (France): sending emails, only if you agreed to receive our news.",
         ),
@@ -855,6 +890,7 @@ const privacyEn: LegalDoc = {
           "Requests that don't lead to a project: 3 years after our last exchange.",
           "Clients: for the duration of the business relationship, then as long as our accounting and tax obligations require.",
           "Hosting technical logs: a few weeks at most, according to our providers' retention periods.",
+          "Analytics (Google Analytics): 14 months; your cookie choice is kept for 6 months.",
         ),
       ],
     },
@@ -866,101 +902,31 @@ const privacyEn: LegalDoc = {
       ],
     },
     {
+      title: "Cookies and analytics",
+      blocks: [
+        p("A cookie is a small file your browser stores. This website sets only one kind, and only with your consent: Google Analytics cookies, which measure traffic (pages viewed, where visitors come from, visit length) so we can improve the website. They are not used for advertising."),
+        ul(
+          "_ga and _ga_* (Google Analytics): tell visitors and sessions apart, kept for 13 months at most.",
+        ),
+        p("On your first visit, a banner lets you accept or refuse, refusing being as easy as accepting. Without an answer, nothing is stored. You can change your mind at any time with the \"Cookie settings\" link at the bottom of every page. Your choice is saved in your browser (not in a cookie) for 6 months."),
+        p("When you click through to an outside service (Calendly, LinkedIn, Instagram, our clients' websites), that service applies its own cookie policy. You can also block or delete cookies in your browser settings."),
+      ],
+    },
+    {
       title: "Security",
       blocks: [p("The website is served over HTTPS only, access to our tools is personal and protected, and we limit the data we collect to what we need to answer you.")],
     },
     {
       title: "Changes",
-      blocks: [p("We will update this policy if our practices change, for example if we add an analytics tool. The date of the last update is shown at the top of the page.")],
+      blocks: [p("We will update this policy if our practices change. The date of the last update is shown at the top of the page.")],
     },
   ],
 };
 
-const cookiesFr: LegalDoc = {
-  meta: { title: "Politique de cookies | TechFlow Agency", description: "Les cookies et traceurs utilisés sur techflow-agency.com : aujourd'hui aucun. Ce qui se passe quand vous cliquez vers un service tiers, et vos choix." },
-  badge: "Informations légales",
-  title: "Politique de *cookies.*",
-  intro: `Les cookies et autres traceurs sur techflow-agency.com. Dernière mise à jour : ${UPDATED_FR}.`,
-  toc: "Sommaire",
-  sections: [
-    {
-      title: "En bref",
-      blocks: [
-        p("Le site techflow-agency.com ne dépose aucun cookie et n'utilise aucun traceur : pas de mesure d'audience, pas de publicité, pas de pixel de réseau social. C'est pourquoi aucun bandeau de consentement ne s'affiche."),
-      ],
-    },
-    {
-      title: "Qu'est-ce qu'un cookie ?",
-      blocks: [
-        p("Un cookie est un petit fichier enregistré par votre navigateur quand vous visitez un site. Il peut servir au fonctionnement du site (cookies strictement nécessaires) ou à suivre votre navigation, mesurer l'audience ou afficher de la publicité. Ces derniers ne peuvent être déposés qu'avec votre accord préalable."),
-      ],
-    },
-    {
-      title: "Contenus et services tiers",
-      blocks: [
-        p("Les images sont servies par Sanity et les vidéos de témoignages par Mux, sans cookie. Lorsque vous cliquez vers un service extérieur (réservation d'un appel sur Calendly, LinkedIn, Instagram, sites de nos clients), vous quittez notre site : ce service applique alors sa propre politique de cookies, que nous vous invitons à consulter."),
-      ],
-    },
-    {
-      title: "Vos choix",
-      blocks: [
-        p("Vous pouvez à tout moment bloquer ou supprimer les cookies depuis les réglages de votre navigateur (Chrome, Safari, Firefox, Edge). Cela n'affecte pas l'utilisation de notre site."),
-      ],
-    },
-    {
-      title: "Évolutions",
-      blocks: [
-        p(`Si nous ajoutons un jour un outil de mesure d'audience ou un service qui dépose des cookies non essentiels, nous mettrons à jour cette page et vous demanderons votre accord avant tout dépôt, avec la possibilité de refuser aussi simplement que d'accepter. Questions : ${EMAIL}.`),
-      ],
-    },
-  ],
-};
-
-const cookiesEn: LegalDoc = {
-  meta: { title: "Cookie Policy | TechFlow Agency", description: "The cookies and trackers used on techflow-agency.com: none today. What happens when you click through to a third-party service, and your choices." },
-  badge: "Legal information",
-  title: "Cookie *policy.*",
-  intro: `Cookies and other trackers on techflow-agency.com. Last updated: ${UPDATED_EN}.`,
-  toc: "Contents",
-  sections: [
-    {
-      title: "In short",
-      blocks: [
-        p("techflow-agency.com sets no cookies and uses no trackers: no analytics, no advertising, no social media pixels. That is why no consent banner is shown."),
-      ],
-    },
-    {
-      title: "What is a cookie?",
-      blocks: [
-        p("A cookie is a small file your browser stores when you visit a website. It can be needed for the website to work (strictly necessary cookies) or used to follow your browsing, measure traffic or show ads. The latter can only be set with your prior consent."),
-      ],
-    },
-    {
-      title: "Third-party content and services",
-      blocks: [
-        p("Images are served by Sanity and the testimonial videos by Mux, without cookies. When you click through to an outside service (booking a call on Calendly, LinkedIn, Instagram, our clients' websites), you leave our website: that service then applies its own cookie policy, which we invite you to read."),
-      ],
-    },
-    {
-      title: "Your choices",
-      blocks: [
-        p("You can block or delete cookies at any time in your browser settings (Chrome, Safari, Firefox, Edge). This does not affect your use of our website."),
-      ],
-    },
-    {
-      title: "Changes",
-      blocks: [
-        p(`If we ever add an analytics tool or a service that sets non-essential cookies, we will update this page and ask for your consent before anything is stored, with refusing as easy as accepting. Questions: ${EMAIL}.`),
-      ],
-    },
-  ],
-};
-
-export type LegalKey = "legal" | "terms" | "cookies" | "privacy";
+export type LegalKey = "legal" | "terms" | "privacy";
 
 export const legalDocs: Record<LegalKey, Record<Locale, LegalDoc>> = {
   legal: { fr: legalFr, en: legalEn },
   terms: { fr: termsFr, en: termsEn },
-  cookies: { fr: cookiesFr, en: cookiesEn },
   privacy: { fr: privacyFr, en: privacyEn },
 };

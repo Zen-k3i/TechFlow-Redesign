@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { openConsent } from "./consent";
 import Link from "next/link";
 import { href } from "@/i18n/routes";
 import { ProjectCta } from "../page/project-cta";
 import { useLocale } from "./locale";
 
 /** `cta` is the "Open for new projects" block; pages that end on their own call to action leave it out. */
-export function Footer({ cta = true }: { cta?: boolean }) {
+export function Footer({ cta = true, tools = [] }: { cta?: boolean; tools?: { title: string; slug: string }[] }) {
   const { t, lang, links } = useLocale();
   const f = t.footer;
   const columns = [
@@ -22,7 +23,6 @@ export function Footer({ cta = true }: { cta?: boolean }) {
       title: f.columns.agency,
       items: [
         { label: f.agency.projects, href: links.projects },
-        { label: f.agency.tools, href: href(lang, "tools") },
         { label: f.agency.team, href: links.team },
         { label: f.agency.insights, href: links.insights },
         { label: f.agency.contact, href: links.contact },
@@ -128,6 +128,24 @@ export function Footer({ cta = true }: { cta?: boolean }) {
           ))}
         </div>
 
+        {/* Every tool page by name, as on the old site: internal links for SEO. */}
+        {tools.length > 0 && (
+          <div className="mt-14 border-t border-white/15 pt-10">
+            <Link href={href(lang, "tools")} className="eyebrow text-white/55 transition-colors hover:text-white">
+              {f.agency.tools}
+            </Link>
+            <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2.5 text-sm">
+              {tools.map((tool) => (
+                <li key={tool.slug}>
+                  <Link href={href(lang, "tools", tool.slug)} className="text-white/65 transition-colors hover:text-white">
+                    {tool.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <p
           aria-hidden
           className="mt-20 select-none text-center font-serif text-[22vw] leading-[0.78] tracking-[-0.04em] text-transparent transition-colors duration-700 [-webkit-text-stroke:1px_rgba(255,255,255,0.3)] hover:text-white/10"
@@ -147,9 +165,9 @@ export function Footer({ cta = true }: { cta?: boolean }) {
             <Link href={links.privacy} className="hover:text-white">
               {f.privacy}
             </Link>
-            <Link href={links.cookies} className="hover:text-white">
+            <button type="button" onClick={openConsent} className="eyebrow cursor-pointer hover:text-white">
               {f.cookies}
-            </Link>
+            </button>
           </span>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ReactLenis, useLenis } from "lenis/react";
 import { LazyMotion, MotionConfig } from "motion/react";
 import { defaultLocale, type Locale } from "@/i18n/config";
+import { Consent } from "./consent";
 import { Cursor } from "./cursor";
 import { LocaleProvider } from "./locale";
 
@@ -20,6 +21,7 @@ export function Providers({ lang = defaultLocale, children }: { lang?: Locale; c
             <ScrollToTopOnNavigate />
             {children}
             <Cursor />
+            <Consent />
           </MotionConfig>
         </LazyMotion>
       </ReactLenis>

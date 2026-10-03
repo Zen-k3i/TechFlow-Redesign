@@ -708,7 +708,7 @@ function DevStage({ content }: { content: ServiceContent }) {
               <Ring
                 key={s}
                 label={s}
-                value={[98, 100, 100, 100][i]}
+                value={[95, 100, 100, 100][i]}
                 delay={1 + i * 0.15}
                 className={i > 0 ? "hidden sm:flex" : ""}
               />

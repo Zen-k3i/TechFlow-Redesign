@@ -11,7 +11,6 @@ const siteLink = (lang: Locale) => ({
   insights: href(lang, "insights"),
   legal: href(lang, "legal"),
   terms: href(lang, "terms"),
-  cookies: href(lang, "cookies"),
   privacy: href(lang, "privacy"),
   instagram: "https://www.instagram.com/we.are.techflow/",
   linkedin: "https://www.linkedin.com/company/techflow-agence/",

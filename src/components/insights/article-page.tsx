@@ -118,7 +118,7 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
       )}
 
       <section className="bg-paper px-5 pb-20 pt-14 text-ink md:px-10 md:pb-28 md:pt-20">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:gap-16 xl:gap-24">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:gap-14 xl:gap-20">
           <aside className="max-lg:hidden">
             <div className="sticky top-28 space-y-10">
               {headings.length > 0 && <Contents label={c.toc} items={headings} target={articleRef} />}
@@ -127,7 +127,7 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
             </div>
           </aside>
 
-          <div className="min-w-0 max-w-[44rem]">
+          <div className="min-w-0 max-w-[52rem]">
             {headings.length > 0 && <MobileContents label={c.toc} items={headings} />}
 
             {/* The opening paragraph reads as a lead. */}
@@ -174,13 +174,17 @@ export function ArticlePage({ article }: { article: InsightDetail }) {
   );
 }
 
+const initials = (name: string | null | undefined) =>
+  name?.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || undefined;
+
 function Avatar({ author, size }: { author: InsightDetail["author"]; size: string }) {
   return (
     <span className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-brand-deep font-semibold text-white ${size}`}>
       {author?.photo?.asset ? (
         <SanityImage image={author.photo} alt="" fill width={160} sizes="64px" className="object-cover object-top" />
       ) : (
-        <span aria-hidden>TF</span>
+        // Placeholder until the member's photo is uploaded: their initials, or TF for the agency.
+        <span aria-hidden>{initials(author?.name) ?? "TF"}</span>
       )}
     </span>
   );

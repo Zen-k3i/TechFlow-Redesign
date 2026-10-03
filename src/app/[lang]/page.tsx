@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Brief } from "@/components/site/brief";
 import { Convictions } from "@/components/site/convictions";
 import { Faq } from "@/components/site/faq";
-import { Footer } from "@/components/site/footer";
+import { SiteFooter } from "@/components/site/site-footer";
 import { Hero } from "@/components/site/hero";
 import { Industries } from "@/components/site/industries";
 import { Manifesto } from "@/components/site/manifesto";
@@ -59,7 +59,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         <Brief />
         <Faq faq={faq} />
       </main>
-      <Footer />
+      <SiteFooter lang={lang} />
     </Providers>
   );
 }

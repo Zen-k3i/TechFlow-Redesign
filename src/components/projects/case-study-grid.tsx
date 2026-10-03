@@ -14,13 +14,24 @@ import { CmsProjectCard, type CmsProject } from "./cms-project-card";
  * `limit` caps the cards under "All" (home page); a sector filter always shows every match, and
  * every count is over all projects.
  */
-export function CaseStudyGrid({ cmsProjects, sectorList, limit }: { cmsProjects: CmsProject[]; sectorList: string[]; limit?: number }) {
+export function CaseStudyGrid({
+  cmsProjects,
+  sectorList,
+  limit,
+  hideUnderAll,
+}: {
+  cmsProjects: CmsProject[];
+  sectorList: string[];
+  limit?: number;
+  /** Projects counted and filterable, but left out of the "All" selection (the home page's 12). */
+  hideUnderAll?: (project: CmsProject) => boolean;
+}) {
   const { t } = useLocale();
   const items = useMemo(() => cmsProjects.filter((p) => p.slug), [cmsProjects]);
   // Filter buttons: the Sectors list from Sanity, as used by these projects.
   const sectors = useMemo(() => filterOptions(sectorList, items.map((p) => p.sectors ?? [])), [sectorList, items]);
   const [filter, setFilter] = useState<string | null>(null);
-  const visible = filter ? items.filter((p) => p.sectors?.includes(filter)) : items.slice(0, limit);
+  const visible = filter ? items.filter((p) => p.sectors?.includes(filter)) : items.filter((p) => !hideUnderAll?.(p)).slice(0, limit);
 
   return (
     <LayoutGroup>

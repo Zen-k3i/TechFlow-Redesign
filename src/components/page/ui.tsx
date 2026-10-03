@@ -439,6 +439,9 @@ const logoSize = ({ width, height, optical = 1 }: { width: number; height: numbe
   return { height: h, width: h * ratio };
 };
 
+/** Every other logo on each row, so both rows mix big and small names. */
+const logoRows = [clients.filter((_, i) => i % 2 === 0), clients.filter((_, i) => i % 2 === 1)];
+
 export function ClientMarquee({
   label,
   tone = "dark",
@@ -456,29 +459,34 @@ export function ClientMarquee({
           {label}
         </p>
       )}
-      <div className="mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
-        {/* Logos scale down to 80% on phones. */}
-        <ul className="flex w-max animate-marquee items-center gap-12 [--logo-scale:0.8] md:gap-16 md:[--logo-scale:1]">
-          {[...clients, ...clients].map((client, i) => {
-            const size = logoSize(client);
-            return (
-              <li key={i} aria-hidden={i >= clients.length} className="shrink-0">
-                <Image
-                  src={client.src}
-                  alt={i < clients.length ? client.name : ""}
-                  // Displayed size, so the srcset offers ~1x/2x of it instead of the full 1000 px files.
-                  width={Math.round(size.width)}
-                  height={Math.round(size.height)}
-                  style={{
-                    width: `calc(${size.width.toFixed(1)}px * var(--logo-scale))`,
-                    height: `calc(${size.height.toFixed(1)}px * var(--logo-scale))`,
-                  }}
-                  className={`object-contain opacity-50 brightness-0 transition-opacity hover:opacity-100 ${light ? "" : "invert"}`}
-                />
-              </li>
-            );
-          })}
-        </ul>
+      {/* Two rows scrolling in opposite directions, half of the logos each. */}
+      <div className="mt-8 space-y-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)] md:space-y-10">
+        {logoRows.map((row, r) => (
+          <ul
+            key={r}
+            className={`flex w-max items-center gap-12 [--logo-scale:0.8] md:gap-16 md:[--logo-scale:1] ${r ? "animate-marquee-reverse" : "animate-marquee"}`}
+          >
+            {[...row, ...row].map((client, i) => {
+              const size = logoSize(client);
+              return (
+                <li key={i} aria-hidden={i >= row.length} className="shrink-0">
+                  <Image
+                    src={client.src}
+                    alt={i < row.length ? client.name : ""}
+                    // Displayed size, so the srcset offers ~1x/2x of it instead of the full 1000 px files.
+                    width={Math.round(size.width)}
+                    height={Math.round(size.height)}
+                    style={{
+                      width: `calc(${size.width.toFixed(1)}px * var(--logo-scale))`,
+                      height: `calc(${size.height.toFixed(1)}px * var(--logo-scale))`,
+                    }}
+                    className={`object-contain opacity-50 brightness-0 transition-opacity hover:opacity-100 ${light ? "" : "invert"}`}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        ))}
       </div>
     </div>
   );

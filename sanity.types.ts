@@ -153,7 +153,6 @@ export type PageSeo = {
     | "contact"
     | "legal"
     | "terms"
-    | "cookies"
     | "privacy";
   seo?: Seo;
 };
@@ -374,7 +373,6 @@ export type Insight = {
   categories?: Array<string>;
   publishedAt?: string;
   author?: TeamMemberReference;
-  authorName?: string;
   coverImage?: ImageWithAlt;
   body?: BlockContent;
   seo?: Seo;
@@ -1595,6 +1593,14 @@ export type GROWTH_INDEX_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../../src/sanity/queries.ts
+// Variable: FOOTER_TOOLS_QUERY
+// Query: *[_type == "tool" && language == $lang && defined(slug.current)]    | order(title asc) { title, "slug": slug.current }
+export type FOOTER_TOOLS_QUERY_RESULT = Array<{
+  title: string | null;
+  slug: string | null;
+}>;
+
+// Source: ../../src/sanity/queries.ts
 // Variable: TOOLS_INDEX_QUERY
 // Query: *[_type == "tool" && language == $lang && defined(slug.current)]    | order(coalesce(order, 999) asc, title asc) {   _id,  title,  "slug": slug.current,  intro,  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } }
 export type TOOLS_INDEX_QUERY_RESULT = Array<{
@@ -1809,7 +1815,7 @@ export type REVIEWS_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHTS_INDEX_QUERY
-// Query: *[_type == "insight" && language == $lang && defined(slug.current)]    | order(publishedAt desc) {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  // A team member, or a guest byline (authorName) for writers without a team page.  "author": select(    defined(author) => author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }  ),  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }
+// Query: *[_type == "insight" && language == $lang && defined(slug.current)]    | order(publishedAt desc) {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }
 export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -1817,36 +1823,28 @@ export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
   excerpt: string | null;
   categories: Array<string> | null;
   publishedAt: string | null;
-  author:
-    | {
-        _id: "guest";
-        name: string;
-        role: null;
-        linkedin: null;
-        photo: null;
-      }
-    | {
+  author: {
+    _id: string;
+    name: string | null;
+    role: string | null;
+    linkedin: string | null;
+    photo: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
         _id: string;
-        name: string | null;
-        role: string | null;
-        linkedin: string | null;
-        photo: {
-          alt: null;
-          hotspot: SanityImageHotspot | null;
-          crop: SanityImageCrop | null;
-          asset: {
-            _id: string;
-            url: string | null;
-            metadata: {
-              lqip: string | null;
-              dimensions: {
-                width: number | null;
-                height: number | null;
-              } | null;
-            } | null;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
           } | null;
         } | null;
-      };
+      } | null;
+    } | null;
+  } | null;
   coverImage: {
     alt: string | null;
     hotspot: SanityImageHotspot | null;
@@ -1868,7 +1866,7 @@ export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHT_DETAIL_QUERY
-// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  // A team member, or a guest byline (authorName) for writers without a team page.  "author": select(    defined(author) => author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }  ),  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  // A team member, or a guest byline (authorName) for writers without a team page.  "author": select(    defined(author) => author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }  ),  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
+// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
 export type INSIGHT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1876,36 +1874,28 @@ export type INSIGHT_DETAIL_QUERY_RESULT = {
   excerpt: string | null;
   categories: Array<string> | null;
   publishedAt: string | null;
-  author:
-    | {
-        _id: "guest";
-        name: string;
-        role: null;
-        linkedin: null;
-        photo: null;
-      }
-    | {
+  author: {
+    _id: string;
+    name: string | null;
+    role: string | null;
+    linkedin: string | null;
+    photo: {
+      alt: null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      asset: {
         _id: string;
-        name: string | null;
-        role: string | null;
-        linkedin: string | null;
-        photo: {
-          alt: null;
-          hotspot: SanityImageHotspot | null;
-          crop: SanityImageCrop | null;
-          asset: {
-            _id: string;
-            url: string | null;
-            metadata: {
-              lqip: string | null;
-              dimensions: {
-                width: number | null;
-                height: number | null;
-              } | null;
-            } | null;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: {
+            width: number | null;
+            height: number | null;
           } | null;
         } | null;
-      };
+      } | null;
+    } | null;
+  } | null;
   coverImage: {
     alt: string | null;
     hotspot: SanityImageHotspot | null;
@@ -2020,36 +2010,28 @@ export type INSIGHT_DETAIL_QUERY_RESULT = {
     excerpt: string | null;
     categories: Array<string> | null;
     publishedAt: string | null;
-    author:
-      | {
-          _id: "guest";
-          name: string;
-          role: null;
-          linkedin: null;
-          photo: null;
-        }
-      | {
+    author: {
+      _id: string;
+      name: string | null;
+      role: string | null;
+      linkedin: string | null;
+      photo: {
+        alt: null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+        asset: {
           _id: string;
-          name: string | null;
-          role: string | null;
-          linkedin: string | null;
-          photo: {
-            alt: null;
-            hotspot: SanityImageHotspot | null;
-            crop: SanityImageCrop | null;
-            asset: {
-              _id: string;
-              url: string | null;
-              metadata: {
-                lqip: string | null;
-                dimensions: {
-                  width: number | null;
-                  height: number | null;
-                } | null;
-              } | null;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number | null;
+              height: number | null;
             } | null;
           } | null;
-        };
+        } | null;
+      } | null;
+    } | null;
     coverImage: {
       alt: string | null;
       hotspot: SanityImageHotspot | null;
@@ -2244,7 +2226,6 @@ export type SITEMAP_PAGES_QUERY_RESULT = Array<{
   page:
     | "aiAgents"
     | "contact"
-    | "cookies"
     | "design"
     | "development"
     | "home"
@@ -2275,13 +2256,14 @@ declare global {
     '\n  *[_type == "growthCaseStudy" && language == $lang && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    accentColor,\n    summary,\n    // "Service tag": sectors picked in the Studio, shown joined in the hero pill.\n    hero { "tags": array::compact(tags[]->title), headline, status, ctaLabel, stats[]{ _key, value, label } },\n    // Same story as a website case study: chapters at each h2, image groups between paragraphs.\n    body[]{\n      ...,\n      _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      _type == "imageGroup" => { images[]{ _key, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } } }\n    },\n    "minutes": round(length(string::split(pt::text(body), " ")) / 220),\n    results { metrics[]{ _key, value, label } },\n    handle,\n    adsSection { heading, intro },\n    ads[]{\n      _key, angle, hook, caption, cta, platform, note, duration,\n      "video": video.asset->url,\n      poster { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n      "captions": captions.asset->url\n    },\n    "sectors": array::compact(sectors[]->title),\n    services,\n    channels,\n    websiteUrl,\n    tools[]->{ _id, title, "slug": slug.current, logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    team[]->{ _id, name, role, photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    "logoFill": coalesce(logoFill, logo.asset->metadata.isOpaque, false),\n    heroImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    // The chosen next case study first, then the others in list order (deduplicated in the page).\n    "related": [\n      ...select(defined(next) => [next->{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }], []),\n      ...*[_type in ["project", "growthCaseStudy"] && language == $lang && defined(slug.current) && slug.current != $slug]\n        | order(coalesce(order, 999) asc)[0...4]{ _type, \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n }\n    ],\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': GROWTH_CASE_STUDY_QUERY_RESULT;
     '\n  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)].slug.current\n': GROWTH_SLUGS_QUERY_RESULT;
     '\n  *[_type == "growthCaseStudy" && language == $lang && defined(slug.current)] | order(coalesce(order, 999) asc){\n    "slug": slug.current, title, accentColor\n  }\n': GROWTH_INDEX_QUERY_RESULT;
+    '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(title asc) { title, "slug": slug.current }\n': FOOTER_TOOLS_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)]\n    | order(coalesce(order, 999) asc, title asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TOOLS_INDEX_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n,\n    benefitsTitle,\n    benefitsIntro,\n    benefits[]{ _key, title, text },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "projects": *[_type == "project" && language == $lang && references(^._id)]\n      | order(coalesce(order, 999) asc) { \n  _id,\n  title,\n  "slug": slug.current,\n  // Picked in the Studio from the Sectors list (one or more).\n  "sectors": array::compact(sectors[]->title),\n  "sector": sectors[0]->title,\n  // "Template colour" in the Studio: the project\'s accent on its card and case study.\n  accentColor,\n  summary,\n  services,\n  websiteUrl,\n  // Growth case studies without a card image use their key visual.\n  "coverImage": coalesce(coverImage, select(_type == "growthCaseStudy" => heroImage)) { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  // Card hover stack: website screens (also the /projets wall), or a growth case study\'s "Card hover" images.\n  "previews": select(\n    _type == "project" => [heroImage, heroSide1, heroSide2][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } } },\n    [hoverImage1, hoverImage2, hoverImage3][defined(asset)]{ "_key": asset._ref, ...{ alt, hotspot, crop, asset->{ _id, url, metadata { dimensions { width, height } } } } }\n  ),\n  // Growth case studies without hover images stack their first ads as phones instead.\n  "phones": select(_type == "growthCaseStudy" => ads[0...3]{ _key, angle, hook, "poster": poster.asset->url }, [])\n },\n    "others": *[_type == "tool" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(coalesce(order, 999) asc)[0...8] { \n  _id,\n  title,\n  "slug": slug.current,\n  intro,\n  logo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n  }\n': TOOL_DETAIL_QUERY_RESULT;
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)].slug.current\n': TOOL_SLUGS_QUERY_RESULT;
     '\n  *[_type == "teamMember" && defined(photo.asset)]\n    | order(coalesce(order, 999) asc, name asc) { \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TEAM_QUERY_RESULT;
     '\n  *[_type == "review" && defined(quote)] | order(coalesce(order, 999) asc, name asc) {\n    _id,\n    quote,\n    name,\n    role,\n    photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n  }\n': REVIEWS_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  // A team member, or a guest byline (authorName) for writers without a team page.\n  "author": select(\n    defined(author) => author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }\n  ),\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  // A team member, or a guest byline (authorName) for writers without a team page.\n  "author": select(\n    defined(author) => author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }\n  ),\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  // A team member, or a guest byline (authorName) for writers without a team page.\n  "author": select(\n    defined(author) => author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }\n  ),\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "insight" && language == $lang && defined(slug.current)].slug.current\n': INSIGHT_SLUGS_QUERY_RESULT;
     '\n  *[_type == $type && slug.current == $slug][0]{\n    language,\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': SLUG_LOOKUP_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    titleTemplate,\n    defaultDescriptionFr,\n    defaultDescriptionEn,\n    defaultOgImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    organization { name, legalName, description, "logo": logo.asset->url, email, locations[]{ name, street, postalCode, city, country, phone }, sameAs },\n    googleVerification\n  }\n': SITE_SETTINGS_QUERY_RESULT;

@@ -11,7 +11,8 @@ const fr = {
   person: {
     availability: "Disponible pour de nouveaux projets",
     book: "Réserver 30 min",
-    or: "ou écrire à",
+    or: "ou écrivez-nous via le",
+    formLink: "formulaire",
   },
   form: {
     eyebrow: "Brief de projet",
@@ -34,8 +35,12 @@ const fr = {
     message: "Votre projet en quelques lignes",
     messagePlaceholder: "Contexte, objectifs, pages ou fonctionnalités clés, références que vous aimez…",
     submit: "Envoyer le brief",
-    note: "L'envoi ouvre votre messagerie avec le brief pré-rempli.",
-    sent: "Votre messagerie s'est ouverte avec le brief pré-rempli. Il ne reste qu'à l'envoyer.",
+    note: "Nous revenons vers vous très vite.",
+    sending: "Envoi en cours…",
+    sent: "Merci ! Votre brief est bien arrivé, vous allez recevoir un e-mail de confirmation.",
+    error: "L'envoi n'a pas abouti. Réessayez dans un instant ou réservez un appel.",
+    consent: "J'accepte que TechFlow utilise ces informations pour me recontacter, conformément à la",
+    privacy: "politique de confidentialité",
     subject: "Nouveau projet",
   },
   offices: {
@@ -58,7 +63,8 @@ const en: typeof fr = {
   person: {
     availability: "Available for new projects",
     book: "Book 30 min",
-    or: "or email",
+    or: "or write to us with the",
+    formLink: "form",
   },
   form: {
     eyebrow: "Project brief",
@@ -81,8 +87,12 @@ const en: typeof fr = {
     message: "Your project in a few lines",
     messagePlaceholder: "Context, goals, key pages or features, references you like…",
     submit: "Send the brief",
-    note: "Sending opens your email app with the brief pre-filled.",
-    sent: "Your email app opened with the brief pre-filled. All that's left is to hit send.",
+    note: "We'll get back to you shortly.",
+    sending: "Sending…",
+    sent: "Thank you! Your brief has arrived, and a confirmation email is on its way.",
+    error: "Sending failed. Try again in a moment or book a call.",
+    consent: "I agree that TechFlow may use this information to get back to me, as described in the",
+    privacy: "privacy policy",
     subject: "New project",
   },
   offices: {

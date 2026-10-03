@@ -168,6 +168,12 @@ const toolCard = /* groq */ `
   logo ${image}
 `;
 
+/** Footer: every tool page, linked by name (SEO, as on the old site). */
+export const FOOTER_TOOLS_QUERY = defineQuery(`
+  *[_type == "tool" && language == $lang && defined(slug.current)]
+    | order(title asc) { title, "slug": slug.current }
+`);
+
 export const TOOLS_INDEX_QUERY = defineQuery(`
   *[_type == "tool" && language == $lang && defined(slug.current)]
     | order(coalesce(order, 999) asc, title asc) { ${toolCard} }
@@ -230,11 +236,7 @@ const insightCard = /* groq */ `
   // Picked in the Studio from the Article categories list (the field is named "topics").
   "categories": array::compact(topics[]->title),
   publishedAt,
-  // A team member, or a guest byline (authorName) for writers without a team page.
-  "author": select(
-    defined(author) => author->{ ${member} },
-    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }
-  ),
+  author->{ ${member} },
   coverImage ${image},
   "minutes": round(length(string::split(pt::text(body), " ")) / 220)
 `;

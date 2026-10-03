@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { href } from "@/i18n/routes";
@@ -118,11 +119,9 @@ function FounderCard() {
         </div>
         <p className="mt-4 text-center text-sm text-white/55">
           {c.person.or}{" "}
-          <a
-            href={`mailto:${links.email}`}
-            className="text-white underline-offset-4 hover:underline"
-          >
-            {links.email}
+          {/* No email address on the page (spam bots): the form sends through Resend. */}
+          <a href="#brief-form" className="text-white underline-offset-4 hover:underline">
+            {c.person.formLink}
           </a>
         </p>
       </div>
@@ -178,31 +177,44 @@ function BriefForm() {
   const [services, setServices] = useState<string[]>([]);
   const [budget, setBudget] = useState("");
   const [timeline, setTimeline] = useState("");
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const toggle = (value: string) =>
     setServices((s) =>
       s.includes(value) ? s.filter((v) => v !== value) : [...s, value],
     );
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const get = (k: string) => String(data.get(k) ?? "").trim();
-    const lines = [
-      [f.name, get("name")],
-      [f.email, get("email")],
-      [f.company, get("company")],
-      [f.website, get("website")],
-      [f.services, services.join(", ")],
-      [f.timeline, timeline],
-    ]
-      .filter(([, v]) => v)
-      .map(([k, v]) => `${k} : ${v}`);
-    const body = `${lines.join("\n")}\n\n${get("message")}`;
-    const subject = `${f.subject}${get("company") ? ` · ${get("company")}` : ""}`;
-    window.location.href = `mailto:${links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lang,
+          name: get("name"),
+          email: get("email"),
+          company: get("company"),
+          website: get("website"),
+          services,
+          timeline,
+          message: get("message"),
+          consent: data.get("consent") === "on",
+          fax: get("fax"),
+        }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setStatus("sent");
+      form.reset();
+      setServices([]);
+      setTimeline("");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -232,6 +244,7 @@ function BriefForm() {
 
         <FadeIn>
           <form
+            id="brief-form"
             onSubmit={onSubmit}
             className="space-y-7 rounded-[2rem] border border-ink/10 bg-white/60 p-6 md:p-10"
           >
@@ -297,10 +310,23 @@ function BriefForm() {
                 className={`${field} resize-y`}
               />
             </label>
+            {/* Honeypot: hidden from people, filled by bots. */}
+            <input type="text" name="fax" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+            <label className="flex items-start gap-3 text-sm text-ink/70">
+              <input type="checkbox" name="consent" required className="mt-0.5 size-4 shrink-0 accent-brand-deep" />
+              <span>
+                {f.consent}{" "}
+                <Link href={links.privacy} className="underline underline-offset-2 hover:text-ink">
+                  {f.privacy}
+                </Link>
+                .
+              </span>
+            </label>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <button
                 type="submit"
-                className="group inline-flex h-14 items-center gap-3 self-start rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand"
+                disabled={status === "sending"}
+                className="group inline-flex h-14 items-center gap-3 self-start rounded-full bg-ink pl-7 pr-2 font-medium text-paper transition-colors hover:bg-brand disabled:opacity-60"
               >
                 {f.submit}
                 <span className="flex size-10 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-300 group-hover:-rotate-45">
@@ -308,7 +334,7 @@ function BriefForm() {
                 </span>
               </button>
               <p className="text-sm text-ink/60" aria-live="polite">
-                {sent ? f.sent : f.note}
+                {{ idle: f.note, sending: f.sending, sent: f.sent, error: f.error }[status]}
               </p>
             </div>
           </form>
