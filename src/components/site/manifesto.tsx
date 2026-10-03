@@ -25,7 +25,7 @@ export function Manifesto() {
           className="mt-10 max-w-6xl font-serif text-[clamp(2.25rem,5.2vw,5.125rem)] leading-[1.02] tracking-[-0.01em]"
         />
 
-        <div className="mt-20 grid gap-16 md:mt-28 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+        <div className="mt-10 grid gap-10 md:mt-28 md:gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
           <div>
             <FadeIn>
               <p className="text-lg text-ink/60">{m.bridge}</p>

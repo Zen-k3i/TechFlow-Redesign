@@ -144,7 +144,7 @@ export function Hero({ stacked = false }: { stacked?: boolean }) {
         <Horizon />
         <FloatingProof />
         {stacked ? (
-          <div className="h-[220px] sm:h-[260px] md:h-[300px]" />
+          <div className="h-[170px] sm:h-[260px] md:h-[300px]" />
         ) : (
           <ProjectFan progress={scrollYProgress} />
         )}
@@ -263,7 +263,7 @@ function ProjectFan({ progress }: { progress: MotionValue<number> }) {
   return (
     <motion.div
       style={{ y: lift }}
-      className="relative mx-auto h-[300px] w-full max-w-5xl sm:h-[380px] md:h-[440px]"
+      className="relative mx-auto h-[255px] w-full max-w-5xl sm:h-[380px] md:h-[440px]"
     >
       {featured.map((project, i) => (
         <FanCard

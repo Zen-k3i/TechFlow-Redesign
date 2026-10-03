@@ -8,10 +8,10 @@ import { useLocale } from "./locale";
 export function Trust() {
   const { t } = useLocale();
   return (
-    <section className="relative bg-night pb-20 pt-10 text-white">
+    <section className="relative bg-night pb-10 pt-2 text-white md:pb-20 md:pt-10">
       <ClientMarquee label={t.trust.eyebrow} />
 
-      <dl className="mx-auto mt-20 grid max-w-6xl grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 px-0 md:grid-cols-4">
+      <dl className="mx-auto mt-12 grid max-w-6xl md:mt-20 grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 px-0 md:grid-cols-4">
         {t.trust.stats.map((stat) => (
           <div key={stat.label} className="group bg-night p-6 transition-colors hover:bg-night-soft md:p-8">
             <dd className="font-serif text-5xl leading-none md:text-6xl">
