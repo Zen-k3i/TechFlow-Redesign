@@ -32,6 +32,15 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 - **Studio:** static build served by nginx in `/docker/sanity-studio` on the Hostinger VPS (187.127.109.12, Traefik + Let's Encrypt), https://cms.techflow-agency.com. The "Deploy Studio" action (`.github/workflows/deploy-studio.yml`) builds it on every push to `main` touching `techflow-cms/studio` and rsyncs `dist/` as the `studio-deploy` user, whose key (secret `STUDIO_DEPLOY_KEY`) can only rsync into that folder (rrsync). Don't use `pnpm deploy` (that publishes to *.sanity.studio instead). The Studio origin must be listed in Sanity → API → CORS origins with credentials.
 - Content stays in Sanity's cloud (project `ce31dig5`); the Content Lake can't be self-hosted.
 
+## Contact form, consent, analytics (2026-10-03)
+- The contact page form posts to `/api/contact` (`src/app/api/contact/route.ts`), which sends through Resend's REST API: the brief to `CONTACT_TO` (default maximilien@techflow-agency.com, reply-to the visitor) and a confirmation to the visitor. Env: `RESEND_API_KEY` (required), `CONTACT_TO`, `CONTACT_FROM` (default `TechFlow <hello@techflow-agency.com>`). Consent checkbox required, `fax` honeypot. No email address is shown on the contact page (spam).
+- `site/consent.tsx`: cookie banner (Accept / Refuse, choice in localStorage for 6 months). Google Analytics (`NEXT_PUBLIC_GA_ID`, default G-D60Y7LH1L8) loads only after Accept and only when `NEXT_PUBLIC_VERCEL_ENV === "production"`. The footer's "Paramètres des cookies" button calls `openConsent()`.
+- There is no separate cookie policy any more: it is a section of the privacy policy; `/politique-de-cookies` and `/en/cookie-policy` redirect (Sanity `redirect` documents). Legal pages: legal notices (both companies: Techflow Agency PTE. LTD., UEN 202517351W, and Techflow Connect SAS, Paris, SIREN 994 381 416), terms, privacy.
+- Search Console verification is the meta tag from Site settings (`googleVerification`), the same token as on Webflow.
+- Footer: a "Tools" row links every tool page by name (`SiteFooter` fetches `FOOTER_TOOLS_QUERY` on the server and passes it to the client `Footer`).
+- `Magnetic` no longer moves its children (kept as a wrapper). `ScrollToTopOnNavigate` (providers) resets Lenis on each new page.
+- Authors are always team members. A member without a photo (Khemra Bonamy, for now) stays off the team page (TEAM_QUERY needs a photo) and shows initials as avatar on articles.
+
 ## Projects page (/projets)
 - Custom hero (`src/components/projects/projects-hero.tsx`), not the shared `PageHero`, but styled like it for consistency (badge pill, grid overlay, same padding; no scroll cue), with a tilted wall of each CMS case study's website screens (`previews`) auto-scrolling behind the pitch; every screen links to its case study, hovering a column pauses it. Stats live in the hero and count up. "Explore" scrolls to `#etudes-de-cas` (Lenis handles the anchor).
 - Growth case studies (local, no screens) are not on the wall.
@@ -57,7 +66,7 @@ Put project knowledge here, not in a personal Claude memory, so the whole team s
 - SEO: like every page (see SEO below); share image = SEO image, else key visual, else first ad poster; JSON-LD `CreativeWork` with a `VideoObject` per uploaded ad.
 
 ## Insight article (/nos-insights/[slug])
-- `article-page.tsx`: short dark header (categories, title, excerpt, author + date + reading time), cover on the seam between header and a full-width paper page, text in a ~44rem column with a numbered sticky contents list + progress rail (collapsible on mobile) and share buttons, then author card and CTA. The navbar already has a page progress bar, so the article has none of its own.
+- `article-page.tsx`: short dark header (categories, title, excerpt, author + date + reading time), cover on the seam between header and a full-width paper page, text in a ~52rem column with a numbered sticky contents list + progress rail (collapsible on mobile) and share buttons, then author card and CTA. The navbar already has a page progress bar, so the article has none of its own.
 - Legal pages (`legal/legal-page.tsx`: legal notices, terms, cookie policy) use the same full-width paper page under the dark hero; no translation/draft notice box.
 - `PortableBody` takes `scale="story" | "article"`; `article` is the larger long-read type scale.
 
