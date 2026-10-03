@@ -1,0 +1,209 @@
+old_path,new_path,status,in_sanity,note
+/401,,missing,no,Webflow utility page (password). Not indexable; let it 404. New site: 404.
+/404,,missing,no,Webflow utility 404 page (answers 200 on Webflow). Let it 404 on the new site. New site: 404.
+/en/privacy-policy,/en/privacy-policy,same,no,Page created on the new site (2026-10-02).
+/politique-de-confidentialite,/politique-de-confidentialite,same,no,Page created on the new site (2026-10-02).
+/blog,/nos-insights,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /nos-insights. New site today: 404 at /blog. Target on new site: 200."
+/category/basic,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /category/basic. Target on new site: 200."
+/category/business,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /category/business. Target on new site: 200."
+/category/enterprise,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /category/enterprise. Target on new site: 200."
+/cgu,/conditions-generales,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /conditions-generales. New site today: 404 at /cgu. Target on new site: 200."
+/checkout,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /checkout. Target on new site: 200."
+/contact-fr,/contact,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /contact. New site today: 404 at /contact-fr. Target on new site: 200."
+/en/our-approach,/en,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en. New site today: 404 at /en/our-approach. Target on new site: 200."
+/en/portfolio,/en/projects,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects. New site today: 404 at /en/portfolio. Target on new site: 200."
+/en/pricing,/en/contact,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/contact. New site today: 404 at /en/pricing. Target on new site: 200."
+/en/project/ama-campus,/en/projects/ama-campus,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/ama-campus. New site today: 404 at /en/project/ama-campus. Target on new site: 200."
+/en/project/canetta,/en/projects/canetta,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/canetta. New site today: 404 at /en/project/canetta. Target on new site: 200."
+/en/project/concorde,/en/projects/concorde,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/concorde. New site today: 404 at /en/project/concorde. Target on new site: 200."
+/en/project/convergences-asia,/en/projects/convergences-asia,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/convergences-asia. New site today: 404 at /en/project/convergences-asia. Target on new site: 200."
+/en/project/district-6-publishing,/en/projects/district-6-publishing,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/district-6-publishing. New site today: 404 at /en/project/district-6-publishing. Target on new site: 200."
+/en/project/emme-studio,/en/projects/emme-studio,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/emme-studio. New site today: 404 at /en/project/emme-studio. Target on new site: 200."
+/en/project/epargne-plurielle-avenir,/en/projects/epargne-plurielle-avenir,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/epargne-plurielle-avenir. New site today: 404 at /en/project/epargne-plurielle-avenir. Target on new site: 200."
+/en/project/eureka-cambodia,/en/projects/eureka-cambodia,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/eureka-cambodia. New site today: 404 at /en/project/eureka-cambodia. Target on new site: 200."
+/en/project/exelmans,/en/projects/exelmans,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/exelmans. New site today: 404 at /en/project/exelmans. Target on new site: 200."
+/en/project/groupe-revive,/en/projects/groupe-revive,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/groupe-revive. New site today: 404 at /en/project/groupe-revive. Target on new site: 200."
+/en/project/je-trouve-mon-avocat,/en/projects/je-trouve-mon-avocat-fr,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/je-trouve-mon-avocat-fr. New site today: 404 at /en/project/je-trouve-mon-avocat. Target on new site: 200."
+/en/project/je-trouve-mon-demenageur,/en/projects/je-trouve-mon-demenageur,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/je-trouve-mon-demenageur. New site today: 404 at /en/project/je-trouve-mon-demenageur. Target on new site: 200."
+/en/project/koulier,/en/projects/koulier,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/koulier. New site today: 404 at /en/project/koulier. Target on new site: 200."
+/en/project/leapmotor,/en/projects/leapmotor,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/leapmotor. New site today: 404 at /en/project/leapmotor. Target on new site: 200."
+/en/project/ma-carriere-immo,/en/projects/ma-carriere-immo,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/ma-carriere-immo. New site today: 404 at /en/project/ma-carriere-immo. Target on new site: 200."
+/en/project/mandil-avocats,/en/projects/mandil-avocats,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/mandil-avocats. New site today: 404 at /en/project/mandil-avocats. Target on new site: 200."
+/en/project/ooinvestir,/en/projects/ooinvestir,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/ooinvestir. New site today: 404 at /en/project/ooinvestir. Target on new site: 200."
+/en/project/opco-ep-en,/en/projects/opco-ep,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/opco-ep. New site today: 404 at /en/project/opco-ep-en. Target on new site: 200."
+/en/project/tandem-partners,/en/projects/tandem-partners,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects/tandem-partners. New site today: 404 at /en/project/tandem-partners. Target on new site: 200."
+/en/team,/en/our-team,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/our-team. New site today: 404 at /en/team. Target on new site: 200."
+/equipe,/notre-equipe,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /notre-equipe. New site today: 404 at /equipe. Target on new site: 200."
+/fr,/,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/equipe,/notre-equipe,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /notre-equipe. New site today: 404 at /equipe. Target on new site: 200."
+/fr/portfolio-fr,/projets,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /projets. New site today: 404 at /portfolio-fr. Target on new site: 200."
+/fr/projets/ama-campus,/projets/ama-campus,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/canetta,/projets/canetta,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/concorde,/projets/concorde,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/convergences-asia,/projets/convergences-asia,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/district-6-publishing,/projets/district-6-publishing,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/emme-studio,/projets/emme-studio,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/epargne-plurielle-avenir,/projets/epargne-plurielle-avenir,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/eureka-cambodia,/projets/eureka-cambodia,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/exelmans,/projets/exelmans,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/groupe-revive,/projets/groupe-revive,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/je-trouve-mon-avocat-fr,/projets/je-trouve-mon-avocat-fr,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/je-trouve-mon-demenageur,/projets/je-trouve-mon-demenageur,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/koulier,/projets/koulier,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/leapmotor,/projets/leapmotor,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/ma-carriere-immo,/projets/ma-carriere-immo,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/mandil-avocats,/projets/mandil-avocats,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/ooinvestir,/projets/ooinvestir,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/opco-ep,/projets/opco-ep,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/fr/projets/tandem-partners,/projets/tandem-partners,301,no,Legacy Webflow 301 (Webflow project settings). Already handled on new site by src/proxy.ts strips /fr (308); target 200.
+/home---new,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /home---new. Target on new site: 200."
+/landing,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /landing. Target on new site: 200."
+/landing-page,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /landing-page. Target on new site: 200."
+/legal-notices,/en/legal-notices,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/legal-notices. New site today: 404 at /legal-notices. Target on new site: 200."
+/merci,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /merci. Target on new site: 200."
+/order-confirmation,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /order-confirmation. Target on new site: 200."
+/paypal-checkout,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /paypal-checkout. Target on new site: 200."
+/photography,/projets,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /projets. New site today: 404 at /photography. Target on new site: 200."
+/portfolio,/en/projects,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /en/projects. New site today: 404 at /portfolio. Target on new site: 200. Note: a French-root path sent to the English listing on Webflow; consider /projets instead."
+/portfolio-fr,/projets,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /projets. New site today: 404 at /portfolio-fr. Target on new site: 200."
+/product/basic,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /product/basic. Target on new site: 200."
+/product/business,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /product/business. Target on new site: 200."
+/product/enterprise,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /product/enterprise. Target on new site: 200."
+/search,/nos-insights,301,yes,Already redirected on new site (/search[308] -> /nos-insights[200]).
+/style,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /style. Target on new site: 200."
+/tarifs,/contact,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /contact. New site today: 404 at /tarifs. Target on new site: 200."
+/templates/style-guide,/,301,no,"Legacy Webflow 301 (only in Webflow project settings, lost at go-live). Live target: /. New site today: 404 at /templates/style-guide. Target on new site: 200."
+/,/,same,no,Verified 200 on new site.
+/agents-ia,/agents-ia,same,no,Verified 200 on new site.
+/conditions-generales,/conditions-generales,same,no,Verified 200 on new site.
+/contact,/contact,same,no,Verified 200 on new site.
+/design,/design,same,no,Verified 200 on new site.
+/developpement,/developpement,same,no,Verified 200 on new site.
+/en,/en,same,no,Verified 200 on new site.
+/en/ai-agents,/en/ai-agents,same,no,Verified 200 on new site.
+/en/contact,/en/contact,same,no,Verified 200 on new site.
+/en/cookie-policy,/en/cookie-policy,same,no,Verified 200 on new site.
+/en/design,/en/design,same,no,Verified 200 on new site.
+/en/development,/en/development,same,no,Verified 200 on new site.
+/en/legal-notices,/en/legal-notices,same,no,Verified 200 on new site.
+/en/our-insights,/en/our-insights,same,no,Verified 200 on new site.
+/en/our-insights/ai-agency-phnom-penh,/en/our-insights/ai-agency-phnom-penh,same,no,Verified 200 on new site.
+/en/our-insights/ai-agents-for-small-business,/en/our-insights/ai-agents-for-small-business,same,no,Verified 200 on new site.
+/en/our-insights/ai-consulting-cambodia,/en/our-insights/ai-consulting-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/ai-development-cambodia,/en/our-insights/ai-development-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/ai-development-phnom-penh,/en/our-insights/ai-development-phnom-penh,same,no,Verified 200 on new site.
+/en/our-insights/digital-agency-phnom-penh,/en/our-insights/digital-agency-phnom-penh,same,no,Verified 200 on new site.
+/en/our-insights/digital-marketing-agency-cambodia,/en/our-insights/digital-marketing-agency-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/digital-marketing-cambodia,/en/our-insights/digital-marketing-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/marketing-agency-cambodia,/en/our-insights/marketing-agency-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/marketing-agency-phnom-penh,/en/our-insights/marketing-agency-phnom-penh,same,no,Verified 200 on new site.
+/en/our-insights/real-estate-website-cambodia,/en/our-insights/real-estate-website-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/startup-cambodia,/en/our-insights/startup-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/tiktok-marketing-cambodia,/en/our-insights/tiktok-marketing-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/web-design-cambodia,/en/our-insights/web-design-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/web-development-cambodia,/en/our-insights/web-development-cambodia,same,no,Verified 200 on new site.
+/en/our-insights/webflow-agency-sme,/en/our-insights/webflow-agency-sme,same,no,Verified 200 on new site.
+/en/our-team,/en/our-team,same,no,Verified 200 on new site.
+/en/projects,/en/projects,same,no,Verified 200 on new site.
+/en/projects/ama-campus,/en/projects/ama-campus,same,no,Verified 200 on new site.
+/en/projects/canetta,/en/projects/canetta,same,no,Verified 200 on new site.
+/en/projects/concorde,/en/projects/concorde,same,no,Verified 200 on new site.
+/en/projects/convergences-asia,/en/projects/convergences-asia,same,no,Verified 200 on new site.
+/en/projects/district-6-publishing,/en/projects/district-6-publishing,same,no,Verified 200 on new site.
+/en/projects/emme-studio,/en/projects/emme-studio,same,no,Verified 200 on new site.
+/en/projects/epargne-plurielle-avenir,/en/projects/epargne-plurielle-avenir,same,no,Verified 200 on new site.
+/en/projects/eureka-cambodia,/en/projects/eureka-cambodia,same,no,Verified 200 on new site.
+/en/projects/exelmans,/en/projects/exelmans,same,no,Verified 200 on new site.
+/en/projects/groupe-revive,/en/projects/groupe-revive,same,no,Verified 200 on new site.
+/en/projects/je-trouve-mon-avocat-fr,/en/projects/je-trouve-mon-avocat-fr,same,no,Verified 200 on new site.
+/en/projects/je-trouve-mon-demenageur,/en/projects/je-trouve-mon-demenageur,same,no,Verified 200 on new site.
+/en/projects/koulier,/en/projects/koulier,same,no,Verified 200 on new site.
+/en/projects/kretz-club,/en/projects/kretz-club,same,no,Verified 200 on new site.
+/en/projects/leapmotor,/en/projects/leapmotor,same,no,Verified 200 on new site.
+/en/projects/little-green-spark,/en/projects/little-green-spark,same,no,Verified 200 on new site.
+/en/projects/ma-carriere-immo,/en/projects/ma-carriere-immo,same,no,Verified 200 on new site.
+/en/projects/mandil-avocats,/en/projects/mandil-avocats,same,no,Verified 200 on new site.
+/en/projects/ooinvestir,/en/projects/ooinvestir,same,no,Verified 200 on new site.
+/en/projects/opco-ep,/en/projects/opco-ep,same,no,Verified 200 on new site.
+/en/projects/place-des-aines,/en/projects/place-des-aines,same,no,Verified 200 on new site.
+/en/projects/tandem-partners,/en/projects/tandem-partners,same,no,Verified 200 on new site.
+/en/sales-funnel,/en/sales-funnel,same,no,Verified 200 on new site.
+/en/terms-of-service,/en/terms-of-service,same,no,Verified 200 on new site.
+/en/tools,/en/tools,same,no,Verified 200 on new site.
+/en/tools/brevo,/en/tools/brevo,same,no,Verified 200 on new site.
+/en/tools/bubble,/en/tools/bubble,same,no,Verified 200 on new site.
+/en/tools/calendly,/en/tools/calendly,same,no,Verified 200 on new site.
+/en/tools/claude,/en/tools/claude,same,no,Verified 200 on new site.
+/en/tools/client-first,/en/tools/client-first,same,no,Verified 200 on new site.
+/en/tools/drupal,/en/tools/drupal,same,no,Verified 200 on new site.
+/en/tools/figma,/en/tools/figma,same,no,Verified 200 on new site.
+/en/tools/fillout,/en/tools/fillout,same,no,Verified 200 on new site.
+/en/tools/google-workspace,/en/tools/google-workspace,same,no,Verified 200 on new site.
+/en/tools/granola,/en/tools/granola,same,no,Verified 200 on new site.
+/en/tools/hubspot,/en/tools/hubspot,same,no,Verified 200 on new site.
+/en/tools/lemlist,/en/tools/lemlist,same,no,Verified 200 on new site.
+/en/tools/loom,/en/tools/loom,same,no,Verified 200 on new site.
+/en/tools/n8n,/en/tools/n8n,same,no,Verified 200 on new site.
+/en/tools/notion,/en/tools/notion,same,no,Verified 200 on new site.
+/en/tools/odoo,/en/tools/odoo,same,no,Verified 200 on new site.
+/en/tools/openrouter,/en/tools/openrouter,same,no,Verified 200 on new site.
+/en/tools/shopify,/en/tools/shopify,same,no,Verified 200 on new site.
+/en/tools/tally,/en/tools/tally,same,no,Verified 200 on new site.
+/en/tools/twenty-crm,/en/tools/twenty-crm,same,no,Verified 200 on new site.
+/en/tools/webflow,/en/tools/webflow,same,no,Verified 200 on new site.
+/en/tools/wise,/en/tools/wise,same,no,Verified 200 on new site.
+/en/tools/zapier,/en/tools/zapier,same,no,Verified 200 on new site.
+/mentions-legales,/mentions-legales,same,no,Verified 200 on new site.
+/nos-insights,/nos-insights,same,no,Verified 200 on new site.
+/nos-insights/agence-webflow-pme,/nos-insights/agence-webflow-pme,same,no,Verified 200 on new site.
+/nos-insights/creation-site-internet-design-agence,/nos-insights/creation-site-internet-design-agence,same,no,Verified 200 on new site.
+/notre-equipe,/notre-equipe,same,no,Verified 200 on new site.
+/outils,/outils,same,no,Verified 200 on new site.
+/outils/brevo,/outils/brevo,same,no,Verified 200 on new site.
+/outils/bubble,/outils/bubble,same,no,Verified 200 on new site.
+/outils/calendly,/outils/calendly,same,no,Verified 200 on new site.
+/outils/claude,/outils/claude,same,no,Verified 200 on new site.
+/outils/client-first,/outils/client-first,same,no,Verified 200 on new site.
+/outils/drupal,/outils/drupal,same,no,Verified 200 on new site.
+/outils/figma,/outils/figma,same,no,Verified 200 on new site.
+/outils/fillout,/outils/fillout,same,no,Verified 200 on new site.
+/outils/google-workspace,/outils/google-workspace,same,no,Verified 200 on new site.
+/outils/granola,/outils/granola,same,no,Verified 200 on new site.
+/outils/hubspot,/outils/hubspot,same,no,Verified 200 on new site.
+/outils/lemlist,/outils/lemlist,same,no,Verified 200 on new site.
+/outils/loom,/outils/loom,same,no,Verified 200 on new site.
+/outils/n8n,/outils/n8n,same,no,Verified 200 on new site.
+/outils/notion,/outils/notion,same,no,Verified 200 on new site.
+/outils/odoo,/outils/odoo,same,no,Verified 200 on new site.
+/outils/openrouter,/outils/openrouter,same,no,Verified 200 on new site.
+/outils/shopify,/outils/shopify,same,no,Verified 200 on new site.
+/outils/tally,/outils/tally,same,no,Verified 200 on new site.
+/outils/twenty-crm,/outils/twenty-crm,same,no,Verified 200 on new site.
+/outils/webflow,/outils/webflow,same,no,Verified 200 on new site.
+/outils/wise,/outils/wise,same,no,Verified 200 on new site.
+/outils/zapier,/outils/zapier,same,no,Verified 200 on new site.
+/politique-de-cookies,/politique-de-cookies,same,no,Verified 200 on new site.
+/projets,/projets,same,no,Verified 200 on new site.
+/projets/ama-campus,/projets/ama-campus,same,no,Verified 200 on new site.
+/projets/canetta,/projets/canetta,same,no,Verified 200 on new site.
+/projets/concorde,/projets/concorde,same,no,Verified 200 on new site.
+/projets/convergences-asia,/projets/convergences-asia,same,no,Verified 200 on new site.
+/projets/district-6-publishing,/projets/district-6-publishing,same,no,Verified 200 on new site.
+/projets/emme-studio,/projets/emme-studio,same,no,Verified 200 on new site.
+/projets/epargne-plurielle-avenir,/projets/epargne-plurielle-avenir,same,no,Verified 200 on new site.
+/projets/eureka-cambodia,/projets/eureka-cambodia,same,no,Verified 200 on new site.
+/projets/exelmans,/projets/exelmans,same,no,Verified 200 on new site.
+/projets/groupe-revive,/projets/groupe-revive,same,no,Verified 200 on new site.
+/projets/je-trouve-mon-avocat-fr,/projets/je-trouve-mon-avocat-fr,same,no,Verified 200 on new site.
+/projets/je-trouve-mon-demenageur,/projets/je-trouve-mon-demenageur,same,no,Verified 200 on new site.
+/projets/koulier,/projets/koulier,same,no,Verified 200 on new site.
+/projets/kretz-club,/projets/kretz-club,same,no,Verified 200 on new site.
+/projets/leapmotor,/projets/leapmotor,same,no,Verified 200 on new site.
+/projets/little-green-spark,/projets/little-green-spark,same,no,Verified 200 on new site.
+/projets/ma-carriere-immo,/projets/ma-carriere-immo,same,no,Verified 200 on new site.
+/projets/mandil-avocats,/projets/mandil-avocats,same,no,Verified 200 on new site.
+/projets/ooinvestir,/projets/ooinvestir,same,no,Verified 200 on new site.
+/projets/opco-ep,/projets/opco-ep,same,no,Verified 200 on new site.
+/projets/place-des-aines,/projets/place-des-aines,same,no,Verified 200 on new site.
+/projets/tandem-partners,/projets/tandem-partners,same,no,Verified 200 on new site.
+/tunnel-de-vente,/tunnel-de-vente,same,no,Verified 200 on new site.

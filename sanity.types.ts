@@ -153,7 +153,8 @@ export type PageSeo = {
     | "contact"
     | "legal"
     | "terms"
-    | "cookies";
+    | "cookies"
+    | "privacy";
   seo?: Seo;
 };
 
@@ -373,6 +374,7 @@ export type Insight = {
   categories?: Array<string>;
   publishedAt?: string;
   author?: TeamMemberReference;
+  authorName?: string;
   coverImage?: ImageWithAlt;
   body?: BlockContent;
   seo?: Seo;
@@ -1807,7 +1809,7 @@ export type REVIEWS_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHTS_INDEX_QUERY
-// Query: *[_type == "insight" && language == $lang && defined(slug.current)]    | order(publishedAt desc) {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }
+// Query: *[_type == "insight" && language == $lang && defined(slug.current)]    | order(publishedAt desc) {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  // A team member, or a guest byline (authorName) for writers without a team page.  "author": select(    defined(author) => author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }  ),  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }
 export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -1815,28 +1817,36 @@ export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
   excerpt: string | null;
   categories: Array<string> | null;
   publishedAt: string | null;
-  author: {
-    _id: string;
-    name: string | null;
-    role: string | null;
-    linkedin: string | null;
-    photo: {
-      alt: null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-      asset: {
+  author:
+    | {
+        _id: "guest";
+        name: string;
+        role: null;
+        linkedin: null;
+        photo: null;
+      }
+    | {
         _id: string;
-        url: string | null;
-        metadata: {
-          lqip: string | null;
-          dimensions: {
-            width: number | null;
-            height: number | null;
+        name: string | null;
+        role: string | null;
+        linkedin: string | null;
+        photo: {
+          alt: null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
           } | null;
         } | null;
-      } | null;
-    } | null;
-  } | null;
+      };
   coverImage: {
     alt: string | null;
     hotspot: SanityImageHotspot | null;
@@ -1858,7 +1868,7 @@ export type INSIGHTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: ../../src/sanity/queries.ts
 // Variable: INSIGHT_DETAIL_QUERY
-// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
+// Query: *[_type == "insight" && language == $lang && slug.current == $slug][0]{      _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  // A team member, or a guest byline (authorName) for writers without a team page.  "author": select(    defined(author) => author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }  ),  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220),    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    _updatedAt,    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{  "language": language,  "slug": value->slug.current},    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]      | order(publishedAt desc)[0...2] {   _id,  title,  "slug": slug.current,  excerpt,  // Picked in the Studio from the Article categories list (the field is named "topics").  "categories": array::compact(topics[]->title),  publishedAt,  // A team member, or a guest byline (authorName) for writers without a team page.  "author": select(    defined(author) => author->{   _id,  name,  role,  linkedin,  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }  ),  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },  "minutes": round(length(string::split(pt::text(body), " ")) / 220) }  }
 export type INSIGHT_DETAIL_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1866,28 +1876,36 @@ export type INSIGHT_DETAIL_QUERY_RESULT = {
   excerpt: string | null;
   categories: Array<string> | null;
   publishedAt: string | null;
-  author: {
-    _id: string;
-    name: string | null;
-    role: string | null;
-    linkedin: string | null;
-    photo: {
-      alt: null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-      asset: {
+  author:
+    | {
+        _id: "guest";
+        name: string;
+        role: null;
+        linkedin: null;
+        photo: null;
+      }
+    | {
         _id: string;
-        url: string | null;
-        metadata: {
-          lqip: string | null;
-          dimensions: {
-            width: number | null;
-            height: number | null;
+        name: string | null;
+        role: string | null;
+        linkedin: string | null;
+        photo: {
+          alt: null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: {
+                width: number | null;
+                height: number | null;
+              } | null;
+            } | null;
           } | null;
         } | null;
-      } | null;
-    } | null;
-  } | null;
+      };
   coverImage: {
     alt: string | null;
     hotspot: SanityImageHotspot | null;
@@ -2002,28 +2020,36 @@ export type INSIGHT_DETAIL_QUERY_RESULT = {
     excerpt: string | null;
     categories: Array<string> | null;
     publishedAt: string | null;
-    author: {
-      _id: string;
-      name: string | null;
-      role: string | null;
-      linkedin: string | null;
-      photo: {
-        alt: null;
-        hotspot: SanityImageHotspot | null;
-        crop: SanityImageCrop | null;
-        asset: {
+    author:
+      | {
+          _id: "guest";
+          name: string;
+          role: null;
+          linkedin: null;
+          photo: null;
+        }
+      | {
           _id: string;
-          url: string | null;
-          metadata: {
-            lqip: string | null;
-            dimensions: {
-              width: number | null;
-              height: number | null;
+          name: string | null;
+          role: string | null;
+          linkedin: string | null;
+          photo: {
+            alt: null;
+            hotspot: SanityImageHotspot | null;
+            crop: SanityImageCrop | null;
+            asset: {
+              _id: string;
+              url: string | null;
+              metadata: {
+                lqip: string | null;
+                dimensions: {
+                  width: number | null;
+                  height: number | null;
+                } | null;
+              } | null;
             } | null;
           } | null;
-        } | null;
-      } | null;
-    } | null;
+        };
     coverImage: {
       alt: string | null;
       hotspot: SanityImageHotspot | null;
@@ -2224,6 +2250,7 @@ export type SITEMAP_PAGES_QUERY_RESULT = Array<{
     | "home"
     | "insights"
     | "legal"
+    | "privacy"
     | "projects"
     | "salesFunnel"
     | "services"
@@ -2253,8 +2280,8 @@ declare global {
     '\n  *[_type == "tool" && language == $lang && defined(slug.current)].slug.current\n': TOOL_SLUGS_QUERY_RESULT;
     '\n  *[_type == "teamMember" && defined(photo.asset)]\n    | order(coalesce(order, 999) asc, name asc) { \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n }\n': TEAM_QUERY_RESULT;
     '\n  *[_type == "review" && defined(quote)] | order(coalesce(order, 999) asc, name asc) {\n    _id,\n    quote,\n    name,\n    role,\n    photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n  }\n': REVIEWS_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && defined(slug.current)]\n    | order(publishedAt desc) { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  // A team member, or a guest byline (authorName) for writers without a team page.\n  "author": select(\n    defined(author) => author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }\n  ),\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n': INSIGHTS_INDEX_QUERY_RESULT;
+    '\n  *[_type == "insight" && language == $lang && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  // A team member, or a guest byline (authorName) for writers without a team page.\n  "author": select(\n    defined(author) => author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }\n  ),\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n,\n    body[]{ ..., _type == "image" => { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } } },\n    _updatedAt,\n    seo { title, description, ogSameAsMeta, ogTitle, ogDescription, image { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }, canonicalUrl, noIndex, noFollow },\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n},\n    "related": *[_type == "insight" && language == $lang && defined(slug.current) && slug.current != $slug]\n      | order(publishedAt desc)[0...2] { \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  // Picked in the Studio from the Article categories list (the field is named "topics").\n  "categories": array::compact(topics[]->title),\n  publishedAt,\n  // A team member, or a guest byline (authorName) for writers without a team page.\n  "author": select(\n    defined(author) => author->{ \n  _id,\n  name,\n  role,\n  linkedin,\n  photo { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } }\n },\n    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }\n  ),\n  coverImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n  "minutes": round(length(string::split(pt::text(body), " ")) / 220)\n }\n  }\n': INSIGHT_DETAIL_QUERY_RESULT;
     '\n  *[_type == "insight" && language == $lang && defined(slug.current)].slug.current\n': INSIGHT_SLUGS_QUERY_RESULT;
     '\n  *[_type == $type && slug.current == $slug][0]{\n    language,\n    "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[]{\n  "language": language,\n  "slug": value->slug.current\n}\n  }\n': SLUG_LOOKUP_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    titleTemplate,\n    defaultDescriptionFr,\n    defaultDescriptionEn,\n    defaultOgImage { alt, hotspot, crop, asset->{ _id, url, metadata { lqip, dimensions { width, height } } } },\n    organization { name, legalName, description, "logo": logo.asset->url, email, locations[]{ name, street, postalCode, city, country, phone }, sameAs },\n    googleVerification\n  }\n': SITE_SETTINGS_QUERY_RESULT;

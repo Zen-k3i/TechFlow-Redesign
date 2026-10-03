@@ -20,7 +20,7 @@ export function Process() {
   const [current, setCurrent] = useState(0);
 
   return (
-    <section id="methode" className="relative overflow-clip bg-night px-5 py-28 text-white md:px-10 md:py-36">
+    <section id="methode" className="relative overflow-clip bg-night px-5 py-24 text-white md:px-10 md:py-32">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_100%_40%,rgba(54,71,245,0.18),transparent_70%)]"
@@ -29,7 +29,7 @@ export function Process() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <p className="eyebrow text-brand-sky">{t.process.eyebrow}</p>
-            <RevealHeading text={t.process.heading} className="mt-4 font-serif text-5xl leading-[0.95] md:text-7xl" />
+            <RevealHeading text={t.process.heading} className="mt-4 font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]" />
           </div>
           <p className="max-w-md text-white/55 md:text-lg lg:justify-self-end">{t.process.intro}</p>
         </div>

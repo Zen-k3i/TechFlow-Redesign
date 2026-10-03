@@ -12,7 +12,7 @@ export function Manifesto() {
   const m = t.manifesto;
 
   return (
-    <section className="relative rounded-[2.5rem] bg-paper px-5 py-28 text-ink md:rounded-[4rem] md:px-10 md:py-36">
+    <section className="relative rounded-[2.5rem] bg-paper px-5 py-24 text-ink md:rounded-[4rem] md:px-10 md:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-center gap-4">
           <p className="eyebrow text-brand-deep">{m.eyebrow}</p>
@@ -22,7 +22,7 @@ export function Manifesto() {
 
         <Statement
           text={m.statement}
-          className="mt-10 max-w-6xl font-serif text-[clamp(2.4rem,5.6vw,5.5rem)] leading-[1.02] tracking-[-0.01em]"
+          className="mt-10 max-w-6xl font-serif text-[clamp(2.25rem,5.2vw,5.125rem)] leading-[1.02] tracking-[-0.01em]"
         />
 
         <div className="mt-20 grid gap-16 md:mt-28 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
@@ -42,7 +42,7 @@ export function Manifesto() {
               as="h3"
               text={m.closing}
               accentClassName="italic text-brand-deep"
-              className="font-serif text-5xl leading-[0.95] md:text-7xl"
+              className="font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]"
             />
             <FadeIn>
               <p className="max-w-lg text-ink/65 md:text-lg">{m.body}</p>
@@ -106,7 +106,7 @@ function Removed({ text, tag, index }: { text: string; tag: string; index: numbe
       viewport={{ once: true, margin: "-15% 0px" }}
       className="flex items-center justify-between gap-6 border-b border-ink/10 py-5 md:py-7"
     >
-      <span className="relative font-serif text-3xl leading-tight md:text-5xl">
+      <span className="relative font-serif text-[1.75rem] leading-tight md:text-[2.625rem]">
         <motion.span
           variants={{ hidden: { opacity: 0.85 }, visible: { opacity: 0.35 } }}
           transition={{ duration: 0.6, delay: delay + 0.4 }}

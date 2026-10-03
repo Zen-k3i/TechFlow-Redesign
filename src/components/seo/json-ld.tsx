@@ -76,6 +76,7 @@ const SECTION: Record<Exclude<RouteKey, "home">, Record<Locale, string>> = {
   legal: { fr: "Mentions légales", en: "Legal notices" },
   terms: { fr: "Conditions générales", en: "Terms of service" },
   cookies: { fr: "Politique de cookies", en: "Cookie policy" },
+  privacy: { fr: "Politique de confidentialité", en: "Privacy policy" },
 };
 
 /** Home › section › (page), e.g. Accueil › Projets › Leapmotor. */

@@ -59,12 +59,12 @@ export function TestimonialsMarquee({ reviews }: { reviews: Review[] }) {
   const mounted = useMounted();
 
   return (
-    <section id="avis" className="relative overflow-hidden bg-night py-28 text-white md:py-36">
+    <section id="avis" className="relative overflow-hidden bg-night py-24 text-white md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="eyebrow text-brand-sky">{t.testimonials.eyebrow}</p>
-            <RevealHeading text={t.testimonials.heading} className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] md:text-7xl" />
+            <RevealHeading text={t.testimonials.heading} className="mt-4 max-w-3xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]" />
           </div>
           <div className="flex items-center gap-3">
             <span className="text-2xl tracking-widest text-brand-sky">★★★★★</span>

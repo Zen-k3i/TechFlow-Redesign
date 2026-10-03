@@ -42,7 +42,7 @@ export function Convictions() {
   const Visual = [BuildVisual, ToolsVisual, UnderstandVisual][active];
 
   return (
-    <section className="relative overflow-hidden bg-night pt-28 text-white md:pt-36">
+    <section className="relative overflow-hidden bg-night pt-24 text-white md:pt-32">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_40%_at_100%_30%,rgba(54,71,245,0.16),transparent_70%)]"
@@ -51,7 +51,7 @@ export function Convictions() {
         <p className="eyebrow text-brand-sky">{c.eyebrow}</p>
         <RevealHeading
           text={c.heading}
-          className="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] md:text-7xl"
+          className="mt-4 max-w-4xl font-serif text-[2.75rem] leading-[0.95] md:text-[4.125rem]"
         />
 
         <div

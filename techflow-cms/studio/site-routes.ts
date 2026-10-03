@@ -20,6 +20,7 @@ export const STATIC_PAGES = [
   {id: 'legal', title: 'Legal notices', fr: '/mentions-legales', en: '/legal-notices'},
   {id: 'terms', title: 'Terms of service', fr: '/conditions-generales', en: '/terms-of-service'},
   {id: 'cookies', title: 'Cookie policy', fr: '/politique-de-cookies', en: '/cookie-policy'},
+  {id: 'privacy', title: 'Privacy policy', fr: '/politique-de-confidentialite', en: '/privacy-policy'},
 ] as const
 
 /** Listing page of each routable document type. */

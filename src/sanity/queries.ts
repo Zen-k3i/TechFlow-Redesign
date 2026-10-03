@@ -230,7 +230,11 @@ const insightCard = /* groq */ `
   // Picked in the Studio from the Article categories list (the field is named "topics").
   "categories": array::compact(topics[]->title),
   publishedAt,
-  author->{ ${member} },
+  // A team member, or a guest byline (authorName) for writers without a team page.
+  "author": select(
+    defined(author) => author->{ ${member} },
+    defined(authorName) => { "_id": "guest", "name": authorName, "role": null, "linkedin": null, "photo": null }
+  ),
   coverImage ${image},
   "minutes": round(length(string::split(pt::text(body), " ")) / 220)
 `;

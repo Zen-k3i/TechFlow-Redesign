@@ -1,0 +1,296 @@
+[
+  {
+    "source": "/blog",
+    "destination": "/nos-insights",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/category/basic",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/category/business",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/category/enterprise",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/cgu",
+    "destination": "/conditions-generales",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/checkout",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/contact-fr",
+    "destination": "/contact",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/our-approach",
+    "destination": "/en",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/portfolio",
+    "destination": "/en/projects",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/pricing",
+    "destination": "/en/contact",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/ama-campus",
+    "destination": "/en/projects/ama-campus",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/canetta",
+    "destination": "/en/projects/canetta",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/concorde",
+    "destination": "/en/projects/concorde",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/convergences-asia",
+    "destination": "/en/projects/convergences-asia",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/district-6-publishing",
+    "destination": "/en/projects/district-6-publishing",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/emme-studio",
+    "destination": "/en/projects/emme-studio",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/epargne-plurielle-avenir",
+    "destination": "/en/projects/epargne-plurielle-avenir",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/eureka-cambodia",
+    "destination": "/en/projects/eureka-cambodia",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/exelmans",
+    "destination": "/en/projects/exelmans",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/groupe-revive",
+    "destination": "/en/projects/groupe-revive",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/je-trouve-mon-avocat",
+    "destination": "/en/projects/je-trouve-mon-avocat-fr",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/je-trouve-mon-demenageur",
+    "destination": "/en/projects/je-trouve-mon-demenageur",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/koulier",
+    "destination": "/en/projects/koulier",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/leapmotor",
+    "destination": "/en/projects/leapmotor",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/ma-carriere-immo",
+    "destination": "/en/projects/ma-carriere-immo",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/mandil-avocats",
+    "destination": "/en/projects/mandil-avocats",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/ooinvestir",
+    "destination": "/en/projects/ooinvestir",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/opco-ep-en",
+    "destination": "/en/projects/opco-ep",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/project/tandem-partners",
+    "destination": "/en/projects/tandem-partners",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/en/team",
+    "destination": "/en/our-team",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/equipe",
+    "destination": "/notre-equipe",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/fr/equipe",
+    "destination": "/notre-equipe",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/fr/portfolio-fr",
+    "destination": "/projets",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/home---new",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/landing",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/landing-page",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/legal-notices",
+    "destination": "/en/legal-notices",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/merci",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/order-confirmation",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/paypal-checkout",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/photography",
+    "destination": "/projets",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/portfolio",
+    "destination": "/en/projects",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/portfolio-fr",
+    "destination": "/projets",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/product/basic",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/product/business",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/product/enterprise",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/style",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/tarifs",
+    "destination": "/contact",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  },
+  {
+    "source": "/templates/style-guide",
+    "destination": "/",
+    "permanent": true,
+    "note": "Legacy Webflow 301 (migration 2026-10-02)"
+  }
+]

@@ -34,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               url: absoluteUrl(href(lang, key)),
               lastModified: seoOf(key, lang)?._updatedAt,
               changeFrequency: "monthly" as const,
-              priority: key === "home" ? 1 : key === "legal" || key === "terms" || key === "cookies" ? 0.3 : 0.8,
+              priority: key === "home" ? 1 : key === "legal" || key === "terms" || key === "cookies" || key === "privacy" ? 0.3 : 0.8,
               alternates: alternates({ fr: href("fr", key), en: href("en", key) }),
             },
           ],

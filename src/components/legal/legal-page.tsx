@@ -5,9 +5,9 @@ import { href } from "@/i18n/routes";
 import { BlockView, Toc } from "../page/blocks";
 import { PageHero } from "../page/ui";
 import { useLocale } from "../site/locale";
-import { legalDocs } from "./data";
+import { legalDocs, type LegalKey } from "./data";
 
-export function LegalPage({ doc: key }: { doc: "legal" | "terms" | "cookies" }) {
+export function LegalPage({ doc: key }: { doc: LegalKey }) {
   const { lang, t, links } = useLocale();
   const doc = legalDocs[key][lang];
   const other = key === "legal" ? "terms" : "legal";
