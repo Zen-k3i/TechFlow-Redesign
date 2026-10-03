@@ -816,7 +816,8 @@ const privacyFr: LegalDoc = {
         ul(
           "_ga et _ga_* (Google Analytics) : distinguent les visiteurs et les sessions, conservés 13 mois au plus.",
         ),
-        p("À votre première visite, un bandeau vous permet d'accepter ou de refuser, aussi simplement l'un que l'autre. Sans réponse, rien n'est déposé. Vous pouvez changer d'avis à tout moment avec le lien « Paramètres des cookies » en bas de chaque page. Votre choix est enregistré dans votre navigateur (pas dans un cookie) pendant 6 mois."),
+        { type: "consent", label: "Modifier mes choix de cookies" },
+        p("À votre première visite, un bandeau vous permet d'accepter ou de refuser, aussi simplement l'un que l'autre. Sans réponse, rien n'est déposé. Vous pouvez changer d'avis à tout moment avec le bouton ci-dessus. Votre choix est enregistré dans votre navigateur (pas dans un cookie) pendant 6 mois."),
         p("Lorsque vous cliquez vers un service extérieur (Calendly, LinkedIn, Instagram, sites de nos clients), ce service applique sa propre politique de cookies. Vous pouvez aussi bloquer ou supprimer les cookies depuis les réglages de votre navigateur."),
       ],
     },
@@ -908,7 +909,8 @@ const privacyEn: LegalDoc = {
         ul(
           "_ga and _ga_* (Google Analytics): tell visitors and sessions apart, kept for 13 months at most.",
         ),
-        p("On your first visit, a banner lets you accept or refuse, refusing being as easy as accepting. Without an answer, nothing is stored. You can change your mind at any time with the \"Cookie settings\" link at the bottom of every page. Your choice is saved in your browser (not in a cookie) for 6 months."),
+        { type: "consent", label: "Change my cookie choices" },
+        p("On your first visit, a banner lets you accept or refuse, refusing being as easy as accepting. Without an answer, nothing is stored. You can change your mind at any time with the button above. Your choice is saved in your browser (not in a cookie) for 6 months."),
         p("When you click through to an outside service (Calendly, LinkedIn, Instagram, our clients' websites), that service applies its own cookie policy. You can also block or delete cookies in your browser settings."),
       ],
     },

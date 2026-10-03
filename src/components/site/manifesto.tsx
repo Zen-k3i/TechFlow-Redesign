@@ -32,7 +32,7 @@ export function Manifesto() {
             </FadeIn>
             <ul className="mt-6 border-t border-ink/10">
               {m.removed.map((item, i) => (
-                <Removed key={item} text={item} tag={m.removedTag} index={i} />
+                <Removed key={item} text={item} index={i} />
               ))}
             </ul>
           </div>
@@ -96,7 +96,7 @@ function Word({
   );
 }
 
-function Removed({ text, tag, index }: { text: string; tag: string; index: number }) {
+function Removed({ text, index }: { text: string; index: number }) {
   const delay = 0.25 + index * 0.22;
 
   return (
@@ -104,9 +104,9 @@ function Removed({ text, tag, index }: { text: string; tag: string; index: numbe
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-15% 0px" }}
-      className="flex items-center justify-between gap-6 border-b border-ink/10 py-5 md:py-7"
+      className="border-b border-ink/10 py-3.5 md:py-4"
     >
-      <span className="relative font-serif text-2xl leading-tight md:text-[2.125rem]">
+      <span className="relative font-serif text-2xl leading-[1.1] md:text-[2.125rem]">
         <motion.span
           variants={{ hidden: { opacity: 0.85 }, visible: { opacity: 0.35 } }}
           transition={{ duration: 0.6, delay: delay + 0.4 }}
@@ -120,13 +120,6 @@ function Removed({ text, tag, index }: { text: string; tag: string; index: numbe
           className="absolute -inset-x-[0.05em] top-[55%] h-[0.07em] origin-left rounded-full bg-brand-deep"
         />
       </span>
-      <motion.span
-        variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
-        transition={{ duration: 0.5, delay: delay + 0.5, ease }}
-        className="eyebrow shrink-0 rounded-full border border-brand-deep/30 px-2.5 py-1 text-brand-deep"
-      >
-        ✕ {tag}
-      </motion.span>
     </motion.li>
   );
 }

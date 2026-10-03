@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import { useLocale } from "../site/locale";
 import { slugify } from "./slugify";
+import { openConsent } from "../site/consent";
 
 export type Block =
   | { type: "p" | "h2" | "h3"; text: string }
   | { type: "ul" | "ol"; items: string[] }
-  | { type: "table"; head: string[]; rows: string[][] };
+  | { type: "table"; head: string[]; rows: string[][] }
+  /** A button that reopens the cookie banner (privacy policy). */
+  | { type: "consent"; label: string };
 
 export { slugify };
 
@@ -27,6 +30,16 @@ function Item({ text }: { text: string }) {
 
 export function BlockView({ block }: { block: Block }) {
   switch (block.type) {
+    case "consent":
+      return (
+        <button
+          type="button"
+          onClick={openConsent}
+          className="mt-6 inline-flex h-12 items-center rounded-full border border-ink/20 px-6 font-medium transition-colors hover:border-brand-deep hover:text-brand-deep"
+        >
+          {block.label}
+        </button>
+      );
     case "h2":
       return (
         <h2 id={slugify(block.text)} className="mt-16 scroll-mt-28 font-serif text-4xl leading-[1.05] first:mt-0 md:text-5xl">

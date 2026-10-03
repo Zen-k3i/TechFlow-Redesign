@@ -416,29 +416,34 @@ const stars = Array.from({ length: 70 }, () => ({
 function Backdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-      <div className="absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_0%,rgba(54,71,245,0.22),transparent_70%)]" />
+      <div className="absolute inset-0 animate-nebula bg-[radial-gradient(70%_55%_at_50%_0%,rgba(54,71,245,0.22),transparent_70%)] motion-reduce:animate-none" />
+      {/* A second, fainter nebula drifting the other way gives the sky some depth. */}
+      <div className="absolute inset-0 animate-nebula bg-[radial-gradient(40%_35%_at_80%_25%,rgba(124,92,255,0.10),transparent_70%)] [animation-delay:-8s] [animation-direction:alternate-reverse] motion-reduce:animate-none" />
       <div className="absolute inset-0 bg-[linear-gradient(60deg,rgba(9,20,71,0.9),transparent_45%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[72px_72px] [mask-image:radial-gradient(60%_50%_at_50%_35%,black,transparent)]" />
-      {stars.map((star, i) => (
-        <motion.span
-          key={i}
-          className="absolute rounded-full bg-white"
-          style={{
-            left: `${star.left}%`,
-            top: `${star.top}%`,
-            width: star.size,
-            height: star.size,
-          }}
-          initial={{ opacity: star.base }}
-          animate={{ opacity: [star.base, 1, star.base] }}
-          transition={{
-            duration: star.duration,
-            delay: star.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
+      <div className="absolute inset-0 animate-star-drift motion-reduce:animate-none">
+        {stars.map((star, i) => (
+          <motion.span
+            key={i}
+            className="absolute rounded-full bg-white"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: star.size,
+              height: star.size,
+            }}
+            initial={{ opacity: star.base }}
+            animate={{ opacity: [star.base, 1, star.base] }}
+            transition={{
+              duration: star.duration,
+              delay: star.delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+      <span className="absolute right-[18%] top-[12%] h-px w-28 animate-shooting-star bg-linear-to-r from-transparent via-white/80 to-white opacity-0 motion-reduce:hidden" />
       <div className="absolute inset-0 opacity-[0.07] mix-blend-overlay [background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;)]" />
     </div>
   );

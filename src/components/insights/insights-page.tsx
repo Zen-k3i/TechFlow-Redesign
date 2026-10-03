@@ -178,7 +178,7 @@ function ArticleIndex({
 
         {showGrid && (
           <>
-            <div className="mt-20 flex flex-wrap items-end justify-between gap-6 border-t border-ink/10 pt-16 md:mt-28 md:pt-20">
+            <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t border-ink/10 pt-10 md:mt-16 md:pt-12">
               <div>
                 <p className="eyebrow text-brand-deep">{insightsContent[lang].all}</p>
                 <p aria-live="polite" className="mt-2 text-sm text-ink/60">

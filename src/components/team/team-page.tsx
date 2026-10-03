@@ -69,7 +69,8 @@ export function TeamPage({ members, testimonials }: { members: TeamMember[]; tes
                   <div className="relative">
                     <div aria-hidden className="absolute -inset-4 rounded-[3rem] bg-brand/15 blur-3xl md:-inset-6" />
                     <div className="relative aspect-square overflow-hidden rounded-[2.5rem] border border-white/10 bg-paper">
-                      <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+                      {/* Shown whole: the visuals are mockups (a call, a board) that must not be cropped. */}
+                      <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-contain" />
                     </div>
                   </div>
                 </FadeIn>

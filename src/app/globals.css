@@ -28,6 +28,10 @@
   --animate-marquee: marquee 50s linear infinite;
   --animate-marquee-reverse: marquee 50s linear infinite reverse;
   --animate-shine: shine 3s linear infinite;
+  /* Home hero sky: a very slow drift, a breathing nebula, a rare shooting star. */
+  --animate-star-drift: star-drift 140s ease-in-out infinite alternate;
+  --animate-nebula: nebula 16s ease-in-out infinite alternate;
+  --animate-shooting-star: shooting-star 13s ease-in infinite;
   --animate-progress: progress 7s linear forwards;
   --animate-hl-streak: hl-streak 1.6s ease-in-out infinite;
   --animate-hl-eq: hl-eq 0.7s ease-in-out infinite;
@@ -74,6 +78,39 @@
     }
   }
 
+  @keyframes star-drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(-2.5%, 1.5%, 0) scale(1.04);
+    }
+  }
+  @keyframes nebula {
+    from {
+      opacity: 0.65;
+      transform: scale(1);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1.08) translate3d(2%, -1%, 0);
+    }
+  }
+  @keyframes shooting-star {
+    0%,
+    86% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) rotate(-24deg);
+    }
+    88% {
+      opacity: 0.9;
+    }
+    93%,
+    100% {
+      opacity: 0;
+      transform: translate3d(-260px, 116px, 0) rotate(-24deg);
+    }
+  }
   @keyframes shine {
     to {
       transform: rotate(390deg);

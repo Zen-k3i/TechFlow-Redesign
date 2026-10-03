@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { openConsent } from "./consent";
 import Link from "next/link";
 import { href } from "@/i18n/routes";
 import { ProjectCta } from "../page/project-cta";
@@ -165,9 +164,7 @@ export function Footer({ cta = true, tools = [] }: { cta?: boolean; tools?: { ti
             <Link href={links.privacy} className="hover:text-white">
               {f.privacy}
             </Link>
-            <button type="button" onClick={openConsent} className="eyebrow cursor-pointer hover:text-white">
-              {f.cookies}
-            </button>
+
           </span>
         </div>
       </div>
