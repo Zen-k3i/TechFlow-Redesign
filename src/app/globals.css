@@ -10,7 +10,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-satoshi), system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-serif: var(--font-tobias), Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
@@ -295,4 +295,11 @@ body {
 
 .marquee-row:hover > * {
   animation-play-state: paused;
+}
+
+/* Tobias trial (staging): display type a touch tighter. In the base layer, so explicit tracking-* classes still win. */
+@layer base {
+  .font-serif {
+    letter-spacing: -1px;
+  }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { hasLocale, locales } from "@/i18n/config";
@@ -20,11 +20,14 @@ const satoshi = localFont({
   ],
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+// Staging trial (2026-10-03): Tobias (trial licence) replaces Instrument Serif for the display type.
+// Variable fonts (wght 100–900) subset like Satoshi, ~32 KB each.
+const tobias = localFont({
+  variable: "--font-tobias",
+  src: [
+    { path: "../../fonts/tobias-uprights.woff2", weight: "100 900", style: "normal" },
+    { path: "../../fonts/tobias-italics.woff2", weight: "100 900", style: "italic" },
+  ],
 });
 
 const geistMono = Geist_Mono({
@@ -61,7 +64,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   return (
     <html
       lang={lang}
-      className={`${satoshi.variable} ${instrumentSerif.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${satoshi.variable} ${tobias.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>
