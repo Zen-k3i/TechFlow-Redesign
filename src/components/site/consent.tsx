@@ -90,7 +90,7 @@ export function Consent() {
           role="dialog"
           aria-live="polite"
           aria-label={lang === "fr" ? "Cookies" : "Cookies"}
-          className="fixed inset-x-3 bottom-3 z-[60] mx-auto max-w-xl rounded-2xl border border-white/10 bg-night/95 p-5 text-sm text-white shadow-2xl backdrop-blur md:bottom-6"
+          className="fixed inset-x-3 bottom-3 z-[60] max-w-sm rounded-2xl border border-white/10 bg-night/95 p-5 text-sm text-white shadow-2xl backdrop-blur md:inset-x-auto md:bottom-6 md:left-6"
         >
           <p className="text-white/80">
             {c.text}{" "}
